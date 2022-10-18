@@ -16,6 +16,8 @@ class Inventory:
             self.inventoryArray[indexOfSlot].item = item
 
     def deleteItem(self, index: int) -> None:
+        if index >= self.size:
+            raise ValueError("Index out of range")
         self.inventoryArray[index].dropItem()
 
     def findAndDeleteItem(self, item: Item) -> None:
@@ -25,3 +27,15 @@ class Inventory:
         else:
             indexOfSlot: int = self.inventoryArray.index(first)
             self.inventoryArray[indexOfSlot].dropItem()
+
+    def enlargeInventroy(self, newInventorySize: int) -> None:
+        if newInventorySize <= self.size:
+            raise ValueError("You have to enlare for a 1 or more slots")
+        self.inventoryArray += [Slot()] * (newInventorySize - self.size)
+        self.size = newInventorySize
+
+    def reduceInventory(self, newInventorySize: int) -> None:
+        if newInventorySize >= self.size:
+            raise ValueError("You have to reduce for a 1 or more slots")
+        self.inventoryArray = self.inventoryArray[:self.size - newInventorySize]
+        self.size = newInventorySize

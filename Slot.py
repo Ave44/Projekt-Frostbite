@@ -24,4 +24,3 @@ class Slot:
 
     def dropItem(self) -> None:
         self._item = None
-

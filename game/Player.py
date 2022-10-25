@@ -2,14 +2,8 @@ import pygame
 from game.Entity import Entity
 
 class Player(Entity):
-    def __init__(self, position, groups, obstacleSprites):
-        super().__init__(groups)
-        self.image = pygame.image.load("./graphics/player/player_down.png").convert_alpha()
-        self.rect = self.image.get_rect(topleft = position)
-        self.obstacleSprites = obstacleSprites
-
-        self.direction = pygame.math.Vector2()
-        self.speed = 5
+    def __init__(self, groups, obstacleSprites, playerData):
+        super().__init__(groups, obstacleSprites, playerData)
 
 
     def input(self):

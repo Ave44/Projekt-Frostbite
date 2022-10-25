@@ -2,19 +2,22 @@ import pygame, sys
 from config import *
 from game.Player import Player
 from game.Tile import Tile
+from game.CameraSpriteGroup import CameraSpriteGroup
 
 class Game():
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
 
-        self.visibleSprites = pygame.sprite.Group()
+        self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = pygame.sprite.Group()
 
         self.createMap(saveData["world_map"])
-        self.player = Player(saveData["player_position"], [self.visibleSprites], self.obstacleSprites)
+
+        self.player = Player([self.visibleSprites], self.obstacleSprites, saveData["player_data"])
 
 	
+    # later will be replaced with LoadGame(savefile) class
     def createMap(self, worldMap):
         for rowIndex, row in enumerate(worldMap):
             for columnIndex, column in enumerate(row):
@@ -34,8 +37,7 @@ class Game():
                     sys.exit()
 
             self.visibleSprites.update()
-            self.screen.fill('black')
-            self.visibleSprites.draw(self.screen)
+            self.visibleSprites.customDraw(pygame.math.Vector2(self.player.rect.center))
 
             pygame.display.update()
             self.clock.tick(FPS)

@@ -1,8 +1,11 @@
+import pygame.sprite
+
 from Item import Item
 
 
-class Slot:
+class Slot(pygame.sprite.Sprite):
     def __init__(self, item: Item = None):
+        super.__init__()
         self._item = item
 
     @property

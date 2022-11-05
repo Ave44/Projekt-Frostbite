@@ -1,6 +1,4 @@
 import pygame
-from pygame.math import Vector2
-
 from game.Entity import Entity
 from game.Inventory import Inventory
 
@@ -25,14 +23,18 @@ class Player(Entity):
             self.direction.x = -1
         elif pressedKeys[pygame.K_d]:
             self.direction.x = 1
-
         # inventory
-        if pressedKeys[pygame.K_e]:
-            self.inventory.handleOpening()
+        print(pygame.event.get(pygame.KEYDOWN))
+        # for event in pygame.event.get():
+        #     print(event)
+        #     if event.type == pygame.KEYDOWN:
+        #         if event.key == pygame.K_i:
+        #             print("eee")
+        #             # self.inventory.handleOpening()
 
 
     def update(self):
         self.input()
         self.move()
         if self.inventory.isOpened:
-            self.inventory.playerCenter = self.rect.center
+            self.inventory.playerPos = self.rect.center

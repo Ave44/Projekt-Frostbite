@@ -1,5 +1,4 @@
 import pygame.sprite
-from pygame.math import Vector2
 from pygame.surface import Surface
 
 from game.Item import Item
@@ -17,10 +16,7 @@ class Slot(pygame.sprite.Sprite):
 
     @property
     def item(self) -> Item:
-        if self.isEmpty():
-            raise ValueError("The slot is empty")
-        else:
-            return self._item
+        return self._item
 
     @item.setter
     def item(self, item: Item):
@@ -49,3 +45,4 @@ class Slot(pygame.sprite.Sprite):
             return False
         else:
             return True
+

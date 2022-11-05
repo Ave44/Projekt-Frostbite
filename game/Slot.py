@@ -25,6 +25,7 @@ class Slot(pygame.sprite.Sprite):
     def addItem(self, item: Item) -> None:
         if self._item is None:
             self._item = item
+            self._item.rect.center = self.rect.center
             return
         raise ValueError("The slot is taken")
 
@@ -42,7 +43,10 @@ class Slot(pygame.sprite.Sprite):
 
     def isEmpty(self) -> bool:
         if self.item is None:
-            return False
-        else:
             return True
+        else:
+            return False
 
+    def update(self) -> None:
+        if self._item is not None:
+            self._item.rect.center = self.rect.center

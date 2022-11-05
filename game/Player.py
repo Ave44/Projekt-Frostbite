@@ -23,15 +23,6 @@ class Player(Entity):
             self.direction.x = -1
         elif pressedKeys[pygame.K_d]:
             self.direction.x = 1
-        # inventory
-        print(pygame.event.get(pygame.KEYDOWN))
-        # for event in pygame.event.get():
-        #     print(event)
-        #     if event.type == pygame.KEYDOWN:
-        #         if event.key == pygame.K_i:
-        #             print("eee")
-        #             # self.inventory.handleOpening()
-
 
     def update(self):
         self.input()

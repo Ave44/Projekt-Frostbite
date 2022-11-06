@@ -15,6 +15,7 @@ class Inventory(pygame.sprite.Sprite):
         super().__init__()
         self._inventoryHeight = inventoryHeight
         self._inventoryWidth = inventoryWidth
+        self._playerPos = playerPos
         self._selectedItem = selectedItem
         self._isOpened: bool = False
         self._slotRec = pygame.image.load(os.path.join(ROOT_PATH, "graphics", "ui", "slot.png")).get_size()
@@ -38,6 +39,7 @@ class Inventory(pygame.sprite.Sprite):
         return self._isOpened
 
     def updatePos(self, playerCenter: tuple[int, int]) -> None:
+        self._playerPos = playerCenter
         self._totalOffset = (self._windowOffset[0] + playerCenter[0], self._windowOffset[1] + playerCenter[1])
         self.rect.topleft = self._totalOffset
 

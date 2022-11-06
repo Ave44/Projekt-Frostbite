@@ -9,14 +9,18 @@ from config import ROOT_PATH
 
 
 class Item(pygame.sprite.Sprite, ABC):
-    def __init__(self, name: str, pathToImage: str = None, pathToIcon: str = None):
+    def __init__(self, name: str, imageFilename: str = None, iconFilename: str = None):
         super().__init__()
         self._id = shortuuid.uuid()
         self._name = name
 
-        self._image = pygame.image.load(pathToImage) if pathToImage is not None \
+        self._image = pygame.image.load(
+            os.path.join(ROOT_PATH, "graphics", "items", imageFilename)) \
+            if imageFilename is not None \
             else pygame.image.load(os.path.join(ROOT_PATH, "graphics", "items", "undefined.png"))
-        self._icon = pygame.image.load(pathToIcon) if pathToIcon is not None \
+        self._icon = pygame.image.load(
+            os.path.join(ROOT_PATH, "graphics", "items", iconFilename)) \
+            if iconFilename is not None \
             else pygame.image.load(os.path.join(ROOT_PATH, "graphics", "items", "undefined.png"))
         self.rect = self.image.get_rect()
 

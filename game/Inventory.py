@@ -1,6 +1,6 @@
-from CameraSpriteGroup import CameraSpriteGroup
-from Item import Item
-from Slot import Slot
+from game.CameraSpriteGroup import CameraSpriteGroup
+from game.Item import Item
+from game.Slot import Slot
 from config import *
 
 
@@ -9,15 +9,16 @@ class Inventory(pygame.sprite.Sprite):
                  visibleSprites: CameraSpriteGroup,
                  inventoryHeight: int,
                  inventoryWidth: int,
-                 playerPos: tuple[int, int], ):
+                 playerPos: tuple[int, int],
+                 selectedItem: Item = None):
 
         super().__init__()
         self._inventoryHeight = inventoryHeight
         self._inventoryWidth = inventoryWidth
-        self._selectedItem = None
+        self._selectedItem = selectedItem
         self._isOpened: bool = False
         self._playerPos = playerPos
-        self._slotRec = pygame.image.load("./graphics/ui/slot.png").get_size()
+        self._slotRec = pygame.image.load(os.path.join(ROOT_PATH, "graphics", "ui", "slot.png")).get_size()
         self._offset = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
         self._inventoryList: list[Slot] = [Slot(self.__calculateSlotPosition((x, y)))
                                            for x in range(inventoryWidth)
@@ -126,7 +127,7 @@ class Inventory(pygame.sprite.Sprite):
             self._selectedItem.rect.center = (mousePos[0] + self._playerPos[0] - self._offset[0],
                                               mousePos[1] + self._playerPos[1] - self._offset[1])
             return
-        if hoveredSlot.isEmpty():
+        if hoveredSlot.isEmpty() and self._selectedItem is not None:
             hoveredSlot.addItem(self._selectedItem)
             self._selectedItem = None
             return

@@ -32,3 +32,7 @@ class SlotTest(unittest.TestCase):
     def test_removeItem_on_empty_slot(self):
         with self.assertRaises(ValueError):
             self.emptySlot.removeItem()
+
+
+if __name__ == '__main__':
+    unittest.main()

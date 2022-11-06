@@ -17,3 +17,7 @@ class ItemTest(unittest.TestCase):
     def test_drop_should_change_item_pos(self):
         self.item.drop((1, 2))
         self.assertEqual((1, 2), self.item.rect.center)
+
+
+if __name__ == '__main__':
+    unittest.main()

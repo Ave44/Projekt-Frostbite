@@ -1,14 +1,16 @@
-import pygame.sprite
-from pygame.surface import Surface
+import os
 
+import pygame.sprite
+from pygame import Surface
+
+from config import *
 from game.Item import Item
 
 
 class Slot(pygame.sprite.Sprite):
     def __init__(self, center: tuple[int, int], item: Item = None):
         super().__init__()
-
-        self.image: Surface = pygame.image.load("./graphics/ui/slot.png").convert_alpha()
+        self.image: Surface = pygame.image.load(os.path.join(ROOT_PATH, "graphics", "ui", "slot.png"))
         self.rect = self.image.get_rect()
         self.rect.center = center
 

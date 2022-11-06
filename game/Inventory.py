@@ -1,7 +1,7 @@
+from CameraSpriteGroup import CameraSpriteGroup
+from Item import Item
+from Slot import Slot
 from config import *
-from game.CameraSpriteGroup import CameraSpriteGroup
-from game.Item import Item
-from game.Slot import Slot
 
 
 class Inventory(pygame.sprite.Sprite):

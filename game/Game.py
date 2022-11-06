@@ -21,8 +21,8 @@ class Game():
     def createMap(self, worldMap):
         for rowIndex, row in enumerate(worldMap):
             for columnIndex, column in enumerate(row):
-                x = columnIndex * TILESIZE
-                y = rowIndex * TILESIZE
+                x = columnIndex * TILE_SIZE
+                y = rowIndex * TILE_SIZE
                 if column == 0:
                     Tile((x,y), column, [self.visibleSprites, self.obstacleSprites])
                 else:

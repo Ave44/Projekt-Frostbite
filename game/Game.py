@@ -37,7 +37,7 @@ class Game():
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_e:
-                        self.player.inventory.handleOpening()
+                        self.player.inventory.toggle()
 
             self.visibleSprites.update()
             self.visibleSprites.customDraw(pygame.math.Vector2(self.player.rect.center))

@@ -2,6 +2,7 @@ import pygame
 
 from game.Entity import Entity
 from game.Inventory import Inventory
+from game.Item import Item
 
 
 class Player(Entity):
@@ -9,6 +10,7 @@ class Player(Entity):
         super().__init__(groups, obstacleSprites, playerData)
         self._selectedItem = None
         self.inventory = Inventory(groups[0], 5, 10, self.rect.center, self._selectedItem)
+        self.inventory.addItem(Item("sword"))
 
     def input(self):
         pressedKeys = pygame.key.get_pressed()

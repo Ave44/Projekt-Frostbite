@@ -27,16 +27,39 @@ class Inventory(pygame.sprite.Sprite):
 
         self.visibleSprites = visibleSprites
         self.image = pygame.Surface([inventoryWidth * self._slotRec[0], inventoryHeight * self._slotRec[1]],
-                                    pygame.SRCALPHA, 32).convert_alpha()
+                                    pygame.SRCALPHA, 32)
         self.rect = self.image.get_rect()
 
     @property
-    def selectedItem(self) -> Item | None:
+    def playerPos(self) -> tuple[int, int]:
+        return self._playerPos
+
+    @property
+    def selectedItem(self) -> Item:
         return self._selectedItem
+
+    @selectedItem.setter
+    def selectedItem(self, Item) -> None:
+        self._selectedItem = Item
 
     @property
     def isOpened(self) -> bool:
         return self._isOpened
+
+    @property
+    def totalOffset(self) -> tuple[int, int]:
+        return self._totalOffset
+
+    @property
+    def inventoryList(self) -> list[Slot]:
+        return self._inventoryList
+
+    @inventoryList.setter
+    def inventoryList(self, inventoryList: list[Slot]) -> None:
+        if len(inventoryList) == len(self._inventoryList):
+            self._inventoryList = inventoryList
+        else:
+            raise ValueError("Can not set inventory list of different length")
 
     def updatePos(self, playerCenter: tuple[int, int]) -> None:
         self._playerPos = playerCenter
@@ -52,7 +75,7 @@ class Inventory(pygame.sprite.Sprite):
         return ((index[0] + 0.5) * self._slotRec[0] + self._totalOffset[0],
                 (index[1] + 0.5) * self._slotRec[1] + self._totalOffset[1])
 
-    def handleOpening(self):
+    def toggle(self):
         if self._isOpened:
             self.__close()
         else:
@@ -73,7 +96,7 @@ class Inventory(pygame.sprite.Sprite):
     def addItem(self, item: Item) -> None:
         emptySlotOption: Slot | None = next(filter(lambda slot: (slot.isEmpty()), self._inventoryList), None)
         if emptySlotOption is None and self._selectedItem is not None:
-            self._selectedItem.drop(self.rect.center)
+            self._selectedItem.drop(self.playerPos)
             self._selectedItem = item
             return
         if emptySlotOption is None and self._selectedItem is None:
@@ -90,7 +113,6 @@ class Inventory(pygame.sprite.Sprite):
                               mousePos[1] + self._totalOffset[1])
 
         hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(calculatedMousePos)), self._inventoryList), None)
-
         if hoveredSlot is None:
             return self.__handleNotHoveredState(mousePos, pressedMouseKeys)
         return self.__handleHoveredState(mousePos, pressedMouseKeys, hoveredSlot)
@@ -111,7 +133,7 @@ class Inventory(pygame.sprite.Sprite):
                              mousePos: tuple[int, int],
                              pressedMouseKeys: tuple[bool, bool, bool],
                              hoveredSlot: Slot) -> None:
-        if self._selectedItem is None and (not pressedMouseKeys[0] or pressedMouseKeys[1]):
+        if self._selectedItem is None and (not pressedMouseKeys[0] and not pressedMouseKeys[1]):
             return
         if self._selectedItem is None and pressedMouseKeys[0] and not hoveredSlot.isEmpty():
             self._selectedItem = hoveredSlot.item

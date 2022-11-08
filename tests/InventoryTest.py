@@ -75,12 +75,12 @@ class InventoryTest(unittest.TestCase):
         self.assertEqual(self.newPlayerPos, (newSlotRect[0] - oldSlotRect[0], newSlotRect[1] - oldSlotRect[1]))
 
     @mock.patch('pygame.mouse')
-    def test_update_should_drop_selectedItem_when_clicked_mouse1_outside_inventory_with_selectedItem(self, mouse):
+    def test_handleMouseLeftClick_should_drop_selectedItem_when_cursor_outside_inventory_with_selectedItem(self, mouse):
         mouse.get_pressed.return_value = (True, False, False)
         mouse.get_pos.return_value = (200, 500)
 
         itemBeforeDrop = self.fullInventoryWithSelectedItem.selectedItem
-        self.fullInventoryWithSelectedItem.update()
+        self.fullInventoryWithSelectedItem.handleMouseLeftClick()
 
         self.assertEqual((3, 2), itemBeforeDrop.rect.center)
         self.assertEqual(None, self.fullInventoryWithSelectedItem.selectedItem)
@@ -97,7 +97,7 @@ class InventoryTest(unittest.TestCase):
         self.assertNotEqual(newItemPos, self.fullInventoryWithSelectedItem.selectedItem.rect)
 
     @mock.patch('pygame.mouse')
-    def test_update_should_use_hovered_slot_when_hover_and_not_selected_item(self, mouse):
+    def test_handleMouseRightClick_should_use_hovered_slot_when_hover_and_not_selected_item(self, mouse):
         firstSlot = MagicMock()
         firstSlot.rect.center.return_value = self.emptyInventory.inventoryList[0].rect.center
 
@@ -107,7 +107,7 @@ class InventoryTest(unittest.TestCase):
         mouse.get_pos.return_value = (firstSlot.rect.center[0] - self.emptyInventory.totalOffset[0],
                                       firstSlot.rect.center[1] - self.emptyInventory.totalOffset[1])
 
-        self.emptyInventory.update()
+        self.emptyInventory.handleMouseRightClick()
         firstSlot.use.assert_called_once()
 
     @mock.patch('pygame.mouse')
@@ -122,7 +122,7 @@ class InventoryTest(unittest.TestCase):
         self.assertNotEqual(newItemPos, self.fullInventoryWithSelectedItem.selectedItem.rect)
 
     @mock.patch('pygame.mouse')
-    def test_update_should_place_selectedItem_when_hover_over_empty_slot_and_clicked_mouse1(self, mouse):
+    def test_handleMouseLeftClick_should_place_selectedItem_when_hover_over_empty_slot(self, mouse):
         emptySlot = self.emptyInventory.inventoryList[0]
         item = Item("sword")
         self.emptyInventory.selectedItem = item
@@ -131,12 +131,12 @@ class InventoryTest(unittest.TestCase):
         mouse.get_pos.return_value = (emptySlot.rect.center[0] - self.emptyInventory.totalOffset[0],
                                       emptySlot.rect.center[1] - self.emptyInventory.totalOffset[1])
 
-        self.emptyInventory.update()
+        self.emptyInventory.handleMouseLeftClick()
         self.assertEqual(item, emptySlot.item)
         self.assertEqual(None, self.emptyInventory.selectedItem)
 
     @mock.patch('pygame.mouse')
-    def test_update_should_swap_items_when_hover_over_not_empty_slot_with_selectedItem_and_clicked_mouse1(self, mouse):
+    def test_handleMouseLeftClick_should_swap_items_when_hover_over_not_empty_slot_with_selectedItem(self, mouse):
         oldItem = Item("sword")
         self.emptyInventory.addItem(oldItem)
         notEmptySlot = self.emptyInventory.inventoryList[0]
@@ -147,7 +147,7 @@ class InventoryTest(unittest.TestCase):
 
         newItem = Item("new sword")
         self.emptyInventory.selectedItem = newItem
-        self.emptyInventory.update()
+        self.emptyInventory.handleMouseLeftClick()
 
         self.assertEqual(newItem, notEmptySlot.item)
         self.assertEqual(oldItem, self.emptyInventory.selectedItem)

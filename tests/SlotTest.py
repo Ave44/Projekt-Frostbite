@@ -47,7 +47,5 @@ class SlotTest(unittest.TestCase):
             self.emptySlot.use()
 
 
-
-
 if __name__ == '__main__':
     unittest.main()

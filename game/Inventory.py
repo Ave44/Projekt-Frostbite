@@ -39,8 +39,8 @@ class Inventory(pygame.sprite.Sprite):
         return self._selectedItem
 
     @selectedItem.setter
-    def selectedItem(self, Item) -> None:
-        self._selectedItem = Item
+    def selectedItem(self, item: Item) -> None:
+        self._selectedItem = item
 
     @property
     def isOpened(self) -> bool:

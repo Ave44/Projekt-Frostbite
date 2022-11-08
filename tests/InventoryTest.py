@@ -3,8 +3,8 @@ import unittest
 from mock import mock
 from mock.mock import MagicMock
 
-from pygame.sprite import Group
 
+from game.CameraSpriteGroup import CameraSpriteGroup
 from game.Inventory import Inventory
 from game.Item import Item
 from game.Slot import Slot
@@ -13,11 +13,11 @@ from game.Slot import Slot
 class InventoryTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        group = Group()
-        self.emptyInventory = Inventory(group, 1, 2, (0, 0))
-        self.fullInventory = Inventory(group, 0, 0, (0, 0))
+        visibleSprites = CameraSpriteGroup()
+        self.emptyInventory = Inventory(visibleSprites, 1, 2, (0, 0))
+        self.fullInventory = Inventory(visibleSprites, 0, 0, (0, 0))
         self.item = Item("sword")
-        self.fullInventoryWithSelectedItem = Inventory(group, 0, 0, (3, 2), self.item)
+        self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, (3, 2), self.item)
         self.newPlayerPos = (3, 4)
 
     def test_inventoryList_should_has_correct_length(self):

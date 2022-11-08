@@ -35,6 +35,15 @@ class InventoryTest(unittest.TestCase):
         self.emptyInventory.toggle()
         self.assertEqual(False, self.emptyInventory.isOpened)
 
+    def test_set_inventoryList_should_raise_error_when_called_with_different_length_list(self):
+        with self.assertRaises(ValueError):
+            self.fullInventory.inventoryList = [Slot((0, 0))]
+
+    def test_set_inventoryList_should_change_inventoryList_when_called_with_the_same_length_list(self):
+        newInventoryList = [Slot((0, 0)), Slot((0, 0))]
+        self.emptyInventory.inventoryList = newInventoryList
+        self.assertEqual(newInventoryList, self.emptyInventory.inventoryList)
+
     def test_addItem_should_addItem_to_empty_slot_in_inventory_with_empty_slot(self):
         self.emptyInventory.addItem(self.item)
         self.assertEqual(self.item, self.emptyInventory.inventoryList[0].item)

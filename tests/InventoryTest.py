@@ -160,3 +160,7 @@ class InventoryTest(unittest.TestCase):
 
         self.assertEqual(newItem, notEmptySlot.item)
         self.assertEqual(oldItem, self.emptyInventory.selectedItem)
+
+
+if __name__ == '__main__':
+    unittest.main()

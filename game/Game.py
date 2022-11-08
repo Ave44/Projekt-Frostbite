@@ -38,6 +38,11 @@ class Game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_e:
                         self.player.inventory.toggle()
+                if event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:
+                        self.player.inventory.handleMouseLeftClick()
+                    if event.button == 2:
+                        self.player.inventory.handleMouseRightClick()
 
             self.visibleSprites.update()
             self.visibleSprites.customDraw(pygame.math.Vector2(self.player.rect.center))

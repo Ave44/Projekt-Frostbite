@@ -105,50 +105,47 @@ class Inventory(pygame.sprite.Sprite):
         emptySlotOption.addItem(item)
         return
 
-    def update(self) -> None:
-        pressedMouseKeys = pygame.mouse.get_pressed()
-
+    def __getCalculatedMousePos(self):
         mousePos = pygame.mouse.get_pos()
         calculatedMousePos = (mousePos[0] + self._totalOffset[0],
                               mousePos[1] + self._totalOffset[1])
+        return calculatedMousePos
 
-        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(calculatedMousePos)), self._inventoryList), None)
-        if hoveredSlot is None:
-            return self.__handleNotHoveredState(mousePos, pressedMouseKeys)
-        return self.__handleHoveredState(mousePos, pressedMouseKeys, hoveredSlot)
-
-    def __handleNotHoveredState(self, mousePos: tuple[int, int],
-                                pressedMouseKeys: tuple[bool, bool, bool]) -> None:
+    def update(self) -> None:
         if self._selectedItem is None:
             return
-        if pressedMouseKeys[0]:
-            self._selectedItem.drop(self._playerPos)
-            self._selectedItem = None
-            return
-        self._selectedItem.rect.center = (mousePos[0] + self._totalOffset[0],
-                                          mousePos[1] + self._totalOffset[1])
+
+        calculatedMousePos = self.__getCalculatedMousePos()
+        self._selectedItem.rect.center = calculatedMousePos
         return
 
-    def __handleHoveredState(self,
-                             mousePos: tuple[int, int],
-                             pressedMouseKeys: tuple[bool, bool, bool],
-                             hoveredSlot: Slot) -> None:
-        if self._selectedItem is None and (not pressedMouseKeys[0] and not pressedMouseKeys[1]):
-            return
-        if self._selectedItem is None and pressedMouseKeys[0] and not hoveredSlot.isEmpty():
+    def handleMouseLeftClick(self):
+        calculatedMousePos = self.__getCalculatedMousePos()
+        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(calculatedMousePos)), self._inventoryList), None)
+
+        if hoveredSlot is None:
+            if self._selectedItem is not None:
+                self._selectedItem.drop(self._playerPos)
+                self._selectedItem = None
+                return
+        if self._selectedItem is None and not hoveredSlot.isEmpty():
             self._selectedItem = hoveredSlot.item
             hoveredSlot.removeItem()
-            return
-        if self._selectedItem is None and pressedMouseKeys[1]:
-            hoveredSlot.use()
-            return
-        if not pressedMouseKeys[0]:
-            self._selectedItem.rect.center = (mousePos[0] + self._totalOffset[0],
-                                              mousePos[1] + self._totalOffset[1])
             return
         if hoveredSlot.isEmpty() and self._selectedItem is not None:
             hoveredSlot.addItem(self._selectedItem)
             self._selectedItem = None
             return
         self._selectedItem, hoveredSlot.item = hoveredSlot.item, self._selectedItem
+        return
+
+    def handleMouseRightClick(self):
+        calculatedMousePos = self.__getCalculatedMousePos()
+        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(calculatedMousePos)), self._inventoryList), None)
+
+        if hoveredSlot is None:
+            return
+        if self._selectedItem is None:
+            hoveredSlot.use()
+            return
         return

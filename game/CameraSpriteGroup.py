@@ -1,6 +1,6 @@
 import pygame
 from config import WINDOW_HEIGHT, WINDOW_WIDTH
-from game.ui.Slot import Slot
+from game.ui.inventory.Slot import Slot
 
 
 class CameraSpriteGroup(pygame.sprite.Group):

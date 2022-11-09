@@ -7,7 +7,7 @@ from mock.mock import MagicMock
 from game.CameraSpriteGroup import CameraSpriteGroup
 from game.ui.inventory.Inventory import Inventory
 from game.item.Item import Item
-from game.ui.Slot import Slot
+from game.ui.inventory.Slot import Slot
 
 
 class InventoryTest(unittest.TestCase):

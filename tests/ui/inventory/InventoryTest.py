@@ -5,6 +5,7 @@ from mock.mock import MagicMock
 
 
 from game.CameraSpriteGroup import CameraSpriteGroup
+from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 from game.item.Item import Item
 from game.ui.inventory.Slot import Slot
@@ -14,26 +15,32 @@ class InventoryTest(unittest.TestCase):
 
     def setUp(self) -> None:
         visibleSprites = CameraSpriteGroup()
-        self.emptyInventory = Inventory(visibleSprites, 1, 2, (0, 0))
-        self.fullInventory = Inventory(visibleSprites, 0, 0, (0, 0))
+        self.playerPos = (34, 15)
+        self.emptyInventory = Inventory(visibleSprites, 1, 2, (0, 0), SelectedItem(self.playerPos))
+        self.fullInventory = Inventory(visibleSprites, 0, 0, (0, 0), SelectedItem(self.playerPos))
         self.item = Item("sword")
-        self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, (3, 2), self.item)
+        self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, self.playerPos,
+                                                       SelectedItem(self.playerPos, Item("sword2")))
         self.newPlayerPos = (3, 4)
+
+        self.emptyInventory.toggle()
+        self.fullInventory.toggle()
+        self.fullInventoryWithSelectedItem.toggle()
 
     def test_inventoryList_should_has_correct_length(self):
         self.assertEqual(2, len(self.emptyInventory.inventoryList))
 
-    def test_isOpen_should_be_False_used_on_closed_inventory(self):
-        self.assertEqual(False, self.emptyInventory.isOpen)
-
-    def test_toggle_should_open_closed_inventory(self):
-        self.emptyInventory.toggle()
+    def test_isOpen_should_be_True_used_on_open_inventory(self):
         self.assertEqual(True, self.emptyInventory.isOpen)
+
+    def test_toggle_should_close_open_inventory(self):
+        self.emptyInventory.toggle()
+        self.assertEqual(False, self.emptyInventory.isOpen)
 
     def test_2x_toggle_should_open_closed_inventory(self):
         self.emptyInventory.toggle()
         self.emptyInventory.toggle()
-        self.assertEqual(False, self.emptyInventory.isOpen)
+        self.assertEqual(True, self.emptyInventory.isOpen)
 
     def test_set_inventoryList_should_raise_error_when_called_with_different_length_list(self):
         with self.assertRaises(ValueError):
@@ -59,107 +66,84 @@ class InventoryTest(unittest.TestCase):
         self.assertEqual(newItem, self.fullInventoryWithSelectedItem.selectedItem)
 
     def test_addItem_should_drop_oldItem_on_player_pos_in_full_inventory_with_selectedItem(self):
-        oldItem = self.fullInventoryWithSelectedItem.selectedItem
+        oldItem = self.fullInventoryWithSelectedItem.selectedItem.item
         self.fullInventoryWithSelectedItem.addItem(Item("sword"))
 
-        self.assertEqual(self.fullInventoryWithSelectedItem.playerPos, oldItem.rect.center)
+        self.assertEqual(self.playerPos, oldItem.rect.center)
 
-    def test_updatePos_should_update_playerPos_value(self):
-        self.emptyInventory.updatePos(self.newPlayerPos)
-        self.assertEqual(self.newPlayerPos, self.emptyInventory.playerPos)
-
-    def test_updatePos_should_update_totalOffset_value(self):
-        oldTotalOffset = self.emptyInventory.totalOffset
-        self.emptyInventory.updatePos(self.newPlayerPos)
-        newTotalOffset = self.emptyInventory.totalOffset
-
-        actual = (newTotalOffset[0] - oldTotalOffset[0], newTotalOffset[1] - oldTotalOffset[1])
-        self.assertEqual(self.newPlayerPos, actual)
-
-    def test_updatePos_should_change_slot_rect(self):
+    def test_changePos_should_change_slot_rect(self):
         oldSlotRect = self.emptyInventory.inventoryList[0].rect.center
-        self.emptyInventory.updatePos(self.newPlayerPos)
+        self.emptyInventory.changePos(self.newPlayerPos)
         newSlotRect = self.emptyInventory.inventoryList[0].rect.center
 
         self.assertEqual(self.newPlayerPos, (newSlotRect[0] - oldSlotRect[0], newSlotRect[1] - oldSlotRect[1]))
 
-    @mock.patch('pygame.mouse')
-    def test_handleMouseLeftClick_should_drop_selectedItem_when_cursor_outside_inventory_with_selectedItem(self, mouse):
-        mouse.get_pressed.return_value = (True, False, False)
-        mouse.get_pos.return_value = (200, 500)
+    def test_changePos_should_change_inventory_pos(self):
+        newCenter = (312, 4)
 
-        itemBeforeDrop = self.fullInventoryWithSelectedItem.selectedItem
-        self.fullInventoryWithSelectedItem.handleMouseLeftClick()
+        self.emptyInventory.changePos(newCenter)
 
-        self.assertEqual((3, 2), itemBeforeDrop.rect.center)
-        self.assertEqual(None, self.fullInventoryWithSelectedItem.selectedItem)
+        # center = (self.emptyInventory.rect.center[0] - self.p)
 
-    @mock.patch('pygame.mouse')
-    def test_update_should_move_selectedItem_when_slot_hover_selectedItem_and_not_clicked_mouse1(self, mouse):
-        itemRectBeforeMove = self.fullInventoryWithSelectedItem.selectedItem.rect[:]
-        newItemPos = (itemRectBeforeMove[0] + 1, itemRectBeforeMove[1] + 2)
+        self.assertEqual(newCenter, self.emptyInventory.rect.topleft)
 
-        mouse.get_pressed.return_value = (False, False, False)
-        mouse.get_pos.return_value = newItemPos
+    def test_handleMouseLeftClick_should_drop_selectedItem_when_cursor_outside_inventory_with_selectedItem(self):
+        itemBeforeDrop = self.fullInventoryWithSelectedItem.selectedItem.item
+        self.fullInventoryWithSelectedItem.handleMouseLeftClick((600, 500))
 
-        self.fullInventoryWithSelectedItem.update()
-        self.assertNotEqual(newItemPos, self.fullInventoryWithSelectedItem.selectedItem.rect)
+        self.assertEqual(self.playerPos, itemBeforeDrop.rect.center)
+        self.assertEqual(None, self.fullInventoryWithSelectedItem.selectedItem.item)
 
-    @mock.patch('pygame.mouse')
-    def test_handleMouseRightClick_should_use_hovered_slot_when_hover_and_not_selected_item(self, mouse):
+    def test_handleMouseLeftClick_should_drop_selectedItem_when_inventory_closed_cursor_over_inventory(self):
+        self.emptyInventory.toggle()
+        self.emptyInventory.selectedItem.item = Item("sword2")
+
+        itemBeforeDrop = self.emptyInventory.selectedItem.item
+
+        emptySlot = self.emptyInventory.inventoryList[0]
+        self.emptyInventory.handleMouseLeftClick(emptySlot.rect.center)
+
+        self.assertEqual(self.playerPos, itemBeforeDrop.rect.center)
+        self.assertEqual(None, self.emptyInventory.selectedItem.item)
+
+    def test_handleMouseRightClick_should_use_hovered_slot_when_hover_and_not_selected_item(self):
         firstSlot = MagicMock()
         firstSlot.rect.center.return_value = self.emptyInventory.inventoryList[0].rect.center
 
         self.emptyInventory.inventoryList = [firstSlot, Slot((1, 1))]
 
-        mouse.get_pressed.return_value = (False, True, False)
-        mouse.get_pos.return_value = (firstSlot.rect.center[0] - self.emptyInventory.totalOffset[0],
-                                      firstSlot.rect.center[1] - self.emptyInventory.totalOffset[1])
-
-        self.emptyInventory.handleMouseRightClick()
+        self.emptyInventory.handleMouseRightClick(firstSlot.rect.center)
         firstSlot.use.assert_called_once()
 
-    @mock.patch('pygame.mouse')
-    def test_update_should_move_selectedItem_when_hover_outside_inventory_and_not_clicked_mouse1(self, mouse):
+    def test_update_should_move_selectedItem_when_hover_outside_inventory_and_not_clicked_mouse1(self):
         itemRectBeforeMove = self.fullInventoryWithSelectedItem.selectedItem.rect[:]
         newItemPos = (itemRectBeforeMove[0] + 1000, itemRectBeforeMove[1] + 2000)
-
-        mouse.get_pressed.return_value = (False, False, False)
-        mouse.get_pos.return_value = newItemPos
 
         self.fullInventoryWithSelectedItem.update()
         self.assertNotEqual(newItemPos, self.fullInventoryWithSelectedItem.selectedItem.rect)
 
-    @mock.patch('pygame.mouse')
-    def test_handleMouseLeftClick_should_place_selectedItem_when_hover_over_empty_slot(self, mouse):
+    def test_handleMouseLeftClick_should_place_selectedItem_when_hover_over_empty_slot(self):
         emptySlot = self.emptyInventory.inventoryList[0]
         item = Item("sword")
-        self.emptyInventory.selectedItem = item
+        self.emptyInventory.selectedItem.item = item
 
-        mouse.get_pressed.return_value = (True, False, False)
-        mouse.get_pos.return_value = (emptySlot.rect.center[0] - self.emptyInventory.totalOffset[0],
-                                      emptySlot.rect.center[1] - self.emptyInventory.totalOffset[1])
-
-        self.emptyInventory.handleMouseLeftClick()
+        self.emptyInventory.handleMouseLeftClick(emptySlot.rect.center)
         self.assertEqual(item, emptySlot.item)
-        self.assertEqual(None, self.emptyInventory.selectedItem)
+        self.assertEqual(None, self.emptyInventory.selectedItem.item)
 
-    @mock.patch('pygame.mouse')
-    def test_handleMouseLeftClick_should_swap_items_when_hover_over_not_empty_slot_with_selectedItem(self, mouse):
+    def test_handleMouseLeftClick_should_swap_items_when_hover_over_not_empty_slot_with_selectedItem(self):
         oldItem = Item("sword")
         self.emptyInventory.addItem(oldItem)
         notEmptySlot = self.emptyInventory.inventoryList[0]
 
-        mouse.get_pressed.return_value = (True, False, False)
-        mouse.get_pos.return_value = (notEmptySlot.rect.center[0] - self.emptyInventory.totalOffset[0],
-                                      notEmptySlot.rect.center[1] - self.emptyInventory.totalOffset[1])
-
         newItem = Item("new sword")
-        self.emptyInventory.selectedItem = newItem
-        self.emptyInventory.handleMouseLeftClick()
+        self.emptyInventory.selectedItem.item = newItem
+        self.emptyInventory.handleMouseLeftClick(notEmptySlot.rect.center)
 
+        print(notEmptySlot.item.name)
+        print(self.emptyInventory.selectedItem.item.name)
         self.assertEqual(newItem, notEmptySlot.item)
-        self.assertEqual(oldItem, self.emptyInventory.selectedItem)
+        self.assertEqual(oldItem, self.emptyInventory.selectedItem.item)
 
 
 if __name__ == '__main__':

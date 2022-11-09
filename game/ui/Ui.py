@@ -12,8 +12,6 @@ class Ui:
         self._playerPos = playerPos
         self._windowOffset = (- WINDOW_WIDTH // 2, - WINDOW_HEIGHT // 2)
         self._inventory = Inventory(visibleSprites, 5, 4, self.__calculateUiPos(), selectedItem)
-        self._inventory.addItem(Item("sword"))
-        self._inventory.addItem(Item("sword", "sword.png", "sword.png"))
 
     def handleMouseLeftClick(self):
         calculatedMousePos = self.__getCalculatedMousePos()

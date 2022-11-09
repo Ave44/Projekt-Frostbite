@@ -1,5 +1,6 @@
 from config import *
 from game.CameraSpriteGroup import CameraSpriteGroup
+from game.item.Item import Item
 from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 
@@ -40,7 +41,6 @@ class Ui:
 
     def __getCalculatedMousePos(self) -> tuple[int, int]:
         mousePos = pygame.mouse.get_pos()
-        print(mousePos)
         uiPos = self.__calculateUiPos()
         calculatedMousePos = (mousePos[0] + uiPos[0],
                               mousePos[1] + uiPos[1])

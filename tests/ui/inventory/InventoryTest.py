@@ -138,8 +138,6 @@ class InventoryTest(unittest.TestCase):
         self.emptyInventory.selectedItem.item = newItem
         self.emptyInventory.handleMouseLeftClick(notEmptySlot.rect.center)
 
-        print(notEmptySlot.item.name)
-        print(self.emptyInventory.selectedItem.item.name)
         self.assertEqual(newItem, notEmptySlot.item)
         self.assertEqual(oldItem, self.emptyInventory.selectedItem.item)
 

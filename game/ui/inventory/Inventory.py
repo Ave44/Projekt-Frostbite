@@ -2,9 +2,10 @@ from game.CameraSpriteGroup import CameraSpriteGroup
 from game.item.Item import Item
 from game.ui.Slot import Slot
 from config import *
+from game.ui.UiInterface import UiInterface
 
 
-class Inventory(pygame.sprite.Sprite):
+class Inventory(pygame.sprite.Sprite, UiInterface):
     def __init__(self,
                  visibleSprites: CameraSpriteGroup,
                  inventoryHeight: int,

@@ -5,7 +5,7 @@ from mock.mock import MagicMock
 
 
 from game.CameraSpriteGroup import CameraSpriteGroup
-from game.ui.Inventory import Inventory
+from game.ui.inventory.Inventory import Inventory
 from game.item.Item import Item
 from game.ui.Slot import Slot
 

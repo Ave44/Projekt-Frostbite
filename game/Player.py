@@ -30,5 +30,4 @@ class Player(Entity):
     def update(self):
         self.input()
         self.move()
-        if self.inventory.isOpened:
-            self.inventory.updatePos(self.rect.center)
+        self.inventory.updatePos(self.rect.center)

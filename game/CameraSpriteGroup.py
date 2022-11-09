@@ -1,5 +1,7 @@
 import pygame
 from config import WINDOW_HEIGHT, WINDOW_WIDTH
+from game.Slot import Slot
+
 
 class CameraSpriteGroup(pygame.sprite.Group):
     def __init__(self):
@@ -17,3 +19,5 @@ class CameraSpriteGroup(pygame.sprite.Group):
         for sprite in self.sprites():
             spritePosition = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image, spritePosition)
+            if type(sprite) == Slot and not sprite.isEmpty():
+                self.displaySurface.blit(sprite.item.icon, spritePosition)

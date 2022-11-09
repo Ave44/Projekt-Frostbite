@@ -10,24 +10,24 @@ class Ui:
         self.selectedItem = selectedItem
         self._playerPos = playerPos
         self._windowOffset = (- WINDOW_WIDTH // 2, - WINDOW_HEIGHT // 2)
-        self._inventory = Inventory(visibleSprites, 5, 4, self.__calculateUiPos(), selectedItem)
+        self.inventory = Inventory(visibleSprites, 5, 4, self.__calculateUiPos(), selectedItem)
 
     def handleMouseLeftClick(self):
         calculatedMousePos = self.__getCalculatedMousePos()
-        self._inventory.handleMouseLeftClick(calculatedMousePos)
+        self.inventory.handleMouseLeftClick(calculatedMousePos)
 
     def handleMouseRightClick(self):
         calculatedMousePos = self.__getCalculatedMousePos()
-        self._inventory.handleMouseRightClick(calculatedMousePos)
+        self.inventory.handleMouseRightClick(calculatedMousePos)
 
     def toggleInventory(self):
-        self._inventory.toggle()
+        self.inventory.toggle()
         self.visibleSprites.remove(self.selectedItem)
         self.visibleSprites.add(self.selectedItem)
 
     def update(self, newPlayerPos: tuple[int, int]) -> None:
         self._playerPos = newPlayerPos
-        self._inventory.changePos(self.__calculateUiPos())
+        self.inventory.changePos(self.__calculateUiPos())
 
         if self.selectedItem.isEmpty():
             return

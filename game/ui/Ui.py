@@ -12,15 +12,15 @@ class Ui:
         self._windowOffset = (- WINDOW_WIDTH // 2, - WINDOW_HEIGHT // 2)
         self.inventory = Inventory(visibleSprites, 5, 4, self.__calculateUiPos(), selectedItem)
 
-    def handleMouseLeftClick(self):
+    def handleMouseLeftClick(self) -> None:
         calculatedMousePos = self.__getCalculatedMousePos()
         self.inventory.handleMouseLeftClick(calculatedMousePos)
 
-    def handleMouseRightClick(self):
+    def handleMouseRightClick(self) -> None:
         calculatedMousePos = self.__getCalculatedMousePos()
         self.inventory.handleMouseRightClick(calculatedMousePos)
 
-    def toggleInventory(self):
+    def toggleInventory(self) -> None:
         self.inventory.toggle()
         self.visibleSprites.remove(self.selectedItem)
         self.visibleSprites.add(self.selectedItem)
@@ -29,18 +29,18 @@ class Ui:
         self._playerPos = newPlayerPos
         self.inventory.changePos(self.__calculateUiPos())
 
-        if self.selectedItem.isEmpty():
+        if not self.selectedItem.isEmpty():
+            calculatedMousePos = self.__getCalculatedMousePos()
+            self.selectedItem.updatePos(calculatedMousePos)
             return
-        calculatedMousePos = self.__getCalculatedMousePos()
-        self.selectedItem.updatePos(calculatedMousePos)
-        return
 
-    def __calculateUiPos(self):
+    def __calculateUiPos(self) -> tuple[int, int]:
         return (self._playerPos[0] + self._windowOffset[0],
                 self._playerPos[1] + self._windowOffset[1])
 
-    def __getCalculatedMousePos(self):
+    def __getCalculatedMousePos(self) -> tuple[int, int]:
         mousePos = pygame.mouse.get_pos()
+        print(mousePos)
         uiPos = self.__calculateUiPos()
         calculatedMousePos = (mousePos[0] + uiPos[0],
                               mousePos[1] + uiPos[1])

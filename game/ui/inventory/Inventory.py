@@ -125,6 +125,7 @@ class Inventory(pygame.sprite.Sprite, UiInterface):
         if hoveredSlot is None:
             if self._selectedItem is not None:
                 self._selectedItem.drop(self._playerPos)
+                self.visibleSprites.add(self._selectedItem)
                 self._selectedItem = None
                 return
         if self._selectedItem is None and not hoveredSlot.isEmpty():
@@ -137,8 +138,8 @@ class Inventory(pygame.sprite.Sprite, UiInterface):
             return
         if self._isOpen:
             self._selectedItem, hoveredSlot.item = hoveredSlot.item, self._selectedItem
-        self.visibleSprites.add(self._selectedItem)
         self._selectedItem.drop(self._playerPos)
+        self.visibleSprites.add(self._selectedItem)
         self._selectedItem = None
         return
 

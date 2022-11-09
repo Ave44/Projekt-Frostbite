@@ -24,16 +24,16 @@ class InventoryTest(unittest.TestCase):
         self.assertEqual(2, len(self.emptyInventory.inventoryList))
 
     def test_isOpen_should_be_False_used_on_closed_inventory(self):
-        self.assertEqual(False, self.emptyInventory.isOpened)
+        self.assertEqual(False, self.emptyInventory.isOpen)
 
     def test_toggle_should_open_closed_inventory(self):
         self.emptyInventory.toggle()
-        self.assertEqual(True, self.emptyInventory.isOpened)
+        self.assertEqual(True, self.emptyInventory.isOpen)
 
     def test_2x_toggle_should_open_closed_inventory(self):
         self.emptyInventory.toggle()
         self.emptyInventory.toggle()
-        self.assertEqual(False, self.emptyInventory.isOpened)
+        self.assertEqual(False, self.emptyInventory.isOpen)
 
     def test_set_inventoryList_should_raise_error_when_called_with_different_length_list(self):
         with self.assertRaises(ValueError):

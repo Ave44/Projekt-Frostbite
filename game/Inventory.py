@@ -17,7 +17,7 @@ class Inventory(pygame.sprite.Sprite):
         self._inventoryWidth = inventoryWidth
         self._playerPos = playerPos
         self._selectedItem = selectedItem
-        self._isOpened: bool = False
+        self._isOpen: bool = False
         self._slotRec = pygame.image.load(os.path.join(ROOT_PATH, "graphics", "ui", "slot.png")).get_size()
         self._windowOffset = (- WINDOW_WIDTH // 2, - WINDOW_HEIGHT // 2)
         self._totalOffset = (self._windowOffset[0] + playerPos[0], self._windowOffset[1] + playerPos[1])
@@ -43,8 +43,8 @@ class Inventory(pygame.sprite.Sprite):
         self._selectedItem = item
 
     @property
-    def isOpened(self) -> bool:
-        return self._isOpened
+    def isOpen(self) -> bool:
+        return self._isOpen
 
     @property
     def totalOffset(self) -> tuple[int, int]:
@@ -76,7 +76,7 @@ class Inventory(pygame.sprite.Sprite):
                 (index[1] + 0.5) * self._slotRec[1] + self._totalOffset[1])
 
     def toggle(self):
-        if self._isOpened:
+        if self._isOpen:
             self.__close()
         else:
             self.__open()
@@ -84,14 +84,12 @@ class Inventory(pygame.sprite.Sprite):
     def __open(self) -> None:
         self.visibleSprites.add(self)
         self.visibleSprites.add(*self._inventoryList)
-        self.visibleSprites.add(*[slot.item for slot in self._inventoryList if not slot.isEmpty()])
-        self._isOpened = True
+        self._isOpen = True
 
     def __close(self) -> None:
         self.visibleSprites.remove(self)
         self.visibleSprites.remove(*self._inventoryList)
-        self.visibleSprites.remove(*[slot.item for slot in self._inventoryList if not slot.isEmpty()])
-        self._isOpened = False
+        self._isOpen = False
 
     def addItem(self, item: Item) -> None:
         emptySlotOption: Slot | None = next(filter(lambda slot: (slot.isEmpty()), self._inventoryList), None)
@@ -136,7 +134,11 @@ class Inventory(pygame.sprite.Sprite):
             hoveredSlot.addItem(self._selectedItem)
             self._selectedItem = None
             return
-        self._selectedItem, hoveredSlot.item = hoveredSlot.item, self._selectedItem
+        if self._isOpen:
+            self._selectedItem, hoveredSlot.item = hoveredSlot.item, self._selectedItem
+        self.visibleSprites.add(self._selectedItem)
+        self._selectedItem.drop(self._playerPos)
+        self._selectedItem = None
         return
 
     def handleMouseRightClick(self):

@@ -17,7 +17,7 @@ class Item(pygame.sprite.Sprite, ABC):
         self._image = pygame.image.load(
             os.path.join(ROOT_PATH, "graphics", "items", imageFilename)) \
             if imageFilename is not None \
-            else pygame.image.load(os.path.join(ROOT_PATH, "graphics", "items", "undefined.png"))
+            else pygame.image.load(os.path.join(ROOT_PATH, "graphics", "items", "undefined_big.png"))
         self._icon = pygame.image.load(
             os.path.join(ROOT_PATH, "graphics", "items", iconFilename)) \
             if iconFilename is not None \
@@ -34,17 +34,17 @@ class Item(pygame.sprite.Sprite, ABC):
 
     @image.setter
     def image(self, image: Surface):
-        self.image = image
+        self._image = image
         self.rect = image.get_rect()
         return
 
     @property
     def icon(self):
-        return self.icon
+        return self._icon
 
     @icon.setter
     def icon(self, icon: Surface):
-        self.icon = icon
+        self._icon = icon
 
     @property
     def name(self) -> str:

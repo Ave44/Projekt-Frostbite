@@ -17,7 +17,7 @@ class Item(pygame.sprite.Sprite, ABC):
         self._image = pygame.image.load(
             os.path.join(ROOT_PATH, "graphics", "items", imageFilename)) \
             if imageFilename is not None \
-            else pygame.image.load(os.path.join(ROOT_PATH, "graphics", "items", "undefined_big.png"))
+            else pygame.image.load(os.path.join(ROOT_PATH, "graphics", "items", "undefined.png"))
         self._icon = pygame.image.load(
             os.path.join(ROOT_PATH, "graphics", "items", iconFilename)) \
             if iconFilename is not None \

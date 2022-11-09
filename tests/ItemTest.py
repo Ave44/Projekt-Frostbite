@@ -2,7 +2,7 @@ import os.path
 import unittest
 
 from config import ROOT_PATH
-from game.Item import Item
+from game.item.Item import Item
 
 
 class ItemTest(unittest.TestCase):

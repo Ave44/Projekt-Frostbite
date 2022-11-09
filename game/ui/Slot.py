@@ -4,7 +4,7 @@ import pygame.sprite
 from pygame import Surface
 
 from config import *
-from game.Item import Item
+from game.item.Item import Item
 
 
 class Slot(pygame.sprite.Sprite):

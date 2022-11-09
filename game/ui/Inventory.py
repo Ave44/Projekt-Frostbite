@@ -1,6 +1,6 @@
 from game.CameraSpriteGroup import CameraSpriteGroup
-from game.Item import Item
-from game.Slot import Slot
+from game.item.Item import Item
+from game.ui.Slot import Slot
 from config import *
 
 

@@ -1,8 +1,8 @@
 import pygame
 
 from game.Entity import Entity
-from game.Inventory import Inventory
-from game.Item import Item
+from game.ui.Inventory import Inventory
+from game.item.Item import Item
 
 
 class Player(Entity):

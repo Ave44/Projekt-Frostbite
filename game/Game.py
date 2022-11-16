@@ -3,6 +3,7 @@ from config import *
 from game.Player import Player
 from game.Tile import Tile
 from game.CameraSpriteGroup import CameraSpriteGroup
+from game.item.Sword import Sword
 
 class Game():
     def __init__(self, screen, saveData):
@@ -15,6 +16,9 @@ class Game():
         self.createMap(saveData["world_map"])
 
         self.player = Player([self.visibleSprites], self.obstacleSprites, saveData["player_data"])
+
+        sword = Sword([self.visibleSprites], pygame.math.Vector2(200, 200))
+        self.player.ui.inventory.addItem(sword)
 
 	
     # later will be replaced with LoadGame(savefile) class

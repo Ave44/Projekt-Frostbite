@@ -1,10 +1,10 @@
-import pygame.sprite
+import pygame
 
 from game.item.Item import Item
 
 
 class SelectedItem(pygame.sprite.Sprite):
-    def __init__(self, playerPos: tuple[int, int], item: Item = None):
+    def __init__(self, playerPos: pygame.math.Vector2(), item: Item = None):
         super().__init__()
         self.playerPos = playerPos
         self.item = item
@@ -20,5 +20,5 @@ class SelectedItem(pygame.sprite.Sprite):
     def drop(self) -> None:
         self.item.drop(self.playerPos)
 
-    def updatePos(self, newPos: tuple[int, int]) -> None:
+    def updatePos(self, newPos: pygame.math.Vector2()) -> None:
         self.rect.center = newPos

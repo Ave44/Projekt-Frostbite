@@ -8,8 +8,8 @@ from game.ui.Ui import Ui
 class Player(Entity):
     def __init__(self, groups, obstacleSprites, playerData):
         super().__init__(groups, obstacleSprites, playerData)
-        self._selectedItem = SelectedItem(playerData['position_center'])
-        self.ui = Ui(groups[0], self._selectedItem, playerData['position_center'])
+        self.selectedItem = SelectedItem(self.rect.center)
+        self.ui = Ui(groups[0], self.selectedItem, self.rect.center)
 
     def input(self):
         pressedKeys = pygame.key.get_pressed()
@@ -30,4 +30,4 @@ class Player(Entity):
         self.input()
         self.move()
         self.ui.update(self.rect.center)
-        self._selectedItem.playerPos = self.rect.center
+        self.selectedItem.playerPos = self.rect.center

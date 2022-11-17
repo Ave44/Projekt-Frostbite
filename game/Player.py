@@ -3,31 +3,34 @@ import pygame
 from game.Entity import Entity
 from game.ui.SelectedItem import SelectedItem
 from game.ui.Ui import Ui
+from game.ui.inventory.Inventory import Inventory
 
 
 class Player(Entity):
-    def __init__(self, groups, obstacleSprites, playerData):
+    def __init__(self, 
+                groups: list[pygame.sprite.Group],
+                obstacleSprites: pygame.sprite.Group,
+                playerData,
+                inventory: Inventory,
+                selectedItem: SelectedItem):
+
         super().__init__(groups, obstacleSprites, playerData)
-        self.selectedItem = SelectedItem(self.rect.center)
-        self.ui = Ui(groups[0], self.selectedItem, self.rect.center)
+        self.selectedItem = selectedItem
+        self.inventory = inventory
 
-    def input(self):
-        pressedKeys = pygame.key.get_pressed()
 
-        # vertical directions
-        if pressedKeys[pygame.K_w]:
-            self.direction.y = -1
-        elif pressedKeys[pygame.K_s]:
-            self.direction.y = 1
+    def moveUp(self):
+        self.direction.y = -1
 
-        # horizontal directions
-        if pressedKeys[pygame.K_a]:
-            self.direction.x = -1
-        elif pressedKeys[pygame.K_d]:
-            self.direction.x = 1
+    def moveDown(self):
+        self.direction.y = 1
+
+    def moveLeft(self):
+        self.direction.x = -1
+
+    def moveRight(self):
+        self.direction.x = 1
+
 
     def update(self):
-        self.input()
         self.move()
-        self.ui.update(self.rect.center)
-        self.selectedItem.playerPos = self.rect.center

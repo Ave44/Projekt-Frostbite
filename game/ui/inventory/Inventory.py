@@ -1,5 +1,4 @@
 from config import *
-from game.CameraSpriteGroup import CameraSpriteGroup
 from game.item.Item import Item
 from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Slot import Slot
@@ -7,48 +6,31 @@ from game.ui.inventory.Slot import Slot
 
 class Inventory(pygame.sprite.Sprite):
     def __init__(self,
-                 visibleSprites: CameraSpriteGroup,
+                 spriteGroup: pygame.sprite.Group,
                  inventoryHeight: int,
                  inventoryWidth: int,
-                 uiPos: pygame.math.Vector2(),
-                 selectedItem: SelectedItem):
+                 center: pygame.math.Vector2()):
 
         super().__init__()
         self.inventoryHeight = inventoryHeight
         self.inventoryWidth = inventoryWidth
-        self.selectedItem = selectedItem
         self.isOpen: bool = False
-        self.slotRec = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()
+        self.slotRectSize = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
+        self.spriteGroup = spriteGroup
 
-        self.visibleSprites = visibleSprites
-        self.image = pygame.Surface([inventoryWidth * self.slotRec[0], inventoryHeight * self.slotRec[1]], pygame.SRCALPHA, 32)
+        self.image = pygame.Surface([inventoryWidth * (self.slotRectSize + SLOTGAP) + SLOTGAP, inventoryHeight * (self.slotRectSize + SLOTGAP) + SLOTGAP], pygame.SRCALPHA, 32)
+        self.image.fill((50,50,50))
         self.rect = self.image.get_rect()
+        self.rect.center = center
 
-        self.windowPos = (0, 0)
-        self.rect.topleft = (uiPos[0] + self.windowPos[0], uiPos[1] + self.windowPos[1])
-        self.inventoryList: list[Slot] = [Slot(self.calculateSlotPosition((x, y), self.rect.topleft))
-                                           for x in range(inventoryWidth)
-                                           for y in range(inventoryHeight)]
+        self.slotList: list[Slot] = [Slot(self.calculateSlotPosition(pygame.math.Vector2(x, y), pygame.math.Vector2(self.rect.topleft)))
+                                        for x in range(inventoryWidth)
+                                        for y in range(inventoryHeight)]
 
 
-    def inventoryList(self, inventoryList: list[Slot]) -> None:
-        if len(inventoryList) == len(self.inventoryList):
-            self.inventoryList = inventoryList
-        else:
-            raise ValueError("Can not set inventory list of different length")
-
-    def changePos(self, newPos: pygame.math.Vector2()) -> None:
-        updatedPos = (self.windowPos[0] + newPos[0], self.windowPos[1] + newPos[1])
-        self.rect.topleft = updatedPos
-
-        for i, slot in enumerate(self.inventoryList):
-            y = i // self.inventoryWidth
-            x = i - y * self.inventoryWidth
-            slot.rect.center = self.calculateSlotPosition((x, y), updatedPos)
-
-    def calculateSlotPosition(self, index: pygame.math.Vector2(), newPos: pygame.math.Vector2()) -> pygame.math.Vector2():
-        return (index[0] * self.slotRec[0] + self.slotRec[0] // 2 + newPos[0],
-                index[1] * self.slotRec[1] + self.slotRec[0] // 2 + newPos[1])
+    def calculateSlotPosition(self, index: pygame.math.Vector2(), topleft: pygame.math.Vector2()) -> pygame.math.Vector2():
+        return (index.x * (self.slotRectSize + SLOTGAP) + SLOTGAP + topleft.x,
+                index.y * (self.slotRectSize + SLOTGAP) + SLOTGAP + topleft.y)
 
     def toggle(self):
         if self.isOpen:
@@ -57,58 +39,58 @@ class Inventory(pygame.sprite.Sprite):
             self.open()
 
     def open(self) -> None:
-        self.visibleSprites.add(self)
-        self.visibleSprites.add(*self.inventoryList)
+        self.spriteGroup.add(self)
+        self.spriteGroup.add(*self.slotList)
         self.isOpen = True
 
     def close(self) -> None:
-        self.visibleSprites.remove(self)
-        self.visibleSprites.remove(*self.inventoryList)
+        self.spriteGroup.remove(self)
+        self.spriteGroup.remove(*self.slotList)
         self.isOpen = False
 
-    def addItem(self, item: Item) -> None:
-        emptySlotOption: Slot | None = next(filter(lambda slot: (slot.isEmpty()), self.inventoryList), None)
-        if emptySlotOption is None and not self.selectedItem.isEmpty():
-            self.selectedItem.drop()
-            self.selectedItem = item
+    def addItem(self, item: Item, selectedItem: SelectedItem) -> None:
+        emptySlotOption: Slot | None = next(filter(lambda slot: (slot.isEmpty()), self.slotList), None)
+        if emptySlotOption is None and not selectedItem.isEmpty():
+            selectedItem.drop()
+            selectedItem = item
             return
-        if emptySlotOption is None and self.selectedItem.isEmpty():
-            self.selectedItem = item
+        if emptySlotOption is None and selectedItem.isEmpty():
+            selectedItem = item
             return
         emptySlotOption.addItem(item)
         return
 
-    def handleMouseLeftClick(self, mousePos: pygame.math.Vector2()):
-        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.inventoryList), None)
+    def handleMouseLeftClick(self, mousePos: pygame.math.Vector2(), selectedItem: SelectedItem):
+        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.slotList), None)
         if hoveredSlot is None:
-            if self.isOpen and not self.selectedItem.isEmpty():
-                self.selectedItem.drop()
-                self.visibleSprites.add(self.selectedItem.item)
-                self.selectedItem.removeItem()
+            if self.isOpen and not selectedItem.isEmpty():
+                selectedItem.drop()
+                self.spriteGroup.add(selectedItem.item)
+                selectedItem.removeItem()
                 return
             return
-        if self.isOpen and self.selectedItem.isEmpty() and not hoveredSlot.isEmpty():
-            self.selectedItem.item = hoveredSlot.item
+        if self.isOpen and selectedItem.isEmpty() and not hoveredSlot.isEmpty():
+            selectedItem.item = hoveredSlot.item
             hoveredSlot.removeItem()
             return
-        if self.isOpen and hoveredSlot.isEmpty() and not self.selectedItem.isEmpty():
-            hoveredSlot.addItem(self.selectedItem.item)
-            self.selectedItem.removeItem()
+        if self.isOpen and hoveredSlot.isEmpty() and not selectedItem.isEmpty():
+            hoveredSlot.addItem(selectedItem.item)
+            selectedItem.removeItem()
             return
-        if self.isOpen and not self.selectedItem.isEmpty():
-            self.selectedItem.item, hoveredSlot.item = hoveredSlot.item, self.selectedItem.item
+        if self.isOpen and not selectedItem.isEmpty():
+            selectedItem.item, hoveredSlot.item = hoveredSlot.item, selectedItem.item
             return
-        if not self.selectedItem.isEmpty():
-            self.selectedItem.drop()
-            self.visibleSprites.add(self.selectedItem.item)
-            self.selectedItem.removeItem()
+        if not selectedItem.isEmpty():
+            selectedItem.drop()
+            self.spriteGroup.add(selectedItem.item)
+            selectedItem.removeItem()
             return
 
-    def handleMouseRightClick(self, mousePos: pygame.math.Vector2()):
-        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.inventoryList), None)
+    def handleMouseRightClick(self, mousePos: pygame.math.Vector2(), selectedItem: SelectedItem):
+        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.slotList), None)
 
         if hoveredSlot is None:
             return
-        if self.isOpen and self.selectedItem.isEmpty():
+        if self.isOpen and selectedItem.isEmpty():
             hoveredSlot.use()
             return

@@ -8,4 +8,5 @@ TILE_SIZE = 64
 CAPTION = 'Project Frostbite'
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON = pygame.image.load(f"{ROOT_PATH}/graphics/icon.png")
+SLOTSIZE = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
 SLOTGAP = 6

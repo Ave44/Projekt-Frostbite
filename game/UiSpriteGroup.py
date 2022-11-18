@@ -1,5 +1,6 @@
 import pygame
 
+from config import SLOTSIZE
 from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.Slot import Slot
@@ -14,12 +15,14 @@ class UiSpriteGroup(pygame.sprite.Group):
 
 
     def customDraw(self):
-        self.displaySurface.blit(self.inventory.image, self.inventory.rect)
-        for slot in self.inventory.slotList:
-            self.displaySurface.blit(slot.image, slot.rect.center)
-            if slot.item:
-                self.displaySurface.blit(slot.item.icon, slot.rect.center)
+        if self.inventory.isOpen:
+            self.displaySurface.blit(self.inventory.image, self.inventory.rect)
+            for slot in self.inventory.slotList:
+                self.displaySurface.blit(slot.image, slot.rect)
+                if slot.item:
+                    self.displaySurface.blit(slot.item.icon, slot.rect)
 
         if not self.selectedItem.isEmpty():
-            mousePos = pygame.mouse.get_pos()
-            self.displaySurface.blit(self.selectedItem.item.icon, mousePos)
+            mousePos = pygame.math.Vector2(pygame.mouse.get_pos())
+            displayPos = (mousePos.x - SLOTSIZE/2, mousePos.y - SLOTSIZE/2)
+            self.displaySurface.blit(self.selectedItem.item.icon, displayPos)

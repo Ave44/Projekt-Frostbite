@@ -1,16 +1,20 @@
 import pygame
 import sys
 
+from game.CameraSpriteGroup import CameraSpriteGroup
 from game.Player import Player
+from config import *
 from game.UiSpriteGroup import UiSpriteGroup
-from game.ui.inventory.Inventory import Inventory
 
 class InputManager:
-    def __init__(self, player: Player, UiSprites: UiSpriteGroup):
+    def __init__(self, player: Player, UiSprites: UiSpriteGroup, visibleSprites: CameraSpriteGroup):
         self.player = player
         self.UiSprites = UiSprites
+        self.visibleSprites = visibleSprites
 
     def handleInput(self):
+        mousePos = pygame.math.Vector2(pygame.mouse.get_pos())
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -23,20 +27,23 @@ class InputManager:
 
 
             if event.type == pygame.MOUSEBUTTONUP:
-                mousePos = pygame.mouse.get_pos()
-                mouseHoversOverUi = self.checkIfMouseHoversOverUi(mousePos)
+                mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)
 
                 if event.button == 1:
-                    if mouseHoversOverUi:
+                    if mouseHoversOverInventory:
                         self.player.inventory.handleMouseLeftClick(mousePos, self.player.selectedItem)
+                    elif not self.player.selectedItem.isEmpty():
+                        self.player.selectedItem.handleMouseLeftClick(mousePos)
                     else:
-                        pass
+                        hoveredSprite = self.getHoveredSprite(mousePos)
+                        if hoveredSprite:
+                            self.player.handleMouseLeftClick(hoveredSprite)
 
-                if event.button == 2:
-                    if mouseHoversOverUi:
-                        self.player.inventory.handleMouseRightClick(mousePos, self.player.selectedItem)
-                    else:
-                        pass
+                if event.button == 3:
+                    if mouseHoversOverInventory:
+                        self.player.inventory.handleMouseRightClick(mousePos)
+                    elif not self.player.selectedItem.isEmpty():
+                        self.player.selectedItem.handleMouseRightClick(mousePos)
 
 
         pressedKeys = pygame.key.get_pressed()
@@ -52,7 +59,15 @@ class InputManager:
             self.player.moveRight()
 
 
-    def checkIfMouseHoversOverUi(self, mousePos) -> bool:
+    def checkIfMouseHoversOverInventory(self, mousePos) -> bool:
         if self.UiSprites.inventory.rect.collidepoint(mousePos):
             return True
         return False
+
+    def getHoveredSprite(self, mousePos):
+        mousePosInWorld = mousePos + self.visibleSprites.offset
+
+        for sprite in self.visibleSprites.sprites():
+            if sprite.rect.collidepoint(mousePosInWorld):
+                return sprite
+        return None

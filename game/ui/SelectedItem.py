@@ -1,23 +1,34 @@
 import pygame
 
-from game.item.Item import Item
-
 
 class SelectedItem(pygame.sprite.Sprite):
-    def __init__(self, item: Item = None):
+    def __init__(self, player):
         super().__init__()
-        self.item = item
-        self.image = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
+        self.image = pygame.Surface((1, 1))
         self.rect = self.image.get_rect()
+
+        self.item = None
+        self.player = player
 
     def isEmpty(self) -> bool:
         return True if self.item is None else False
 
-    def removeItem(self) -> None:
+    def addItem(self, item):
+        if self.isEmpty():
+            self.item = item
+        else:
+            self.item.drop(self.player.rect.center)
+            self.item = item
+
+    def removeItem(self):
         self.item = None
 
-    def drop(self, position) -> None:
-        self.item.drop(position)
+    def drop(self):
+        self.item.drop(self.player.rect.midbottom)
+        self.removeItem()
 
-    def updatePos(self, newPos: pygame.math.Vector2()) -> None:
-        self.rect.center = newPos
+    def handleMouseRightClick(self, mousePos):
+        self.drop()
+
+    def handleMouseLeftClick(self, mousePos):
+        pass

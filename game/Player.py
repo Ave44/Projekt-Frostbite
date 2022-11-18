@@ -1,8 +1,8 @@
 import pygame
 
 from game.Entity import Entity
+from game.items.Item import Item
 from game.ui.SelectedItem import SelectedItem
-from game.ui.Ui import Ui
 from game.ui.inventory.Inventory import Inventory
 
 
@@ -11,11 +11,10 @@ class Player(Entity):
                 groups: list[pygame.sprite.Group],
                 obstacleSprites: pygame.sprite.Group,
                 playerData,
-                inventory: Inventory,
-                selectedItem: SelectedItem):
+                inventory: Inventory):
 
         super().__init__(groups, obstacleSprites, playerData)
-        self.selectedItem = selectedItem
+        self.selectedItem = SelectedItem(self)
         self.inventory = inventory
 
 
@@ -31,6 +30,9 @@ class Player(Entity):
     def moveRight(self):
         self.direction.x = 1
 
+    def handleMouseLeftClick(self, sprite):
+        if isinstance(sprite, Item):
+            self.inventory.addItem(sprite, self.selectedItem)
 
     def update(self):
         self.move()

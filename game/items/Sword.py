@@ -1,5 +1,5 @@
 from config import ROOT_PATH
-from game.item.Item import Item
+from game.items.Item import Item
 import pygame
 
 class Sword(Item):
@@ -10,3 +10,6 @@ class Sword(Item):
         self.icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/sword.png")
         self.damage = 10
         self.durability = 100
+
+    def use(self):
+        print(self, "was used")

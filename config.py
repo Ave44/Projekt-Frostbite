@@ -1,8 +1,12 @@
+import os.path
 import pygame
 
 WINDOW_WIDTH = 1280
-WINDOW_HEIGTH = 720
+WINDOW_HEIGHT = 720
 FPS = 60
-TILESIZE = 64
+TILE_SIZE = 64
 CAPTION = 'Project Frostbite'
-ICON = pygame.image.load('./graphics/icon.png')
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+ICON = pygame.image.load(f"{ROOT_PATH}/graphics/icon.png")
+SLOTSIZE = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
+SLOTGAP = 6

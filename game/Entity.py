@@ -1,8 +1,8 @@
 import pygame
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, groups, obstacleSprites, entityData):
-        super().__init__(groups)
+    def __init__(self, spriteGroups, obstacleSprites, entityData):
+        super().__init__(spriteGroups)
 
         self.imageUp    = pygame.image.load(entityData["path_to_image_up"]).convert_alpha()
         self.imageDown  = pygame.image.load(entityData["path_to_image_down"]).convert_alpha()

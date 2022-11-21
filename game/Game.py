@@ -1,8 +1,14 @@
 import pygame, sys
 from config import *
+from game.InputManager import InputManager
 from game.Player import Player
 from game.Tile import Tile
 from game.CameraSpriteGroup import CameraSpriteGroup
+from game.UiSpriteGroup import UiSpriteGroup
+from game.items.Item import Item
+from game.items.Sword import Sword
+from game.ui.SelectedItem import SelectedItem
+from game.ui.inventory.Inventory import Inventory
 
 class Game():
     def __init__(self, screen, saveData):
@@ -11,33 +17,58 @@ class Game():
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = pygame.sprite.Group()
+        self.UiSprites = UiSpriteGroup()
+
 
         self.createMap(saveData["world_map"])
 
-        self.player = Player([self.visibleSprites], self.obstacleSprites, saveData["player_data"])
+        inventoryPosition = pygame.math.Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT - 60)
+        inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
+        inventory.open()
+
+        self.player = Player([self.visibleSprites], self.obstacleSprites, saveData["player_data"], inventory)
+
+        self.UiSprites.inventory = inventory
+        self.UiSprites.selectedItem = self.player.selectedItem
+
+        sword = Sword([self.visibleSprites], pygame.math.Vector2(200, 200))
+        self.player.inventory.addItem(sword, self.player.selectedItem)
+        unknownItem = Item([self.visibleSprites], pygame.math.Vector2(200, 200))
+        self.player.inventory.addItem(unknownItem, self.player.selectedItem)
+
+        self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
 	
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, worldMap):
         for rowIndex, row in enumerate(worldMap):
             for columnIndex, column in enumerate(row):
-                x = columnIndex * TILESIZE
-                y = rowIndex * TILESIZE
+                x = columnIndex * TILE_SIZE
+                y = rowIndex * TILE_SIZE
                 if column == 0:
-                    Tile((x,y), column, [self.visibleSprites, self.obstacleSprites])
+                    tile = Tile((x,y), column, [self.obstacleSprites])
                 else:
-                    Tile((x,y), column, [self.visibleSprites])
+                    tile = Tile((x,y), column, [])
+                self.visibleSprites.addTile(tile)
+
+    def debug(self, text):
+        font = pygame.font.SysFont(None, 24)
+        img = font.render(text, True, (255,255,255))
+        self.screen.blit(img, (10, 10))
 
 
     def play(self):
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+            self.InputManager.handleInput()
 
             self.visibleSprites.update()
             self.visibleSprites.customDraw(pygame.math.Vector2(self.player.rect.center))
+
+            self.UiSprites.customDraw()
+
+            # method for debuging values by writing them on screen
+            text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
+            self.debug(text)
 
             pygame.display.update()
             self.clock.tick(FPS)

@@ -1,27 +1,38 @@
 import pygame
+
 from game.Entity import Entity
+from game.items.Item import Item
+from game.ui.SelectedItem import SelectedItem
+from game.ui.inventory.Inventory import Inventory
+
 
 class Player(Entity):
-    def __init__(self, groups, obstacleSprites, playerData):
+    def __init__(self, 
+                groups: list[pygame.sprite.Group],
+                obstacleSprites: pygame.sprite.Group,
+                playerData,
+                inventory: Inventory):
+
         super().__init__(groups, obstacleSprites, playerData)
+        self.selectedItem = SelectedItem(self)
+        self.inventory = inventory
 
 
-    def input(self):
-        pressedKeys = pygame.key.get_pressed()
+    def moveUp(self):
+        self.direction.y = -1
 
-        # vertical directions
-        if pressedKeys[pygame.K_w]:
-            self.direction.y = -1
-        elif pressedKeys[pygame.K_s]:
-            self.direction.y = 1
+    def moveDown(self):
+        self.direction.y = 1
 
-        # horizontal directions
-        if pressedKeys[pygame.K_a]:
-            self.direction.x = -1
-        elif pressedKeys[pygame.K_d]:
-            self.direction.x = 1
-            
+    def moveLeft(self):
+        self.direction.x = -1
+
+    def moveRight(self):
+        self.direction.x = 1
+
+    def handleMouseLeftClick(self, sprite):
+        if isinstance(sprite, Item):
+            self.inventory.addItem(sprite, self.selectedItem)
 
     def update(self):
-        self.input()
         self.move()

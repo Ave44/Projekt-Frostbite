@@ -46,3 +46,4 @@ class Player(Entity):
     def die(self):
         self.healthBar.update(self.currentHealth)
         self.remove(*self.groups())
+        print("Game Over")

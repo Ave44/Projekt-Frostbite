@@ -1,6 +1,7 @@
 import pygame
 
 from config import SLOTSIZE
+from game.ui.Bar import Bar
 from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.Slot import Slot
@@ -26,3 +27,7 @@ class UiSpriteGroup(pygame.sprite.Group):
             mousePos = pygame.math.Vector2(pygame.mouse.get_pos())
             displayPos = (mousePos.x - SLOTSIZE/2, mousePos.y - SLOTSIZE/2)
             self.displaySurface.blit(self.selectedItem.item.icon, displayPos)
+
+        for sprite in self.sprites():
+            if type(sprite) == Bar:
+                sprite.draw(self.displaySurface)

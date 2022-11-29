@@ -14,7 +14,8 @@ class Bar(Sprite):
                  barHeight: int,
                  barLength: int,
                  color: str,
-                 targetColor: str):
+                 targetIncreaseColor: str,
+                 targetDecreaseColor: str):
         super(Bar, self).__init__()
 
         self.maxValue = maxValue
@@ -24,7 +25,8 @@ class Bar(Sprite):
         self.barHeight = barHeight
         self.barLength = barLength
         self.color = color
-        self.targetColor = targetColor
+        self.targetIncreaseColor = targetIncreaseColor
+        self.targetDecreaseColor = targetDecreaseColor
 
         self.pos = topLeftPosition
 
@@ -43,11 +45,11 @@ class Bar(Sprite):
     def getBackgroundSurfaceAndRect(self) -> tuple[Surface, Rect]:
         return self.getSurfaceAndRect(self.barLength, self.barHeight, UI_BG_COLOR)
 
-    def getDisplayValueSurfaceAndRect(self) -> tuple[Surface, Rect]:
-        return self.getSurfaceAndRect(self.getValueLength(self.displayValue), self.barHeight, self.targetColor)
+    def getDisplayValueSurfaceAndRect(self, color: str) -> tuple[Surface, Rect]:
+        return self.getSurfaceAndRect(self.getValueLength(self.displayValue), self.barHeight, color)
 
-    def getCurrentValueSurfaceAndRect(self) -> tuple[Surface, Rect]:
-        return self.getSurfaceAndRect(self.getValueLength(self.currentValue), self.barHeight, self.color)
+    def getCurrentValueSurfaceAndRect(self, color: str) -> tuple[Surface, Rect]:
+        return self.getSurfaceAndRect(self.getValueLength(self.currentValue), self.barHeight, color)
 
     def getSurfaceAndRect(self, length: int, height: int, color: str) -> tuple[Surface, Rect]:
         surface = pygame.Surface([length, height])
@@ -73,25 +75,23 @@ class Bar(Sprite):
         if self.displayValue < self.currentValue:
             self.displayValue += 1
 
-            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect()
-            currentSurface.fill(self.targetColor)
+            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.targetIncreaseColor)
             screen.blit(currentSurface, currentRect)
 
-            (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect()
-            displayValSurface.fill(self.color)
+            (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect(self.color)
             screen.blit(displayValSurface, displayValRect)
 
         if self.displayValue > self.currentValue:
             self.displayValue -= 1
 
-            (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect()
+            (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect(self.targetDecreaseColor)
             screen.blit(displayValSurface, displayValRect)
 
-            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect()
+            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.color)
             screen.blit(currentSurface, currentRect)
 
         if self.displayValue == self.currentValue:
-            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect()
+            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.color)
             screen.blit(currentSurface, currentRect)
 
 

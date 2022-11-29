@@ -1,7 +1,7 @@
 import pygame
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, spriteGroups, obstacleSprites, entityData):
+    def __init__(self, spriteGroups, obstacleSprites, entityData, maxHealth: int, currHealth: int):
         super().__init__(spriteGroups)
 
         self.imageUp    = pygame.image.load(entityData["path_to_image_up"]).convert_alpha()
@@ -14,6 +14,9 @@ class Entity(pygame.sprite.Sprite):
         self.speed = entityData["speed"]
         self.direction = pygame.math.Vector2()
         self.obstacleSprites = obstacleSprites
+
+        self.maxHealth = maxHealth
+        self.currentHealth = maxHealth
 
 
     def checkHorizontalCollision(self): # Solution only for non moving coliders!
@@ -60,3 +63,19 @@ class Entity(pygame.sprite.Sprite):
             self.image = self.imageDown
         elif self.direction.y < 0:
             self.image = self.imageUp
+
+    def getDamage(self, amount: int) -> None:
+        if self.currentHealth <= amount:
+            self.currentHealth = 0
+            self.die()
+            return
+        self.currentHealth -= amount
+
+    def die(self):
+        self.remove(*self.groups())
+
+    def heal(self, amount: int):
+        if self.currentHealth + amount >= self.maxHealth:
+            self.currentHealth = self.maxHealth
+            return
+        self.currentHealth += amount

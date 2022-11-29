@@ -2,7 +2,6 @@ import pygame
 from pygame.math import Vector2
 
 from game.Entity import Entity
-from game.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.ui.Bar import Bar
 from game.ui.SelectedItem import SelectedItem

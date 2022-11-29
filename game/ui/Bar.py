@@ -1,4 +1,3 @@
-import pygame
 from pygame import Vector2
 from pygame.rect import Rect
 from pygame.sprite import Sprite
@@ -15,7 +14,8 @@ class Bar(Sprite):
                  barLength: int,
                  color: str,
                  targetIncreaseColor: str,
-                 targetDecreaseColor: str):
+                 targetDecreaseColor: str,
+                 deltaPoints: int):
         super(Bar, self).__init__()
 
         self.maxValue = maxValue
@@ -27,6 +27,7 @@ class Bar(Sprite):
         self.color = color
         self.targetIncreaseColor = targetIncreaseColor
         self.targetDecreaseColor = targetDecreaseColor
+        self.deltaPoints = deltaPoints
 
         self.pos = topLeftPosition
 
@@ -73,7 +74,12 @@ class Bar(Sprite):
         screen.blit(bgSurface, bgRect)
 
         if self.displayValue < self.currentValue:
-            self.displayValue += 1
+            newDisplayVal = self.displayValue + self.deltaPoints
+
+            if newDisplayVal > self.currentValue:
+                self.displayValue = self.currentValue
+            else:
+                self.displayValue = newDisplayVal
 
             (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.targetIncreaseColor)
             screen.blit(currentSurface, currentRect)
@@ -82,7 +88,12 @@ class Bar(Sprite):
             screen.blit(displayValSurface, displayValRect)
 
         if self.displayValue > self.currentValue:
-            self.displayValue -= 1
+            newDisplayVal = self.displayValue - self.deltaPoints
+
+            if newDisplayVal < 0:
+                self.displayValue = 0
+            else:
+                self.displayValue = newDisplayVal
 
             (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect(self.targetDecreaseColor)
             screen.blit(displayValSurface, displayValRect)
@@ -94,8 +105,5 @@ class Bar(Sprite):
             (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.color)
             screen.blit(currentSurface, currentRect)
 
-
     def update(self, newCurrentValue: int):
         self.currentValue = newCurrentValue
-
-

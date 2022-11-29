@@ -18,7 +18,7 @@ class Player(Entity):
         super().__init__(groups, obstacleSprites, playerData, maxHealth, maxHealth)
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
-        self.healthBar = Bar(Vector2(10, 40), self.maxHealth, self.currentHealth, 20, 200, 'red', 'green', 'yellow')
+        self.healthBar = Bar(Vector2(10, 40), self.maxHealth, self.currentHealth, 20, 200, 'red', 'green', 'yellow', 1)
 
     def moveUp(self):
         self.direction.y = -1

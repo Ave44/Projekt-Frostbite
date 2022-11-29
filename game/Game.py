@@ -1,4 +1,6 @@
 import pygame, sys
+from pygame.math import Vector2
+
 from config import *
 from game.InputManager import InputManager
 from game.Player import Player
@@ -7,6 +9,7 @@ from game.CameraSpriteGroup import CameraSpriteGroup
 from game.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
+from game.ui.Bar import Bar
 from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 
@@ -26,8 +29,14 @@ class Game():
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
         inventory.open()
 
-        self.player = Player([self.visibleSprites], self.obstacleSprites, saveData["player_data"], inventory)
+        maxHealth = 100
 
+        self.player = Player([self.visibleSprites],
+                             self.obstacleSprites,
+                             saveData["player_data"],
+                             inventory, maxHealth)
+
+        self.UiSprites.add(self.player.healthBar)
         self.UiSprites.inventory = inventory
         self.UiSprites.selectedItem = self.player.selectedItem
 

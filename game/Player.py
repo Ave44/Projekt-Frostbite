@@ -10,17 +10,15 @@ from game.ui.inventory.Inventory import Inventory
 
 class Player(Entity):
     def __init__(self,
-                groups: list[pygame.sprite.Group],
-                obstacleSprites: pygame.sprite.Group,
-                playerData,
-                inventory: Inventory,
-                maxHealth: int
-                 ):
-
+                 groups: list[pygame.sprite.Group],
+                 obstacleSprites: pygame.sprite.Group,
+                 playerData,
+                 inventory: Inventory,
+                 maxHealth: int):
         super().__init__(groups, obstacleSprites, playerData, maxHealth, maxHealth)
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
-        self.healthBar = Bar(Vector2(10, 40), self.maxHealth, self.currentHealth, 20, 200, 'red')
+        self.healthBar = Bar(Vector2(10, 40), self.maxHealth, self.currentHealth, 20, 200, 'red', 'yellow')
 
     def moveUp(self):
         self.direction.y = -1

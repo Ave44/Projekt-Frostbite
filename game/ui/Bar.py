@@ -18,6 +18,7 @@ class Bar(Sprite):
 
         self.maxValue = maxValue
         self.currentValue = currentValue
+        self.displayValue = currentValue
 
         self.barHeight = barHeight
         self.barLength = barLength
@@ -40,8 +41,8 @@ class Bar(Sprite):
     def getBackgroundSurfaceAndRect(self) -> tuple[Surface, Rect]:
         return self.getSurfaceAndRect(self.barLength, self.barHeight, UI_BG_COLOR)
 
-    def getValueSurfaceAndRect(self) -> tuple[Surface, Rect]:
-        return self.getSurfaceAndRect(int(self.getCurrentLength()), self.barHeight, self.color)
+    def getDisplayValueSurfaceAndRect(self) -> tuple[Surface, Rect]:
+        return self.getSurfaceAndRect(int(self.getDisplayLength()), self.barHeight, self.color)
 
     def getSurfaceAndRect(self, length: int, height: int, color: str) -> tuple[Surface, Rect]:
         surface = pygame.Surface([length, height])
@@ -52,9 +53,9 @@ class Bar(Sprite):
         return surface, rect
 
     def getValueRatio(self) -> float:
-        return self.currentValue / self.maxValue
+        return self.displayValue / self.maxValue
 
-    def getCurrentLength(self) -> float:
+    def getDisplayLength(self) -> float:
         return self.barLength * self.getValueRatio()
 
     def draw(self, screen: Surface):
@@ -64,8 +65,14 @@ class Bar(Sprite):
         (bgSurface, bgRect) = self.getBackgroundSurfaceAndRect()
         screen.blit(bgSurface, bgRect)
 
-        (valSurface, valRect) = self.getValueSurfaceAndRect()
-        screen.blit(valSurface, valRect)
+        if self.displayValue < self.currentValue:
+            self.displayValue += 1
+
+        if self.displayValue > self.currentValue:
+            self.displayValue -= 1
+
+        (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect()
+        screen.blit(displayValSurface, displayValRect)
 
     def update(self, newCurrentValue: int):
         self.currentValue = newCurrentValue

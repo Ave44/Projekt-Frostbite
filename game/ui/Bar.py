@@ -1,4 +1,3 @@
-import pygame
 from pygame import Vector2
 from pygame.rect import Rect
 from pygame.sprite import Sprite
@@ -9,93 +8,64 @@ from config import *
 
 class Bar(Sprite):
     def __init__(self,
-                 topLeftPosition: Vector2,
-                 maxValue: int, currentValue: int,
+                 center: Vector2,
+                 maxValue: int,
+                 currentValue: int,
                  barHeight: int,
                  barLength: int,
-                 color: str,
-                 targetIncreaseColor: str,
-                 targetDecreaseColor: str):
-        super(Bar, self).__init__()
+                 mainColor: tuple[int, int, int],
+                 increaseColor: tuple[int, int, int],
+                 decreaseColor: tuple[int, int, int]):
+        super().__init__()
 
         self.maxValue = maxValue
         self.currentValue = currentValue
         self.displayValue = currentValue
+        self.valueRatio = barLength / maxValue
 
         self.barHeight = barHeight
         self.barLength = barLength
-        self.color = color
-        self.targetIncreaseColor = targetIncreaseColor
-        self.targetDecreaseColor = targetDecreaseColor
 
-        self.pos = topLeftPosition
+        self.mainColor = mainColor
+        self.increaseColor = increaseColor
+        self.decreaseColor = decreaseColor
 
-    def getBorderSurfaceAndRect(self) -> tuple[Surface, Rect]:
-        (bgSurface, bgRect) = self.getBackgroundSurfaceAndRect()
-        bgSize = bgSurface.get_size()
+        self.center = center
+        self.bgSurface = Surface([barLength, barHeight])
+        self.bgSurface.fill(UI_BG_COLOR)
+        self.bgRect = Rect(center.x - barLength/2, center.y - barHeight/2, barLength, barHeight)
 
-        borderSurface = Surface([bgSize[0] + UI_BORDER_SIZE * 2, bgSize[1] + UI_BORDER_SIZE * 2])
-        borderSurface.fill(UI_BORDER_COLOR)
+        self.borderSurface = Surface([barLength + UI_BORDER_SIZE*2, barHeight + UI_BORDER_SIZE*2])
+        self.borderSurface.fill(UI_BORDER_COLOR)
+        self.borderRect = Rect(center.x - barLength/2 - UI_BORDER_SIZE,
+                               center.y - barHeight/2 - UI_BORDER_SIZE,
+                               barLength + UI_BORDER_SIZE*2,
+                               barHeight + UI_BORDER_SIZE*2)
 
-        borderRect = bgRect.copy()
-        borderRect = borderRect.move(-UI_BORDER_SIZE, -UI_BORDER_SIZE)
-
-        return borderSurface, borderRect
-
-    def getBackgroundSurfaceAndRect(self) -> tuple[Surface, Rect]:
-        return self.getSurfaceAndRect(self.barLength, self.barHeight, UI_BG_COLOR)
-
-    def getDisplayValueSurfaceAndRect(self, color: str) -> tuple[Surface, Rect]:
-        return self.getSurfaceAndRect(self.getValueLength(self.displayValue), self.barHeight, color)
-
-    def getCurrentValueSurfaceAndRect(self, color: str) -> tuple[Surface, Rect]:
-        return self.getSurfaceAndRect(self.getValueLength(self.currentValue), self.barHeight, color)
-
-    def getSurfaceAndRect(self, length: int, height: int, color: str) -> tuple[Surface, Rect]:
-        surface = pygame.Surface([length, height])
+    def drawBarSurface(self, screen: Surface, value: int, color: str):
+        length = value * self.valueRatio
+        surface = Surface([length, self.barHeight])
         surface.fill(color)
 
         rect = surface.get_rect()
-        rect.topleft = self.pos
-        return surface, rect
+        rect.topleft = self.bgRect.topleft
 
-    def getValueRatio(self, value) -> int:
-        return value / self.maxValue
-
-    def getValueLength(self, value) -> int:
-        return self.barLength * self.getValueRatio(value)
+        screen.blit(surface, rect)
 
     def draw(self, screen: Surface):
-        (borderSurface, borderRect) = self.getBorderSurfaceAndRect()
-        screen.blit(borderSurface, borderRect)
-
-        (bgSurface, bgRect) = self.getBackgroundSurfaceAndRect()
-        screen.blit(bgSurface, bgRect)
-
-        if self.displayValue < self.currentValue:
-            self.displayValue += 1
-
-            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.targetIncreaseColor)
-            screen.blit(currentSurface, currentRect)
-
-            (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect(self.color)
-            screen.blit(displayValSurface, displayValRect)
-
-        if self.displayValue > self.currentValue:
-            self.displayValue -= 1
-
-            (displayValSurface, displayValRect) = self.getDisplayValueSurfaceAndRect(self.targetDecreaseColor)
-            screen.blit(displayValSurface, displayValRect)
-
-            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.color)
-            screen.blit(currentSurface, currentRect)
+        screen.blit(self.borderSurface, self.borderRect)
+        screen.blit(self.bgSurface, self.bgRect)
 
         if self.displayValue == self.currentValue:
-            (currentSurface, currentRect) = self.getCurrentValueSurfaceAndRect(self.color)
-            screen.blit(currentSurface, currentRect)
-
+            self.drawBarSurface(screen, self.currentValue, self.mainColor)
+        elif self.displayValue < self.currentValue:
+            self.displayValue += 1
+            self.drawBarSurface(screen, self.currentValue, self.increaseColor)
+            self.drawBarSurface(screen, self.displayValue, self.mainColor)
+        else:
+            self.displayValue -= 1
+            self.drawBarSurface(screen, self.displayValue, self.decreaseColor)
+            self.drawBarSurface(screen, self.currentValue, self.mainColor)
 
     def update(self, newCurrentValue: int):
         self.currentValue = newCurrentValue
-
-

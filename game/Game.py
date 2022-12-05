@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 from pygame.math import Vector2
 
 from config import *
@@ -9,8 +9,6 @@ from game.CameraSpriteGroup import CameraSpriteGroup
 from game.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
-from game.ui.Bar import Bar
-from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 
 class Game():
@@ -25,24 +23,22 @@ class Game():
 
         self.createMap(saveData["world_map"])
 
-        inventoryPosition = pygame.math.Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT - 60)
+        inventoryPosition = Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
         inventory.open()
-
-        maxHealth = 100
 
         self.player = Player([self.visibleSprites],
                              self.obstacleSprites,
                              saveData["player_data"],
-                             inventory, maxHealth)
+                             inventory)
 
-        self.UiSprites.add(self.player.healthBar)
+        self.UiSprites.player = self.player
         self.UiSprites.inventory = inventory
         self.UiSprites.selectedItem = self.player.selectedItem
 
-        sword = Sword([self.visibleSprites], pygame.math.Vector2(200, 200))
+        sword = Sword([self.visibleSprites], Vector2(200, 200))
         self.player.inventory.addItem(sword, self.player.selectedItem)
-        unknownItem = Item([self.visibleSprites], pygame.math.Vector2(200, 200))
+        unknownItem = Item([self.visibleSprites], Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
 
         self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
@@ -71,7 +67,7 @@ class Game():
             self.InputManager.handleInput()
 
             self.visibleSprites.update()
-            self.visibleSprites.customDraw(pygame.math.Vector2(self.player.rect.center))
+            self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
             self.UiSprites.customDraw()
 

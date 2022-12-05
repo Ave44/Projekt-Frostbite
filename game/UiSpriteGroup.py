@@ -1,9 +1,11 @@
 import pygame
+from pygame.math import Vector2
 
 from config import SLOTSIZE
 from game.ui.Bar import Bar
 from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
+from game import Player
 from game.ui.inventory.Slot import Slot
 
 
@@ -13,6 +15,7 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.displaySurface = pygame.display.get_surface()
         self.inventory = None | Inventory
         self.selectedItem = None | SelectedItem
+        self.player = None
 
 
     def customDraw(self):
@@ -24,10 +27,8 @@ class UiSpriteGroup(pygame.sprite.Group):
                     self.displaySurface.blit(slot.item.icon, slot.rect)
 
         if not self.selectedItem.isEmpty():
-            mousePos = pygame.math.Vector2(pygame.mouse.get_pos())
+            mousePos = Vector2(pygame.mouse.get_pos())
             displayPos = (mousePos.x - SLOTSIZE/2, mousePos.y - SLOTSIZE/2)
             self.displaySurface.blit(self.selectedItem.item.icon, displayPos)
 
-        for sprite in self.sprites():
-            if type(sprite) == Bar:
-                sprite.draw(self.displaySurface)
+        self.player.healthBar.draw(self.displaySurface)

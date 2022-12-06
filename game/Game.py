@@ -9,7 +9,7 @@ from ui.inventory.items.Sword import Sword
 from game.ui.inventory.Inventory import Inventory
 
 
-class Game():
+class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()

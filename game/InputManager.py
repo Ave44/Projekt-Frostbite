@@ -1,5 +1,7 @@
 import sys
 
+from pygame.sprite import Sprite
+
 from sprites.CameraSpriteGroup import CameraSpriteGroup
 from entities.Player import Player
 from config import *
@@ -12,7 +14,7 @@ class InputManager:
         self.UiSprites = UiSprites
         self.visibleSprites = visibleSprites
 
-    def handleInput(self):
+    def handleInput(self) -> None:
         mousePos = pygame.math.Vector2(pygame.mouse.get_pos())
 
         for event in pygame.event.get():
@@ -60,7 +62,7 @@ class InputManager:
             return True
         return False
 
-    def getHoveredSprite(self, mousePos):
+    def getHoveredSprite(self, mousePos) -> Sprite | None:
         mousePosInWorld = mousePos + self.visibleSprites.offset
 
         for sprite in self.visibleSprites.sprites():

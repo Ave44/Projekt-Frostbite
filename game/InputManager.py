@@ -1,10 +1,9 @@
-import pygame
 import sys
 
-from game.CameraSpriteGroup import CameraSpriteGroup
-from game.Player import Player
+from sprites.CameraSpriteGroup import CameraSpriteGroup
+from entities.Player import Player
 from config import *
-from game.UiSpriteGroup import UiSpriteGroup
+from sprites.UiSpriteGroup import UiSpriteGroup
 
 
 class InputManager:

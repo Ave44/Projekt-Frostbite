@@ -1,6 +1,6 @@
 from config import *
 from ui.inventory.items.Item import Item
-from ui.inventory.items.SelectedItem import SelectedItem
+from ui.inventory.state.SelectedItem import SelectedItem
 from game.ui.inventory.Slot import Slot
 
 

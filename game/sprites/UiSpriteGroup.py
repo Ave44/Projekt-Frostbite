@@ -1,7 +1,7 @@
 import pygame
 
 from config import SLOTSIZE
-from ui.inventory.items.SelectedItem import SelectedItem
+from ui.inventory.state.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 
 

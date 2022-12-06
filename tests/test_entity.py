@@ -1,5 +1,5 @@
 import unittest
-from game.Entity import Entity
+from entities.Entity import Entity
 
 
 class entityTests(unittest.TestCase):

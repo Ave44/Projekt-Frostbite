@@ -1,8 +1,8 @@
 import pygame
 
-from game.Entity import Entity
+from entities.Entity import Entity
 from ui.inventory.items.Item import Item
-from ui.inventory.items.SelectedItem import SelectedItem
+from ui.inventory.state.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 
 

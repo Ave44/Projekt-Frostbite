@@ -3,12 +3,12 @@ import unittest
 import pygame
 from mock.mock import MagicMock
 
-from Player import Player
-from game.CameraSpriteGroup import CameraSpriteGroup
+from entities.Player import Player
+from sprites.CameraSpriteGroup import CameraSpriteGroup
 from ui.inventory.items.Item import Item
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.Slot import Slot
-from ui.inventory.items.SelectedItem import SelectedItem
+from ui.inventory.state.SelectedItem import SelectedItem
 
 
 class InventoryTest(unittest.TestCase):

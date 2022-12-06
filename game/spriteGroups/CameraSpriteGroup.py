@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 
 from config import WINDOW_HEIGHT, WINDOW_WIDTH
-from game.ui.inventory.Slot import Slot
+from ui.inventory.items.Slot import Slot
 from ui.inventory.state.SelectedItem import SelectedItem
 
 

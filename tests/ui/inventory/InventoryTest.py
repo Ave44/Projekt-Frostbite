@@ -5,7 +5,7 @@ from mock.mock import MagicMock
 
 from entities.Player import Player
 from game.ui.inventory.Inventory import Inventory
-from game.ui.inventory.Slot import Slot
+from ui.inventory.items.Slot import Slot
 from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from ui.inventory.items.Item import Item
 from ui.inventory.state.SelectedItem import SelectedItem

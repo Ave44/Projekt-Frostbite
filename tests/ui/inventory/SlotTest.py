@@ -2,7 +2,7 @@ import unittest
 
 from mock.mock import Mock
 
-from game.ui.inventory.Slot import Slot
+from ui.inventory.items.Slot import Slot
 from ui.inventory.items.Item import Item
 
 

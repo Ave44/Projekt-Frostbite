@@ -1,7 +1,7 @@
 from pygame.math import Vector2
 
 from config import *
-from game.ui.inventory.Slot import Slot
+from ui.inventory.items.Slot import Slot
 from ui.inventory.items.Item import Item
 from ui.inventory.state.SelectedItem import SelectedItem
 

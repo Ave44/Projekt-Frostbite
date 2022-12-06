@@ -8,7 +8,7 @@ from game.ui.inventory.Inventory import Inventory
 
 class Player(Entity):
     def __init__(self,
-                 groups: list[pygame.sprite.Group],
+                 groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
                  playerData,
                  inventory: Inventory):
@@ -16,7 +16,7 @@ class Player(Entity):
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
 
-    def moveUp(self):
+    def move_up(self):
         self.direction.y = -1
 
     def moveDown(self):

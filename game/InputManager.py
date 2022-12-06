@@ -2,10 +2,10 @@ import sys
 
 from pygame.sprite import Sprite
 
-from sprites.CameraSpriteGroup import CameraSpriteGroup
+from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from entities.Player import Player
 from config import *
-from sprites.UiSpriteGroup import UiSpriteGroup
+from spriteGroups.UiSpriteGroup import UiSpriteGroup
 
 
 class InputManager:
@@ -48,7 +48,7 @@ class InputManager:
         pressedKeys = pygame.key.get_pressed()
 
         if pressedKeys[pygame.K_w]:
-            self.player.moveUp()
+            self.player.move_up()
         elif pressedKeys[pygame.K_s]:
             self.player.moveDown()
 

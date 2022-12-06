@@ -4,7 +4,7 @@ import pygame
 from mock.mock import MagicMock
 
 from entities.Player import Player
-from sprites.CameraSpriteGroup import CameraSpriteGroup
+from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from ui.inventory.items.Item import Item
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.Slot import Slot

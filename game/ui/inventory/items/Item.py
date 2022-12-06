@@ -6,7 +6,7 @@ from config import ROOT_PATH
 
 class Item(pygame.sprite.Sprite):
     def __init__(self, spriteGroup: pygame.sprite.Group, center: pygame.math.Vector2()):
-        super().__init__([spriteGroup])
+        super().__init__(spriteGroup)
         self.spriteGroup = spriteGroup
         self.id = shortuuid.uuid()
         self.name = "Item without name"

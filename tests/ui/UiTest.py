@@ -3,7 +3,7 @@ import unittest
 import mock
 
 from config import *
-from sprites.CameraSpriteGroup import CameraSpriteGroup
+from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from ui.inventory.state.SelectedItem import SelectedItem
 from game.ui.Ui import Ui
 

@@ -12,7 +12,7 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.inventory = None | Inventory
         self.selectedItem = None | SelectedItem
 
-    def customDraw(self):
+    def custom_draw(self):
         if self.inventory.isOpen:
             self.displaySurface.blit(self.inventory.image, self.inventory.rect)
             for slot in self.inventory.slotList:

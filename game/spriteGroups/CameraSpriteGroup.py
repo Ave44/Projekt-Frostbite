@@ -13,7 +13,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
         self.tilesSprites = []
 
-    def customDraw(self, center):
+    def custom_draw(self, center):
         self.displaySurface.fill('black')
         self.offset.x = center.x - self.halfWindowWidth
         self.offset.y = center.y - self.halfWindowHeight
@@ -28,5 +28,5 @@ class CameraSpriteGroup(pygame.sprite.Group):
             if (type(sprite) == Slot or type(sprite) == SelectedItem) and not sprite.isEmpty():
                 self.displaySurface.blit(sprite.item.icon, spritePosition)
 
-    def addTile(self, tile):
+    def add_tile(self, tile):
         self.tilesSprites.append(tile)

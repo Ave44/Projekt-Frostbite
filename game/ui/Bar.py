@@ -42,7 +42,7 @@ class Bar(Sprite):
                                barLength + UI_BORDER_SIZE*2,
                                barHeight + UI_BORDER_SIZE*2)
 
-    def drawBarSurface(self, screen: Surface, value: int, color: str):
+    def drawBarSurface(self, screen: Surface, value: int, color: tuple[int, int, int]):
         length = value * self.valueRatio
         surface = Surface([length, self.barHeight])
         surface.fill(color)

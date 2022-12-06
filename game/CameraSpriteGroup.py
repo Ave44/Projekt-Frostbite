@@ -1,6 +1,6 @@
 import pygame
 from config import WINDOW_HEIGHT, WINDOW_WIDTH
-from game.ui.SelectedItem import SelectedItem
+from ui.inventory.items.SelectedItem import SelectedItem
 from game.ui.inventory.Slot import Slot
 
 

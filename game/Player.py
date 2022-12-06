@@ -1,22 +1,20 @@
 import pygame
 
 from game.Entity import Entity
-from game.items.Item import Item
-from game.ui.SelectedItem import SelectedItem
+from ui.inventory.items.Item import Item
+from ui.inventory.items.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
 
 
 class Player(Entity):
-    def __init__(self, 
-                groups: list[pygame.sprite.Group],
-                obstacleSprites: pygame.sprite.Group,
-                playerData,
-                inventory: Inventory):
-
+    def __init__(self,
+                 groups: list[pygame.sprite.Group],
+                 obstacleSprites: pygame.sprite.Group,
+                 playerData,
+                 inventory: Inventory):
         super().__init__(groups, obstacleSprites, playerData)
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
-
 
     def moveUp(self):
         self.direction.y = -1

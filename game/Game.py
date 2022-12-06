@@ -1,14 +1,13 @@
-import pygame, sys
 from config import *
 from game.InputManager import InputManager
 from game.Player import Player
 from game.Tile import Tile
 from game.CameraSpriteGroup import CameraSpriteGroup
 from game.UiSpriteGroup import UiSpriteGroup
-from game.items.Item import Item
-from game.items.Sword import Sword
-from game.ui.SelectedItem import SelectedItem
+from ui.inventory.items.Item import Item
+from ui.inventory.items.Sword import Sword
 from game.ui.inventory.Inventory import Inventory
+
 
 class Game():
     def __init__(self, screen, saveData):
@@ -19,10 +18,9 @@ class Game():
         self.obstacleSprites = pygame.sprite.Group()
         self.UiSprites = UiSpriteGroup()
 
-
         self.createMap(saveData["world_map"])
 
-        inventoryPosition = pygame.math.Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT - 60)
+        inventoryPosition = pygame.math.Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
         inventory.open()
 
@@ -38,7 +36,6 @@ class Game():
 
         self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
-	
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, worldMap):
         for rowIndex, row in enumerate(worldMap):
@@ -46,16 +43,15 @@ class Game():
                 x = columnIndex * TILE_SIZE
                 y = rowIndex * TILE_SIZE
                 if column == 0:
-                    tile = Tile((x,y), column, [self.obstacleSprites])
+                    tile = Tile((x, y), column, [self.obstacleSprites])
                 else:
-                    tile = Tile((x,y), column, [])
+                    tile = Tile((x, y), column, [])
                 self.visibleSprites.addTile(tile)
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
-        img = font.render(text, True, (255,255,255))
+        img = font.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
-
 
     def play(self):
         while True:

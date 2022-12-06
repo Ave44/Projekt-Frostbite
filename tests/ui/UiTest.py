@@ -1,11 +1,10 @@
 import unittest
 
 import mock
-from mock.mock import MagicMock
 
 from config import *
 from game.CameraSpriteGroup import CameraSpriteGroup
-from game.ui.SelectedItem import SelectedItem
+from ui.inventory.items.SelectedItem import SelectedItem
 from game.ui.Ui import Ui
 
 

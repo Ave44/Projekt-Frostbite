@@ -1,6 +1,6 @@
 from config import *
-from game.items.Item import Item
-from game.ui.SelectedItem import SelectedItem
+from ui.inventory.items.Item import Item
+from ui.inventory.items.SelectedItem import SelectedItem
 from game.ui.inventory.Slot import Slot
 
 
@@ -17,17 +17,20 @@ class Inventory(pygame.sprite.Sprite):
         self.isOpen: bool = False
         self.spriteGroup = spriteGroup
 
-        self.image = pygame.Surface([inventoryWidth * (SLOTSIZE + SLOTGAP) + SLOTGAP, inventoryHeight * (SLOTSIZE + SLOTGAP) + SLOTGAP], pygame.SRCALPHA, 32)
-        self.image.fill((50,50,50))
+        self.image = pygame.Surface(
+            [inventoryWidth * (SLOTSIZE + SLOTGAP) + SLOTGAP, inventoryHeight * (SLOTSIZE + SLOTGAP) + SLOTGAP],
+            pygame.SRCALPHA, 32)
+        self.image.fill((50, 50, 50))
         self.rect = self.image.get_rect()
         self.rect.center = center
 
-        self.slotList: list[Slot] = [Slot(self.calculateSlotPosition(pygame.math.Vector2(x, y), pygame.math.Vector2(self.rect.topleft)))
-                                        for y in range(inventoryHeight)
-                                        for x in range(inventoryWidth)]
+        self.slotList: list[Slot] = [
+            Slot(self.calculateSlotPosition(pygame.math.Vector2(x, y), pygame.math.Vector2(self.rect.topleft)))
+            for y in range(inventoryHeight)
+            for x in range(inventoryWidth)]
 
-
-    def calculateSlotPosition(self, index: pygame.math.Vector2(), topleft: pygame.math.Vector2()) -> pygame.math.Vector2():
+    def calculateSlotPosition(self, index: pygame.math.Vector2(),
+                              topleft: pygame.math.Vector2()) -> pygame.math.Vector2():
         return (topleft.x + SLOTGAP + index.x * (SLOTSIZE + SLOTGAP),
                 topleft.y + SLOTGAP + index.y * (SLOTSIZE + SLOTGAP))
 
@@ -48,7 +51,7 @@ class Inventory(pygame.sprite.Sprite):
     def addItem(self, item: Item, selectedItem: SelectedItem) -> None:
         emptySlot: Slot | None = next(filter(lambda slot: (slot.isEmpty()), self.slotList), None)
         item.removeFromSpriteGroup()
-        
+
         if emptySlot:
             emptySlot.addItem(item)
         else:
@@ -79,4 +82,3 @@ class Inventory(pygame.sprite.Sprite):
 
             if hoveredSlot:
                 hoveredSlot.use()
-

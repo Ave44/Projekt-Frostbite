@@ -6,6 +6,7 @@ from game.Player import Player
 from config import *
 from game.UiSpriteGroup import UiSpriteGroup
 
+
 class InputManager:
     def __init__(self, player: Player, UiSprites: UiSpriteGroup, visibleSprites: CameraSpriteGroup):
         self.player = player
@@ -20,11 +21,9 @@ class InputManager:
                 pygame.quit()
                 sys.exit()
 
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     self.player.inventory.toggle()
-
 
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)
@@ -45,7 +44,6 @@ class InputManager:
                     elif not self.player.selectedItem.isEmpty():
                         self.player.selectedItem.handleMouseRightClick(mousePos)
 
-
         pressedKeys = pygame.key.get_pressed()
 
         if pressedKeys[pygame.K_w]:
@@ -57,7 +55,6 @@ class InputManager:
             self.player.moveLeft()
         elif pressedKeys[pygame.K_d]:
             self.player.moveRight()
-
 
     def checkIfMouseHoversOverInventory(self, mousePos) -> bool:
         if self.UiSprites.inventory.rect.collidepoint(mousePos):

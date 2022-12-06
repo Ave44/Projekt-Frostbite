@@ -1,22 +1,22 @@
 import pygame
 
+
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, spriteGroups, obstacleSprites, entityData):
+    def __init__(self, spriteGroups, obstacleSprites, entityData: dict):
         super().__init__(spriteGroups)
 
-        self.imageUp    = pygame.image.load(entityData["path_to_image_up"]).convert_alpha()
-        self.imageDown  = pygame.image.load(entityData["path_to_image_down"]).convert_alpha()
-        self.imageLeft  = pygame.image.load(entityData["path_to_image_left"]).convert_alpha()
+        self.imageUp = pygame.image.load(entityData["path_to_image_up"]).convert_alpha()
+        self.imageDown = pygame.image.load(entityData["path_to_image_down"]).convert_alpha()
+        self.imageLeft = pygame.image.load(entityData["path_to_image_left"]).convert_alpha()
         self.imageRight = pygame.image.load(entityData["path_to_image_right"]).convert_alpha()
         self.image = self.imageDown
-        self.rect = self.image.get_rect(center = entityData["position_center"])
+        self.rect = self.image.get_rect(center=entityData["position_center"])
 
         self.speed = entityData["speed"]
         self.direction = pygame.math.Vector2()
         self.obstacleSprites = obstacleSprites
 
-
-    def checkHorizontalCollision(self): # Solution only for non moving coliders!
+    def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites:
             if not sprite.rect.colliderect(self.rect):
                 pass
@@ -24,7 +24,6 @@ class Entity(pygame.sprite.Sprite):
                 self.rect.right = sprite.rect.left
             else:
                 self.rect.left = sprite.rect.right
-
 
     def checkVerticalCollision(self):
         for sprite in self.obstacleSprites:
@@ -34,7 +33,6 @@ class Entity(pygame.sprite.Sprite):
                 self.rect.top = sprite.rect.bottom
             else:
                 self.rect.bottom = sprite.rect.top
-
 
     def move(self):
         if self.direction.x != 0 and self.direction.y != 0:
@@ -48,7 +46,6 @@ class Entity(pygame.sprite.Sprite):
 
         self.adjustImageToDirection()
         self.direction.xy = [0, 0]
-
 
     def adjustImageToDirection(self):
         if self.direction.x > 0:

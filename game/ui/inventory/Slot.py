@@ -2,7 +2,7 @@ import pygame.sprite
 from pygame import Surface
 
 from config import *
-from game.items.Item import Item
+from ui.inventory.items.Item import Item
 
 
 class Slot(pygame.sprite.Sprite):
@@ -13,7 +13,6 @@ class Slot(pygame.sprite.Sprite):
         self.rect.topleft = topleftPosition
 
         self.item = item
-
 
     def addItem(self, item: Item) -> None:
         self.item = item

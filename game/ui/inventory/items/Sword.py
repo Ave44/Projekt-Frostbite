@@ -1,6 +1,7 @@
 from config import ROOT_PATH
-from game.items.Item import Item
+from ui.inventory.items.Item import Item
 import pygame
+
 
 class Sword(Item):
     def __init__(self, groups: list[pygame.sprite.Group], center: pygame.math.Vector2()):

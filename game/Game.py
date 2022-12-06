@@ -23,7 +23,7 @@ class Game:
 
         self.createMap(saveData["world_map"])
 
-        inventoryPosition = pygame.math.Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
+        inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
         inventory.open()
 

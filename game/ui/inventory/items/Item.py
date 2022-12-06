@@ -1,13 +1,14 @@
 import pygame
 import shortuuid
+from pygame.math import Vector2
 
 from config import ROOT_PATH
 
 
 class Item(pygame.sprite.Sprite):
-    def __init__(self, spriteGroup: pygame.sprite.Group, center: pygame.math.Vector2()):
-        super().__init__(spriteGroup)
-        self.spriteGroup = spriteGroup
+    def __init__(self, sprite_group: pygame.sprite.Group, center: Vector2()):
+        super().__init__(sprite_group)
+        self.spriteGroup = sprite_group
         self.id = shortuuid.uuid()
         self.name = "Item without name"
         self.image = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png")

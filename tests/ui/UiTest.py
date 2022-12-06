@@ -1,11 +1,11 @@
 import unittest
 
 import mock
+from game.ui.Ui import Ui
 
 from config import *
 from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from ui.inventory.state.SelectedItem import SelectedItem
-from game.ui.Ui import Ui
 
 
 class UiTest(unittest.TestCase):

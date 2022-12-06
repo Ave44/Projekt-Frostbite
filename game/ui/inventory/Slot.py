@@ -1,12 +1,13 @@
 import pygame.sprite
 from pygame import Surface
+from pygame.math import Vector2
 
 from config import *
 from ui.inventory.items.Item import Item
 
 
 class Slot(pygame.sprite.Sprite):
-    def __init__(self, topleftPosition: pygame.math.Vector2(), item: Item = None):
+    def __init__(self, topleftPosition: Vector2, item: Item = None):
         super().__init__()
         self.image: Surface = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png")
         self.rect = self.image.get_rect()

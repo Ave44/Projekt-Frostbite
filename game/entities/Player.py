@@ -1,9 +1,11 @@
 import pygame
 
+from config import UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE, UI_HEALTHBAR_MAIN
 from entities.Entity import Entity
+from game.ui.inventory.Inventory import Inventory
+from ui.Bar import Bar
 from ui.inventory.items.Item import Item
 from ui.inventory.state.SelectedItem import SelectedItem
-from game.ui.inventory.Inventory import Inventory
 
 
 class Player(Entity):
@@ -15,6 +17,9 @@ class Player(Entity):
         super().__init__(groups, obstacleSprites, playerData)
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
+
+        self.healthBar = Bar(pygame.Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, UI_HEALTHBAR_MAIN,
+                             UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE)
 
     def move_up(self):
         self.direction.y = -1
@@ -34,3 +39,9 @@ class Player(Entity):
 
     def update(self):
         self.move()
+        self.healthBar.update(self.currentHealth)
+
+    def die(self):
+        self.healthBar.update(self.currentHealth)
+        # self.remove(*self.groups())
+        print("Game Over")

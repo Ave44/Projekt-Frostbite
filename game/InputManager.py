@@ -2,9 +2,9 @@ import sys
 
 from pygame.sprite import Sprite
 
-from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
-from entities.Player import Player
 from config import *
+from entities.Player import Player
+from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from spriteGroups.UiSpriteGroup import UiSpriteGroup
 
 
@@ -25,6 +25,12 @@ class InputManager:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     self.player.inventory.toggle()
+
+                if event.key == pygame.K_o:
+                    self.player.getDamage(20)
+
+                if event.key == pygame.K_p:
+                    self.player.heal(20)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)

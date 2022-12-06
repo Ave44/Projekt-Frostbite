@@ -1,20 +1,25 @@
-import pygame
+from pygame import Vector2
+from pygame.image import load
+from pygame.sprite import Sprite
 
 
-class Entity(pygame.sprite.Sprite):
+class Entity(Sprite):
     def __init__(self, spriteGroups, obstacleSprites, entityData: dict):
         super().__init__(spriteGroups)
 
-        self.imageUp = pygame.image.load(entityData["path_to_image_up"]).convert_alpha()
-        self.imageDown = pygame.image.load(entityData["path_to_image_down"]).convert_alpha()
-        self.imageLeft = pygame.image.load(entityData["path_to_image_left"]).convert_alpha()
-        self.imageRight = pygame.image.load(entityData["path_to_image_right"]).convert_alpha()
+        self.imageUp = load(entityData["path_to_image_up"]).convert_alpha()
+        self.imageDown = load(entityData["path_to_image_down"]).convert_alpha()
+        self.imageLeft = load(entityData["path_to_image_left"]).convert_alpha()
+        self.imageRight = load(entityData["path_to_image_right"]).convert_alpha()
         self.image = self.imageDown
         self.rect = self.image.get_rect(center=entityData["position_center"])
 
         self.speed = entityData["speed"]
-        self.direction = pygame.math.Vector2()
+        self.direction = Vector2()
         self.obstacleSprites = obstacleSprites
+
+        self.maxHealth = entityData["maxHealth"]
+        self.currentHealth = entityData["currentHealth"]
 
     def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites:
@@ -57,3 +62,19 @@ class Entity(pygame.sprite.Sprite):
             self.image = self.imageDown
         elif self.direction.y < 0:
             self.image = self.imageUp
+
+    def getDamage(self, amount: int) -> None:
+        if self.currentHealth <= amount:
+            self.die()
+            return
+        self.currentHealth -= amount
+
+    def die(self):
+        self.currentHealth = 0
+        self.remove(*self.groups())
+
+    def heal(self, amount: int):
+        if self.currentHealth + amount >= self.maxHealth:
+            self.currentHealth = self.maxHealth
+            return
+        self.currentHealth += amount

@@ -21,7 +21,7 @@ class Player(Entity):
         self.healthBar = Bar(pygame.Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, UI_HEALTHBAR_MAIN,
                              UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE)
 
-    def move_up(self):
+    def moveUp(self):
         self.direction.y = -1
 
     def moveDown(self):

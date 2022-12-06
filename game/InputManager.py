@@ -54,7 +54,7 @@ class InputManager:
         pressedKeys = pygame.key.get_pressed()
 
         if pressedKeys[pygame.K_w]:
-            self.player.move_up()
+            self.player.moveUp()
         elif pressedKeys[pygame.K_s]:
             self.player.moveDown()
 

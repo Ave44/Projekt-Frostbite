@@ -5,7 +5,7 @@ from game.ui.Ui import Ui
 
 from config import *
 from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
-from ui.inventory.state.SelectedItem import SelectedItem
+from ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class UiTest(unittest.TestCase):

@@ -3,7 +3,7 @@ from pygame import Surface
 from pygame.math import Vector2
 
 from config import *
-from ui.inventory.items.Item import Item
+from items.Item import Item
 
 
 class Slot(pygame.sprite.Sprite):

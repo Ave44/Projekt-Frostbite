@@ -1,7 +1,7 @@
 import pygame
 
 from config import ROOT_PATH
-from ui.inventory.items.Item import Item
+from items.Item import Item
 
 
 class Sword(Item):

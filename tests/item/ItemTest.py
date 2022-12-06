@@ -2,7 +2,7 @@ import os.path
 import unittest
 
 from config import ROOT_PATH
-from ui.inventory.items.Item import Item
+from items.Item import Item
 
 
 class ItemTest(unittest.TestCase):

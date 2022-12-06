@@ -2,8 +2,6 @@ import pygame
 from pygame.math import Vector2
 
 from config import WINDOW_HEIGHT, WINDOW_WIDTH
-from ui.inventory.items.Slot import Slot
-from ui.inventory.state.SelectedItem import SelectedItem
 
 
 class CameraSpriteGroup(pygame.sprite.Group):
@@ -27,9 +25,6 @@ class CameraSpriteGroup(pygame.sprite.Group):
         for sprite in self.sprites():
             spritePosition = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image, spritePosition)
-            if type(sprite) == Slot or type(sprite) == SelectedItem:
-                if not sprite.isEmpty():
-                    self.displaySurface.blit(sprite.item.icon, spritePosition)
 
     def addTile(self, tile):
         self.tilesSprites.append(tile)

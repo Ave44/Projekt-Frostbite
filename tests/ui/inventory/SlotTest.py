@@ -2,8 +2,8 @@ import unittest
 
 from mock.mock import Mock
 
-from ui.inventory.items.Slot import Slot
-from ui.inventory.items.Item import Item
+from ui.inventory.slot.Slot import Slot
+from items.Item import Item
 
 
 class SlotTest(unittest.TestCase):

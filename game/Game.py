@@ -8,8 +8,8 @@ from game.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from spriteGroups.UiSpriteGroup import UiSpriteGroup
-from ui.inventory.items.Item import Item
-from ui.inventory.items.Sword import Sword
+from items.Item import Item
+from items.Sword import Sword
 
 
 class Game:

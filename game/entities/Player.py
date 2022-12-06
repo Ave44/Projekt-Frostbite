@@ -4,8 +4,8 @@ from config import UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE, UI_HEALTHBAR_MA
 from entities.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
 from ui.Bar import Bar
-from ui.inventory.items.Item import Item
-from ui.inventory.state.SelectedItem import SelectedItem
+from items.Item import Item
+from ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class Player(Entity):

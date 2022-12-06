@@ -1,11 +1,12 @@
 import pygame
+from pygame.math import Vector2
 import shortuuid
 
 from config import ROOT_PATH
 
 
 class Item(pygame.sprite.Sprite):
-    def __init__(self, spriteGroup: pygame.sprite.Group, center: pygame.math.Vector2()):
+    def __init__(self, spriteGroup: pygame.sprite.Group, center: Vector2()):
         super().__init__([spriteGroup])
         self.spriteGroup = spriteGroup
         self.id = shortuuid.uuid()
@@ -15,7 +16,7 @@ class Item(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = center)
 
 
-    def drop(self, position: pygame.math.Vector2()) -> None:
+    def drop(self, position: Vector2()) -> None:
         self.rect.center = position
         self.addToSpriteGroup()
 

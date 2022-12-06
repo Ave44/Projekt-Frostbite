@@ -25,6 +25,11 @@ class InputManager:
                 if event.key == pygame.K_e:
                     self.player.inventory.toggle()
 
+                if event.key == pygame.K_o:
+                    self.player.getDamage(20)
+
+                if event.key == pygame.K_p:
+                    self.player.heal(20)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)

@@ -1,3 +1,4 @@
+from pygame.math import Vector2
 from config import *
 from game.items.Item import Item
 from game.ui.SelectedItem import SelectedItem
@@ -9,7 +10,7 @@ class Inventory(pygame.sprite.Sprite):
                  spriteGroup: pygame.sprite.Group,
                  inventoryHeight: int,
                  inventoryWidth: int,
-                 center: pygame.math.Vector2()):
+                 center: Vector2()):
 
         super().__init__()
         self.inventoryHeight = inventoryHeight
@@ -18,16 +19,16 @@ class Inventory(pygame.sprite.Sprite):
         self.spriteGroup = spriteGroup
 
         self.image = pygame.Surface([inventoryWidth * (SLOTSIZE + SLOTGAP) + SLOTGAP, inventoryHeight * (SLOTSIZE + SLOTGAP) + SLOTGAP], pygame.SRCALPHA, 32)
-        self.image.fill((50,50,50))
+        self.image.fill(UI_BG_COLOR)
         self.rect = self.image.get_rect()
         self.rect.center = center
 
-        self.slotList: list[Slot] = [Slot(self.calculateSlotPosition(pygame.math.Vector2(x, y), pygame.math.Vector2(self.rect.topleft)))
+        self.slotList: list[Slot] = [Slot(self.calculateSlotPosition(Vector2(x, y), Vector2(self.rect.topleft)))
                                         for y in range(inventoryHeight)
                                         for x in range(inventoryWidth)]
 
 
-    def calculateSlotPosition(self, index: pygame.math.Vector2(), topleft: pygame.math.Vector2()) -> pygame.math.Vector2():
+    def calculateSlotPosition(self, index: Vector2(), topleft: Vector2()) -> Vector2():
         return (topleft.x + SLOTGAP + index.x * (SLOTSIZE + SLOTGAP),
                 topleft.y + SLOTGAP + index.y * (SLOTSIZE + SLOTGAP))
 
@@ -54,7 +55,7 @@ class Inventory(pygame.sprite.Sprite):
         else:
             selectedItem.addItem(item)
 
-    def handleMouseLeftClick(self, mousePos: pygame.math.Vector2(), selectedItem: SelectedItem):
+    def handleMouseLeftClick(self, mousePos: Vector2(), selectedItem: SelectedItem):
         if self.isOpen:
             hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.slotList), None)
 
@@ -73,7 +74,7 @@ class Inventory(pygame.sprite.Sprite):
                     selectedItem.removeItem()
                     selectedItem.addItem(slotItem)
 
-    def handleMouseRightClick(self, mousePos: pygame.math.Vector2()):
+    def handleMouseRightClick(self, mousePos: Vector2()):
         if self.isOpen:
             hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.slotList), None)
 

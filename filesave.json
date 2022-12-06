@@ -24,6 +24,8 @@
         
     "player_data": {
         "speed": 5,
+        "maxHealth": 100,
+        "currentHealth": 100,
         "position_center": [80,80],
         "path_to_image_up": "./graphics/player/player_up.png",
         "path_to_image_down": "./graphics/player/player_down.png",

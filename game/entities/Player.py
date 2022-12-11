@@ -5,6 +5,7 @@ from entities.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
 from ui.Bar import Bar
 from items.Item import Item
+from pygame.math import Vector2
 from ui.inventory.slot.SelectedItem import SelectedItem
 
 
@@ -18,7 +19,7 @@ class Player(Entity):
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
 
-        self.healthBar = Bar(pygame.Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, UI_HEALTHBAR_MAIN,
+        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, UI_HEALTHBAR_MAIN,
                              UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE)
 
     def moveUp(self):

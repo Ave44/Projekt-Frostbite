@@ -1,10 +1,10 @@
 from pygame.math import Vector2
-from pygame.sprite import AbstractGroup
 
 from config import *
 from entities.Player import Player
 from game.InputManager import InputManager
-from game.Tile import Tile
+from tiles.SeaTile import SeaTile
+from tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from spriteGroups.UiSpriteGroup import UiSpriteGroup
@@ -50,10 +50,9 @@ class Game:
                 x = columnIndex * TILE_SIZE
                 y = rowIndex * TILE_SIZE
                 if column == 0:
-                    tile = Tile((x, y), column, self.obstacleSprites)
+                    self.visibleSprites.addTile(SeaTile((x, y), self.obstacleSprites))
                 else:
-                    tile = Tile((x, y), column, AbstractGroup())
-                self.visibleSprites.addTile(tile)
+                    self.visibleSprites.addTile(Tile((x, y)))
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)

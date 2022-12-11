@@ -1,16 +1,18 @@
-import pygame
 from pygame import Vector2
+from pygame.image import load
+from pygame.sprite import Sprite
 
-class Entity(pygame.sprite.Sprite):
-    def __init__(self, spriteGroups, obstacleSprites, entityData):
+
+class Entity(Sprite):
+    def __init__(self, spriteGroups, obstacleSprites, entityData: dict):
         super().__init__(spriteGroups)
 
-        self.imageUp    = pygame.image.load(entityData["path_to_image_up"]).convert_alpha()
-        self.imageDown  = pygame.image.load(entityData["path_to_image_down"]).convert_alpha()
-        self.imageLeft  = pygame.image.load(entityData["path_to_image_left"]).convert_alpha()
-        self.imageRight = pygame.image.load(entityData["path_to_image_right"]).convert_alpha()
+        self.imageUp = load(entityData["path_to_image_up"]).convert_alpha()
+        self.imageDown = load(entityData["path_to_image_down"]).convert_alpha()
+        self.imageLeft = load(entityData["path_to_image_left"]).convert_alpha()
+        self.imageRight = load(entityData["path_to_image_right"]).convert_alpha()
         self.image = self.imageDown
-        self.rect = self.image.get_rect(center = entityData["position_center"])
+        self.rect = self.image.get_rect(center=entityData["position_center"])
 
         self.speed = entityData["speed"]
         self.direction = Vector2()
@@ -19,8 +21,7 @@ class Entity(pygame.sprite.Sprite):
         self.maxHealth = entityData["maxHealth"]
         self.currentHealth = entityData["currentHealth"]
 
-
-    def checkHorizontalCollision(self): # Solution only for non moving coliders!
+    def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites:
             if not sprite.rect.colliderect(self.rect):
                 pass
@@ -28,7 +29,6 @@ class Entity(pygame.sprite.Sprite):
                 self.rect.right = sprite.rect.left
             else:
                 self.rect.left = sprite.rect.right
-
 
     def checkVerticalCollision(self):
         for sprite in self.obstacleSprites:
@@ -38,7 +38,6 @@ class Entity(pygame.sprite.Sprite):
                 self.rect.top = sprite.rect.bottom
             else:
                 self.rect.bottom = sprite.rect.top
-
 
     def move(self):
         if self.direction.x != 0 and self.direction.y != 0:
@@ -53,7 +52,6 @@ class Entity(pygame.sprite.Sprite):
         self.adjustImageToDirection()
         self.direction.xy = [0, 0]
 
-
     def adjustImageToDirection(self):
         if self.direction.x > 0:
             self.image = self.imageRight
@@ -67,12 +65,12 @@ class Entity(pygame.sprite.Sprite):
 
     def getDamage(self, amount: int) -> None:
         if self.currentHealth <= amount:
-            self.currentHealth = 0
             self.die()
             return
         self.currentHealth -= amount
 
     def die(self):
+        self.currentHealth = 0
         self.remove(*self.groups())
 
     def heal(self, amount: int):

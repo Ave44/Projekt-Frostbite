@@ -2,11 +2,8 @@ import pygame
 from pygame.math import Vector2
 
 from config import SLOTSIZE
-from game.ui.Bar import Bar
-from game.ui.SelectedItem import SelectedItem
 from game.ui.inventory.Inventory import Inventory
-from game import Player
-from game.ui.inventory.Slot import Slot
+from ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class UiSpriteGroup(pygame.sprite.Group):
@@ -16,7 +13,6 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.inventory = None | Inventory
         self.selectedItem = None | SelectedItem
         self.player = None
-
 
     def customDraw(self):
         if self.inventory.isOpen:

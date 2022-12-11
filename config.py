@@ -1,6 +1,6 @@
 import os.path
-import pygame
 
+import pygame
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720

@@ -1,10 +1,13 @@
-import pygame
 import sys
 
-from game.CameraSpriteGroup import CameraSpriteGroup
-from game.Player import Player
+from pygame.sprite import Sprite
+from pygame.math import Vector2
+
 from config import *
-from game.UiSpriteGroup import UiSpriteGroup
+from entities.Player import Player
+from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from spriteGroups.UiSpriteGroup import UiSpriteGroup
+
 
 class InputManager:
     def __init__(self, player: Player, UiSprites: UiSpriteGroup, visibleSprites: CameraSpriteGroup):
@@ -12,14 +15,13 @@ class InputManager:
         self.UiSprites = UiSprites
         self.visibleSprites = visibleSprites
 
-    def handleInput(self):
-        mousePos = pygame.math.Vector2(pygame.mouse.get_pos())
+    def handleInput(self) -> None:
+        mousePos = Vector2(pygame.mouse.get_pos())
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
@@ -50,7 +52,6 @@ class InputManager:
                     elif not self.player.selectedItem.isEmpty():
                         self.player.selectedItem.handleMouseRightClick(mousePos)
 
-
         pressedKeys = pygame.key.get_pressed()
 
         if pressedKeys[pygame.K_w]:
@@ -63,13 +64,12 @@ class InputManager:
         elif pressedKeys[pygame.K_d]:
             self.player.moveRight()
 
-
     def checkIfMouseHoversOverInventory(self, mousePos) -> bool:
         if self.UiSprites.inventory.rect.collidepoint(mousePos):
             return True
         return False
 
-    def getHoveredSprite(self, mousePos):
+    def getHoveredSprite(self, mousePos) -> Sprite | None:
         mousePosInWorld = mousePos + self.visibleSprites.offset
 
         for sprite in self.visibleSprites.sprites():

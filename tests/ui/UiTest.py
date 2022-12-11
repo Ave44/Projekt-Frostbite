@@ -1,12 +1,11 @@
 import unittest
 
 import mock
-from mock.mock import MagicMock
+from game.ui.Ui import Ui
 
 from config import *
-from game.CameraSpriteGroup import CameraSpriteGroup
-from game.ui.SelectedItem import SelectedItem
-from game.ui.Ui import Ui
+from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class UiTest(unittest.TestCase):

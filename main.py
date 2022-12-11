@@ -1,6 +1,7 @@
-from game.Game import Game
-import json, pygame
+import json
+
 from config import *
+from game.Game import Game
 
 # loading savefile
 # (Later will be replaced with "load all savefile names", then only selected favefile will be loaded)

@@ -1,12 +1,15 @@
 import unittest
 
+import pygame
 from mock.mock import MagicMock
+from pygame.math import Vector2
 
-from game.CameraSpriteGroup import CameraSpriteGroup
-from game.items.Item import Item
-from game.ui.SelectedItem import SelectedItem
+from entities.Player import Player
 from game.ui.inventory.Inventory import Inventory
-from game.ui.inventory.Slot import Slot
+from ui.inventory.slot.Slot import Slot
+from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from items.Item import Item
+from ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class InventoryTest(unittest.TestCase):
@@ -14,19 +17,20 @@ class InventoryTest(unittest.TestCase):
     def setUp(self) -> None:
         visibleSprites = CameraSpriteGroup()
         self.playerPos = (34, 15)
-        self.emptyInventory = Inventory(visibleSprites, 1, 2, (0, 0), SelectedItem(self.playerPos))
-        self.fullInventory = Inventory(visibleSprites, 0, 0, (0, 0), SelectedItem(self.playerPos))
-        self.item = Item("sword")
-        self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, self.playerPos,
-                                                       SelectedItem(self.playerPos, Item("sword2")))
+        self.emptyInventory = Inventory(visibleSprites, 1, 2, (0, 0))
+        self.fullInventory = Inventory(visibleSprites, 0, 0, (0, 0))
+        self.item = Item(visibleSprites, Vector2())
+        self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, self.playerPos)
         self.newPlayerPos = (3, 4)
 
         self.emptyInventory.toggle()
         self.fullInventory.toggle()
         self.fullInventoryWithSelectedItem.toggle()
 
+        self.player = MagicMock(Player)
+
     def test_inventoryList_should_has_correct_length(self):
-        self.assertEqual(2, len(self.emptyInventory.inventoryList))
+        self.assertEqual(2, len(self.emptyInventory.slotList))
 
     def test_isOpen_should_be_True_used_on_open_inventory(self):
         self.assertEqual(True, self.emptyInventory.isOpen)
@@ -50,12 +54,14 @@ class InventoryTest(unittest.TestCase):
         self.assertEqual(newInventoryList, self.emptyInventory.inventoryList)
 
     def test_addItem_should_addItem_to_empty_slot_in_inventory_with_empty_slot(self):
-        self.emptyInventory.addItem(self.item)
-        self.assertEqual(self.item, self.emptyInventory.inventoryList[0].item)
+        selectedItem = SelectedItem(self.player)
+        self.emptyInventory.addItem(self.item, selectedItem)
+        self.assertEqual(self.item, self.emptyInventory.slotList[0].item)
 
     def test_addItem_should_add_to_selectedItem_in_full_inventory_with_empty_selectedItem(self):
-        self.fullInventory.addItem(self.item)
-        self.assertEqual(self.item, self.fullInventory.selectedItem)
+        selectedItem = SelectedItem(self.player)
+        self.fullInventory.addItem(self.item, selectedItem)
+        self.assertEqual(self.item, selectedItem.item)
 
     def test_addItem_should_set_newItem_as_selectedItem_in_full_inventory_with_selectedItem(self):
         newItem = Item("axe")

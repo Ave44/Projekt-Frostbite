@@ -1,6 +1,7 @@
 import sys
 
 from pygame.sprite import Sprite
+from pygame.math import Vector2
 
 from config import *
 from entities.Player import Player
@@ -15,7 +16,7 @@ class InputManager:
         self.visibleSprites = visibleSprites
 
     def handleInput(self) -> None:
-        mousePos = pygame.math.Vector2(pygame.mouse.get_pos())
+        mousePos = Vector2(pygame.mouse.get_pos())
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

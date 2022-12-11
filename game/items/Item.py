@@ -15,7 +15,7 @@ class Item(pygame.sprite.Sprite):
         self.icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png")
         self.rect = self.image.get_rect(center=center)
 
-    def drop(self, position: pygame.math.Vector2()) -> None:
+    def drop(self, position: Vector2()) -> None:
         self.rect.center = position
         self.addToSpriteGroup()
 

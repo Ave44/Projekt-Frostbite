@@ -2,6 +2,7 @@ import unittest
 
 import pygame
 from mock.mock import MagicMock
+from pygame.math import Vector2
 
 from entities.Player import Player
 from game.ui.inventory.Inventory import Inventory
@@ -18,7 +19,7 @@ class InventoryTest(unittest.TestCase):
         self.playerPos = (34, 15)
         self.emptyInventory = Inventory(visibleSprites, 1, 2, (0, 0))
         self.fullInventory = Inventory(visibleSprites, 0, 0, (0, 0))
-        self.item = Item(visibleSprites, pygame.math.Vector2())
+        self.item = Item(visibleSprites, Vector2())
         self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, self.playerPos)
         self.newPlayerPos = (3, 4)
 

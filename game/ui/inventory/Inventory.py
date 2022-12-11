@@ -18,11 +18,10 @@ class Inventory(pygame.sprite.Sprite):
         self.inventoryWidth = inventoryWidth
         self.isOpen: bool = False
         self.spriteGroup = spriteGroup
-
         self.image = pygame.Surface(
             [inventoryWidth * (SLOTSIZE + SLOTGAP) + SLOTGAP, inventoryHeight * (SLOTSIZE + SLOTGAP) + SLOTGAP],
             pygame.SRCALPHA, 32)
-        self.image.fill((50, 50, 50))
+        self.image.fill(UI_BG_COLOR)
         self.rect = self.image.get_rect()
         self.rect.center = center
 

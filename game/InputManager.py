@@ -35,16 +35,19 @@ class InputManager:
 
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)
+                hoveredSprite = self.getHoveredSprite(mousePos)
 
                 if event.button == 1:
                     if mouseHoversOverInventory:
                         self.player.inventory.handleMouseLeftClick(mousePos, self.player.selectedItem)
-                    elif not self.player.selectedItem.isEmpty():
-                        self.player.selectedItem.handleMouseLeftClick(mousePos)
+                    elif hoveredSprite:
+                        self.player.handleMouseLeftClick(hoveredSprite)
+                    elif not self.player.selectedItem.isEmpty():   
+                        mousePosInWorld = mousePos + self.visibleSprites.offset
+                        self.player.selectedItem.handleMouseLeftClick(mousePosInWorld)
                     else:
-                        hoveredSprite = self.getHoveredSprite(mousePos)
-                        if hoveredSprite:
-                            self.player.handleMouseLeftClick(hoveredSprite)
+                        mousePosInWorld = mousePos + self.visibleSprites.offset
+                        self.player.destinationPosition = mousePosInWorld
 
                 if event.button == 3:
                     if mouseHoversOverInventory:

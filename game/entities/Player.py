@@ -23,21 +23,30 @@ class Player(Entity):
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, UI_HEALTHBAR_MAIN,
                              UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE)
 
+    def stopAutowalking(self):
+        self.destinationPosition = None
+        self.destinationTarget = None
+
     def moveUp(self):
         self.direction.y = -1
+        self.stopAutowalking()
 
     def moveDown(self):
         self.direction.y = 1
+        self.stopAutowalking()
 
     def moveLeft(self):
         self.direction.x = -1
+        self.stopAutowalking()
 
     def moveRight(self):
         self.direction.x = 1
+        self.stopAutowalking()
 
     def handleMouseLeftClick(self, sprite):
         if isinstance(sprite, Item):
-            self.inventory.addItem(sprite, self.selectedItem)
+            self.setDestination(Vector2(sprite.rect.center), sprite)
+            # self.inventory.addItem(sprite, self.selectedItem)
 
     def update(self):
         self.move()

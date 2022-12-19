@@ -3,7 +3,7 @@ from pygame.math import Vector2
 
 from config import SLOTSIZE
 from game.ui.inventory.Inventory import Inventory
-from ui.inventory.slot.SelectedItem import SelectedItem
+from game.ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class UiSpriteGroup(pygame.sprite.Group):

@@ -1,15 +1,16 @@
 from pygame.math import Vector2
 
 from config import *
-from entities.Player import Player
+# from entities.Player import Player
+from game.entities.Player import Player
 from game.InputManager import InputManager
-from tiles.SeaTile import SeaTile
-from tiles.Tile import Tile
+from game.tiles.SeaTile import SeaTile
+from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
-from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
-from spriteGroups.UiSpriteGroup import UiSpriteGroup
-from items.Item import Item
-from items.Sword import Sword
+from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
+from game.items.Item import Item
+from game.items.Sword import Sword
 
 
 class Game:

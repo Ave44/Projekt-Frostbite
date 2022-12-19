@@ -4,9 +4,9 @@ from pygame.sprite import Sprite
 from pygame.math import Vector2
 
 from config import *
-from entities.Player import Player
-from spriteGroups.CameraSpriteGroup import CameraSpriteGroup
-from spriteGroups.UiSpriteGroup import UiSpriteGroup
+from game.entities.Player import Player
+from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 
 
 class InputManager:

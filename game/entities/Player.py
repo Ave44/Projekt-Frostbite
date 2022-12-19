@@ -1,12 +1,13 @@
 import pygame
 
 from config import UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE, UI_HEALTHBAR_MAIN
-from entities.Entity import Entity
+from game.entities.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
-from ui.Bar import Bar
-from items.Item import Item
+from game.items.Item import Item
+from game.ui.inventory.slot.SelectedItem import SelectedItem
+from game.ui.Bar import Bar
 from pygame.math import Vector2
-from ui.inventory.slot.SelectedItem import SelectedItem
+
 
 
 class Player(Entity):

@@ -2,8 +2,8 @@ import os.path
 
 import pygame
 
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
+WINDOW_WIDTH = 1920 # 1280 1920
+WINDOW_HEIGHT = 1080 # 720 1080
 FPS = 60
 TILE_SIZE = 64
 CAPTION = 'Project Frostbite'

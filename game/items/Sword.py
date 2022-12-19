@@ -2,7 +2,7 @@ import pygame
 
 from config import ROOT_PATH
 from pygame.math import Vector2
-from items.Item import Item
+from game.items.Item import Item
 
 
 class Sword(Item):

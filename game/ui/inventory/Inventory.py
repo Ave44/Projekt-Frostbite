@@ -1,9 +1,9 @@
 from pygame.math import Vector2
 
 from config import *
-from ui.inventory.slot.Slot import Slot
-from items.Item import Item
-from ui.inventory.slot.SelectedItem import SelectedItem
+from game.ui.inventory.slot.Slot import Slot
+from game.items.Item import Item
+from game.ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class Inventory(pygame.sprite.Sprite):

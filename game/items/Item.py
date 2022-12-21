@@ -19,6 +19,9 @@ class Item(pygame.sprite.Sprite):
         self.rect.center = position
         self.addToSpriteGroup()
 
+    def action(self, entity):
+        entity.inventory.addItem(self, entity.selectedItem)
+
     def addToSpriteGroup(self):
         self.add(self.spriteGroup)
 

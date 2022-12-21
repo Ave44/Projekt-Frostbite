@@ -17,7 +17,7 @@ class SelectedItem(pygame.sprite.Sprite):
         if self.isEmpty():
             self.item = item
         else:
-            self.item.drop(self.player.rect.center)
+            self.item.drop(self.player.rect.midbottom)
             self.item = item
 
     def removeItem(self):
@@ -27,8 +27,11 @@ class SelectedItem(pygame.sprite.Sprite):
         self.item.drop(self.player.rect.midbottom)
         self.removeItem()
 
+    def action(self, entity):
+        self.drop()
+
     def handleMouseRightClick(self, mousePos):
         self.drop()
 
-    def handleMouseLeftClick(self, mousePos):
-        pass
+    def handleMouseLeftClick(self, mousePosInWorld):
+        self.player.setDestination(mousePosInWorld, self)

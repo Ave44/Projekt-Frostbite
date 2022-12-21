@@ -4,13 +4,14 @@ from config import *
 # from entities.Player import Player
 from game.entities.Player import Player
 from game.InputManager import InputManager
-from game.tiles.SeaTile import SeaTile
+from game.tiles.CollidableTile import CollidableTile
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
+from gameinitialization.GenerateMap import generateMap, loadImages
 
 
 class Game:
@@ -22,7 +23,8 @@ class Game:
         self.obstacleSprites = pygame.sprite.Group()
         self.UiSprites = UiSpriteGroup()
 
-        self.createMap(saveData["world_map"])
+        #self.createMap(saveData["world_map"])
+        self.createMap(generateMap(31))
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -47,14 +49,26 @@ class Game:
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, worldMap):
+        #for rowIndex, row in enumerate(worldMap):
+        #    for columnIndex, column in enumerate(row):
+        #        x = columnIndex * TILE_SIZE
+        #        y = rowIndex * TILE_SIZE
+        #        if column == 0:
+        #            self.visibleSprites.addTile(CollidableTile((x, y), self.obstacleSprites))
+        #        else:
+        #            self.visibleSprites.addTile(Tile((x, y)))
+        dictOfImages = loadImages()
         for rowIndex, row in enumerate(worldMap):
             for columnIndex, column in enumerate(row):
-                x = columnIndex * TILE_SIZE
-                y = rowIndex * TILE_SIZE
-                if column == 0:
-                    self.visibleSprites.addTile(SeaTile((x, y), self.obstacleSprites))
-                else:
-                    self.visibleSprites.addTile(Tile((x, y)))
+                for biome in dictOfImages:
+                    x = columnIndex * TILE_SIZE
+                    y = rowIndex * TILE_SIZE
+                    if dictOfImages[biome]["collidable"].get(column) != None:
+                        tile = CollidableTile((x, y), dictOfImages[biome]["collidable"][column],[self.obstacleSprites])
+                        self.visibleSprites.addTile(tile)
+                    elif dictOfImages[biome]["walkable"].get(column) != None:
+                        tile = Tile((x, y), dictOfImages[biome]["walkable"][column])
+                        self.visibleSprites.addTile(tile)
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)

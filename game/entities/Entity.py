@@ -42,7 +42,7 @@ class Entity(Sprite):
             else:
                 self.rect.bottom = sprite.rect.top
 
-    def setDestination(self, position: Vector2 | None, target: Sprite | None):
+    def setDestination(self, position: Vector2, target: Sprite):
         self.destinationTarget = target
         self.destinationPosition = position
 

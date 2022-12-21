@@ -11,7 +11,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
-from gameinitialization.GenerateMap import generateMap, loadImages
+from gameInitialization.GenerateMap import generateMap, loadImages
 
 
 class Game:

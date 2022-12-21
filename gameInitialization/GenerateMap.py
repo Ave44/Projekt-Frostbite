@@ -2,7 +2,7 @@ from perlin_noise import PerlinNoise
 import random
 import os
 import pygame
-from gameinitialization.PhasesOfMapGeneration import replaceGroundWithBeach, generateGroundAndWater
+from gameInitialization.PhasesOfMapGeneration import replaceGroundWithBeach, generateGroundAndWater
 def loadImages():
     """
     Load images, so Tile class doesn't need to access filesystem million times, and map generation takes 10x faster

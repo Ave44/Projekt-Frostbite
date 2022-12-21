@@ -10,8 +10,8 @@ class UiSpriteGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
         self.displaySurface = pygame.display.get_surface()
-        self.inventory = None | Inventory
-        self.selectedItem = None | SelectedItem
+        self.inventory = Inventory
+        self.selectedItem = SelectedItem
         self.player = None
 
     def customDraw(self):

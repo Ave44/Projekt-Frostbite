@@ -72,7 +72,7 @@ class InputManager:
             return True
         return False
 
-    def getHoveredSprite(self, mousePos) -> Sprite | None:
+    def getHoveredSprite(self, mousePos) -> Sprite:
         mousePosInWorld = mousePos + self.visibleSprites.offset
 
         for sprite in self.visibleSprites.sprites():

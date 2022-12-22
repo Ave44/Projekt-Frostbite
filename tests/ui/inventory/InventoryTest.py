@@ -1,7 +1,7 @@
 import unittest
 
 import pygame
-from mock.mock import MagicMock
+from mock.mock import MagicMock, Mock
 from pygame.math import Vector2
 
 from entities.Player import Player
@@ -17,10 +17,10 @@ class InventoryTest(unittest.TestCase):
     def setUp(self) -> None:
         visibleSprites = CameraSpriteGroup()
         self.playerPos = (34, 15)
-        self.emptyInventory = Inventory(visibleSprites, 1, 2, (0, 0))
-        self.fullInventory = Inventory(visibleSprites, 0, 0, (0, 0))
+        self.emptyInventory = Inventory(visibleSprites, 1, 2, Vector2(0, 0))
+        self.fullInventory = Inventory(visibleSprites, 0, 0, Vector2(0, 0))
         self.item = Item(visibleSprites, Vector2())
-        self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, self.playerPos)
+        self.fullInventoryWithSelectedItem = Inventory(visibleSprites, 0, 0, Vector2(self.playerPos))
         self.newPlayerPos = (3, 4)
 
         self.emptyInventory.toggle()
@@ -46,10 +46,10 @@ class InventoryTest(unittest.TestCase):
 
     def test_set_inventoryList_should_raise_error_when_called_with_different_length_list(self):
         with self.assertRaises(ValueError):
-            self.fullInventory.inventoryList = [Slot((0, 0))]
+            self.fullInventory.inventoryList = [Slot(Vector2(0, 0))]
 
     def test_set_inventoryList_should_change_inventoryList_when_called_with_the_same_length_list(self):
-        newInventoryList = [Slot((0, 0)), Slot((0, 0))]
+        newInventoryList = [Slot(Vector2(0, 0)), Slot(Vector2(0, 0))]
         self.emptyInventory.inventoryList = newInventoryList
         self.assertEqual(newInventoryList, self.emptyInventory.inventoryList)
 
@@ -64,7 +64,7 @@ class InventoryTest(unittest.TestCase):
         self.assertEqual(self.item, selectedItem.item)
 
     def test_addItem_should_set_newItem_as_selectedItem_in_full_inventory_with_selectedItem(self):
-        newItem = Item("axe")
+        newItem = Mock(Item)
         self.fullInventoryWithSelectedItem.addItem(newItem)
 
         self.assertEqual(newItem, self.fullInventoryWithSelectedItem.selectedItem)
@@ -114,7 +114,7 @@ class InventoryTest(unittest.TestCase):
         firstSlot = MagicMock()
         firstSlot.rect.center.return_value = self.emptyInventory.inventoryList[0].rect.center
 
-        self.emptyInventory.inventoryList = [firstSlot, Slot((1, 1))]
+        self.emptyInventory.inventoryList = [firstSlot, Slot(Vector2(1, 1))]
 
         self.emptyInventory.handleMouseRightClick(firstSlot.rect.center)
         firstSlot.use.assert_called_once()
@@ -128,7 +128,7 @@ class InventoryTest(unittest.TestCase):
 
     def test_handleMouseLeftClick_should_place_selectedItem_when_hover_over_empty_slot(self):
         emptySlot = self.emptyInventory.inventoryList[0]
-        item = Item("sword")
+        item = Mock(Item)
         self.emptyInventory.selectedItem.item = item
 
         self.emptyInventory.handleMouseLeftClick(emptySlot.rect.center)

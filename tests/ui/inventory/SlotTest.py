@@ -1,6 +1,7 @@
 import unittest
 
 from mock.mock import Mock
+from pygame import Vector2
 
 from ui.inventory.slot.Slot import Slot
 from items.Item import Item
@@ -9,9 +10,9 @@ from items.Item import Item
 class SlotTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.item = Item("Icon")
-        self.emptySlot = Slot((0, 0))
-        self.slot = Slot((0, 0), self.item)
+        self.item = Mock(Item)
+        self.emptySlot = Slot(Vector2(0, 0))
+        self.slot = Slot(Vector2(0, 0), self.item)
 
     def test_isEmpty_should_return_True_when_called_on_empty_slot(self):
         self.assertEqual(True, self.emptySlot.isEmpty())
@@ -23,17 +24,9 @@ class SlotTest(unittest.TestCase):
         self.emptySlot.addItem(self.item)
         self.assertEqual(self.item, self.emptySlot.item)
 
-    def test_addItem_should_raise_error_when_called_on_not_empty_slot(self):
-        with self.assertRaises(ValueError):
-            self.slot.addItem(self.item)
-
     def test_removeItem_should_remove_item_when_called_on_not_empty_slot(self):
         self.slot.removeItem()
         self.assertEqual(None, self.emptySlot.item)
-
-    def test_removeItem_should_raise_error_when_called_on_empty_slot(self):
-        with self.assertRaises(ValueError):
-            self.emptySlot.removeItem()
 
     def test_use_should_use_item_when_called_on_not_empty_slot(self):
         item = Mock()
@@ -41,10 +34,6 @@ class SlotTest(unittest.TestCase):
         self.emptySlot.use()
 
         item.use.assert_called_once()
-
-    def test_use_should_raise_error_when_called_on_empty_slot(self):
-        with self.assertRaises(ValueError):
-            self.emptySlot.use()
 
 
 if __name__ == '__main__':

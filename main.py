@@ -28,4 +28,3 @@ gameRunning = True
 if gameRunning:
     game = Game(screen, saveData)
     game.main_menu()
-    game.play()

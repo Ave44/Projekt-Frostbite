@@ -1,11 +1,13 @@
+import sys
+
 from pygame.math import Vector2
 
 from config import *
-# from entities.Player import Player
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.tiles.CollidableTile import CollidableTile
 from game.tiles.Tile import Tile
+from game.ui.general.Button import Button
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
@@ -63,10 +65,10 @@ class Game:
                 for biome in dictOfImages:
                     x = columnIndex * TILE_SIZE
                     y = rowIndex * TILE_SIZE
-                    if dictOfImages[biome]["collidable"].get(column) != None:
-                        tile = CollidableTile((x, y), dictOfImages[biome]["collidable"][column],[self.obstacleSprites])
+                    if dictOfImages[biome]["collidable"].get(column) is not None:
+                        tile = CollidableTile((x, y), dictOfImages[biome]["collidable"][column], self.obstacleSprites)
                         self.visibleSprites.addTile(tile)
-                    elif dictOfImages[biome]["walkable"].get(column) != None:
+                    elif dictOfImages[biome]["walkable"].get(column) is not None:
                         tile = Tile((x, y), dictOfImages[biome]["walkable"][column])
                         self.visibleSprites.addTile(tile)
 
@@ -74,6 +76,55 @@ class Game:
         font = pygame.font.SysFont(None, 24)
         img = font.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
+
+    def main_menu(self) -> None:
+        font = pygame.font.Font("graphics/fonts/font.ttf", 100)
+        # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
+
+        background = pygame.image.load("graphics/tiles/forest/walkable/grass00.png")
+        self.screen.fill((255, 255, 255))
+        screen_w, screen_h = self.screen.get_size()
+        image_w, image_h = background.get_size()
+
+        for x in range(0, screen_w, image_w):
+            for y in range(0, screen_h, image_h):
+                self.screen.blit(background, (x, y))
+
+        while True:
+            menu_mouse_pos = pygame.mouse.get_pos()
+            menu_text = font.render("MAIN MENU", True, "#b68f40")
+            menu_rect = menu_text.get_rect(center=(640, 100))
+            play_button = Button(None, pos=(640, 250),
+                                 text_input="PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
+            options_button = Button(None, pos=(640, 400),
+                                    text_input="OPTIONS", font=font, base_color="#d7fcd4",
+                                    hovering_color="White")
+            quit_button = Button(None, pos=(640, 550),
+                                 text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
+
+            self.screen.blit(menu_text, menu_rect)
+
+            for button in [play_button, options_button, quit_button]:
+                button.changeColor(menu_mouse_pos)
+                button.update(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if play_button.checkForInput(menu_mouse_pos):
+                        self.play()
+                    if options_button.checkForInput(menu_mouse_pos):
+                        self.options()
+                    if quit_button.checkForInput(menu_mouse_pos):
+                        pygame.quit()
+                        sys.exit()
+
+            pygame.display.update()
+
+    def options(self) -> None:
+        pass
 
     def play(self):
         while True:

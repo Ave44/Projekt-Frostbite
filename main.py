@@ -19,12 +19,9 @@ pygame.display.set_icon(ICON)
 
 # Initialize music
 mixer.init()
-mixer.music.load('music/custom/main_theme.mp3')
-mixer.music.play(-1)
-mixer.music.set_volume(MAIN_THEME_VOLUME)
 # Game view
 gameRunning = True
 
 if gameRunning:
     game = Game(screen, saveData)
-    game.main_menu()
+    game.mainMenu()

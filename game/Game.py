@@ -1,5 +1,6 @@
 import sys
 
+from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
@@ -77,7 +78,8 @@ class Game:
         img = font.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
 
-    def main_menu(self) -> None:
+    def mainMenu(self) -> None:
+        self.changeMusicTheme(MENU_THEME)
         font = pygame.font.Font("graphics/fonts/font.ttf", 100)
         # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
 
@@ -91,21 +93,21 @@ class Game:
                 self.screen.blit(background, (x, y))
 
         while True:
-            menu_mouse_pos = pygame.mouse.get_pos()
+            mousePos = pygame.mouse.get_pos()
             menu_text = font.render("MAIN MENU", True, "#b68f40")
             menu_rect = menu_text.get_rect(center=(640, 100))
-            play_button = Button(None, pos=(640, 250),
-                                 text_input="PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
-            options_button = Button(None, pos=(640, 400),
-                                    text_input="OPTIONS", font=font, base_color="#d7fcd4",
-                                    hovering_color="White")
-            quit_button = Button(None, pos=(640, 550),
-                                 text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
+            play_button = Button(pos=(640, 250),
+                                 textInput="PLAY", font=font, baseColor="#d7fcd4", hoveringColor="White")
+            options_button = Button(pos=(640, 400),
+                                    textInput="OPTIONS", font=font, baseColor="#d7fcd4",
+                                    hoveringColor="White")
+            quit_button = Button(pos=(640, 550),
+                                 textInput="QUIT", font=font, baseColor="#d7fcd4", hoveringColor="White")
 
             self.screen.blit(menu_text, menu_rect)
 
             for button in [play_button, options_button, quit_button]:
-                button.changeColor(menu_mouse_pos)
+                button.changeColor(mousePos)
                 button.update(self.screen)
 
             for event in pygame.event.get():
@@ -113,11 +115,11 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if play_button.checkForInput(menu_mouse_pos):
+                    if play_button.checkForInput(mousePos):
                         self.play()
-                    if options_button.checkForInput(menu_mouse_pos):
+                    if options_button.checkForInput(mousePos):
                         self.options()
-                    if quit_button.checkForInput(menu_mouse_pos):
+                    if quit_button.checkForInput(mousePos):
                         pygame.quit()
                         sys.exit()
 
@@ -126,7 +128,13 @@ class Game:
     def options(self) -> None:
         pass
 
+    def changeMusicTheme(self, theme):
+        mixer.music.load(theme)
+        mixer.music.play(-1)
+        mixer.music.set_volume(MAIN_THEME_VOLUME)
+
     def play(self):
+        self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.InputManager.handleInput()
 

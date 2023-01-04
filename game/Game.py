@@ -115,8 +115,7 @@ class Game:
             menuButtons = [play_button, options_button, quit_button]
 
             for button in menuButtons:
-                button.changeColor(mousePos)
-                button.update(self.screen)
+                button.update(self.screen, mousePos)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

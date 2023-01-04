@@ -13,7 +13,8 @@ class Button:
         self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
         self.action = action
 
-    def update(self, screen) -> None:
+    def update(self, screen, mousePos) -> None:
+        self.drawText(mousePos)
         if self.image is not None:
             screen.blit(self.image, self.rect)
         screen.blit(self.text, self.text_rect)
@@ -26,7 +27,7 @@ class Button:
     def executeAction(self):
         self.action()
 
-    def changeColor(self, mousePos) -> None:
+    def drawText(self, mousePos) -> None:
         if self.rect.collidepoint(mousePos):
             self.text = self.font.render(self.textInput, True, self.hoveringColor)
         else:

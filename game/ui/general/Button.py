@@ -15,8 +15,7 @@ class Button:
 
     def update(self, screen, mousePos) -> None:
         self.drawText(mousePos)
-        if self.image is not None:
-            screen.blit(self.image, self.rect)
+        screen.blit(self.image, self.rect)
         screen.blit(self.text, self.text_rect)
 
     def checkForInput(self, mousePos) -> bool:

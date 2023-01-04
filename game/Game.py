@@ -112,8 +112,9 @@ class Game:
                                  font=menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, action=self.quitGame)
 
             self.screen.blit(menuText, menuRect)
+            menuButtons = [play_button, options_button, quit_button]
 
-            for button in [play_button, options_button, quit_button]:
+            for button in menuButtons:
                 button.changeColor(mousePos)
                 button.update(self.screen)
 
@@ -121,7 +122,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.quitGame()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    for button in [play_button, options_button, quit_button]:
+                    for button in menuButtons:
                         if button.checkForInput(mousePos):
                             button.executeAction()
 

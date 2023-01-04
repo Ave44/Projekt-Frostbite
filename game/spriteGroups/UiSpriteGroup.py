@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 
-from config import SLOTSIZE
+from config import SLOT_SIZE
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 
@@ -24,7 +24,7 @@ class UiSpriteGroup(pygame.sprite.Group):
 
         if not self.selectedItem.isEmpty():
             mousePos = Vector2(pygame.mouse.get_pos())
-            displayPos = (mousePos.x - SLOTSIZE/2, mousePos.y - SLOTSIZE/2)
+            displayPos = (mousePos.x - SLOT_SIZE / 2, mousePos.y - SLOT_SIZE / 2)
             self.displaySurface.blit(self.selectedItem.item.icon, displayPos)
 
         self.player.healthBar.draw(self.displaySurface)

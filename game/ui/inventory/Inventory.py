@@ -19,9 +19,9 @@ class Inventory(pygame.sprite.Sprite):
         self.isOpen: bool = False
         self.spriteGroup = spriteGroup
         self.image = pygame.Surface(
-            [inventoryWidth * (SLOTSIZE + SLOTGAP) + SLOTGAP, inventoryHeight * (SLOTSIZE + SLOTGAP) + SLOTGAP],
+            [inventoryWidth * (SLOT_SIZE + SLOT_GAP) + SLOT_GAP, inventoryHeight * (SLOT_SIZE + SLOT_GAP) + SLOT_GAP],
             pygame.SRCALPHA, 32)
-        self.image.fill(UI_BG_COLOR)
+        self.image.fill(BG_COLOR)
         self.rect = self.image.get_rect()
         self.rect.center = center
 
@@ -31,8 +31,8 @@ class Inventory(pygame.sprite.Sprite):
             for x in range(inventoryWidth)]
 
     def calculateSlotPosition(self, index: Vector2, topleft: Vector2) -> Vector2:
-        return Vector2((topleft.x + SLOTGAP + index.x * (SLOTSIZE + SLOTGAP),
-                        topleft.y + SLOTGAP + index.y * (SLOTSIZE + SLOTGAP)))
+        return Vector2((topleft.x + SLOT_GAP + index.x * (SLOT_SIZE + SLOT_GAP),
+                        topleft.y + SLOT_GAP + index.y * (SLOT_SIZE + SLOT_GAP)))
 
     def toggle(self):
         if self.isOpen:

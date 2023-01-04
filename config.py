@@ -11,17 +11,26 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON = pygame.image.load(f"{ROOT_PATH}/graphics/icon.png")
 
 # SLOTS
-SLOTSIZE = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
-SLOTGAP = 6
+SLOT_SIZE = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
+SLOT_GAP = 6
 
-UI_BG_COLOR = (50, 50, 50)
-UI_BORDER_COLOR = (255, 255, 255)
-UI_BORDER_SIZE = 3
-UI_HEALTHBAR_MAIN = (214, 30, 17)
-UI_HEALTHBAR_INCREASE = (82, 255, 20)
-UI_HEALTHBAR_DECREASE = (240, 212, 29)
+# UI
+BG_COLOR = (50, 50, 50)
+BORDER_COLOR = (255, 255, 255)
+BORDER_SIZE = 3
+HEALTHBAR_MAIN = (214, 30, 17)
+HEALTHBAR_INCREASE = (82, 255, 20)
+HEALTHBAR_DECREASE = (240, 212, 29)
+
+# COLORS
+BASE_BUTTON_COLOR = "#d7fcd4"
+WHITE = "White"
+FONT_MENU_COLOR = "#b68f40"
 
 # MUSIC
 MAIN_THEME_VOLUME = 0.5
 HAPPY_THEME = 'music/custom/happy-theme.mp3'
 MENU_THEME = 'music/custom/menu_theme.mp3'
+
+# FONTS
+BUTTON_FONT = "graphics/fonts/font.ttf"

@@ -1,6 +1,6 @@
 import pygame
 
-from config import UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE, UI_HEALTHBAR_MAIN
+from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN
 from game.entities.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
 from game.items.Item import Item
@@ -20,8 +20,8 @@ class Player(Entity):
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
 
-        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, UI_HEALTHBAR_MAIN,
-                             UI_HEALTHBAR_INCREASE, UI_HEALTHBAR_DECREASE)
+        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, HEALTHBAR_MAIN,
+                             HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
 
     def stopAutowalking(self):
         self.destinationPosition = None

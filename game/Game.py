@@ -26,7 +26,7 @@ class Game:
         self.obstacleSprites = pygame.sprite.Group()
         self.UiSprites = UiSpriteGroup()
 
-        #self.createMap(saveData["world_map"])
+        # self.createMap(saveData["world_map"])
         self.createMap(generateMap(31))
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
@@ -52,7 +52,7 @@ class Game:
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, worldMap):
-        #for rowIndex, row in enumerate(worldMap):
+        # for rowIndex, row in enumerate(worldMap):
         #    for columnIndex, column in enumerate(row):
         #        x = columnIndex * TILE_SIZE
         #        y = rowIndex * TILE_SIZE
@@ -78,33 +78,40 @@ class Game:
         img = font.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
 
+    def quitGame(self):
+        pygame.quit()
+        sys.exit()
+
     def mainMenu(self) -> None:
         self.changeMusicTheme(MENU_THEME)
-        font = pygame.font.Font("graphics/fonts/font.ttf", 100)
+        font = pygame.font.Font(BUTTON_FONT, 100)
+        menuOptionFont = pygame.font.Font(BUTTON_FONT, 75)
         # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
 
         background = pygame.image.load("graphics/tiles/forest/walkable/grass00.png")
         self.screen.fill((255, 255, 255))
-        screen_w, screen_h = self.screen.get_size()
-        image_w, image_h = background.get_size()
+        screenWidth, screenHeight = self.screen.get_size()
+        imageWidth, imageHeight = background.get_size()
 
-        for x in range(0, screen_w, image_w):
-            for y in range(0, screen_h, image_h):
+        for x in range(0, screenWidth, imageWidth):
+            for y in range(0, screenHeight, imageHeight):
                 self.screen.blit(background, (x, y))
 
         while True:
             mousePos = pygame.mouse.get_pos()
-            menu_text = font.render("MAIN MENU", True, "#b68f40")
-            menu_rect = menu_text.get_rect(center=(640, 100))
+            menuText = font.render("MAIN MENU", True, FONT_MENU_COLOR)
+            menuRect = menuText.get_rect(center=(640, 100))
             play_button = Button(pos=(640, 250),
-                                 textInput="PLAY", font=font, baseColor="#d7fcd4", hoveringColor="White")
+                                 textInput="PLAY",
+                                 font=menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, action=self.play)
             options_button = Button(pos=(640, 400),
-                                    textInput="OPTIONS", font=font, baseColor="#d7fcd4",
-                                    hoveringColor="White")
+                                    textInput="OPTIONS",
+                                    font=menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, action=self.options)
             quit_button = Button(pos=(640, 550),
-                                 textInput="QUIT", font=font, baseColor="#d7fcd4", hoveringColor="White")
+                                 textInput="QUIT",
+                                 font=menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, action=self.quitGame)
 
-            self.screen.blit(menu_text, menu_rect)
+            self.screen.blit(menuText, menuRect)
 
             for button in [play_button, options_button, quit_button]:
                 button.changeColor(mousePos)
@@ -112,16 +119,11 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    self.quitGame()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if play_button.checkForInput(mousePos):
-                        self.play()
-                    if options_button.checkForInput(mousePos):
-                        self.options()
-                    if quit_button.checkForInput(mousePos):
-                        pygame.quit()
-                        sys.exit()
+                    for button in [play_button, options_button, quit_button]:
+                        if button.checkForInput(mousePos):
+                            button.executeAction()
 
             pygame.display.update()
 

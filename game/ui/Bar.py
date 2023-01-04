@@ -32,15 +32,15 @@ class Bar(Sprite):
 
         self.center = center
         self.bgSurface = Surface([barLength, barHeight])
-        self.bgSurface.fill(UI_BG_COLOR)
+        self.bgSurface.fill(BG_COLOR)
         self.bgRect = Rect(center.x - barLength/2, center.y - barHeight/2, barLength, barHeight)
 
-        self.borderSurface = Surface([barLength + UI_BORDER_SIZE*2, barHeight + UI_BORDER_SIZE*2])
-        self.borderSurface.fill(UI_BORDER_COLOR)
-        self.borderRect = Rect(center.x - barLength/2 - UI_BORDER_SIZE,
-                               center.y - barHeight/2 - UI_BORDER_SIZE,
-                               barLength + UI_BORDER_SIZE*2,
-                               barHeight + UI_BORDER_SIZE*2)
+        self.borderSurface = Surface([barLength + BORDER_SIZE * 2, barHeight + BORDER_SIZE * 2])
+        self.borderSurface.fill(BORDER_COLOR)
+        self.borderRect = Rect(center.x - barLength / 2 - BORDER_SIZE,
+                               center.y - barHeight / 2 - BORDER_SIZE,
+                               barLength + BORDER_SIZE * 2,
+                               barHeight + BORDER_SIZE * 2)
 
     def drawBarSurface(self, screen: Surface, value: int, color: tuple[int, int, int]):
         length = value * self.valueRatio

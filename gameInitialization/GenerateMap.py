@@ -1,67 +1,103 @@
-from perlin_noise import PerlinNoise
-import random
 import os
 import pygame
-from gameInitialization.PhasesOfMapGeneration import replaceGroundWithBeach, generateGroundAndWater
-def loadImages():
-    """
-    Load images, so Tile class doesn't need to access filesystem million times, and map generation takes 10x faster
-    Also makes it easier to define which tiles should be rendered as obstacles, when we have more obstacle sprites than 1
-    Returns dict with ids of images and pygame image class attached to them( the one from pygrame.image.load() function)
-    """
-    dictOfImages={}
-    idOfTile=0
-    for biomeFolderName in os.listdir("./graphics/tiles"):
-        dictOfImages[biomeFolderName]={"collidable":[],"walkable":[]}
-        dictOfImages[biomeFolderName]["collidable"] = {}
-        dictOfImages[biomeFolderName]["walkable"] = {}
-        for collidableTileName in os.listdir("./graphics/tiles/" + biomeFolderName+"/collidable"):
-            dictOfImages[biomeFolderName]["collidable"][idOfTile]=pygame.image.load("./graphics/tiles/" + biomeFolderName+"/collidable/"+collidableTileName)
-            idOfTile+=1
-        for walkableTileName in os.listdir("./graphics/tiles/" + biomeFolderName+"/walkable"):
-            dictOfImages[biomeFolderName]["walkable"][idOfTile]=pygame.image.load("./graphics/tiles/" + biomeFolderName+"/walkable/"+walkableTileName)
-            idOfTile += 1
-    #print(dictOfImages)
-    return dictOfImages
+from perlin_noise import PerlinNoise
+import random
 
-def loadImagesFileNames():
-    """
-    Load images, so Tile class doesn't need to access filesystem million times, and map generation takes 10x faster
-    Also makes it easier to define which tiles should be rendered as obstacles, when we have more obstacle sprites than 1
-    Returns dict with ids of images and name of image file attached to them
-    """
-    dictOfImages={}
-    idOfTile=0
-    for biomeFolderName in os.listdir("./graphics/tiles"):
-        dictOfImages[biomeFolderName]={"collidable":[],"walkable":[]}
-        dictOfImages[biomeFolderName]["collidable"] = {}
-        dictOfImages[biomeFolderName]["walkable"] = {}
-        for collidableTileName in os.listdir("./graphics/tiles/" + biomeFolderName+"/collidable"):
-            dictOfImages[biomeFolderName]["collidable"][idOfTile]=collidableTileName
-            idOfTile+=1
-        for walkableTileName in os.listdir("./graphics/tiles/" + biomeFolderName+"/walkable"):
-            dictOfImages[biomeFolderName]["walkable"][idOfTile]=walkableTileName
-            idOfTile += 1
-    print(dictOfImages)
-    return dictOfImages
+biomesId = {0: 'sea', 1: 'grassland'}
 
+def generateGroundAndWater(mapSize, seed=random.randint(1, 1000)):
+    octaves = 10
+    noise = PerlinNoise(octaves, seed)
+    pic = [[noise([i / mapSize, j / mapSize]) for j in range(mapSize)] for i in range(mapSize)]
 
+    if (mapSize < 5):
+        mapSize = 5
 
-def generateMap(widthAndHeight=101):
-    """Generate 2 dimensional map array for render function, to render.
+    mapAreaArray = [[0 for x in range(mapSize)] for y in range(mapSize)]
 
-        @param: widthAndHeight WidthAndHeight of 2 dimensional array. Can't be lower than 5.
+    r = (mapSize - 2) // 2 + 1
+    for y in range(mapSize):
+        for x in range(mapSize):
+            if abs((x - (mapSize // 2)) ** 2 + (y - (mapSize // 2)) ** 2) < r ** 2 and pic[x][y] < 0.2:
+                mapAreaArray[x][y] = 1
+            else:
+                mapAreaArray[x][y] = 0
 
-        """
-
-    dictOfImages=loadImages()
-    dictOfImagesNames=loadImagesFileNames()
-
-    mapAreaArray=generateGroundAndWater(widthAndHeight=widthAndHeight)
-    mapAreaArray = replaceGroundWithBeach(1,mapAreaArray)
-
-    # print the map
-    #for line in mapAreaArray:
-    #    print(line)
     return mapAreaArray
-#generateMap(21)
+
+def replaceGroundWithBeach(mapAreaArray):
+    tilesMatrix = [[biomesId[mapAreaArray[row][column]] for column in range(len(mapAreaArray))] for row in range(len(mapAreaArray))]
+
+    for y in range(1, len(mapAreaArray) - 1):
+        for x in range(1, len(mapAreaArray) - 1):
+            if mapAreaArray[x][y] != 0:
+                if mapAreaArray[x][y - 1] == 0:
+                    tilesMatrix[x][y] = tilesMatrix[x][y] + "L"
+                if mapAreaArray[x][y + 1] == 0:
+                    tilesMatrix[x][y] = tilesMatrix[x][y] + "R"
+                if mapAreaArray[x - 1][y] == 0:
+                    tilesMatrix[x][y] = tilesMatrix[x][y] + "T"
+                if mapAreaArray[x + 1][y] == 0:
+                    tilesMatrix[x][y] = tilesMatrix[x][y] + "B"
+
+    return tilesMatrix
+
+# returns {name: {image: pygame.image, walkable: bool}} loading all images in advance makes the code faster
+def loadTilesData():
+    tilesData = {}
+    tileId = 0
+    for biom in os.listdir("./graphics/tiles/walkable"):
+        for imageFile in os.listdir(f"./graphics/tiles/walkable/{biom}"):
+            name = imageFile[:-4]
+            image = pygame.image.load(f"./graphics/tiles/walkable/{biom}/{imageFile}")
+            tilesData[name] = {"image": image, "walkable": True}
+        tileId += 1
+            
+    for biom in os.listdir("./graphics/tiles/collidable"):
+        for imageFile in os.listdir(f"./graphics/tiles/collidable/{biom}"):
+            name = imageFile[:-4]
+            image = pygame.image.load(f"./graphics/tiles/collidable/{biom}/{imageFile}")
+            tilesData[name] = {"image": image, "walkable": False}
+        tileId += 1
+
+    return tilesData
+
+def a(namesMap):
+    tilesData = loadTilesData()
+    mapSize = len(namesMap)
+    dataMap = [[None for x in range(mapSize)] for y in range(mapSize)]
+
+    for y in range(mapSize):
+        for x in range(mapSize):
+            dataMap[y][x] = tilesData[namesMap[y][x]]
+    
+    return dataMap
+
+
+def generateMap(mapSize):
+    idMap = generateGroundAndWater(mapSize)
+    # for i in idMap:
+    #     print(i)
+
+    namesMap = replaceGroundWithBeach(idMap)
+    # for i in namesMap:
+    #     print(i)
+
+    dataMap = a(namesMap)
+    # for i in dataMap:
+    #     print(i)
+
+    return dataMap
+
+# map = generateGroundAndWater(64)
+# a = replaceGroundWithBeach(1, map)
+# for i in map:
+#     for l in i:
+#         if l == 1:
+#             print("██", end="")
+#         else:
+#             print("  ", end="")
+#         print(l, end="")
+#     print("")
+
+# generateMap(16)

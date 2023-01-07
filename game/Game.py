@@ -6,7 +6,6 @@ from pygame.math import Vector2
 from config import *
 from game.entities.Player import Player
 from game.InputManager import InputManager
-from game.tiles.CollidableTile import CollidableTile
 from game.tiles.Tile import Tile
 from game.ui.general.Button import Button
 from game.ui.inventory.Inventory import Inventory
@@ -14,7 +13,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
-from gameInitialization.GenerateMap import generateMap, loadImages
+from gameInitialization.GenerateMap import generateMap
 
 
 class Game:
@@ -27,7 +26,7 @@ class Game:
         self.UiSprites = UiSpriteGroup()
 
         # self.createMap(saveData["world_map"])
-        self.createMap(generateMap(31))
+        self.createMap(33)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -51,27 +50,16 @@ class Game:
         self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
     # later will be replaced with LoadGame(savefile) class
-    def createMap(self, worldMap):
-        # for rowIndex, row in enumerate(worldMap):
-        #    for columnIndex, column in enumerate(row):
-        #        x = columnIndex * TILE_SIZE
-        #        y = rowIndex * TILE_SIZE
-        #        if column == 0:
-        #            self.visibleSprites.addTile(CollidableTile((x, y), self.obstacleSprites))
-        #        else:
-        #            self.visibleSprites.addTile(Tile((x, y)))
-        dictOfImages = loadImages()
-        for rowIndex, row in enumerate(worldMap):
-            for columnIndex, column in enumerate(row):
-                for biome in dictOfImages:
-                    x = columnIndex * TILE_SIZE
-                    y = rowIndex * TILE_SIZE
-                    if dictOfImages[biome]["collidable"].get(column) is not None:
-                        tile = CollidableTile((x, y), dictOfImages[biome]["collidable"][column], self.obstacleSprites)
-                        self.visibleSprites.addTile(tile)
-                    elif dictOfImages[biome]["walkable"].get(column) is not None:
-                        tile = Tile((x, y), dictOfImages[biome]["walkable"][column])
-                        self.visibleSprites.addTile(tile)
+    def createMap(self, mapSize):
+        map = generateMap(mapSize)
+        for y in range(len(map)):
+            for x in range(len(map)):
+                xPos = x * TILE_SIZE
+                yPos = y * TILE_SIZE
+                tile = Tile((xPos, yPos), map[y][x]["image"])
+                self.visibleSprites.addTile(tile)
+                if not map[y][x]["walkable"]:
+                    self.obstacleSprites.add(tile)
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -88,7 +76,7 @@ class Game:
         menuOptionFont = pygame.font.Font(BUTTON_FONT, 75)
         # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
 
-        background = pygame.image.load("graphics/tiles/forest/walkable/grass00.png")
+        background = pygame.image.load("graphics/tiles/walkable/grassland/grassland.png")
         self.screen.fill((255, 255, 255))
         screenWidth, screenHeight = self.screen.get_size()
         imageWidth, imageHeight = background.get_size()

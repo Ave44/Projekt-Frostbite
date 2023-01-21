@@ -4,6 +4,7 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
+from game.entities.Enemy import Enemy
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.tiles.CollidableTile import CollidableTile
@@ -37,6 +38,11 @@ class Game:
                              self.obstacleSprites,
                              saveData["player_data"],
                              inventory)
+
+        self.enemy = Enemy(self.visibleSprites,
+                           self.obstacleSprites,
+                           saveData["enemy_data"],
+                           200)
 
         self.UiSprites.player = self.player
         self.UiSprites.inventory = inventory

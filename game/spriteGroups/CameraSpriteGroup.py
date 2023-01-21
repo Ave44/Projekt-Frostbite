@@ -2,6 +2,8 @@ import pygame
 from pygame.math import Vector2
 
 from config import WINDOW_HEIGHT, WINDOW_WIDTH
+from game.entities.Enemy import Enemy
+from game.entities.Player import Player
 
 
 class CameraSpriteGroup(pygame.sprite.Group):
@@ -23,8 +25,11 @@ class CameraSpriteGroup(pygame.sprite.Group):
             self.displaySurface.blit(tile.image, spritePosition)
 
         for sprite in self.sprites():
+            if type(sprite) is Enemy:
+                sprite.followIfInRange(center)
             spritePosition = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image, spritePosition)
+
 
     def addTile(self, tile):
         self.tilesSprites.append(tile)

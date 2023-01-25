@@ -1,16 +1,16 @@
 import os
 import skimage
-def rescaleGraphicsInFolder(relativeFolderParth,rescaleTimesThisNumber):
+def rescaleGraphicsInFolder(relativeFolderParth,scale):
     for nameOfImageFile in os.listdir("./"+relativeFolderParth):
         filepath=relativeFolderParth+"/"+nameOfImageFile
         image = skimage.io.imread(filepath)
-        image = skimage.transform.resize(image,(len(image)*rescaleTimesThisNumber,len(image[0])*rescaleTimesThisNumber),
+        image = skimage.transform.resize(image,(len(image)*scale,len(image[0])*scale),
                                          anti_aliasing=False,preserve_range=True,order=0).astype('uint8')
         skimage.io.imsave(filepath, skimage.img_as_ubyte(image))
         print(nameOfImageFile)
-rescaleTimesThisNumber=2
-rescaleGraphicsInFolder("items",rescaleTimesThisNumber)
-rescaleGraphicsInFolder("player",rescaleTimesThisNumber)
-rescaleGraphicsInFolder("tiles/collidable/sea",rescaleTimesThisNumber)
-rescaleGraphicsInFolder("tiles/walkable/grassland",rescaleTimesThisNumber)
-rescaleGraphicsInFolder("ui",rescaleTimesThisNumber)
+scale=2
+rescaleGraphicsInFolder("items",scale)
+rescaleGraphicsInFolder("player",scale)
+rescaleGraphicsInFolder("tiles/collidable/sea",scale)
+rescaleGraphicsInFolder("tiles/walkable/grassland",scale)
+rescaleGraphicsInFolder("ui",scale)

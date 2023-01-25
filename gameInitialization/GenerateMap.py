@@ -23,7 +23,12 @@ def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
             else:
                 idMatrix[x][y] = 0
 
-    return idMatrix
+    # TODO: temporal solution
+    newIdMatrix = [[0 for x in range(mapSize + 20)] for y in range(mapSize + 20)]
+    for y in range(mapSize):
+        for x in range(mapSize):
+            newIdMatrix[x + 10][y + 10] = idMatrix[x][y]
+    return newIdMatrix
 
 def replaceIdWithNames(idMatrix):
     namesMatrix = [[biomesId[idMatrix[row][column]] for column in range(len(idMatrix))] for row in range(len(idMatrix))]

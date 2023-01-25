@@ -67,13 +67,13 @@ def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable
 def populateNameMatrixWithData(namesMatrix):
     tilesData = loadTilesData()
     mapSize = len(namesMatrix)
-    dataMap = [[None for x in range(mapSize)] for y in range(mapSize)]
+    dataMatrix = [[None for x in range(mapSize)] for y in range(mapSize)]
 
     for y in range(mapSize):
         for x in range(mapSize):
-            dataMap[y][x] = tilesData[namesMatrix[y][x]]
+            dataMatrix[y][x] = tilesData[namesMatrix[y][x]]
     
-    return dataMap
+    return dataMatrix
 
 
 def generateMap(mapSize: int):

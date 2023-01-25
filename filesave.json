@@ -34,10 +34,10 @@
     },
 
     "enemy_data": {
-        "speed": 1,
+        "speed": 2,
         "maxHealth": 60,
         "currentHealth": 60,
-        "position_center": [140,140],
+        "position_center": [1800,1800],
         "path_to_image_up": "./graphics/player/player_up.png",
         "path_to_image_down": "./graphics/player/player_down.png",
         "path_to_image_left": "./graphics/player/player_left.png",

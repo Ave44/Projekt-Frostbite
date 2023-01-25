@@ -13,23 +13,26 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.halfWindowHeight = WINDOW_HEIGHT // 2
         self.halfWindowWidth = WINDOW_WIDTH // 2
         self.offset = Vector2()
-        self.tilesSprites = []
+        self.tiles = []
+        self.entities = []
 
     def customDraw(self, center):
-        self.displaySurface.fill('black')
+        self.displaySurface.fill('black') # possibly unecessary step
         self.offset.x = center.x - self.halfWindowWidth
         self.offset.y = center.y - self.halfWindowHeight
 
-        for tile in self.tilesSprites:
+        for tile in self.tiles:
             spritePosition = tile.rect.topleft - self.offset
             self.displaySurface.blit(tile.image, spritePosition)
 
+        for sprite in self.entities:
+            spritePosition = sprite.rect.topleft - self.offset
+            self.displaySurface.blit(sprite.image, spritePosition)
+
         for sprite in self.sprites():
-            if type(sprite) is Enemy:
-                sprite.followIfInRange(center)
             spritePosition = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image, spritePosition)
 
 
     def addTile(self, tile):
-        self.tilesSprites.append(tile)
+        self.tiles.append(tile)

@@ -26,7 +26,6 @@ class Game:
         self.obstacleSprites = pygame.sprite.Group()
         self.UiSprites = UiSpriteGroup()
 
-        # self.createMap(saveData["world_map"])
         self.createMap(33)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
@@ -89,10 +88,17 @@ class Game:
         mixer.music.play(-1)
         mixer.music.set_volume(MAIN_THEME_VOLUME)
 
+    def entitiesUpdate(self):
+        for entity in self.visibleSprites.entities:
+            if type(entity) is Enemy:
+                entity.searchForTarget(self.visibleSprites.entities)
+
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.InputManager.handleInput()
+
+            self.entitiesUpdate()
 
             self.visibleSprites.update()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))

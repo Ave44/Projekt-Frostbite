@@ -11,8 +11,9 @@ class Enemy(Entity):
                  obstacleSprites: pygame.sprite.Group,
                  enemyData,
                  sightRange: int):
-        super(Enemy, self).__init__(groups, obstacleSprites, enemyData)
+        super().__init__(groups, obstacleSprites, enemyData)
         self.sightRange = sightRange
+        self.focus = None
 
     def isInSightRange(self, pos: tuple[int, int]) -> bool:
         sightRangeTuple = (self.sightRange, self.sightRange)
@@ -29,5 +30,13 @@ class Enemy(Entity):
         else:
             self.destinationPosition = None
 
+    def searchForTarget(self, entities):
+        for entity in entities:
+            if type(entity) != :
+    def attack(self):
+        pass
+
     def update(self):
+        if self.focus != None:
+            self.attack()
         self.move()

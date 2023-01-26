@@ -11,7 +11,7 @@ def rescaleGraphicsInFolder(relativeFolderParth, scale):
         skimage.io.imsave(filepath, skimage.img_as_ubyte(image))
         print(nameOfImageFile)
 
-scale = 0,5
+scale = 0.5
 
 rescaleGraphicsInFolder("items", scale)
 # rescaleGraphicsInFolder("player",scale)

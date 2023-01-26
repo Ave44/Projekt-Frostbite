@@ -33,19 +33,19 @@ class CameraSpriteGroup(pygame.sprite.Group):
             self.displaySurface.blit(sprite.image, spritePosition)
 
         for radius in self.radiuses:
-            self.drawRadius(radius["radius"], radius["position"])
+            self.drawRadius(radius["radius"], radius["position"], radius["color"])
         self.radiuses = []
 
 
     def addTile(self, tile):
         self.tiles.append(tile)
 
-    def addRadius(self, radius, position):
-        self.radiuses.append({"radius": radius, "position": position})
+    def addRadius(self, radius, position, color):
+        self.radiuses.append({"radius": radius, "position": position, "color": color})
 
-    def drawRadius(self, radius, position):
+    def drawRadius(self, radius, position, color):
         circleSurface = pygame.Surface((radius*2, radius*2))
         circleSurface.set_colorkey((0,0,0))
         circleSurface.set_alpha(80)
-        pygame.draw.circle(circleSurface, (100, 100, 100), (radius, radius), radius)
+        pygame.draw.circle(circleSurface, color, (radius, radius), radius)
         self.displaySurface.blit(circleSurface, (position[0] - radius - self.offset.x, position[1] - radius - self.offset.y))

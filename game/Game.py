@@ -1,4 +1,5 @@
 import sys
+import random
 
 from pygame import mixer
 from pygame.math import Vector2
@@ -26,6 +27,8 @@ class Game:
         self.obstacleSprites = pygame.sprite.Group()
         self.UiSprites = UiSpriteGroup()
 
+        self.tick = 0
+
         self.createMap(33)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
@@ -37,9 +40,9 @@ class Game:
                              saveData["player_data"],
                              inventory)
 
-        self.enemy = Enemy(self.visibleSprites,
-                           self.obstacleSprites,
-                           saveData["enemy_data"])
+        Enemy(self.visibleSprites,
+              self.obstacleSprites,
+              saveData["enemy_data"])
 
         self.UiSprites.player = self.player
         self.UiSprites.inventory = inventory
@@ -71,6 +74,33 @@ class Game:
         img = font.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
 
+    def handleTick(self):
+        self.tick = self.tick + 1
+        if self.tick == 60:
+            self.spawnEnemy()
+        if self.tick == 120:
+            self.tick = 0
+            self.spawnEnemy()
+            self.player.heal(20)
+
+    def spawnEnemy(self):
+        randomFactor = random.choice([Vector2(1,1),Vector2(-1,1),Vector2(1,-1),Vector2(-1,-1)])
+        offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
+        position = [self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y]
+        Enemy(self.visibleSprites, self.obstacleSprites, {
+        "speed": 3,
+        "maxHealth": 60,
+        "currentHealth": 60,
+        "damage": 20,
+        "sightRange": 400,
+        "attackRange": 20,
+        "position_center": position,
+        "path_to_image_up": "./graphics/player/enemy.png",
+        "path_to_image_down": "./graphics/player/enemy.png",
+        "path_to_image_left": "./graphics/player/enemy.png",
+        "path_to_image_right": "./graphics/player/enemy.png"
+    })
+
     def quitGame(self) -> None:
         pygame.quit()
         sys.exit()
@@ -100,6 +130,7 @@ class Game:
             self.entitiesUpdate()
 
             self.visibleSprites.update()
+            self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
             self.UiSprites.customDraw()

@@ -1,7 +1,6 @@
 import pygame
 from pygame.math import Vector2
 import math
-import random
 
 from game.entities.Entity import Entity
 
@@ -17,7 +16,6 @@ class Enemy(Entity):
         self.damage = enemyData["damage"]
         self.target = None
         self.visibleSprites = groups
-        self.id = random.randint(00000000, 99999999)
 
     def isInSightRange(self, position: tuple[int, int]) -> bool:
         return self.isInRange(self.sightRange, position)
@@ -54,6 +52,6 @@ class Enemy(Entity):
         # print(self.target)
         if self.target != None:
             self.attack()
-            self.visibleSprites.addRadius(self.sightRange, self.rect.center)
-            self.visibleSprites.addRadius(self.attackRange, self.rect.center)
+            self.visibleSprites.addRadius(self.sightRange, self.rect.center, (100, 100, 100))
+            self.visibleSprites.addRadius(self.attackRange, self.rect.center, (255, 100, 100))
         self.move()

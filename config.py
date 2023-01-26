@@ -5,7 +5,7 @@ import pygame
 WINDOW_WIDTH = 1280  # 1920
 WINDOW_HEIGHT = 720  # 1080
 FPS = 60
-TILE_SIZE = 64
+TILE_SIZE = 128
 CAPTION = 'Project Frostbite'
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON = pygame.image.load(f"{ROOT_PATH}/graphics/icon.png")

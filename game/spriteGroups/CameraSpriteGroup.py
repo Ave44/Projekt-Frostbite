@@ -17,7 +17,6 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.entities = []
 
     def customDraw(self, center):
-        self.displaySurface.fill('black') # possibly unecessary step
         self.offset.x = center.x - self.halfWindowWidth
         self.offset.y = center.y - self.halfWindowHeight
 

@@ -39,8 +39,7 @@ class Game:
 
         self.enemy = Enemy(self.visibleSprites,
                            self.obstacleSprites,
-                           saveData["enemy_data"],
-                           200)
+                           saveData["enemy_data"])
 
         self.UiSprites.player = self.player
         self.UiSprites.inventory = inventory

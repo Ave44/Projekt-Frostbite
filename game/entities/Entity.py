@@ -4,8 +4,9 @@ from pygame.sprite import Sprite
 
 
 class Entity(Sprite):
-    def __init__(self, spriteGroups, obstacleSprites, entityData: dict):
-        super().__init__(spriteGroups)
+    def __init__(self, spriteGroup, obstacleSprites, entityData: dict):
+        super().__init__(spriteGroup)
+        spriteGroup.entities.add(self)
 
         self.imageUp = load(entityData["path_to_image_up"]).convert_alpha()
         self.imageDown = load(entityData["path_to_image_down"]).convert_alpha()

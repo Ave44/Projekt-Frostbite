@@ -28,7 +28,7 @@ WHITE = "White"
 FONT_MENU_COLOR = "#b68f40"
 
 # MUSIC
-MAIN_THEME_VOLUME = 0.5
+MAIN_THEME_VOLUME = 0#.5
 HAPPY_THEME = 'music/custom/happy-theme.mp3'
 MENU_THEME = 'music/custom/menu_theme.mp3'
 

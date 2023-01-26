@@ -23,7 +23,7 @@
     ],
         
     "player_data": {
-        "speed": 5,
+        "speed": 6,
         "maxHealth": 100,
         "currentHealth": 100,
         "position_center": [3000,3000],
@@ -31,5 +31,19 @@
         "path_to_image_down": "./graphics/player/player_down.png",
         "path_to_image_left": "./graphics/player/player_left.png",
         "path_to_image_right": "./graphics/player/player_right.png"
+    },
+
+    "enemy_data": {
+        "speed": 3,
+        "maxHealth": 60,
+        "currentHealth": 60,
+        "damage": 20,
+        "sightRange": 400,
+        "attackRange": 20,
+        "position_center": [3200,3200],
+        "path_to_image_up": "./graphics/player/enemy.png",
+        "path_to_image_down": "./graphics/player/enemy.png",
+        "path_to_image_left": "./graphics/player/enemy.png",
+        "path_to_image_right": "./graphics/player/enemy.png"
     }
 }

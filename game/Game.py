@@ -100,7 +100,7 @@ class Game:
         Enemy(self.visibleSprites, self.obstacleSprites, {
         "speed": 3,
         "maxHealth": 60,
-        "currentDurability": 60,
+        "currentHealth": 60,
         "damage": 20,
         "sightRange": 400,
         "attackRange": 20,

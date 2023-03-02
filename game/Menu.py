@@ -17,7 +17,6 @@ class Menu:
         self.play = playAction
         self.font = pygame.font.Font(BUTTON_FONT, 100)
         self.menuOptionFont = pygame.font.Font(BUTTON_FONT, 75)
-        self.menuType = "MAIN"
 
     def createBackground(self) -> None:
         # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
@@ -36,7 +35,7 @@ class Menu:
     def mainMenu(self) -> None:
         self.createBackground()
 
-        while self.menuType is "MAIN":
+        while True:
             mousePos = pygame.mouse.get_pos()
             menuText = self.font.render("MAIN MENU", True, FONT_MENU_COLOR)
             menuRect = menuText.get_rect(center=(640, 100))

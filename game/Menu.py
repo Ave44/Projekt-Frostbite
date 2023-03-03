@@ -32,9 +32,6 @@ class Menu:
             for y in range(0, screenHeight, imageHeight):
                 self.screen.blit(background, (x, y))
 
-    def options(self) -> None:
-        del self
-
     def mainMenu(self) -> None:
         self.createBackground()
 
@@ -49,7 +46,7 @@ class Menu:
             options_button = Button(pos=(640, 400),
                                     textInput="OPTIONS",
                                     font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
-                                    action=self.options)
+                                    action=self.optionsMenu.options)
             quit_button = Button(pos=(640, 550),
                                  textInput="QUIT",
                                  font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,

@@ -17,6 +17,7 @@ pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption(CAPTION)
 pygame.display.set_icon(ICON)
+currentMenu = "MAIN"
 
 # Initialize music
 mixer.init()
@@ -25,5 +26,5 @@ gameRunning = True
 
 if gameRunning:
     game = Game(screen, saveData)
-    menu = Menu(screen, game.play)
+    menu = Menu(screen, game.play, currentMenu)
     menu.mainMenu()

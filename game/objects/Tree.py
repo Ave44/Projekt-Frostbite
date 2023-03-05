@@ -6,19 +6,19 @@ from pygame.time import Clock
 from config import ROOT_PATH
 from game.items.Sword import Sword
 from game.items.ToolType import ToolType
-from game.objects.Object import Object
+from game.objects.Flammable import Flammable
 
 
-class Tree(Object):
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, center: Vector2(),
+class Tree(Flammable):
+    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, bottomCenter: Vector2(),
                  clock: Clock):
-        imageNormal = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/tree.png")
-        imageDamage = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/tree_damage.png")
-        imageHeal = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/tree_heal.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/tree.png")
         super().__init__(visibleGroup, obstaclesGroup,
-                         center, 10, ToolType.AXE,
-                         True, clock, imageNormal,
-                         imageDamage, imageHeal)
+                         bottomCenter, 10, ToolType.AXE, image, clock)
+
+    def interact(self) -> None:
+        # do something
+        pass
 
     def dropItem(self) -> None:
         Sword(self.visibleGroup, self.rect.center)

@@ -1,4 +1,3 @@
-import sys
 import random
 
 from pygame import mixer
@@ -6,7 +5,6 @@ from pygame.math import Vector2
 
 from config import *
 from game.entities.Enemy import Enemy
-from game.Menu import Menu
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.objects.Grass import Grass
@@ -65,7 +63,6 @@ class Game:
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
 
         self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
-        self.menu = Menu(screen, self.play, self.options, self.quitGame)
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
@@ -94,33 +91,22 @@ class Game:
             self.player.heal(20)
 
     def spawnEnemy(self):
-        randomFactor = random.choice([Vector2(1,1),Vector2(-1,1),Vector2(1,-1),Vector2(-1,-1)])
+        randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
         position = [self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y]
         Enemy(self.visibleSprites, self.obstacleSprites, {
-        "speed": 3,
-        "maxHealth": 60,
-        "currentHealth": 60,
-        "damage": 20,
-        "sightRange": 400,
-        "attackRange": 20,
-        "position_center": position,
-        "path_to_image_up": "./graphics/player/enemy.png",
-        "path_to_image_down": "./graphics/player/enemy.png",
-        "path_to_image_left": "./graphics/player/enemy.png",
-        "path_to_image_right": "./graphics/player/enemy.png"
-    })
-
-    def quitGame(self) -> None:
-        pygame.quit()
-        sys.exit()
-
-    def mainMenu(self) -> None:
-        self.changeMusicTheme(MENU_THEME)
-        self.menu.mainMenu()
-
-    def options(self) -> None:
-        pass
+            "speed": 3,
+            "maxHealth": 60,
+            "currentHealth": 60,
+            "damage": 20,
+            "sightRange": 400,
+            "attackRange": 20,
+            "position_center": position,
+            "path_to_image_up": "./graphics/player/enemy.png",
+            "path_to_image_down": "./graphics/player/enemy.png",
+            "path_to_image_left": "./graphics/player/enemy.png",
+            "path_to_image_right": "./graphics/player/enemy.png"
+        })
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)

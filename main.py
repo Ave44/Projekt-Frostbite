@@ -4,7 +4,7 @@ from pygame import mixer
 
 from config import *
 from game.Game import Game
-from game.menu.Menu import Menu
+from game.menu.MainMenu import MainMenu
 
 # loading savefile
 # (Later will be replaced with "load all savefile names", then only selected savefile will be loaded)
@@ -25,5 +25,5 @@ gameRunning = True
 
 if gameRunning:
     game = Game(screen, saveData)
-    menu = Menu(screen, game.play)
+    menu = MainMenu(screen, game.play)
     menu.mainMenu()

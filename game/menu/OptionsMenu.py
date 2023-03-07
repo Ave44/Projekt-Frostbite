@@ -1,28 +1,14 @@
-import sys
-
 import pygame
 
 from config import BUTTON_FONT, FONT_MENU_COLOR, BASE_BUTTON_COLOR, WHITE
+from game.menu.Menu import Menu
 from game.ui.general.Button import Button
 
 
-class OptionsMenu:
+class OptionsMenu(Menu):
     def __init__(self, screen, backAction):
-        self.screen = screen
+        super().__init__(screen)
         self.backAction = backAction
-        self.font = pygame.font.Font(BUTTON_FONT, 100)
-        self.menuOptionFont = pygame.font.Font(BUTTON_FONT, 75)
-
-    def createBackground(self) -> None:
-        # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
-        background = pygame.image.load("graphics/tiles/walkable/grassland/grassland.png")
-        self.screen.fill((255, 255, 255))
-        screenWidth, screenHeight = self.screen.get_size()
-        imageWidth, imageHeight = background.get_size()
-
-        for x in range(0, screenWidth, imageWidth):
-            for y in range(0, screenHeight, imageHeight):
-                self.screen.blit(background, (x, y))
 
     def options(self) -> None:
         self.createBackground()

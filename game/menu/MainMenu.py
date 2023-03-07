@@ -37,19 +37,4 @@ class MainMenu(Menu):
                              action=quitGame)
         menuButtons = [play_button, options_button, quit_button]
 
-        while True:
-            mousePos = pygame.mouse.get_pos()
-            self.screen.blit(menuText, menuRect)
-
-            for button in menuButtons:
-                button.update(self.screen, mousePos)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    quitGame()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    for button in menuButtons:
-                        if button.checkForInput(mousePos):
-                            button.executeAction()
-
-            pygame.display.update()
+        self.menuLoop(menuText, menuRect, menuButtons)

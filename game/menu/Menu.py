@@ -19,3 +19,19 @@ class Menu:
         for x in range(0, screenWidth, imageWidth):
             for y in range(0, screenHeight, imageHeight):
                 self.screen.blit(background, (x, y))
+
+    def menuLoop(self, menuText, menuRect, menuButtons) -> None:
+        while True:
+            mousePos = pygame.mouse.get_pos()
+            self.screen.blit(menuText, menuRect)
+
+            for button in menuButtons:
+                button.update(self.screen, mousePos)
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for button in menuButtons:
+                        if button.checkForInput(mousePos):
+                            button.executeAction()
+
+            pygame.display.update()

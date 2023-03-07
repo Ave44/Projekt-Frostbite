@@ -1,5 +1,3 @@
-import pygame
-
 from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR, WHITE
 from game.menu.Menu import Menu
 from game.ui.general.Button import Button

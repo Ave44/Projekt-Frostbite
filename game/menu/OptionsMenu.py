@@ -6,11 +6,6 @@ from config import BUTTON_FONT, FONT_MENU_COLOR, BASE_BUTTON_COLOR, WHITE
 from game.ui.general.Button import Button
 
 
-def quitGame() -> None:
-    pygame.quit()
-    sys.exit()
-
-
 class OptionsMenu:
     def __init__(self, screen, backAction):
         self.screen = screen
@@ -47,8 +42,6 @@ class OptionsMenu:
                 button.update(self.screen, mousePos)
 
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    quitGame()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for button in menuButtons:
                         if button.checkForInput(mousePos):

@@ -10,11 +10,8 @@ from game.Menu import Menu
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.objects.Grass import Grass
-from game.objects.effects.Ignite import Ignite
 from game.objects.Rock import Rock
 from game.objects.Tree import Tree
-from game.objects.effects.IgniteAndRepair import IgniteAndRepair
-from game.objects.effects.Repair import Repair
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -56,10 +53,8 @@ class Game:
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
         tree = Tree(self.visibleSprites, self.obstacleSprites, Vector2(3001, 3001), self.clock)
-        Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100), self.clock)
-        Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200), self.clock)
-        effect = IgniteAndRepair(8, 4, 1, tree, self.clock)
-        tree.addEffect(effect)
+        Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100))
+        Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200))
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)

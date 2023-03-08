@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from pygame import Vector2
+from pygame import Vector2, Surface
 from pygame.image import load
 from pygame.sprite import Sprite
 from pygame.time import Clock
@@ -62,20 +62,27 @@ class Entity(Sprite, ABC):
     @state.setter
     def state(self, newState: State) -> None:
         if newState == State.DAMAGED:
-            self.imageUp = self.imageUpDamage
-            self.imageDown = self.imageDownDamage
-            self.imageLeft = self.imageLeftDamage
-            self.imageRight = self.imageRightDamage
+            self.__changeImages(self.imageUpDamage, self.imageDownDamage, self.imageLeftDamage, self.imageRightDamage)
         elif newState == State.HEALED:
-            self.imageUp = self.imageUpHeal
-            self.imageDown = self.imageDownHeal
-            self.imageLeft = self.imageLeftHeal
-            self.imageRight = self.imageRightHeal
+            self.__changeImages(self.imageUpHeal, self.imageDownHeal, self.imageLeftHeal, self.imageRightHeal)
         else:
-            self.imageUp = self.imageUpNormal
-            self.imageDown = self.imageDownNormal
-            self.imageLeft = self.imageLeftNormal
-            self.imageRight = self.imageRightNormal
+            self.__changeImages(self.imageUpNormal, self.imageDownNormal, self.imageLeftNormal, self.imageRightNormal)
+        self._state = newState
+
+    def __changeImages(self, newImageUp: Surface, newImageDown: Surface, newImageLeft: Surface, newImageRight: Surface):
+        if self.image == self.imageUp:
+            self.image = newImageUp
+        elif self.image == self.imageDown:
+            self.image = newImageDown
+        elif self.image == self.imageLeft:
+            self.image = newImageLeft
+        else:
+            self.image = newImageRight
+
+        self.imageUp = newImageUp
+        self.imageDown = newImageDown
+        self.imageLeft = newImageLeft
+        self.imageRight = newImageRight
 
     @abstractmethod
     def localUpdate(self):
@@ -150,24 +157,26 @@ class Entity(Sprite, ABC):
             self.image = self.imageUp
 
     def getDamage(self, amount: int) -> None:
+        if self.currentHealth:
+            self.timeFromLastHealthChange = 0
+            self.state = State.DAMAGED
         if self.currentHealth <= amount:
             self.die()
         else:
             self.currentHealth -= amount
-            self.timeFromLastHealthChange = 0
-            self.state = State.DAMAGED
 
     def die(self):
         self.currentHealth = 0
         self.remove(*self.groups())
 
     def heal(self, amount: int):
+        if self.currentHealth != self.maxHealth:
+            self.timeFromLastHealthChange = 0
+            self.state = State.HEALED
         if self.currentHealth + amount >= self.maxHealth:
             self.currentHealth = self.maxHealth
         else:
             self.currentHealth += amount
-            self.timeFromLastHealthChange = 0
-            self.state = State.HEALED
 
     def addEffect(self, effect: Effect) -> None:
         filteredActiveEffects = list(filter(lambda x: (x.__class__ != effect.__class__), self.activeEffects))
@@ -187,9 +196,8 @@ class Entity(Sprite, ABC):
         for effect in self.activeEffects:
             self.executeEffect(effect)
 
-        if not self.state == State.NORMAL:
-            return
-        if self.timeFromLastHealthChange >= 250:
-            self.state = State.NORMAL
-        else:
-            self.timeFromLastHealthChange += timeFromLastTick
+        if self.state != State.NORMAL:
+            if self.timeFromLastHealthChange >= 250:
+                self.state = State.NORMAL
+            else:
+                self.timeFromLastHealthChange += timeFromLastTick

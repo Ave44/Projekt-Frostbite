@@ -142,8 +142,8 @@ class Entity(Sprite, ABC):
         self.rect.y += round(self.direction.y * self.speed)
         self.checkVerticalCollision()
 
-        self.adjustDirection()
         self.adjustImageToDirection()
+        self.adjustDirection()
 
     def adjustImageToDirection(self):
         if self.direction.x > 0:

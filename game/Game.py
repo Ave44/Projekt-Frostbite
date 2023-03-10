@@ -29,7 +29,8 @@ class Game:
 
         self.tick = 0
 
-        self.createMap(33)
+        self.map = self.createMap(64)
+        # self.map = self.createMap(256)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -39,6 +40,17 @@ class Game:
                              self.obstacleSprites,
                              saveData["player_data"],
                              inventory)
+        
+        if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
+            for y in range(len(self.map)):
+                for x in range(len(self.map)):
+                    if self.map[y][x]['walkable']:
+                        self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
+                        self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
+                        break
+                else:
+                    continue
+                break
 
         Enemy(self.visibleSprites,
               self.obstacleSprites,
@@ -68,6 +80,7 @@ class Game:
                 self.visibleSprites.addTile(tile)
                 if not map[y][x]["walkable"]:
                     self.obstacleSprites.add(tile)
+        return map        
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -76,9 +89,9 @@ class Game:
 
     def handleTick(self):
         self.tick = self.tick + 1
-        if self.tick == 60:
+        if self.tick == 1000:
             self.spawnEnemy()
-        if self.tick == 120:
+        if self.tick == 2000:
             self.tick = 0
             self.spawnEnemy()
             self.player.heal(20)
@@ -136,7 +149,8 @@ class Game:
             self.UiSprites.customDraw()
 
             # method for debugging values by writing them on screen
-            text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
+            # text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
+            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
             self.debug(text)
 
             pygame.display.update()

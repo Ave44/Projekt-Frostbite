@@ -3,41 +3,22 @@ import pygame
 from perlin_noise import PerlinNoise
 import random
 import matplotlib.pyplot as plt
+from skimage.measure import label
+import numpy as np
+import math
 
-biomesId = {0: 'sea', 1: 'grassland', 2: 'forest', 3: 'rocky'}
-
-def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
-    octaves = 10
-    noise = PerlinNoise(octaves, seed)
-    pic = [[noise([i / mapSize, j / mapSize]) for j in range(mapSize)] for i in range(mapSize)]
-
-    idMatrix = [[0 for x in range(mapSize)] for y in range(mapSize)]
-
-    r = (mapSize - 2) // 2 + 1
-    for y in range(mapSize):
-        for x in range(mapSize):
-            if abs((x - (mapSize // 2)) ** 2 + (y - (mapSize // 2)) ** 2) < r ** 2 and pic[x][y] < 0.2:
-                idMatrix[x][y] = 1
-            else:
-                idMatrix[x][y] = 0
-
-    # TODO: temporal solution
-    newIdMatrix = [[0 for x in range(mapSize + 20)] for y in range(mapSize + 20)]
-    for y in range(mapSize):
-        for x in range(mapSize):
-            newIdMatrix[x + 10][y + 10] = idMatrix[x][y]
-    return newIdMatrix
+biomesId = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
 def replaceIdWithNames(idMatrix):
     namesMatrix = [[biomesId[idMatrix[row][column]] for column in range(len(idMatrix))] for row in range(len(idMatrix))]
 
-    for y in range(1, len(idMatrix) - 1):
-        for x in range(1, len(idMatrix) - 1):
-            if idMatrix[x][y] != 0:
-                checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
-                checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
-                checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
-                checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
+    # for y in range(1, len(idMatrix) - 1):
+    #     for x in range(1, len(idMatrix) - 1):
+    #         if idMatrix[x][y] != 0:
+    #             checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
+    #             checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
+    #             checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
+    #             checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
 
     return namesMatrix
 
@@ -81,148 +62,37 @@ def generateMap(mapSize: int):
 
     return dataMatrix
 
-def generateIdMatrix2(mapSize: int, seed=random.randint(1, 1000)):
+def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noise1 = PerlinNoise(octaves=5, seed=seed)
     noise2 = PerlinNoise(octaves=10, seed=seed)
     noise3 = PerlinNoise(octaves=20, seed=seed)
-    pic1 = []
-    pic2 = []
-    pic3 = []
-    pic4 = []
-    pic5 = []
-    pic6 = []
+
+    noiseMatrix1 = []
+    noiseMatrix2 = []
     
     for j in range(mapSize):
-        row1 = []
-        row2 = []
-        row3 = []
-        row4 = []
-        row5 = []
-        row6 = []
+        noiseMatrix1row = []
+        noiseMatrix2row = []
         for i in range(mapSize):
             noiseVal1 = noise1([i / mapSize, j / mapSize])
             noiseVal2 = noise2([i / mapSize, j / mapSize])
             noiseVal3 = noise3([i / mapSize, j / mapSize])
-            row1.append(noiseVal1)
-            row2.append(noiseVal2)
-            row3.append(noiseVal1 + noiseVal2)
-            row4.append(noiseVal1 + noiseVal2 * 0.5)
-            row5.append(noiseVal1 + noiseVal2 + noiseVal3)
-            row6.append(noiseVal1 + noiseVal2 * 0.5 + noiseVal3 * 0.25)
-        pic1.append(row1)
-        pic2.append(row2)
-        pic3.append(row3)
-        pic4.append(row4)
-        pic5.append(row5)
-        pic6.append(row6)
+            noiseMatrix1row.append(noiseVal1 + noiseVal2 + noiseVal3)
+            noiseMatrix2row.append(noiseVal1 + noiseVal2 * 0.5 + noiseVal3 * 0.25)
+        noiseMatrix1.append(noiseMatrix1row)
+        noiseMatrix2.append(noiseMatrix2row)
 
-    idMatrix = [[0 for x in range(mapSize)] for y in range(mapSize)]
-    pic7 = [[pic6[y][x] + pic5[y][x] for x in range(mapSize)] for y in range(mapSize)]
+    noiseMatrixCombined = [[noiseMatrix2[y][x] + noiseMatrix1[y][x] for x in range(mapSize)] for y in range(mapSize)]
 
-    pic1N = normalize(pic1)
-    pic2N = normalize(pic2)
-    pic3N = normalize(pic3)
-    pic4N = normalize(pic4)
-    pic5N = normalize(pic5)
-    pic6N = normalize(pic6)
-    pic7N = normalize(pic7)
-    mask = getMask(pic7)
-    pic8N = [[pic7N[y][x] * mask[y][x] for x in range(mapSize)] for y in range(mapSize)]
+    noiseMatrixNormalized = normalize(noiseMatrixCombined)
+    mask = getMask(noiseMatrixCombined)
+    noiseMatrixMasked = [[noiseMatrixNormalized[y][x] * mask[y][x] for x in range(mapSize)] for y in range(mapSize)]
     
-    plt.figure(figsize=(18,8))
-    plt.suptitle("normalized noise", fontsize=16)
+    idMatrix, binaryLandMatrix = setpFunc(noiseMatrixMasked)
 
-    plt.subplot(2,4,1)
-    plt.imshow(pic1N, cmap='gray')
-    plt.colorbar()
-    plt.title("5")
+    matrixAfterCleanup = cleanup(idMatrix, binaryLandMatrix, bridgeId=1)
 
-    plt.subplot(2,4,5)
-    plt.imshow(pic2N, cmap='gray')
-    plt.colorbar()
-    plt.title("10")
-
-    plt.subplot(2,4,2)
-    plt.imshow(pic3N, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10")
-
-    plt.subplot(2,4,6)
-    plt.imshow(pic4N, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10 * 0.5")
-
-    plt.subplot(2,4,3)
-    plt.imshow(pic5N, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10 + 20")
-
-    plt.subplot(2,4,7)
-    plt.imshow(pic6N, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10 * 0.5 + 20 * 0.25")
-    
-    plt.subplot(2,4,4)
-    plt.imshow(pic7N, cmap='gray')
-    plt.colorbar()
-    plt.title("combined")
-
-    plt.subplot(2,4,8)
-    plt.imshow(pic8N, cmap='gray')
-    plt.colorbar()
-    plt.title("masked")
-
-    pic1 = setpFunc(pic1N)
-    pic2 = setpFunc(pic2N)
-    pic3 = setpFunc(pic3N)
-    pic4 = setpFunc(pic4N)
-    pic5 = setpFunc(pic5N)
-    pic6 = setpFunc(pic6N)
-    pic7 = setpFunc(pic7N)
-    pic8 = setpFunc(pic8N)
-    plt.figure(figsize=(18,8))
-    plt.suptitle("after step func", fontsize=16)
-
-    plt.subplot(2,4,1)
-    plt.imshow(pic1, cmap='gray')
-    plt.colorbar()
-    plt.title("5")
-
-    plt.subplot(2,4,5)
-    plt.imshow(pic2, cmap='gray')
-    plt.colorbar()
-    plt.title("10")
-
-    plt.subplot(2,4,2)
-    plt.imshow(pic3, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10")
-
-    plt.subplot(2,4,6)
-    plt.imshow(pic4, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10 * 0.5")
-
-    plt.subplot(2,4,3)
-    plt.imshow(pic5, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10 + 20")
-
-    plt.subplot(2,4,7)
-    plt.imshow(pic6, cmap='gray')
-    plt.colorbar()
-    plt.title("5 + 10 * 0.5 + 20 * 0.25")
-    
-    plt.subplot(2,4,4)
-    plt.imshow(pic7, cmap='gray')
-    plt.colorbar()
-    plt.title("combined")
-
-    plt.subplot(2,4,8)
-    plt.imshow(pic8, cmap='gray')
-    plt.colorbar()
-    plt.title("masked")
-    plt.show()
+    return matrixAfterCleanup
 
 def normalize(matrix):
     maxValue = max(matrix[0])
@@ -242,15 +112,13 @@ def setpFunc(matrix):
     step3 = 0.6
     matrixSize = len(matrix)
     newMatrix = [[0 for x in range(matrixSize)] for y in range(matrixSize)]
+    land = [[0 for x in range(matrixSize)] for y in range(matrixSize)]
     for row in range(matrixSize):
         for column in range(matrixSize):
             curVal = matrix[row][column]
-            newMatrix[row][column] = ((1 if curVal >= step3 else 0.5) if curVal >= step2 else 0.25) if curVal >= step1 else 0
-    return newMatrix
-
-
-
-# map = generateIdMatrix2(256)
+            newMatrix[row][column] = ((3 if curVal >= step3 else 2) if curVal >= step2 else 1) if curVal >= step1 else 0
+            land[row][column] = 1 if curVal >= step1 else 0
+    return newMatrix, land
 
 def circleMask(matrix):
     matrixSize = len(matrix)
@@ -303,4 +171,161 @@ def getMask(matrix):
 
     return combinedMask
 
-generateIdMatrix2(256)
+def cleanup(matrix, binaryMatrix, bridgeId):
+    afterRemoval, binaryMatrixAfterRemoval = removeSmallUnconnectedIslands(matrix, binaryMatrix)
+    afterConnecting = connectIslands(afterRemoval, binaryMatrixAfterRemoval, bridgeId)
+
+    return afterConnecting
+
+def removeSmallUnconnectedIslands(matrix, binaryMatrix):
+    matrixSize = len(matrix)
+    matrixLabeled, islandsAmmount = label(np.array(binaryMatrix), return_num=True)
+    newMatrix = [[matrix[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
+    newBinaryMatrix = [[binaryMatrix[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
+
+    islandSizes = [0 for islandIndex in range(islandsAmmount + 1)]
+
+    for row in matrixLabeled:
+        for val in row:
+            islandSizes[val] += 1
+
+    for row in range(matrixSize):
+        for column in range(matrixSize):
+            if islandSizes[matrixLabeled[row][column]] < 100:
+                newMatrix[row][column] = 0
+                newBinaryMatrix[row][column] = 0
+
+    return newMatrix, newBinaryMatrix
+
+def connectIslands(matrix, binaryMatrix, bridgeId):
+    matrixSize = len(matrix)
+    matrixLabeled, islandsAmmount = label(np.array(binaryMatrix), return_num=True)
+    newMatrix = [[matrix[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
+
+    islandsOutline = [[matrixLabeled[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
+    islandsPoints = [[] for island in range(islandsAmmount + 1)]
+    for row in range(matrixSize):
+        for column in range(matrixSize):
+            if matrixLabeled[row - 1][column] != 0 and matrixLabeled[row + 1][column] != 0 and matrixLabeled[row][column - 1] != 0 and matrixLabeled[row][column + 1] != 0:
+                islandsOutline[row][column] = 0
+            else:
+                islandsPoints[islandsOutline[row][column]].append({'x': column, 'y': row})
+
+    distances = []
+    distanceMatrix = [[0 for i in range(islandsAmmount)] for j in range(islandsAmmount)]
+    pointsMatrix = [[0 for i in range(islandsAmmount)] for j in range(islandsAmmount)]
+    for firstIndex in range(islandsAmmount - 1):
+        for secondIndex in range(islandsAmmount - 1 - firstIndex):
+            label1 = firstIndex + 1
+            label2 = secondIndex + firstIndex + 2
+            data = findClosestPoints(islandsPoints[label1], islandsPoints[label2])
+            distances.append({'label1': label1, 'label2': label2, 'data': data})
+            distanceMatrix[label1 - 1][label2 - 1] = data['distance']
+            distanceMatrix[label2 - 1][label1 - 1] = data['distance']
+            pointsMatrix[label1 - 1][label2 - 1] = data
+            pointsMatrix[label2 - 1][label1 - 1] = data
+
+    islandsToConnect = minimalSpanningTree(distanceMatrix)
+
+    for pair in islandsToConnect:
+        l1, l2 = pair['label1'], pair['label2']
+        bridge = pointsMatrix[l1][l2]
+        point1 = bridge['point1']
+        point2 = bridge['point2']
+        createBridge(newMatrix, point1, point2, bridgeId)
+
+    return newMatrix
+
+def findClosestPoints(pointsList1, pointsList2):
+    minDistance = float('inf')
+    list1Len = len(pointsList1)
+    list2Len = len(pointsList2)
+    point1 = None
+    point2 = None
+    for index1 in range(list1Len):
+        for index2 in range(list2Len):
+            p1 = pointsList1[index1]
+            p2 = pointsList2[index2]
+            distance = math.sqrt((p1['x'] - p2['x'])**2 + (p1['y'] - p2['y'])**2)
+            if minDistance > distance:
+                minDistance = distance
+                point1 = p1
+                point2 = p2
+
+    return {'distance': minDistance, 'point1': point1, 'point2': point2}
+
+def minimalSpanningTree(matrix):
+    matrixSize = len(matrix)
+    visitedNodes = [False for node in range(matrixSize)]
+    result = [[0 for column in range(matrixSize)] for row in range(matrixSize)]
+    
+    index = 0
+    while(False in visitedNodes):
+        minimum = float('inf')
+        start = 0
+        end = 0
+        for p1 in range(matrixSize):
+            if visitedNodes[p1]:
+                for p2 in range(matrixSize):
+                    if (not visitedNodes[p2] and matrix[p1][p2]>0):  
+                        if matrix[p1][p2] < minimum:
+                            minimum = matrix[p1][p2]
+                            start, end = p1, p2
+        visitedNodes[end] = True
+        result[start][end] = minimum
+        if minimum == float('inf'):
+            result[start][end] = 0
+        index += 1
+        result[end][start] = result[start][end]
+
+    edges = []
+    for l1 in range(len(result)):
+        for l2 in range(0+l1, len(result)):
+            if result[l1][l2] != 0:
+                edges.append({'label1': l1, 'label2': l2})
+    return edges
+
+def createBridge(matrix, point1, point2, bridgeId):
+    xGrowth = point2['x'] - point1['x']
+    yGrowth = point2['y'] - point1['y']
+    horizontalStep = 1
+    verticalStep = 1
+    if xGrowth < 0:
+        horizontalStep = -1
+        xGrowth = xGrowth * -1
+    if yGrowth < 0:
+        verticalStep = -1
+        yGrowth = yGrowth * -1
+    directionRatio = xGrowth
+    currPoint = point1
+    rand1 = random.random()
+    rand2 = random.random()
+    while currPoint != point2:
+        rand1 = min(max(rand1 + random.uniform(-0.5, 0.5), 0), 1)
+        rand2 = min(max(rand2 + random.uniform(-0.5, 0.5), 0), 1)
+        if directionRatio >= yGrowth:
+            directionRatio -= yGrowth
+            currPoint['x'] += horizontalStep
+            createHorizontalStep(matrix, currPoint, bridgeId, rand1, rand2)
+        else:
+            directionRatio += xGrowth
+            currPoint['y'] += verticalStep
+            createVerticalStep(matrix, currPoint, bridgeId, rand1, rand2)
+
+def createHorizontalStep(matrix, point, val, rand1=random.random(), rand2=random.random()):
+    if(rand1 > 0.5):
+        matrix[point['y'] - 2][point['x']] = val
+    matrix[point['y'] - 1][point['x']] = val
+    matrix[point['y']][point['x']] = val
+    matrix[point['y'] + 1][point['x']] = val
+    if(rand2 > 0.5):
+        matrix[point['y'] + 2][point['x']] = val
+
+def createVerticalStep(matrix, point, val, rand1=random.random(), rand2=random.random()):
+    if(rand1 > 0.5):
+        matrix[point['y']][point['x'] - 2] = val
+    matrix[point['y']][point['x'] - 1] = val
+    matrix[point['y']][point['x']] = val
+    matrix[point['y']][point['x'] + 1] = val
+    if(rand2 > 0.5):
+        matrix[point['y']][point['x'] + 2] = val

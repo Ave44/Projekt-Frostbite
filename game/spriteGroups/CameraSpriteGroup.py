@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
 
-from config import WINDOW_HEIGHT, WINDOW_WIDTH
+from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILES_ON_SCREEN_HEIGHT, TILES_ON_SCREEN_WIDTH, TILE_SIZE
 
 
 class CameraSpriteGroup(pygame.sprite.Group):
@@ -13,16 +13,14 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.halfWindowWidth = WINDOW_WIDTH // 2
         self.offset = Vector2()
         self.tiles = []
+        self.map = []
         self.entities = EntitiesGroup()
         self.radiuses = []
 
     def customDraw(self, center):
         self.offset.x = center.x - self.halfWindowWidth
         self.offset.y = center.y - self.halfWindowHeight
-
-        for tile in self.tiles:
-            spritePosition = tile.rect.topleft - self.offset
-            self.displaySurface.blit(tile.image, spritePosition)
+        self.drawTiles()
 
         for sprite in self.entities.sprites():
             spritePosition = sprite.rect.topleft - self.offset
@@ -39,6 +37,16 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
     def addTile(self, tile):
         self.tiles.append(tile)
+
+    def drawTiles(self):
+        xGap = int(self.offset.x / TILE_SIZE)
+        yGap = int(self.offset.y / TILE_SIZE)
+        for y in range(TILES_ON_SCREEN_HEIGHT):
+            for x in range(TILES_ON_SCREEN_WIDTH):
+                if x + xGap < len(self.map) and y + yGap < len(self.map):
+                    tile = self.map[y + yGap][x + xGap]
+                    spritePosition = tile.rect.topleft - self.offset
+                    self.displaySurface.blit(tile.image, spritePosition)
 
     def addRadius(self, radius, position, color):
         self.radiuses.append({"radius": radius, "position": position, "color": color})

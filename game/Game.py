@@ -29,8 +29,7 @@ class Game:
 
         self.tick = 0
 
-        self.map = self.createMap(64)
-        # self.map = self.createMap(256)
+        self.map = self.createMap(256)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -72,14 +71,16 @@ class Game:
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
         map = generateMap(mapSize)
+        tilesMap = [[None  for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
             for x in range(len(map)):
                 xPos = x * TILE_SIZE
                 yPos = y * TILE_SIZE
                 tile = Tile((xPos, yPos), map[y][x]["image"])
-                self.visibleSprites.addTile(tile)
+                tilesMap[y][x] = tile
                 if not map[y][x]["walkable"]:
                     self.obstacleSprites.add(tile)
+        self.visibleSprites.map = tilesMap
         return map        
 
     def debug(self, text):

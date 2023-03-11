@@ -12,6 +12,7 @@ from game.InputManager import InputManager
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
@@ -24,12 +25,12 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.visibleSprites = CameraSpriteGroup()
-        self.obstacleSprites = pygame.sprite.Group()
+        self.obstacleSprites = ObstacleSprites()
         self.UiSprites = UiSpriteGroup()
 
         self.tick = 0
 
-        self.map = self.createMap(256)
+        self.map = self.createMap(512)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -51,9 +52,9 @@ class Game:
                     continue
                 break
 
-        Enemy(self.visibleSprites,
-              self.obstacleSprites,
-              saveData["enemy_data"])
+        # Enemy(self.visibleSprites,
+        #       self.obstacleSprites,
+        #       saveData["enemy_data"])
 
         self.UiSprites.player = self.player
         self.UiSprites.inventory = inventory
@@ -72,6 +73,7 @@ class Game:
     def createMap(self, mapSize):
         map = generateMap(mapSize)
         tilesMap = [[None  for x in range(mapSize)] for y in range(mapSize)]
+        obstaclesMap = [[None  for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
             for x in range(len(map)):
                 xPos = x * TILE_SIZE
@@ -79,8 +81,9 @@ class Game:
                 tile = Tile((xPos, yPos), map[y][x]["image"])
                 tilesMap[y][x] = tile
                 if not map[y][x]["walkable"]:
-                    self.obstacleSprites.add(tile)
+                    obstaclesMap[y][x] = tile
         self.visibleSprites.map = tilesMap
+        self.obstacleSprites.map = obstaclesMap
         return map        
 
     def debug(self, text):

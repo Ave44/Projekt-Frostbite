@@ -26,7 +26,7 @@ class Entity(Sprite):
         self.destinationTarget = None
 
     def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
-        for sprite in self.obstacleSprites:
+        for sprite in self.obstacleSprites.getObstacles(self.rect.center):
             if not sprite.rect.colliderect(self.rect):
                 pass
             elif self.direction.x > 0:
@@ -35,7 +35,7 @@ class Entity(Sprite):
                 self.rect.left = sprite.rect.right
 
     def checkVerticalCollision(self):
-        for sprite in self.obstacleSprites:
+        for sprite in self.obstacleSprites.getObstacles(self.rect.center):
             if not sprite.rect.colliderect(self.rect):
                 pass
             elif self.direction.y < 0:

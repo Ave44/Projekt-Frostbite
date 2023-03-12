@@ -3,7 +3,6 @@ import unittest
 import mock
 from pygame import Vector2
 
-from config import *
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.ui.inventory.Inventory import Inventory
 

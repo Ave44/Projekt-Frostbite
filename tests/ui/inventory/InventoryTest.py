@@ -1,6 +1,6 @@
 import unittest
 
-from mock.mock import MagicMock, Mock
+from mock.mock import MagicMock
 from pygame.math import Vector2
 
 from game.entities.Player import Player

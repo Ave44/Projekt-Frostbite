@@ -1,10 +1,8 @@
-import os.path
 import unittest
 
 import pygame.sprite
 from pygame import Vector2
 
-from config import ROOT_PATH
 from game.items.Item import Item
 
 

@@ -1,10 +1,11 @@
+import pygame.sprite
 from pygame import Vector2
 from pygame.image import load
 from pygame.sprite import Sprite
 
 
 class Entity(Sprite):
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict):
+    def __init__(self, spriteGroup, obstacleSprites: pygame.sprite.Group, entityData: dict):
         super().__init__(spriteGroup)
         spriteGroup.entities.add(self)
 

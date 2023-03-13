@@ -184,10 +184,10 @@ class Entity(Sprite, ABC):
         self.activeEffects = filteredActiveEffects
 
     def executeEffect(self, effect: Effect) -> None:
-        if not effect.amountOfTicks:
-            self.activeEffects.remove(effect)
-        else:
+        if effect.timeLeft:
             effect.execute()
+        else:
+            self.activeEffects.remove(effect)
 
     def update(self) -> None:
         self.localUpdate()

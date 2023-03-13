@@ -11,7 +11,7 @@ class Object(ABC, Sprite):
 
     def __init__(self, visibleGroup: Group,
                  obstaclesGroup: Group,
-                 bottomCenter: Vector2(), durability: int,
+                 midBottom: Vector2(), durability: int,
                  toolType: ToolType,
                  image: Surface):
 
@@ -20,7 +20,7 @@ class Object(ABC, Sprite):
         self.obstaclesGroup = obstaclesGroup
 
         self.image = image
-        self.rect = self.image.get_rect(bottomcenter=bottomCenter)
+        self.rect = self.image.get_rect(midbottom=midBottom)
 
         self.maxDurability = durability
         self.currentDurability = durability

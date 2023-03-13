@@ -2,6 +2,8 @@ import pygame
 from pygame.math import Vector2
 import math
 
+from pygame.time import Clock
+
 from game.entities.Entity import Entity
 
 
@@ -9,8 +11,8 @@ class Enemy(Entity):
     def __init__(self,
                  groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
-                 enemyData):
-        super().__init__(groups, obstacleSprites, enemyData)
+                 enemyData, clock: Clock):
+        super().__init__(groups, obstacleSprites, enemyData, clock)
         self.sightRange = enemyData["sightRange"]
         self.attackRange = enemyData["attackRange"]
         self.damage = enemyData["damage"]
@@ -27,7 +29,6 @@ class Enemy(Entity):
         pos = Vector2(position)
         distance = math.sqrt((self.rect.centerx - pos.x)**2 + (self.rect.centery - pos.y)**2)
         return distance <= range
-
 
     def searchForTarget(self, entities):
         if self.target != None:
@@ -48,7 +49,7 @@ class Enemy(Entity):
             self.target.getDamage(self.damage)
             self.kill()
 
-    def update(self):
+    def localUpdate(self):
         # print(self.target)
         if self.target != None:
             self.attack()

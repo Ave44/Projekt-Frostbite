@@ -1,4 +1,5 @@
 import pygame
+from pygame.time import Clock
 
 from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN
 from game.entities.Entity import Entity
@@ -9,14 +10,13 @@ from game.ui.Bar import Bar
 from pygame.math import Vector2
 
 
-
 class Player(Entity):
     def __init__(self,
                  groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
                  playerData,
-                 inventory: Inventory):
-        super().__init__(groups, obstacleSprites, playerData)
+                 inventory: Inventory, clock: Clock):
+        super().__init__(groups, obstacleSprites, playerData, clock)
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
 
@@ -48,11 +48,12 @@ class Player(Entity):
             self.setDestination(Vector2(sprite.rect.center), sprite)
             # self.inventory.addItem(sprite, self.selectedItem)
 
-    def update(self):
+    def die(self):
+        self.currentHealth = 0
+        self.healthBar.update(self.currentHealth)
+        self.remove(*self.groups())
+        print("Game Over")
+
+    def localUpdate(self):
         self.move()
         self.healthBar.update(self.currentHealth)
-
-    def die(self):
-        self.healthBar.update(self.currentHealth)
-        # self.remove(*self.groups())
-        print("Game Over")

@@ -4,9 +4,10 @@ from pygame import mixer
 
 from config import *
 from game.Game import Game
+from game.menu.MainMenu import MainMenu
 
 # loading savefile
-# (Later will be replaced with "load all savefile names", then only selected favefile will be loaded)
+# (Later will be replaced with "load all savefile names", then only selected savefile will be loaded)
 fileSave = open("./filesave.json")
 saveData = json.load(fileSave)
 fileSave.close()
@@ -24,4 +25,5 @@ gameRunning = True
 
 if gameRunning:
     game = Game(screen, saveData)
-    game.mainMenu()
+    menu = MainMenu(screen, game.play)
+    menu.mainMenu()

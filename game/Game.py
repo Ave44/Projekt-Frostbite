@@ -1,4 +1,3 @@
-import sys
 import random
 
 from pygame import mixer
@@ -6,9 +5,11 @@ from pygame.math import Vector2
 
 from config import *
 from game.entities.Enemy import Enemy
-from game.Menu import Menu
 from game.entities.Player import Player
 from game.InputManager import InputManager
+from game.objects.Grass import Grass
+from game.objects.Rock import Rock
+from game.objects.Tree import Tree
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -39,7 +40,7 @@ class Game:
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
                              saveData["player_data"],
-                             inventory)
+                             inventory, self.clock)
         
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
@@ -57,12 +58,14 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
+        Tree(self.visibleSprites, self.obstacleSprites, Vector2(2900, 2900), self.clock)
+        Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100))
+        Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200))
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
 
         self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
-        self.menu = Menu(screen, self.play, self.options, self.quitGame)
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
@@ -96,33 +99,32 @@ class Game:
             self.player.heal(20)
 
     def spawnEnemy(self):
-        randomFactor = random.choice([Vector2(1,1),Vector2(-1,1),Vector2(1,-1),Vector2(-1,-1)])
+        randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
         position = [self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y]
         Enemy(self.visibleSprites, self.obstacleSprites, {
-        "speed": 3,
-        "maxHealth": 60,
-        "currentHealth": 60,
-        "damage": 20,
-        "sightRange": 400,
-        "attackRange": 20,
-        "position_center": position,
-        "path_to_image_up": "./graphics/player/enemy.png",
-        "path_to_image_down": "./graphics/player/enemy.png",
-        "path_to_image_left": "./graphics/player/enemy.png",
-        "path_to_image_right": "./graphics/player/enemy.png"
-    })
+            "speed": 3,
+            "maxHealth": 60,
+            "currentHealth": 60,
+            "damage": 20,
+            "sightRange": 400,
+            "attackRange": 20,
+            "position_center": position,
+            "path_to_image_up": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_down": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_left": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_right": "./graphics/entities/enemy/enemy.png",
 
-    def quitGame(self) -> None:
-        pygame.quit()
-        sys.exit()
+            "path_to_image_up_heal": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_down_heal": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_left_heal": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_right_heal": "./graphics/entities/enemy/enemy.png",
 
-    def mainMenu(self) -> None:
-        self.changeMusicTheme(MENU_THEME)
-        self.menu.mainMenu()
-
-    def options(self) -> None:
-        pass
+            "path_to_image_up_damage": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_down_damage": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_left_damage": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_right_damage": "./graphics/entities/enemy/enemy.png",
+        }, self.clock)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)

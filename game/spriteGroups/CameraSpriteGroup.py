@@ -15,7 +15,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.tiles = []
         self.map = []
         self.entities = EntitiesGroup()
-        self.radiuses = []
+        # self.radiuses = []
 
     def customDraw(self, center):
         self.offset.x = center.x - self.halfWindowWidth
@@ -30,8 +30,9 @@ class CameraSpriteGroup(pygame.sprite.Group):
             spritePosition = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image, spritePosition)
 
-        for radius in self.radiuses:
-            self.drawRadius(radius["radius"], radius["position"], radius["color"])
+        # Displaying radiuses is causing a lot of lag use only to debug
+        # for radius in self.radiuses:
+        #     self.drawRadius(radius["radius"], radius["position"], radius["color"])
         self.radiuses = []
 
 

@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 
 from config import BUTTON_FONT
@@ -7,7 +9,7 @@ class Menu:
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.Font(BUTTON_FONT, 100)
-        self.menuOptionFont = pygame.font.Font(BUTTON_FONT, 75)
+        self.menuOptionFont = pygame.font.Font(BUTTON_FONT, 50)
 
     def createBackground(self) -> None:
         # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
@@ -19,6 +21,10 @@ class Menu:
         for x in range(0, screenWidth, imageWidth):
             for y in range(0, screenHeight, imageHeight):
                 self.screen.blit(background, (x, y))
+
+    def quitGame(self) -> None:
+        pygame.quit()
+        sys.exit()
 
     def menuLoop(self, menuText, menuRect, menuButtons) -> None:
         while True:
@@ -33,5 +39,7 @@ class Menu:
                     for button in menuButtons:
                         if button.checkForInput(mousePos):
                             button.executeAction()
+                if event.type == pygame.QUIT:
+                    self.quitGame()
 
             pygame.display.update()

@@ -1,16 +1,8 @@
-import sys
-
-import pygame
-
 from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR, WHITE
+from game.menu.CreateGame import CreateGame
 from game.menu.Menu import Menu
 from game.menu.OptionsMenu import OptionsMenu
 from game.ui.general.Button import Button
-
-
-def quitGame() -> None:
-    pygame.quit()
-    sys.exit()
 
 
 class MainMenu(Menu):
@@ -18,6 +10,7 @@ class MainMenu(Menu):
         super().__init__(screen)
         self.play = playAction
         self.optionsMenu = OptionsMenu(screen, self.mainMenu)
+        self.createGameMenu = CreateGame(screen, self.mainMenu)
 
     def mainMenu(self) -> None:
         self.createBackground()
@@ -27,14 +20,18 @@ class MainMenu(Menu):
                              textInput="PLAY",
                              font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
                              action=self.play)
-        options_button = Button(pos=(640, 400),
+        create_game_button = Button(pos=(640, 350),
+                                    textInput="CREATE GAME",
+                                    font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
+                                    action=self.createGameMenu.options)
+        options_button = Button(pos=(640, 450),
                                 textInput="OPTIONS",
                                 font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
                                 action=self.optionsMenu.options)
         quit_button = Button(pos=(640, 550),
                              textInput="QUIT",
                              font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
-                             action=quitGame)
-        menuButtons = [play_button, options_button, quit_button]
+                             action=self.quitGame)
+        menuButtons = [play_button, options_button, quit_button, create_game_button]
 
         self.menuLoop(menuText, menuRect, menuButtons)

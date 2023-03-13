@@ -202,21 +202,14 @@ def connectIslands(matrix, binaryMatrix, bridgeId):
     matrixLabeled, islandsAmmount = label(np.array(binaryMatrix), return_num=True)
     newMatrix = [[matrix[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
 
-    islandsOutline = [[matrixLabeled[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
-    islandsPoints = [[] for island in range(islandsAmmount + 1)]
-    for row in range(matrixSize):
-        for column in range(matrixSize):
-            if matrixLabeled[row - 1][column] != 0 and matrixLabeled[row + 1][column] != 0 and matrixLabeled[row][column - 1] != 0 and matrixLabeled[row][column + 1] != 0:
-                islandsOutline[row][column] = 0
-            else:
-                islandsPoints[islandsOutline[row][column]].append({'x': column, 'y': row})
+    islandsOutline, islandsPoints = getIslandsOutline(matrixLabeled, islandsAmmount)
 
     distances = []
     distanceMatrix = [[0 for i in range(islandsAmmount)] for j in range(islandsAmmount)]
     pointsMatrix = [[0 for i in range(islandsAmmount)] for j in range(islandsAmmount)]
     for firstIndex in range(islandsAmmount - 1):
-        for secondIndex in range(islandsAmmount - 1 - firstIndex):
-            label1 = firstIndex + 1
+        label1 = firstIndex + 1
+        for secondIndex in range(islandsAmmount - 1 - firstIndex):    
             label2 = secondIndex + firstIndex + 2
             data = findClosestPoints(islandsPoints[label1], islandsPoints[label2])
             distances.append({'label1': label1, 'label2': label2, 'data': data})
@@ -235,6 +228,18 @@ def connectIslands(matrix, binaryMatrix, bridgeId):
         createBridge(newMatrix, point1, point2, bridgeId)
 
     return newMatrix
+
+def getIslandsOutline(matrixLabeled, islandsAmmount):
+    matrixSize = len(matrixLabeled)
+    islandsOutline = [[matrixLabeled[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
+    islandsPoints = [[] for island in range(islandsAmmount + 1)]
+    for row in range(matrixSize):
+        for column in range(matrixSize):
+            if matrixLabeled[row - 1][column] != 0 and matrixLabeled[row + 1][column] != 0 and matrixLabeled[row][column - 1] != 0 and matrixLabeled[row][column + 1] != 0:
+                islandsOutline[row][column] = 0
+            else:
+                islandsPoints[islandsOutline[row][column]].append({'x': column, 'y': row})
+    return islandsOutline, islandsPoints
 
 def findClosestPoints(pointsList1, pointsList2):
     minDistance = float('inf')
@@ -313,19 +318,19 @@ def createBridge(matrix, point1, point2, bridgeId):
             createVerticalStep(matrix, currPoint, bridgeId, rand1, rand2)
 
 def createHorizontalStep(matrix, point, val, rand1=random.random(), rand2=random.random()):
-    if(rand1 > 0.5):
+    if rand1 > 0.5:
         matrix[point['y'] - 2][point['x']] = val
     matrix[point['y'] - 1][point['x']] = val
     matrix[point['y']][point['x']] = val
     matrix[point['y'] + 1][point['x']] = val
-    if(rand2 > 0.5):
+    if rand2 > 0.5:
         matrix[point['y'] + 2][point['x']] = val
 
 def createVerticalStep(matrix, point, val, rand1=random.random(), rand2=random.random()):
-    if(rand1 > 0.5):
+    if rand1 > 0.5:
         matrix[point['y']][point['x'] - 2] = val
     matrix[point['y']][point['x'] - 1] = val
     matrix[point['y']][point['x']] = val
     matrix[point['y']][point['x'] + 1] = val
-    if(rand2 > 0.5):
+    if rand2 > 0.5:
         matrix[point['y']][point['x'] + 2] = val

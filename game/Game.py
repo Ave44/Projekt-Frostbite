@@ -52,16 +52,11 @@ class Game:
                     continue
                 break
 
-        # Enemy(self.visibleSprites,
-        #       self.obstacleSprites,
-        #       saveData["enemy_data"])
-
         self.UiSprites.player = self.player
         self.UiSprites.inventory = inventory
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        sword2 = Sword(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -72,8 +67,8 @@ class Game:
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
         map = generateMap(mapSize)
-        tilesMap = [[None  for x in range(mapSize)] for y in range(mapSize)]
-        obstaclesMap = [[None  for x in range(mapSize)] for y in range(mapSize)]
+        tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
+        obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
             for x in range(len(map)):
                 xPos = x * TILE_SIZE

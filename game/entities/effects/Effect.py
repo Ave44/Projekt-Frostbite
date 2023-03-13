@@ -27,6 +27,6 @@ class Effect(ABC):
         self.timeLeft -= dt
         if self.timeLeft <= 0:
             self.target.activeEffects.remove(self)
-        if self.canApply() and self.timeFromLastTick >= self.timeBetweenActions:
+        elif self.canApply() and self.timeFromLastTick >= self.timeBetweenActions:
             self.action()
             self.timeFromLastTick = 0

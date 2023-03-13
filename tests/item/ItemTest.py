@@ -1,17 +1,18 @@
-import os.path
 import unittest
 
-from config import ROOT_PATH
-from items.Item import Item
+import pygame.sprite
+from pygame import Vector2
+
+from game.items.Item import Item
 
 
 class ItemTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.item = Item("sword")
+        self.item = Item(pygame.sprite.Group(), Vector2())
 
     def test_id_should_be_different(self):
-        item2 = Item("another sword", os.path.join(ROOT_PATH, "graphics", "items", "sword.png"))
+        item2 = Item(pygame.sprite.Group(), Vector2())
         self.assertNotEqual(self.item.id, item2.id)
 
     def test_drop_should_change_item_pos(self):

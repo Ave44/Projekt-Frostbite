@@ -1,6 +1,8 @@
 from abc import abstractmethod, ABC
 
 from pygame import Vector2, Surface
+import pygame.sprite
+
 from pygame.image import load
 from pygame.sprite import Sprite
 from pygame.time import Clock

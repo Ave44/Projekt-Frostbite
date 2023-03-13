@@ -6,8 +6,8 @@ from pygame.time import Clock
 class Effect(ABC):
     from game.entities import Entity
 
-    def __init__(self, durationMiliSeconds: int, timeBetweenActionsMs: int, target: Entity, clock: Clock):
-        self.timeLeft = durationMiliSeconds
+    def __init__(self, durationMs: int, timeBetweenActionsMs: int, target: Entity, clock: Clock):
+        self.timeLeft = durationMs
         self.target = target
         self.clock = clock
         self.timeFromLastTick = 0
@@ -22,10 +22,11 @@ class Effect(ABC):
         pass
 
     def execute(self) -> None:
-        if self.canApply() and self.timeLeft:
-            dt = self.clock.get_time()
-            self.timeFromLastTick += dt
-            self.timeLeft -= dt
-            if self.timeFromLastTick >= self.timeBetweenActions:
-                self.action()
-                self.timeFromLastTick = 0
+        dt = self.clock.get_time()
+        self.timeFromLastTick += dt
+        self.timeLeft -= dt
+        if self.timeLeft <= 0:
+            self.target.activeEffects.remove(self)
+        if self.canApply() and self.timeFromLastTick >= self.timeBetweenActions:
+            self.action()
+            self.timeFromLastTick = 0

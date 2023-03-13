@@ -183,18 +183,12 @@ class Entity(Sprite, ABC):
         filteredActiveEffects.append(effect)
         self.activeEffects = filteredActiveEffects
 
-    def executeEffect(self, effect: Effect) -> None:
-        if effect.timeLeft:
-            effect.execute()
-        else:
-            self.activeEffects.remove(effect)
-
     def update(self) -> None:
         self.localUpdate()
 
         timeFromLastTick = self.clock.get_time()
         for effect in self.activeEffects:
-            self.executeEffect(effect)
+            effect.execute()
 
         if self.state != State.NORMAL:
             if self.timeFromLastHealthChange >= 250:

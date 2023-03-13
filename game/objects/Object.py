@@ -20,7 +20,7 @@ class Object(ABC, Sprite):
         self.obstaclesGroup = obstaclesGroup
 
         self.image = image
-        self.rect = self.image.get_rect(bottomcenter=bottomCenter)
+        self.rect = self.image.get_rect(midbottom=bottomCenter)
 
         self.maxDurability = durability
         self.currentDurability = durability

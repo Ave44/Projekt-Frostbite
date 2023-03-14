@@ -14,7 +14,7 @@ class Flammable(Object, ABC):
         super().__init__(visibleGroup, obstaclesGroup, bottomCenter, durability, toolType, image)
         self.isOnFire = False
         self.timeLeft = 0
-        self.damagePerTick = 0
+        self.damagePerAction = 0
         self.timeFromLastTick = 0
         self.clock = clock
 
@@ -22,9 +22,10 @@ class Flammable(Object, ABC):
     def localUpdate(self):
         pass
 
-    def burn(self, duration: int, damagePerTick: int) -> None:
-        self.timeLeft = duration
-        self.damagePerTick = damagePerTick
+    def burn(self, durationMs: int, damagePerAction: int) -> None:
+        self.isOnFire = True
+        self.timeLeft = durationMs
+        self.damagePerAction = damagePerAction
 
     def update(self) -> None:
         self.localUpdate()
@@ -35,5 +36,5 @@ class Flammable(Object, ABC):
         self.timeFromLastTick += dt
         self.timeLeft -= dt
         if self.timeFromLastTick > 1000:
-            self.getDamage(self.damagePerTick)
+            self.getDamage(self.damagePerAction)
             self.timeFromLastTick = 0

@@ -11,7 +11,7 @@ from game.objects.domain.Flammable import Flammable
 
 class Snag(Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, bottomCenter: Vector2, clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/snag.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/snag.png")
         super().__init__(visibleGroup, obstaclesGroup, bottomCenter, 1, ToolType.AXE, image, clock)
 
     def interact(self) -> None:

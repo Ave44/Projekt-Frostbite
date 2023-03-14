@@ -7,6 +7,7 @@ from config import *
 from game.entities.Enemy import Enemy
 from game.entities.Player import Player
 from game.InputManager import InputManager
+from game.objects.trees.SmallTree import SmallTree
 from game.objects.trees.TreeSapling import TreeSapling
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory

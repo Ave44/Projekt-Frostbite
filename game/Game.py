@@ -9,7 +9,7 @@ from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.objects.Grass import Grass
 from game.objects.Rock import Rock
-from game.objects.Tree import Tree
+from game.objects.LargeTree import Tree
 from game.objects.TreeSapling import TreeSapling
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory

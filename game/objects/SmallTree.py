@@ -14,7 +14,7 @@ class SmallTree(Flammable):
     _LIFESPAN = 20000
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/smallTree.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/smallTree.png")
         super().__init__(visibleGroup, obstaclesGroup, midBottom, 5, ToolType.AXE, image, clock)
         self.age = 0
 

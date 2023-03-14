@@ -7,14 +7,14 @@ from config import ROOT_PATH
 from game.items.Sword import Sword
 from game.items.ToolType import ToolType
 from game.objects.Flammable import Flammable
-from game.objects.Tree import Tree
+from game.objects.LargeTree import Tree
 
 
 class MediumTree(Flammable):
     _LIFESPAN = 10000
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/mediumTree.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/mediumTree.png")
         super().__init__(visibleGroup, obstaclesGroup, midBottom, 10, ToolType.AXE, image, clock)
         self.age = 0
 

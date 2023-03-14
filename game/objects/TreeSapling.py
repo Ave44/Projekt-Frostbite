@@ -14,7 +14,7 @@ class TreeSapling(Object):
     _LIFESPAN = 36000
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/sapling.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/sapling.png")
         super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image)
         self.clock = clock
         self.age = 0

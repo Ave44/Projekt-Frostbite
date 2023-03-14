@@ -7,7 +7,7 @@ from config import ROOT_PATH
 from game.items.Sword import Sword
 from game.items.ToolType import ToolType
 from game.objects.Object import Object
-from game.objects.Tree import Tree
+from game.objects.SmallTree import SmallTree
 
 
 class TreeSapling(Object):
@@ -30,4 +30,4 @@ class TreeSapling(Object):
         if self.age >= self._LIFESPAN:
             self.visibleGroup.remove(self)
             self.obstaclesGroup.remove(self)
-            Tree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.clock)
+            SmallTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.clock)

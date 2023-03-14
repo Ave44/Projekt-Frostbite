@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from pygame import Vector2, Surface
 from pygame.sprite import Group
@@ -18,11 +18,17 @@ class Flammable(Object, ABC):
         self.timeFromLastTick = 0
         self.clock = clock
 
+    @abstractmethod
+    def localUpdate(self):
+        pass
+
     def burn(self, duration: int, damagePerTick: int) -> None:
         self.timeLeft = duration
         self.damagePerTick = damagePerTick
 
     def update(self) -> None:
+        self.localUpdate()
+
         if not self.isOnFire:
             return
         dt = self.clock.get_time()

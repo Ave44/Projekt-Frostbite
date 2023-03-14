@@ -16,6 +16,9 @@ class Tree(Flammable):
         super().__init__(visibleGroup, obstaclesGroup,
                          bottomCenter, 10, ToolType.AXE, image, clock)
 
+    def localUpdate(self):
+        pass
+
     def interact(self) -> None:
         # do something
         pass

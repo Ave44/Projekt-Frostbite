@@ -6,8 +6,8 @@ from pygame.time import Clock
 from config import ROOT_PATH
 from game.items.Sword import Sword
 from game.items.ToolType import ToolType
-from game.objects.Object import Object
-from game.objects.SmallTree import SmallTree
+from game.objects.domain.Object import Object
+from game.objects.trees.SmallTree import SmallTree
 
 
 class TreeSapling(Object):
@@ -22,7 +22,7 @@ class TreeSapling(Object):
     def interact(self) -> None:
         print("interacted with sapling")  # in the future there will be a real implementation
 
-    def dropItem(self) -> None:
+    def drop(self) -> None:
         Sword(self.visibleGroup, self.rect.center)
 
     def update(self) -> None:

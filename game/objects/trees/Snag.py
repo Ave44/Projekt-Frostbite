@@ -1,12 +1,12 @@
 import pygame
-from pygame import Vector2, Surface
+from pygame import Vector2
 from pygame.sprite import Group
 from pygame.time import Clock
 
 from config import ROOT_PATH
 from game.items.Sword import Sword
 from game.items.ToolType import ToolType
-from game.objects.Flammable import Flammable
+from game.objects.domain.Flammable import Flammable
 
 
 class Snag(Flammable):
@@ -17,7 +17,7 @@ class Snag(Flammable):
     def interact(self) -> None:
         print("interacted with snag")  # in the future there will be a real implementation
 
-    def dropItem(self) -> None:
+    def drop(self) -> None:
         Sword(self.visibleGroup, self.rect.center)  # in the future there will be a real implementation
 
     def localUpdate(self):

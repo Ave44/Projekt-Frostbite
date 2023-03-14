@@ -27,7 +27,7 @@ class Object(ABC, Sprite):
         self.toolType = toolType
 
     @abstractmethod
-    def dropItem(self) -> None:
+    def drop(self) -> None:
         pass
 
     @abstractmethod
@@ -50,4 +50,4 @@ class Object(ABC, Sprite):
     def destroy(self) -> None:
         self.visibleGroup.remove(self)
         self.obstaclesGroup.remove(self)
-        self.dropItem()
+        self.drop()

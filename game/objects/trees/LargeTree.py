@@ -4,10 +4,10 @@ from pygame.sprite import Group
 from pygame.time import Clock
 
 from config import ROOT_PATH
-from game.items.Sword import Sword
 from game.items.ToolType import ToolType
-from game.objects.Flammable import Flammable
-from game.objects.Snag import Snag
+from game.objects.trees.BurntTree import BurntTree
+from game.objects.domain.Flammable import Flammable
+from game.objects.trees.Snag import Snag
 
 
 class Tree(Flammable):
@@ -15,16 +15,16 @@ class Tree(Flammable):
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, bottomCenter: Vector2(),
                  clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/tree/largeTree.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/largeTree.png")
         super().__init__(visibleGroup, obstaclesGroup,
                          bottomCenter, 10, ToolType.AXE, image, clock)
         self.age = 0
 
     def interact(self) -> None:
-        print("interacted with medium tree")  # in the future there will be a real implementation
+        print("interacted with medium trees")  # in the future there will be a real implementation
 
-    def dropItem(self) -> None:
-        Sword(self.visibleGroup, self.rect.center)  # in the future there will be a real implementation
+    def drop(self) -> None:
+        BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom)
 
     def localUpdate(self):
         if self.isOnFire:

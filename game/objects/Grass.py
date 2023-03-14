@@ -5,7 +5,7 @@ from pygame.sprite import Group
 from config import ROOT_PATH
 from game.items.Sword import Sword
 from game.items.ToolType import ToolType
-from game.objects.Object import Object
+from game.objects.domain.Object import Object
 
 
 class Grass(Object):
@@ -18,5 +18,5 @@ class Grass(Object):
         # do something
         pass
 
-    def dropItem(self) -> None:
+    def drop(self) -> None:
         Sword(self.visibleGroup, self.rect.center)

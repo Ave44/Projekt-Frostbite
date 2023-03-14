@@ -5,7 +5,7 @@ from pygame.sprite import Group
 from pygame.time import Clock
 
 from game.items.ToolType import ToolType
-from game.objects.Object import Object
+from game.objects.domain.Object import Object
 
 
 class Flammable(Object, ABC):

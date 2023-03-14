@@ -10,6 +10,7 @@ from game.InputManager import InputManager
 from game.objects.Grass import Grass
 from game.objects.Rock import Rock
 from game.objects.Tree import Tree
+from game.objects.TreeSapling import TreeSapling
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -58,9 +59,7 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        Tree(self.visibleSprites, self.obstacleSprites, Vector2(2900, 2900), self.clock)
-        Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100))
-        Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200))
+        TreeSapling(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)

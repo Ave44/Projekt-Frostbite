@@ -20,15 +20,27 @@ class ImageTransformer(metaclass=ImageTransformerMeta):
     _GREEN_RGBA = [0, 255 * 0.3, 0, 0]
     _RED_RGBA = [255 * 0.3, 0, 0, 0]
 
-    def createHealImage(self, relativeImageInPath: str, relativeImageOutPath: str):
+    def createHealImage(self, relativeImageInPath: str, relativeImageOutPath: str = None):
+        if not relativeImageOutPath:
+            relativeImageOutPath = self._buildImageOutPath(relativeImageInPath, "Heal")
+
         im = imread(f"/{ROOT_PATH}/{relativeImageInPath}")
         healImage = self._transformImage(im, self._GREEN_RGBA)
         imwrite(f"/{ROOT_PATH}/{relativeImageOutPath}", healImage)
 
-    def createDamageImage(self, relativeImageInPath: str, relativeImageOutPath: str):
+    def createDamageImage(self, relativeImageInPath: str, relativeImageOutPath: str = None):
+        if not relativeImageOutPath:
+            relativeImageOutPath = self._buildImageOutPath(relativeImageInPath, "Damage")
+
         im = imread(f"/{ROOT_PATH}/{relativeImageInPath}")
         damageImage = self._transformImage(im, self._RED_RGBA)
         imwrite(f"/{ROOT_PATH}/{relativeImageOutPath}", damageImage)
+
+    @staticmethod
+    def _buildImageOutPath(relativeImageInPath: str, typeOfImage: str):
+        splitInPath = relativeImageInPath.split(".")
+        imageOutPath = splitInPath[0] + typeOfImage + "." + splitInPath[1]
+        return imageOutPath
 
     @staticmethod
     def _transformImage(image: numpy.ndarray, colorRGBA: [int, int, int, int]) -> numpy.ndarray:

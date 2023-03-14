@@ -20,7 +20,7 @@ class TreeSapling(Object):
         self.age = 0
 
     def interact(self) -> None:
-        print("interacted with sapling")
+        print("interacted with sapling")  # in the future there will be a real implementation
 
     def dropItem(self) -> None:
         Sword(self.visibleGroup, self.rect.center)

@@ -10,31 +10,29 @@ from game.objects.domain.Object import Object
 
 class Flammable(Object, ABC):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, bottomCenter: Vector2(), durability: int,
-                 toolType: ToolType, image: Surface, clock: Clock):
+                 toolType: ToolType, image: Surface, clock: Clock, isOnFire: bool = False,
+                 timeToBurnMs: int = 0, timeOnFireMs: int = 0):
         super().__init__(visibleGroup, obstaclesGroup, bottomCenter, durability, toolType, image)
-        self.isOnFire = False
-        self.timeLeft = 0
-        self.damagePerAction = 0
-        self.timeFromLastTick = 0
+        self.isOnFire = isOnFire
+        self.timeToBurn = timeToBurnMs
+        self.timeOnFire = timeOnFireMs
         self.clock = clock
 
     @abstractmethod
-    def localUpdate(self):
+    def burn(self):
         pass
 
-    def burn(self, durationMs: int, damagePerAction: int) -> None:
+    def setOnFire(self, timeToBurnMs: int) -> None:
         self.isOnFire = True
-        self.timeLeft = durationMs
-        self.damagePerAction = damagePerAction
+        self.timeToBurn = timeToBurnMs
+
+    def stopFire(self) -> None:
+        self.isOnFire = False
+        self.timeToBurn = 0
 
     def update(self) -> None:
-        self.localUpdate()
-
-        if not self.isOnFire:
+        if not self.isOnFire or not self.timeToBurn:
             return
-        dt = self.clock.get_time()
-        self.timeFromLastTick += dt
-        self.timeLeft -= dt
-        if self.timeFromLastTick > 1000:
-            self.getDamage(self.damagePerAction)
-            self.timeFromLastTick = 0
+        self.timeOnFire += self.clock.get_time()
+        if self.timeOnFire >= self.timeToBurn:
+            self.burn()

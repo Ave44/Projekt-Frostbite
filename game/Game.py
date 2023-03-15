@@ -30,8 +30,9 @@ class Game:
         self.UiSprites = UiSpriteGroup()
 
         self.tick = 0
-
-        self.map = self.createMap(512)
+        
+        map = self.createMap(564)
+        self.map = map
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -58,9 +59,9 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        Tree(self.visibleSprites, self.obstacleSprites, Vector2(2900, 2900), self.clock)
-        Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100))
-        Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200))
+        # Tree(self.visibleSprites, self.obstacleSprites, Vector2(2900, 2900), self.clock)
+        # Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100))
+        # Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200))
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -69,7 +70,7 @@ class Game:
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
-        map = generateMap(mapSize)
+        map, chunks = generateMap(mapSize)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
@@ -81,8 +82,9 @@ class Game:
                 if not map[y][x]["walkable"]:
                     obstaclesMap[y][x] = tile
         self.visibleSprites.map = tilesMap
+        self.visibleSprites.chunks = chunks
         self.obstacleSprites.map = obstaclesMap
-        return map        
+        return map     
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -138,7 +140,9 @@ class Game:
 
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
+        tick = 0
         while True:
+            self.screen.fill('black')
             self.InputManager.handleInput()
 
             self.entitiesUpdate()
@@ -151,8 +155,8 @@ class Game:
 
             # method for debugging values by writing them on screen
             # text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
-            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
+            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}, {self.clock.get_fps()}"
             self.debug(text)
 
             pygame.display.update()
-            self.clock.tick(FPS)
+            self.clock.tick()

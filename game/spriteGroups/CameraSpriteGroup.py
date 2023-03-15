@@ -1,6 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
+import numpy as np
 
 from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILES_ON_SCREEN_HEIGHT, TILES_ON_SCREEN_WIDTH, TILE_SIZE
 
@@ -14,13 +15,15 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset = Vector2()
         self.tiles = []
         self.map = []
+        self.chunks = []
         self.entities = EntitiesGroup()
         # self.radiuses = []
 
     def customDraw(self, center):
         self.offset.x = center.x - self.halfWindowWidth
         self.offset.y = center.y - self.halfWindowHeight
-        self.drawTiles()
+        # self.drawTiles()
+        self.drawTiles2()
 
         for sprite in self.entities.sprites():
             spritePosition = sprite.rect.topleft - self.offset
@@ -48,6 +51,25 @@ class CameraSpriteGroup(pygame.sprite.Group):
                     tile = self.map[y + yGap][x + xGap]
                     spritePosition = tile.rect.topleft - self.offset
                     self.displaySurface.blit(tile.image, spritePosition)
+
+    def drawTiles2(self):
+        chunkWidth = self.chunks[0][0].get_width()
+        chunkHeight = self.chunks[0][0].get_height()
+        
+        xIndex = int(self.offset.x / chunkWidth)
+        yIndex = int(self.offset.y / chunkHeight)
+        chunksWidth = len(self.chunks[0])
+        chunksHeight = len(self.chunks)
+        for y in range(2):
+            yPos = (yIndex + y) * chunkHeight - self.offset.y
+            for x in range(2):
+                xPos = (xIndex + x) * chunkWidth - self.offset.x
+                chunkIndexX = xIndex + x
+                chunkIndexY = yIndex + y
+                if chunkIndexY < chunksHeight and chunkIndexX < chunksWidth: 
+                    chunk = self.chunks[chunkIndexY][chunkIndexX]
+                    chunkPosition = (xPos, yPos)
+                    self.displaySurface.blit(chunk, chunkPosition)
 
     def addRadius(self, radius, position, color):
         self.radiuses.append({"radius": radius, "position": position, "color": color})

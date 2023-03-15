@@ -2,10 +2,10 @@ import os
 import pygame
 from perlin_noise import PerlinNoise
 import random
-import matplotlib.pyplot as plt
 from skimage.measure import label
 import numpy as np
 import math
+from config import TILE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH
 
 biomesId = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
@@ -56,11 +56,29 @@ def populateNameMatrixWithData(namesMatrix):
 
 
 def generateMap(mapSize: int):
+    # idMatrix = [[1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1],
+    #             [1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    #             [1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],
+    #             [1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0],
+    #             [1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #             [1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1],
+    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
+    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
+    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
+    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
+    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
+    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
+    #             [1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1]]
     idMatrix = generateIdMatrix(mapSize)
     namesMatrix = replaceIdWithNames(idMatrix)
     dataMatrix = populateNameMatrixWithData(namesMatrix)
+    # connectedImage = getConnectedImage(dataMatrix)
+    chunks = getChunksImages(dataMatrix)
 
-    return dataMatrix
+    return dataMatrix, chunks
 
 def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noise1 = PerlinNoise(octaves=5, seed=seed)
@@ -334,3 +352,63 @@ def createVerticalStep(matrix, point, val, rand1=random.random(), rand2=random.r
     matrix[point['y']][point['x'] + 1] = val
     if rand2 > 0.5:
         matrix[point['y']][point['x'] + 2] = val
+
+def getConnectedImage(dataMatrix):
+    matrixSize = len(dataMatrix)
+    imageSize = matrixSize * TILE_SIZE
+    connectedImage = np.zeros((imageSize, imageSize, 3), np.int8)
+    for y in range(matrixSize):
+        for x in range(matrixSize):
+            yStart = y * TILE_SIZE
+            yEnd = yStart + TILE_SIZE
+            xStart = x * TILE_SIZE
+            xEnd = xStart + TILE_SIZE
+            image = pygame.surfarray.array3d(dataMatrix[y][x]['image'])
+            connectedImage[xStart:xEnd, yStart:yEnd] = image
+
+    # return connectedImage
+    return pygame.surfarray.make_surface(connectedImage)
+
+def getChunksImages(dataMatrix):
+    matrixSize = len(dataMatrix)
+    chunksAmountX = math.ceil(matrixSize * TILE_SIZE / WINDOW_WIDTH)
+    chunksAmountY = math.ceil(matrixSize * TILE_SIZE / WINDOW_HEIGHT)
+
+    tilesOnChunkX = math.ceil(WINDOW_WIDTH / TILE_SIZE)
+    tilesOnChunkY = math.ceil(WINDOW_HEIGHT / TILE_SIZE)
+
+    chunkImageWidth = tilesOnChunkX * TILE_SIZE
+    chunkImageHeight = tilesOnChunkY * TILE_SIZE
+
+    chunksImages = [[None for x in range(chunksAmountX)] for y in range(chunksAmountY)]
+    for yIndex in range(chunksAmountY):
+        for xIndex in range(chunksAmountX):
+            chunkImage = getChunkImage(dataMatrix, xIndex, yIndex, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
+            chunksImages[yIndex][xIndex] = pygame.surfarray.make_surface(chunkImage)
+
+    return chunksImages
+
+def getChunkImage(dataMatrix, xIndex, yIndex, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight):
+    chunkImage = np.zeros((chunkImageWidth, chunkImageHeight, 3), int)
+    xOffset = xIndex * tilesOnChunkX
+    yOffset = yIndex * tilesOnChunkY
+    dataMatrixSize = len(dataMatrix)
+    for tileY in range(tilesOnChunkY):
+        yStart = tileY * TILE_SIZE
+        yEnd = yStart + TILE_SIZE
+        for tileX in range(tilesOnChunkX):
+            xStart = tileX * TILE_SIZE
+            xEnd = xStart + TILE_SIZE
+            tileIndexY = tileY + yOffset
+            tileIndexX = tileX + xOffset
+            if dataMatrixSize > tileIndexY and dataMatrixSize > tileIndexX:
+                tileSurface = dataMatrix[tileIndexY][tileIndexX]['image']
+                tileImage = pygame.surfarray.array3d(tileSurface)
+                chunkImage[xStart:xEnd, yStart:yEnd] = tileImage
+
+    chunkImage[0:1, :] = [0, 0, 255]
+    chunkImage[:, 0:1] = [255, 0, 0]
+
+    chunkImage[-1:, :] = [255, 255, 0]
+    chunkImage[:, -1:] = [0, 255, 0]
+    return chunkImage

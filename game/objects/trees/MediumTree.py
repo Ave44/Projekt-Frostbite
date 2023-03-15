@@ -24,6 +24,8 @@ class MediumTree(Flammable):
         BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom)
 
     def burn(self):
+        self.visibleGroup.remove(self)
+        self.obstaclesGroup.remove(self)
         BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom)
 
     def localUpdate(self):

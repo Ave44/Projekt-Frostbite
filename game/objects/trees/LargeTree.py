@@ -27,6 +27,8 @@ class LargeTree(Flammable):
         Sword(self.visibleGroup, self.rect.center)  # in the future there will be a real implementation
 
     def burn(self):
+        self.visibleGroup.remove(self)
+        self.obstaclesGroup.remove(self)
         BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom)
 
     def localUpdate(self):

@@ -40,7 +40,8 @@ def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable
         for imageFile in os.listdir(f"./graphics/tiles/{subfolderName}/{biom}"):
             name = imageFile[:-4]
             image = pygame.image.load(f"./graphics/tiles/{subfolderName}/{biom}/{imageFile}")
-            tilesData[name] = {"image": image, "walkable": isWalkable}
+            imageRaw = pygame.surfarray.array3d(image)
+            tilesData[name] = {"image": image, "imageRawMatrix": imageRaw, "walkable": isWalkable}
         tileId += 1
 
 def populateNameMatrixWithData(namesMatrix):
@@ -56,6 +57,7 @@ def populateNameMatrixWithData(namesMatrix):
 
 
 def generateMap(mapSize: int):
+    import time
     # idMatrix = [[1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1],
     #             [1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
     #             [1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -72,11 +74,25 @@ def generateMap(mapSize: int):
     #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
     #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
     #             [1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1]]
+    start = time.time()
     idMatrix = generateIdMatrix(mapSize)
+    end = time.time()
+    print(end - start, "- generateIdMatrix") # 29 dla 564x564
+
+    start = time.time()
     namesMatrix = replaceIdWithNames(idMatrix)
+    end = time.time()
+    print(end - start, "- replaceIdWithNames") # ~0 dla 564x564
+
+    start = time.time()
     dataMatrix = populateNameMatrixWithData(namesMatrix)
-    # connectedImage = getConnectedImage(dataMatrix)
+    end = time.time()
+    print(end - start, "- populateNameMatrixWithData") # ~0 dla 564x564
+
+    start = time.time()
     chunks = getChunksImages(dataMatrix)
+    end = time.time()
+    print(end - start, "- getChunksImages") # 120 dla 564x564
 
     return dataMatrix, chunks
 
@@ -353,26 +369,8 @@ def createVerticalStep(matrix, point, val, rand1=random.random(), rand2=random.r
     if rand2 > 0.5:
         matrix[point['y']][point['x'] + 2] = val
 
-def getConnectedImage(dataMatrix):
-    matrixSize = len(dataMatrix)
-    imageSize = matrixSize * TILE_SIZE
-    connectedImage = np.zeros((imageSize, imageSize, 3), np.int8)
-    for y in range(matrixSize):
-        for x in range(matrixSize):
-            yStart = y * TILE_SIZE
-            yEnd = yStart + TILE_SIZE
-            xStart = x * TILE_SIZE
-            xEnd = xStart + TILE_SIZE
-            image = pygame.surfarray.array3d(dataMatrix[y][x]['image'])
-            connectedImage[xStart:xEnd, yStart:yEnd] = image
-
-    # return connectedImage
-    return pygame.surfarray.make_surface(connectedImage)
-
 def getChunksImages(dataMatrix):
     matrixSize = len(dataMatrix)
-    chunksAmountX = math.ceil(matrixSize * TILE_SIZE / WINDOW_WIDTH)
-    chunksAmountY = math.ceil(matrixSize * TILE_SIZE / WINDOW_HEIGHT)
 
     tilesOnChunkX = math.ceil(WINDOW_WIDTH / TILE_SIZE)
     tilesOnChunkY = math.ceil(WINDOW_HEIGHT / TILE_SIZE)
@@ -380,35 +378,45 @@ def getChunksImages(dataMatrix):
     chunkImageWidth = tilesOnChunkX * TILE_SIZE
     chunkImageHeight = tilesOnChunkY * TILE_SIZE
 
+    chunksAmountX = math.ceil(matrixSize * TILE_SIZE / chunkImageWidth)
+    chunksAmountY = math.ceil(matrixSize * TILE_SIZE / chunkImageHeight)
+
     chunksImages = [[None for x in range(chunksAmountX)] for y in range(chunksAmountY)]
-    for yIndex in range(chunksAmountY):
-        for xIndex in range(chunksAmountX):
-            chunkImage = getChunkImage(dataMatrix, xIndex, yIndex, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
-            chunksImages[yIndex][xIndex] = pygame.surfarray.make_surface(chunkImage)
+    for chunkIndexY in range(chunksAmountY):
+        for chunkIndexX in range(chunksAmountX):
+            chunkImage = getChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
+            chunkSurface = pygame.surface.Surface((chunkImageWidth, chunkImageHeight))
+            print(chunkIndexY, chunkIndexX, chunkImageHeight, chunkImageWidth)
+            pygame.surfarray.blit_array(chunkSurface, chunkImage)
+            chunksImages[chunkIndexY][chunkIndexX] = chunkSurface
 
     return chunksImages
 
-def getChunkImage(dataMatrix, xIndex, yIndex, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight):
+def getChunkImage(dataMatrix, dataMatrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight):
     chunkImage = np.zeros((chunkImageWidth, chunkImageHeight, 3), int)
-    xOffset = xIndex * tilesOnChunkX
-    yOffset = yIndex * tilesOnChunkY
-    dataMatrixSize = len(dataMatrix)
-    for tileY in range(tilesOnChunkY):
-        yStart = tileY * TILE_SIZE
-        yEnd = yStart + TILE_SIZE
-        for tileX in range(tilesOnChunkX):
-            xStart = tileX * TILE_SIZE
-            xEnd = xStart + TILE_SIZE
-            tileIndexY = tileY + yOffset
-            tileIndexX = tileX + xOffset
-            if dataMatrixSize > tileIndexY and dataMatrixSize > tileIndexX:
-                tileSurface = dataMatrix[tileIndexY][tileIndexX]['image']
-                tileImage = pygame.surfarray.array3d(tileSurface)
-                chunkImage[xStart:xEnd, yStart:yEnd] = tileImage
+    tileIndexOffsetX = chunkIndexX * tilesOnChunkX
+    tileIndexOffsetY = chunkIndexY * tilesOnChunkY
 
-    chunkImage[0:1, :] = [0, 0, 255]
-    chunkImage[:, 0:1] = [255, 0, 0]
+    for tileOnChunkIndexY in range(tilesOnChunkY):
+        tileIndexY = tileOnChunkIndexY + tileIndexOffsetY
 
-    chunkImage[-1:, :] = [255, 255, 0]
-    chunkImage[:, -1:] = [0, 255, 0]
+        if dataMatrixSize > tileIndexY:
+            yStart = tileOnChunkIndexY * TILE_SIZE
+            yEnd = yStart + TILE_SIZE
+
+            for tileOnChunkIndexX in range(tilesOnChunkX):
+                tileIndexX = tileOnChunkIndexX + tileIndexOffsetX
+
+                if dataMatrixSize > tileIndexX:
+                    xStart = tileOnChunkIndexX * TILE_SIZE
+                    xEnd = xStart + TILE_SIZE
+
+                    tileImage = dataMatrix[tileIndexY][tileIndexX]['imageRawMatrix']
+                    chunkImage[xStart:xEnd, yStart:yEnd] = tileImage
+
+    # chunk borders
+    # chunkImage[0:1, :] = [0, 0, 255]
+    # chunkImage[:, 0:1] = [255, 0, 0]
+    # chunkImage[-1:, :] = [255, 255, 0]
+    # chunkImage[:, -1:] = [0, 255, 0]
     return chunkImage

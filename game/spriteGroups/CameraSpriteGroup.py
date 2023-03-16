@@ -1,7 +1,6 @@
 import pygame
 from pygame.math import Vector2
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
-import numpy as np
 
 from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILES_ON_SCREEN_HEIGHT, TILES_ON_SCREEN_WIDTH, TILE_SIZE
 
@@ -22,8 +21,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
     def customDraw(self, center):
         self.offset.x = center.x - self.halfWindowWidth
         self.offset.y = center.y - self.halfWindowHeight
-        # self.drawTiles()
-        self.drawTiles2()
+        self.drawTiles()
 
         for sprite in self.entities.sprites():
             spritePosition = sprite.rect.topleft - self.offset
@@ -42,7 +40,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
     def addTile(self, tile):
         self.tiles.append(tile)
 
-    def drawTiles(self):
+    def drawTilesOld(self):
         xGap = int(self.offset.x / TILE_SIZE)
         yGap = int(self.offset.y / TILE_SIZE)
         for y in range(TILES_ON_SCREEN_HEIGHT):
@@ -52,7 +50,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
                     spritePosition = tile.rect.topleft - self.offset
                     self.displaySurface.blit(tile.image, spritePosition)
 
-    def drawTiles2(self):
+    def drawTiles(self):
         chunkWidth = self.chunks[0][0].get_width()
         chunkHeight = self.chunks[0][0].get_height()
         

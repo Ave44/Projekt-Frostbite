@@ -5,3 +5,4 @@ class ToolType(Enum):
     PICKAXE = auto()
     AXE = auto()
     SHOVEL = auto()
+    HAND = auto()

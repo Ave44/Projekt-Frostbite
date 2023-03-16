@@ -11,7 +11,7 @@ class Object(ABC, Sprite):
 
     def __init__(self, visibleGroup: Group,
                  obstaclesGroup: Group,
-                 midBottom: Vector2(), durability: int,
+                 midBottom: Vector2, durability: int,
                  toolType: ToolType,
                  image: Surface):
 

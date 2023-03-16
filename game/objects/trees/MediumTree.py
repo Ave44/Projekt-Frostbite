@@ -4,9 +4,10 @@ from pygame.sprite import Group
 from pygame.time import Clock
 
 from config import ROOT_PATH
+from game.items.Item import Item
 from game.items.ToolType import ToolType
-from game.objects.trees.BurntTree import BurntTree
 from game.objects.domain.Flammable import Flammable
+from game.objects.trees.BurntTree import BurntTree
 from game.objects.trees.LargeTree import LargeTree
 
 
@@ -21,7 +22,7 @@ class MediumTree(Flammable):
         print("interacted with medium trees")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom)
+        Item(self.visibleGroup, self.rect.center)  # in the future there will be a real implementation
 
     def burn(self):
         self.visibleGroup.remove(self)

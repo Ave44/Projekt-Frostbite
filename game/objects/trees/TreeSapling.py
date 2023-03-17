@@ -1,21 +1,25 @@
 import pygame
-from pygame import Vector2
+from pygame import Vector2, Rect
 from pygame.sprite import Group
 from pygame.time import Clock
 
 from config import ROOT_PATH
 from game.items.Item import Item
 from game.items.ToolType import ToolType
+from game.objects.domain.CollisionObject import CollisionObject
 from game.objects.domain.Object import Object
 from game.objects.trees.SmallTree import SmallTree
 
 
-class TreeSapling(Object):
+class TreeSapling(CollisionObject):
     _LIFESPAN = 36000
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/sapling.png")
-        super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image)
+        hitBox = Rect((0, 0), (5, 5))
+        hitBox.midbottom = midBottom
+        super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image, hitBox)
+
         self.clock = clock
         self.age = 0
 
@@ -28,6 +32,5 @@ class TreeSapling(Object):
     def update(self) -> None:
         self.age += self.clock.get_time()
         if self.age >= self._LIFESPAN:
-            self.visibleGroup.remove(self)
-            self.obstaclesGroup.remove(self)
+            self.remove(*self.groups())
             SmallTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.clock)

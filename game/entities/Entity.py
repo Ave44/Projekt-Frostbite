@@ -92,21 +92,21 @@ class Entity(Sprite, ABC):
 
     def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites.getObstacles(self.rect.center):
-            if not sprite.rect.colliderect(self.rect):
+            if not sprite.hitBox.colliderect(self.rect):
                 pass
             elif self.direction.x > 0:
-                self.rect.right = sprite.rect.left
+                self.rect.right = sprite.hitBox.left
             else:
-                self.rect.left = sprite.rect.right
+                self.rect.left = sprite.hitBox.right
 
     def checkVerticalCollision(self):
         for sprite in self.obstacleSprites.getObstacles(self.rect.center):
-            if not sprite.rect.colliderect(self.rect):
+            if not sprite.hitBox.colliderect(self.rect):
                 pass
             elif self.direction.y < 0:
-                self.rect.top = sprite.rect.bottom
+                self.rect.top = sprite.hitBox.bottom
             else:
-                self.rect.bottom = sprite.rect.top
+                self.rect.bottom = sprite.hitBox.top
 
     def setDestination(self, position: Vector2, target: Sprite):
         self.destinationTarget = target

@@ -104,7 +104,7 @@ class Entity(Sprite, ABC):
             if not sprite.coliderRect.colliderect(self.rect):
                 pass
             elif self.direction.y < 0:
-                self.rect.top = sprite.hitBox.bottom
+                self.rect.top = sprite.coliderRect.bottom
             else:
                 self.rect.bottom = sprite.hitBox.top
 

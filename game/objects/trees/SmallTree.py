@@ -19,7 +19,7 @@ class SmallTree(CollisionObject, Flammable):
         coliderRect = Rect((0, 0), (5, 5))
         coliderRect.midbottom = midBottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 5, ToolType.AXE, image, hitBox)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 5, ToolType.AXE, image, coliderRect)
         Flammable.__init__(self, clock)
 
         self.age = ageMs

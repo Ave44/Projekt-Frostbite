@@ -18,7 +18,7 @@ class Snag(CollisionObject, Flammable):
         hitBox = Rect((0, 0), (5, 5))
         hitBox.midbottom = midBottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 1, ToolType.AXE, image, hitBox)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 1, ToolType.AXE, image, coliderRect)
         Flammable.__init__(self, clock)
 
         self.age = age

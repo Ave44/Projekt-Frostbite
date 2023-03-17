@@ -95,7 +95,7 @@ class Entity(Sprite, ABC):
             if not sprite.coliderRect.colliderect(self.rect):
                 pass
             elif self.direction.x > 0:
-                self.rect.right = sprite.hitBox.left
+                self.rect.right = sprite.coliderRect.left
             else:
                 self.rect.left = sprite.hitBox.right
 

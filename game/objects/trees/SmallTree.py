@@ -16,10 +16,10 @@ class SmallTree(CollisionObject, Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group,
                  midBottom: Vector2, clock: Clock, ageMs: int = 0):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/smallTree.png")
-        coliderRect = Rect((0, 0), (5, 5))
-        coliderRect.midbottom = midBottom
+        colliderRect = Rect((0, 0), (5, 5))
+        colliderRect.midbottom = midBottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 5, ToolType.AXE, image, coliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 5, ToolType.AXE, image, colliderRect)
         Flammable.__init__(self, clock)
 
         self.age = ageMs

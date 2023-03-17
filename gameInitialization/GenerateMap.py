@@ -6,7 +6,7 @@ from skimage.measure import label
 import numpy as np
 import math
 from config import TILE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH
-from game.objects.Tree import Tree
+# from game.objects.Tree import Tree
 
 biomesId = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 

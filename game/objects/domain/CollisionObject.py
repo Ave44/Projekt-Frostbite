@@ -16,4 +16,4 @@ class CollisionObject(Object, ABC):
         super().__init__(visibleGroup, midBottom, durability, toolType, image)
         Sprite.__init__(self, obstaclesGroup, visibleGroup)
         self.obstaclesGroup = obstaclesGroup
-        self.hitBox = hitBox
+        self.coliderRect = coliderRect

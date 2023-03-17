@@ -13,7 +13,7 @@ class Rock(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rock.png")
         coliderRect = Rect((0, 0), (10, 10))
-        hitBox.midbottom = midBottom
+        coliderRect.midbottom = midBottom
 
         super().__init__(visibleGroup, obstaclesGroup,
                          midBottom, 40, ToolType.PICKAXE, image, hitBox)

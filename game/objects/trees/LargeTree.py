@@ -18,7 +18,7 @@ class LargeTree(CollisionObject, Flammable):
                  clock: Clock, ageMs: int = 0):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/largeTree.png")
         hitBox = Rect((0, 0), (5, 5))
-        hitBox.midbottom = midBottom
+        coliderRect.midbottom = midBottom
 
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
                                  midBottom, 10, ToolType.AXE, image, hitBox)

@@ -106,7 +106,7 @@ class Entity(Sprite, ABC):
             elif self.direction.y < 0:
                 self.rect.top = sprite.coliderRect.bottom
             else:
-                self.rect.bottom = sprite.hitBox.top
+                self.rect.bottom = sprite.coliderRect.top
 
     def setDestination(self, position: Vector2, target: Sprite):
         self.destinationTarget = target

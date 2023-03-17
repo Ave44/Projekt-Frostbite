@@ -97,7 +97,7 @@ class Entity(Sprite, ABC):
             elif self.direction.x > 0:
                 self.rect.right = sprite.coliderRect.left
             else:
-                self.rect.left = sprite.hitBox.right
+                self.rect.left = sprite.coliderRect.right
 
     def checkVerticalCollision(self):
         for sprite in self.obstacleSprites.getObstacles(self.rect.center):

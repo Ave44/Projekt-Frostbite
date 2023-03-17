@@ -1,4 +1,5 @@
 import math
+import random
 from abc import ABC
 
 from pygame import Vector2
@@ -11,9 +12,16 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class PassiveMob(Entity, ABC):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 clock: Clock, entityData, sightRange: int):
+                 clock: Clock, entityData, sightRange: int, moveEveryMs: int,
+                 minMoveMs: int, maxMoveMs: int):
         super().__init__(visibleSprites, obstacleSprites, entityData, clock)
         self.sightRange = sightRange
+        self.movingTime = 0
+        self.moveTime = 0
+        self.timeBetweenMoves = 0
+        self.moveEveryMs = moveEveryMs
+        self.minMoveMs = minMoveMs
+        self.maxMoveMs = maxMoveMs
 
     def runAway(self, fromEntity: Entity):
         xOffset = -fromEntity.rect.x + self.rect.centerx
@@ -26,3 +34,19 @@ class PassiveMob(Entity, ABC):
                              (self.rect.centery - entity.rect.y) ** 2)
         if distance <= self.sightRange:
             self.runAway(entity)
+
+    def buildRandomMove(self, moveTimeMin: int, moveTimeMax: int):
+        self.timeBetweenMoves = 0
+        self.movingTime = 0
+        self.moveTime = random.randint(moveTimeMin, moveTimeMax)
+        self.direction = Vector2(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
+
+    def moveRandomly(self):
+        dt = self.clock.get_time()
+        if self.movingTime < self.moveTime:
+            self.movingTime += dt
+            self.move()
+            return
+        self.timeBetweenMoves += dt
+        if self.timeBetweenMoves >= self.moveEveryMs:
+            self.buildRandomMove(self.minMoveMs, self.maxMoveMs)

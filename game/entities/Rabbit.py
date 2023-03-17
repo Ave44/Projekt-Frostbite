@@ -1,10 +1,8 @@
-import random
-
 from pygame import Vector2
 from pygame.time import Clock
 
-from game.entities.domain.PassiveMob import PassiveMob
 from game.entities.Player import Player
+from game.entities.domain.PassiveMob import PassiveMob
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
@@ -32,26 +30,9 @@ class Rabbit(PassiveMob):
             "path_to_image_left_heal": "./graphics/entities/rabbit/rabbit_left_heal.png",
             "path_to_image_right_heal": "./graphics/entities/rabbit/rabbit_right_heal.png"
         }
-        super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200)
-        self.jumpingTime = 0
-        self.jumpTime = 0
-        self.timeBetweenJumps = 0
+        super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 2000, 500, 1500)
         self.player = player
-
-    def jump(self):
-        self.timeBetweenJumps = 0
-        self.jumpingTime = 0
-        self.jumpTime = random.randint(500, 1000)
-        self.direction = Vector2(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
 
     def localUpdate(self):
         self.runAwayIfEntityTooClose(self.player)
-
-        dt = self.clock.get_time()
-        if self.jumpingTime < self.jumpTime:
-            self.jumpingTime += dt
-            self.move()
-            return
-        self.timeBetweenJumps += dt
-        if self.timeBetweenJumps >= 2000:
-            self.jump()
+        self.moveRandomly()

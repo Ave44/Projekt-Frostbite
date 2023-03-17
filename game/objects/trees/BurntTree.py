@@ -15,7 +15,7 @@ class BurntTree(CollisionObject):
         coliderRect = Rect((0, 0), (5, 5))
         coliderRect.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup,
-                         midBottom, 1, ToolType.AXE, image, hitBox)
+                         midBottom, 1, ToolType.AXE, image, coliderRect)
 
     def interact(self) -> None:
         print("interacted with burnt trees")  # in the future there will be a real implementation

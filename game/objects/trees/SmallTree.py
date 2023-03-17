@@ -17,7 +17,7 @@ class SmallTree(CollisionObject, Flammable):
                  midBottom: Vector2, clock: Clock, ageMs: int = 0):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/smallTree.png")
         coliderRect = Rect((0, 0), (5, 5))
-        hitBox.midbottom = midBottom
+        coliderRect.midbottom = midBottom
 
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 5, ToolType.AXE, image, hitBox)
         Flammable.__init__(self, clock)

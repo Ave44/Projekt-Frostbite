@@ -12,7 +12,7 @@ from game.objects.domain.CollisionObject import CollisionObject
 class BurntTree(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/burntTree.png")
-        hitBox = Rect((0, 0), (5, 5))
+        coliderRect = Rect((0, 0), (5, 5))
         hitBox.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup,
                          midBottom, 1, ToolType.AXE, image, hitBox)

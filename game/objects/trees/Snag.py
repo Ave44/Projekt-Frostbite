@@ -16,7 +16,7 @@ class Snag(CollisionObject, Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock, age: int = 0):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/snag.png")
         hitBox = Rect((0, 0), (5, 5))
-        hitBox.midbottom = midBottom
+        coliderRect.midbottom = midBottom
 
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 1, ToolType.AXE, image, coliderRect)
         Flammable.__init__(self, clock)

@@ -1,17 +1,21 @@
 import pygame
+from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
 
 from config import ROOT_PATH
+from game.items.Item import Item
 from game.items.ToolType import ToolType
-from game.objects.domain.Object import Object
+from game.objects.domain.CollisionObject import CollisionObject
 
 
-class BurntTree(Object):
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, bottomCenter: Vector2):
+class BurntTree(CollisionObject):
+    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/burntTree.png")
+        coliderRect = Rect((0, 0), (5, 5))
+        coliderRect.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup,
-                         bottomCenter, 1, ToolType.AXE, image)
+                         midBottom, 1, ToolType.AXE, image, coliderRect)
 
     def interact(self) -> None:
         print("interacted with burnt trees")  # in the future there will be a real implementation

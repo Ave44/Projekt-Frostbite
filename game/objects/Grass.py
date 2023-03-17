@@ -9,9 +9,9 @@ from game.objects.domain.Object import Object
 
 
 class Grass(Object):
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, center: Vector2()):
+    def __init__(self, visibleGroup: Group, center: Vector2):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/grass.png")
-        super().__init__(visibleGroup, obstaclesGroup,
+        super().__init__(visibleGroup,
                          center, 1, ToolType.SHOVEL, image)
 
     def interact(self) -> None:

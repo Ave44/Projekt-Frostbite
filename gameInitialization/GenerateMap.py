@@ -430,4 +430,4 @@ def GenerateTrees(probability: int, tiles: list[dict]):
     for tile in tiles:
         rand = random.random()
         if rand <= probability:
-            pass # tree = Tree()
+            pass  # tree = Tree()

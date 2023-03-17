@@ -70,7 +70,7 @@ class Game:
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
-        map, chunks = generateMap(mapSize)
+        map, chunks = generateMap(mapSize, print)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):

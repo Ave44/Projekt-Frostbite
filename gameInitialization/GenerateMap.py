@@ -6,6 +6,7 @@ from skimage.measure import label
 import numpy as np
 import math
 from config import TILE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH
+from game.objects.Tree import Tree
 
 biomesId = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
@@ -56,43 +57,19 @@ def populateNameMatrixWithData(namesMatrix):
     return dataMatrix
 
 
-def generateMap(mapSize: int):
-    import time
-    # idMatrix = [[1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1],
-    #             [1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    #             [1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],
-    #             [1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0],
-    #             [1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0],
-    #             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    #             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    #             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    #             [1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1],
-    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
-    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
-    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
-    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
-    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
-    #             [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1],
-    #             [1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1]]
-    start = time.time()
-    idMatrix = generateIdMatrix(mapSize)
-    end = time.time()
-    print(end - start, "- generateIdMatrix") # 29 dla 564x564
+def generateMap(mapSize: int, progresNotiftFunc: callable):
+    progresNotiftFunc("Generating map")
+    idMatrix = generateIdMatrix(mapSize) # 29s dla 564x564
 
-    start = time.time()
-    namesMatrix = replaceIdWithNames(idMatrix)
-    end = time.time()
-    print(end - start, "- replaceIdWithNames") # ~0 dla 564x564
+    namesMatrix = replaceIdWithNames(idMatrix) # ~0s dla 564x564
 
-    start = time.time()
-    dataMatrix = populateNameMatrixWithData(namesMatrix)
-    end = time.time()
-    print(end - start, "- populateNameMatrixWithData") # ~0 dla 564x564
+    dataMatrix = populateNameMatrixWithData(namesMatrix) # ~0s dla 564x564
 
-    start = time.time()
-    chunks = getChunksImages(dataMatrix)
-    end = time.time()
-    print(end - start, "- getChunksImages") # 120 dla 564x564
+    probabilities = {"tree": 0.2, "rock": 0.05, "grass": 0.7}
+    GenerateObjects(idMatrix, probabilities, progresNotiftFunc)
+
+    chunks = getChunksImages(dataMatrix, progresNotiftFunc) # 120s dla 564x564
+    progresNotiftFunc("Generating chunks - 100%")
 
     return dataMatrix, chunks
 
@@ -369,7 +346,7 @@ def createVerticalStep(matrix, point, val, rand1=random.random(), rand2=random.r
     if rand2 > 0.5:
         matrix[point['y']][point['x'] + 2] = val
 
-def getChunksImages(dataMatrix):
+def getChunksImages(dataMatrix, progresNotiftFunc: callable):
     matrixSize = len(dataMatrix)
 
     tilesOnChunkX = math.ceil(WINDOW_WIDTH / TILE_SIZE)
@@ -383,10 +360,10 @@ def getChunksImages(dataMatrix):
 
     chunksImages = [[None for x in range(chunksAmountX)] for y in range(chunksAmountY)]
     for chunkIndexY in range(chunksAmountY):
+        progresNotiftFunc(f"Generating chunks - {chunkIndexY*100//chunksAmountY}%")
         for chunkIndexX in range(chunksAmountX):
             chunkImage = getChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
             chunkSurface = pygame.surface.Surface((chunkImageWidth, chunkImageHeight))
-            print(chunkIndexY, chunkIndexX, chunkImageHeight, chunkImageWidth)
             pygame.surfarray.blit_array(chunkSurface, chunkImage)
             chunksImages[chunkIndexY][chunkIndexX] = chunkSurface
 
@@ -420,3 +397,37 @@ def getChunkImage(dataMatrix, dataMatrixSize, chunkIndexX, chunkIndexY, tilesOnC
     # chunkImage[-1:, :] = [255, 255, 0]
     # chunkImage[:, -1:] = [0, 255, 0]
     return chunkImage
+
+def GenerateObjects(idMatrix: list[list[int]], probabilities: dict, progresNotiftFunc: callable):
+    biomesCoordinatesDict = getBiomesCoordinatesDict(idMatrix)
+    treeProbability = probabilities['tree']
+    if treeProbability > 0:
+        progresNotiftFunc("Generating trees")
+        GenerateTrees(treeProbability, biomesCoordinatesDict['medow'])
+        GenerateTrees(treeProbability + 0.4, biomesCoordinatesDict['forest'])
+        GenerateTrees(treeProbability, biomesCoordinatesDict['swamp'])
+
+def getBiomesCoordinatesDict(idMatrix: list[list[int]]) -> dict:
+    matrixSize = len(idMatrix)
+    {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
+    biomesCoordinatesDict = {}
+    for _, value in biomesId.items():
+        biomesCoordinatesDict[value] = []
+
+    for y in range(matrixSize):
+        yCoordinate = y * TILE_SIZE
+        for x in range(matrixSize):
+            xCoordinate = x * TILE_SIZE
+            coordinates = {'x': xCoordinate, 'y': yCoordinate}
+            biome = biomesId[idMatrix[y][x]]
+            biomesCoordinatesDict[biome].append(coordinates)
+    
+    return biomesCoordinatesDict
+
+
+def GenerateTrees(probability: int, tiles: list[dict]):
+    trees = []
+    for tile in tiles:
+        rand = random.random()
+        if rand <= probability:
+            tree = Tree()

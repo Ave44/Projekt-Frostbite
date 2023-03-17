@@ -7,7 +7,6 @@ WINDOW_HEIGHT = 1080  # 720
 TILE_SIZE = 128
 TILES_ON_SCREEN_WIDTH = math.ceil(WINDOW_WIDTH / TILE_SIZE + 1)
 TILES_ON_SCREEN_HEIGHT = math.ceil(WINDOW_HEIGHT / TILE_SIZE + 1)
-FPS = 60
 CAPTION = 'Project Frostbite'
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON = pygame.image.load(f"{ROOT_PATH}/graphics/icon.png")

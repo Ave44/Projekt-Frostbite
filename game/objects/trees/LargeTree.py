@@ -21,7 +21,7 @@ class LargeTree(CollisionObject, Flammable):
         coliderRect.midbottom = midBottom
 
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
-                                 midBottom, 10, ToolType.AXE, image, hitBox)
+                                 midBottom, 10, ToolType.AXE, image, coliderRect)
         Flammable.__init__(self, clock)
 
         self.age = ageMs

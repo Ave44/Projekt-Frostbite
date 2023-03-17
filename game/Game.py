@@ -7,6 +7,7 @@ from config import *
 from game.entities.Enemy import Enemy
 from game.entities.Player import Player
 from game.InputManager import InputManager
+from game.entities.Rabbit import Rabbit
 from game.objects.trees.TreeSapling import TreeSapling
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
@@ -56,7 +57,7 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        TreeSapling(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)

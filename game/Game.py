@@ -8,6 +8,9 @@ from game.entities.Enemy import Enemy
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.objects.trees.TreeSapling import TreeSapling
+from game.objects.trees.SmallTree import SmallTree
+from game.objects.trees.MediumTree import MediumTree
+from game.objects.trees.LargeTree import LargeTree
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -29,8 +32,7 @@ class Game:
 
         self.tick = 0
         
-        map = self.createMap(164)
-        self.map = map
+        self.map = self.createMap(164)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -66,7 +68,7 @@ class Game:
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
-        map, chunks = generateMap(mapSize, print)
+        map, chunks, objects = generateMap(mapSize, print)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
@@ -80,7 +82,20 @@ class Game:
         self.visibleSprites.map = tilesMap
         self.visibleSprites.chunks = chunks
         self.obstacleSprites.map = obstaclesMap
+        self.createObjects(objects)
         return map
+    
+    def createObjects(self, objects):
+        smallTrees = []
+        for smallTree in objects['smallTrees']:
+            smallTrees.append(SmallTree(self.visibleSprites, self.obstacleSprites, smallTree['midBottom'], self.clock, smallTree['age']))
+        mediumTrees = []
+        for mediumTree in objects['mediumTrees']:
+            mediumTrees.append(MediumTree(self.visibleSprites, self.obstacleSprites, mediumTree['midBottom'], self.clock, mediumTree['age']))
+        largeTrees = []
+        for largeTree in objects['largeTrees']:
+            largeTrees.append(LargeTree(self.visibleSprites, self.obstacleSprites, largeTree['midBottom'], self.clock, largeTree['age']))
+
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)

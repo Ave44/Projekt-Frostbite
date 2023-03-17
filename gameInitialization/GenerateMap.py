@@ -6,7 +6,9 @@ from skimage.measure import label
 import numpy as np
 import math
 from config import TILE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH
-# from game.objects.Tree import Tree
+from game.objects.trees.SmallTree import SmallTree
+from game.objects.trees.MediumTree import MediumTree
+from game.objects.trees.LargeTree import LargeTree
 
 biomesId = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
@@ -66,12 +68,12 @@ def generateMap(mapSize: int, progresNotiftFunc: callable):
     dataMatrix = populateNameMatrixWithData(namesMatrix) # ~0s dla 564x564
 
     probabilities = {"tree": 0.2, "rock": 0.05, "grass": 0.7}
-    GenerateObjects(idMatrix, probabilities, progresNotiftFunc)
+    objects = GenerateObjects(idMatrix, probabilities, progresNotiftFunc)
 
     chunks = getChunksImages(dataMatrix, progresNotiftFunc) # 120s dla 564x564
     progresNotiftFunc("Generating chunks - 100%")
 
-    return dataMatrix, chunks
+    return dataMatrix, chunks, objects
 
 def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noise1 = PerlinNoise(octaves=5, seed=seed)
@@ -398,14 +400,18 @@ def getChunkImage(dataMatrix, dataMatrixSize, chunkIndexX, chunkIndexY, tilesOnC
     # chunkImage[:, -1:] = [0, 255, 0]
     return chunkImage
 
-def GenerateObjects(idMatrix: list[list[int]], probabilities: dict, progresNotiftFunc: callable):
+def GenerateObjects(idMatrix: list[list[int]], probabilities: dict, progresNotiftFunc: callable) -> dict:
     biomesCoordinatesDict = getBiomesCoordinatesDict(idMatrix)
     treeProbability = probabilities['tree']
     if treeProbability > 0:
         progresNotiftFunc("Generating trees")
-        GenerateTrees(treeProbability, biomesCoordinatesDict['medow'])
-        GenerateTrees(treeProbability + 0.4, biomesCoordinatesDict['forest'])
-        GenerateTrees(treeProbability, biomesCoordinatesDict['swamp'])
+        smallTrees = []
+        mediumTrees = []
+        largeTrees = []
+        GenerateTrees(treeProbability, biomesCoordinatesDict['medow'], smallTrees, mediumTrees, largeTrees)
+        GenerateTrees(treeProbability + 0.4, biomesCoordinatesDict['forest'], smallTrees, mediumTrees, largeTrees)
+        GenerateTrees(treeProbability, biomesCoordinatesDict['swamp'], smallTrees, mediumTrees, largeTrees)
+    return {'smallTrees': smallTrees, 'mediumTrees': mediumTrees, 'largeTrees': largeTrees}
 
 def getBiomesCoordinatesDict(idMatrix: list[list[int]]) -> dict:
     matrixSize = len(idMatrix)
@@ -424,10 +430,16 @@ def getBiomesCoordinatesDict(idMatrix: list[list[int]]) -> dict:
     
     return biomesCoordinatesDict
 
-
-def GenerateTrees(probability: int, tiles: list[dict]):
-    trees = []
+def GenerateTrees(probability: int, tiles: list[dict], smallTrees: list[dict], mediumTrees: list[dict], largeTrees: list[dict]) -> None:
     for tile in tiles:
         rand = random.random()
         if rand <= probability:
-            pass  # tree = Tree()
+            treeSize = random.random()
+            position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
+            treeData = {'midBottom': position, 'age': 0}
+            if treeSize < 0.3:
+                smallTrees.append(treeData)
+            elif treeSize < 0.6:
+                mediumTrees.append(treeData)
+            else:
+                largeTrees.append(treeData)

@@ -18,7 +18,7 @@ class TreeSapling(CollisionObject):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/sapling.png")
         coliderRect = Rect((0, 0), (5, 5))
         coliderRect.midbottom = midBottom
-        super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image, hitBox)
+        super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image, coliderRect)
 
         self.clock = clock
         self.age = 0

@@ -2,7 +2,7 @@ import pygame
 from pygame.time import Clock
 
 from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN
-from game.entities.Entity import Entity
+from game.entities.domain.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
 from game.items.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem

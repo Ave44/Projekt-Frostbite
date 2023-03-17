@@ -1,13 +1,12 @@
 from abc import abstractmethod, ABC
 
 from pygame import Vector2, Surface
-import pygame.sprite
 
 from pygame.image import load
 from pygame.sprite import Sprite
 from pygame.time import Clock
 
-from game.entities.State import State
+from game.entities.domain.State import State
 
 
 class Entity(Sprite, ABC):
@@ -113,9 +112,11 @@ class Entity(Sprite, ABC):
         self.destinationPosition = position
 
     def adjustDirection(self):
+        from game.entities.Player import Player
+
         if self.destinationPosition:
             self.moveTowards()
-        else:
+        elif isinstance(self, Player):
             self.direction.xy = [0, 0]
 
     def moveTowards(self):

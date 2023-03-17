@@ -4,7 +4,7 @@ import math
 
 from pygame.time import Clock
 
-from game.entities.Entity import Entity
+from game.entities.domain.Entity import Entity
 
 
 class Enemy(Entity):

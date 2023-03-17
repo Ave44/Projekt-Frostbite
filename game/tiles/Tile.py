@@ -6,3 +6,4 @@ class Tile(pygame.sprite.Sprite):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect(topleft=position)
+        self.colliderRect = self.rect

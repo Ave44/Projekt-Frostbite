@@ -16,7 +16,7 @@ class Rock(CollisionObject):
         coliderRect.midbottom = midBottom
 
         super().__init__(visibleGroup, obstaclesGroup,
-                         midBottom, 40, ToolType.PICKAXE, image, hitBox)
+                         midBottom, 40, ToolType.PICKAXE, image, coliderRect)
 
     def interact(self) -> None:
         # do something

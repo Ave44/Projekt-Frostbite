@@ -27,11 +27,3 @@ if gameRunning:
     game = Game(screen, saveData)
     menu = MainMenu(screen, game.play)
     menu.mainMenu()
-
-# import matplotlib.pyplot as plt
-# from gameInitialization.GenerateMap import generateMap
-# map, connectedImage = generateMap(64)
-# # print(map,connectedImage)
-# plt.figure()
-# plt.imshow(connectedImage)
-# plt.show()

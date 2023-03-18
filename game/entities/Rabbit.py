@@ -1,7 +1,6 @@
 from pygame import Vector2
 from pygame.time import Clock
 
-from game.entities.Player import Player
 from game.entities.domain.PassiveMob import PassiveMob
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
@@ -9,7 +8,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Rabbit(PassiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 clock: Clock, positionCenter: Vector2, player: Player):
+                 clock: Clock, positionCenter: Vector2):
         entityData = {
             "speed": 2,
             "maxHealth": 5,
@@ -31,8 +30,10 @@ class Rabbit(PassiveMob):
             "path_to_image_right_heal": "./graphics/entities/rabbit/rabbit_right_heal.png"
         }
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 2000, 500, 1500)
-        self.player = player
 
     def localUpdate(self):
-        self.runAwayIfEntityTooClose(self.player)
-        self.moveRandomly()
+        closestOtherEntity = self.findClosestOtherEntity()
+        if closestOtherEntity and self.isEntityInSightRange(closestOtherEntity):
+            self.runAway(closestOtherEntity)
+        else:
+            self.moveRandomly()

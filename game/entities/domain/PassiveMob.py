@@ -16,12 +16,14 @@ class PassiveMob(Entity, ABC):
                  minMoveMs: int, maxMoveMs: int):
         super().__init__(visibleSprites, obstacleSprites, entityData, clock)
         self.sightRange = sightRange
+        self.isMoving = False
         self.movingTime = 0
         self.moveTime = 0
         self.timeBetweenMoves = 0
         self.moveEveryMs = moveEveryMs
         self.minMoveMs = minMoveMs
         self.maxMoveMs = maxMoveMs
+        self.visibleSprites = visibleSprites
 
     def runAway(self, fromEntity: Entity):
         xOffset = -fromEntity.rect.x + self.rect.centerx
@@ -29,11 +31,10 @@ class PassiveMob(Entity, ABC):
         self.direction = Vector2(xOffset, yOffset)
         self.move()
 
-    def runAwayIfEntityTooClose(self, entity: Entity):
+    def isEntityInSightRange(self, entity: Entity) -> bool:
         distance = math.sqrt((self.rect.centerx - entity.rect.x) ** 2 +
                              (self.rect.centery - entity.rect.y) ** 2)
-        if distance <= self.sightRange:
-            self.runAway(entity)
+        return distance <= self.sightRange
 
     def buildRandomMove(self, moveTimeMin: int, moveTimeMax: int):
         self.timeBetweenMoves = 0
@@ -50,3 +51,16 @@ class PassiveMob(Entity, ABC):
         self.timeBetweenMoves += dt
         if self.timeBetweenMoves >= self.moveEveryMs:
             self.buildRandomMove(self.minMoveMs, self.maxMoveMs)
+
+    def findClosestOtherEntity(self) -> Entity | None:
+        closestEntity = None
+        closestDistance = float('inf')
+        for entity in self.visibleSprites.entities:
+            if type(self) == type(entity):
+                continue
+            distance = math.sqrt((self.rect.centerx - entity.rect.x) ** 2 +
+                                 (self.rect.centery - entity.rect.y) ** 2)
+            if distance < closestDistance:
+                closestEntity = entity
+                closestDistance = distance
+        return closestEntity

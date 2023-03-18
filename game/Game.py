@@ -4,6 +4,7 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
+from game.entities.Deer import Deer
 from game.entities.domain.Enemy import Enemy
 from game.entities.Player import Player
 from game.InputManager import InputManager
@@ -57,6 +58,7 @@ class Game:
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
         Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom, self.player)
+        Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom, self.player)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)

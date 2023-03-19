@@ -1,4 +1,4 @@
-from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR, WHITE
+from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR
 from game.menu.Menu import Menu
 from game.ui.general.Button import Button
 
@@ -11,12 +11,6 @@ class CreateGame(Menu):
         self.mapSizesIndex = 2
         self.objectsQuantity = ["1", "2", "3", "4", "5"]
         self.objectsQuantityIndex = 2
-
-    def changeMapSize(self) -> None:
-        return
-
-    def changeObjectsQuantity(self) -> None:
-        return
 
     def increment_map_size(self) -> None:
         if self.mapSizesIndex == 4:
@@ -58,32 +52,30 @@ class CreateGame(Menu):
 
         map_size_button_increment = Button(pos=(1040, 250),
                                            textInput="=>",
-                                           font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
+                                           font=self.menuOptionFont,
                                            action=self.increment_map_size)
         map_size_button_decrement = Button(pos=(240, 250),
                                            textInput="<=",
-                                           font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
+                                           font=self.menuOptionFont,
                                            action=self.decrement_map_size)
 
         objects_quantity_button_increment = Button(pos=(1200, 350),
                                                    textInput="=>",
-                                                   font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR,
-                                                   hoveringColor=WHITE,
+                                                   font=self.menuOptionFont,
                                                    action=self.incrementObjectsQuantity)
         objects_quantity_button_decrement = Button(pos=(80, 350),
                                                    textInput="<=",
-                                                   font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR,
-                                                   hoveringColor=WHITE,
+                                                   font=self.menuOptionFont,
                                                    action=self.decrementObjectsQuantity)
 
         create_game_button = Button(pos=(640, 450),
                                     textInput="CREATE GAME",
-                                    font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
+                                    font=self.menuOptionFont,
                                     action=self.createGame)
 
         back_button = Button(pos=(640, 650),
                              textInput="BACK",
-                             font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
+                             font=self.menuOptionFont,
                              action=self.backAction)
         menuButtons = [back_button, create_game_button, map_size_button_decrement, map_size_button_increment,
                        map_size_button_decrement, objects_quantity_button_increment, objects_quantity_button_decrement]

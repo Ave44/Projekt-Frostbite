@@ -1,4 +1,4 @@
-from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR, WHITE
+from config import FONT_MENU_COLOR
 from game.menu.Menu import Menu
 from game.ui.general.Button import Button
 
@@ -14,7 +14,7 @@ class OptionsMenu(Menu):
         menuRect = menuText.get_rect(center=(640, 100))
         back_button = Button(pos=(640, 650),
                              textInput="BACK",
-                             font=self.menuOptionFont, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE,
+                             font=self.menuOptionFont,
                              action=self.backAction)
         menuButtons = [back_button]
 

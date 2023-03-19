@@ -6,7 +6,7 @@ from pygame.math import Vector2
 from config import *
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
-from game.entities.domain.EnemyMob import EnemyMob
+from game.entities.domain.AggressiveMob import EnemyMob
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit

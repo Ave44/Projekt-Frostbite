@@ -1,6 +1,6 @@
 from abc import ABC
 
-from game.entities.domain.EnemyMob import EnemyMob
+from game.entities.domain.AggressiveMob import EnemyMob
 from game.entities.domain.State import State
 
 

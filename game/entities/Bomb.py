@@ -1,7 +1,7 @@
 from pygame import Vector2
 from pygame.time import Clock
 
-from game.entities.domain.EnemyMob import EnemyMob
+from game.entities.domain.AggressiveMob import EnemyMob
 from game.entities.domain.Entity import Entity
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup

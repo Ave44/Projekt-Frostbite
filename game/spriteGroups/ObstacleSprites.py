@@ -1,5 +1,4 @@
 import pygame
-from pygame.math import Vector2
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
 
 from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE

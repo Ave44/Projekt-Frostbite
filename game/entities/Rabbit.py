@@ -32,8 +32,9 @@ class Rabbit(PassiveMob):
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 2000, 500, 1500)
 
     def localUpdate(self):
+        print(self.obstacleSprites.sprites())
         closestOtherEntity = self.findClosestOtherEntity()
-        if closestOtherEntity and self.isEntityInSightRange(closestOtherEntity):
+        if closestOtherEntity and self.isInSightRange(closestOtherEntity):
             self.runAway(closestOtherEntity)
         else:
             self.moveRandomly()

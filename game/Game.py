@@ -4,8 +4,9 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
+from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
-from game.entities.domain.Enemy import Enemy
+from game.entities.domain.EnemyMob import EnemyMob
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit
@@ -57,8 +58,8 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom, self.player)
-        Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom, self.player)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -90,39 +91,17 @@ class Game:
     def handleTick(self):
         self.tick = self.tick + 1
         if self.tick == 1000:
-            self.spawnEnemy()
+            self.spawnBomb()
         if self.tick == 2000:
             self.tick = 0
-            self.spawnEnemy()
+            self.spawnBomb()
             self.player.heal(20)
 
-    def spawnEnemy(self):
+    def spawnBomb(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
-        position = [self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y]
-        Enemy(self.visibleSprites, self.obstacleSprites, {
-            "speed": 3,
-            "maxHealth": 60,
-            "currentHealth": 60,
-            "damage": 20,
-            "sightRange": 400,
-            "attackRange": 20,
-            "position_center": position,
-            "path_to_image_up": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right": "./graphics/entities/enemy/enemy.png",
-
-            "path_to_image_up_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right_heal": "./graphics/entities/enemy/enemy.png",
-
-            "path_to_image_up_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right_damage": "./graphics/entities/enemy/enemy.png",
-        }, self.clock)
+        position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
+        Bomb(self.visibleSprites, self.obstacleSprites, position, self.clock)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)
@@ -131,7 +110,7 @@ class Game:
 
     def entitiesUpdate(self):
         for entity in self.visibleSprites.entities:
-            if type(entity) is Enemy:
+            if type(entity) is EnemyMob:
                 entity.searchForTarget(self.visibleSprites.entities)
 
     def play(self):

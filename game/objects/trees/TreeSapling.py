@@ -12,7 +12,7 @@ from game.objects.trees.SmallTree import SmallTree
 
 
 class TreeSapling(CollisionObject):
-    _LIFESPAN = 36000
+    _LIFESPAN = 20000
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/sapling.png")

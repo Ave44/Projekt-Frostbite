@@ -10,6 +10,7 @@ TILES_ON_SCREEN_HEIGHT = math.ceil(WINDOW_HEIGHT / TILE_SIZE + 1)
 CAPTION = 'Project Frostbite'
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON = pygame.image.load(f"{ROOT_PATH}/graphics/icon.png")
+BIOMES_ID = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
 # SLOTS
 SLOT_SIZE = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]

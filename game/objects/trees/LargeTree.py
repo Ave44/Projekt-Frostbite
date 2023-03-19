@@ -25,7 +25,7 @@ class LargeTree(CollisionObject, Flammable):
         Flammable.__init__(self, clock)
 
         self.age = ageMs
-        self.LIFESPAN = 10000
+        self.LIFESPAN = 20000
 
     def interact(self) -> None:
         print("interacted with medium trees")  # in the future there will be a real implementation

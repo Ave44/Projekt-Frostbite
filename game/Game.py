@@ -11,6 +11,8 @@ from game.objects.trees.TreeSapling import TreeSapling
 from game.objects.trees.SmallTree import SmallTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.LargeTree import LargeTree
+from game.objects.Rock import Rock
+from game.objects.Grass import Grass
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -86,16 +88,26 @@ class Game:
         return map
     
     def createObjects(self, objects):
-        smallTrees = []
-        for smallTree in objects['smallTrees']:
-            smallTrees.append(SmallTree(self.visibleSprites, self.obstacleSprites, smallTree['midBottom'], self.clock, smallTree['age']))
-        mediumTrees = []
-        for mediumTree in objects['mediumTrees']:
-            mediumTrees.append(MediumTree(self.visibleSprites, self.obstacleSprites, mediumTree['midBottom'], self.clock, mediumTree['age']))
-        largeTrees = []
-        for largeTree in objects['largeTrees']:
-            largeTrees.append(LargeTree(self.visibleSprites, self.obstacleSprites, largeTree['midBottom'], self.clock, largeTree['age']))
+        trees = []
+        for treeData in objects['trees']:
+            if treeData['growthStage'] == 1:
+                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+            if treeData['growthStage'] == 2:
+                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+            if treeData['growthStage'] == 3:
+                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
 
+            trees.append(tree)
+
+        rocks = []
+        for rockData in objects['rocks']:
+            rock = Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'])
+            rocks.append(rock)
+
+        grasses = []
+        for grassData in objects['grasses']:
+            grass = Grass(self.visibleSprites, grassData['midBottom'])
+            grasses.append(grass)
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)

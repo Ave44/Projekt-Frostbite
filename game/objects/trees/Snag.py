@@ -22,7 +22,7 @@ class Snag(CollisionObject, Flammable):
         Flammable.__init__(self, clock)
 
         self.age = age
-        self.LIFESPAN = 20000
+        self.LIFESPAN = 10000
 
     def interact(self) -> None:
         print("interacted with snag")  # in the future there will be a real implementation

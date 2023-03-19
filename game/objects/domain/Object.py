@@ -10,14 +10,12 @@ from game.items.ToolType import ToolType
 class Object(ABC, Sprite):
 
     def __init__(self, visibleGroup: Group,
-                 obstaclesGroup: Group,
-                 midBottom: Vector2(), durability: int,
+                 midBottom: Vector2, durability: int,
                  toolType: ToolType,
                  image: Surface):
 
-        super().__init__(visibleGroup, obstaclesGroup)
+        super().__init__(visibleGroup)
         self.visibleGroup = visibleGroup
-        self.obstaclesGroup = obstaclesGroup
 
         self.image = image
         self.rect = self.image.get_rect(midbottom=midBottom)
@@ -27,7 +25,7 @@ class Object(ABC, Sprite):
         self.toolType = toolType
 
     @abstractmethod
-    def dropItem(self) -> None:
+    def drop(self) -> None:
         pass
 
     @abstractmethod
@@ -50,4 +48,4 @@ class Object(ABC, Sprite):
     def destroy(self) -> None:
         self.visibleGroup.remove(self)
         self.obstaclesGroup.remove(self)
-        self.dropItem()
+        self.drop()

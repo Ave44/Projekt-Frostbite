@@ -4,23 +4,21 @@ from pygame.math import Vector2
 from pygame.sprite import Group
 
 from config import ROOT_PATH
-from game.items.Sword import Sword
+from game.items.Item import Item
 from game.items.ToolType import ToolType
 from game.objects.domain.CollisionObject import CollisionObject
 
 
-class Rock(CollisionObject):
+class BurntTree(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rock.png")
-        colliderRect = Rect((0, 0), (10, 10))
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/burntTree.png")
+        colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
-
         super().__init__(visibleGroup, obstaclesGroup,
-                         midBottom, 40, ToolType.PICKAXE, image, colliderRect)
+                         midBottom, 1, ToolType.AXE, image, colliderRect)
 
     def interact(self) -> None:
-        # do something
-        pass
+        print("interacted with burnt trees")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        Sword(self.visibleGroup, self.rect.center)
+        Item(self.visibleGroup, self.rect.center)  # in the future there will be a real implementation

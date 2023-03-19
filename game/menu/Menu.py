@@ -26,7 +26,7 @@ class Menu:
         pygame.quit()
         sys.exit()
 
-    def menuLoop(self, menuTexts, menuButtons) -> None:
+    def menuLoop(self, menuTexts: list[list[str, pygame.font.Font]], menuButtons) -> None:
         while True:
             mousePos = pygame.mouse.get_pos()
             for [menuText, menuRect] in menuTexts:

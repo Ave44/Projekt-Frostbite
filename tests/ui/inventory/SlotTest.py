@@ -3,8 +3,8 @@ import unittest
 from mock.mock import Mock
 from pygame import Vector2
 
-from ui.inventory.slot.Slot import Slot
-from items.Item import Item
+from game.ui.inventory.slot.Slot import Slot
+from game.items.Item import Item
 
 
 class SlotTest(unittest.TestCase):

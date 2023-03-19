@@ -7,15 +7,20 @@ from config import *
 from game.entities.Enemy import Enemy
 from game.entities.Player import Player
 from game.InputManager import InputManager
+<<<<<<< HEAD
 from game.objects.Grass import Grass
 #from game.objects.effects.Ignite import Ignite
 from game.objects.Rock import Rock
 from game.objects.Tree import Tree
 #from game.objects.effects.IgniteAndRepair import IgniteAndRepair
 #from game.objects.effects.Repair import Repair
+=======
+from game.objects.trees.TreeSapling import TreeSapling
+>>>>>>> origin
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
@@ -28,13 +33,13 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.visibleSprites = CameraSpriteGroup()
-        self.obstacleSprites = pygame.sprite.Group()
+        self.obstacleSprites = ObstacleSprites()
         self.UiSprites = UiSpriteGroup()
 
         self.tick = 0
         self.daySeconds=0
 
-        self.createMap(33)
+        self.map = self.createMap(512)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -43,17 +48,25 @@ class Game:
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
                              saveData["player_data"],
-                             inventory)
-
-        Enemy(self.visibleSprites,
-              self.obstacleSprites,
-              saveData["enemy_data"])
+                             inventory, self.clock)
+        
+        if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
+            for y in range(len(self.map)):
+                for x in range(len(self.map)):
+                    if self.map[y][x]['walkable']:
+                        self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
+                        self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
+                        break
+                else:
+                    continue
+                break
 
         self.UiSprites.player = self.player
         self.UiSprites.inventory = inventory
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
+<<<<<<< HEAD
         tree = Tree(self.visibleSprites, self.obstacleSprites, Vector2(3001, 3001), self.clock)
         #Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100), self.clock)
         #Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200), self.clock)
@@ -61,6 +74,9 @@ class Game:
         Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200))
         #effect = IgniteAndRepair(8, 4, 1, tree, self.clock)
         #tree.addEffect(effect)
+=======
+        TreeSapling(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
+>>>>>>> origin
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -70,14 +86,19 @@ class Game:
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
         map = generateMap(mapSize)
+        tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
+        obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
             for x in range(len(map)):
                 xPos = x * TILE_SIZE
                 yPos = y * TILE_SIZE
                 tile = Tile((xPos, yPos), map[y][x]["image"])
-                self.visibleSprites.addTile(tile)
+                tilesMap[y][x] = tile
                 if not map[y][x]["walkable"]:
-                    self.obstacleSprites.add(tile)
+                    obstaclesMap[y][x] = tile
+        self.visibleSprites.map = tilesMap
+        self.obstacleSprites.map = obstaclesMap
+        return map        
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -86,11 +107,11 @@ class Game:
 
     def handleTick(self):
         self.tick = self.tick + 1
-        # if self.tick == 60:
-            # self.spawnEnemy()
-        if self.tick == 120:
+        if self.tick == 1000:
+            self.spawnEnemy()
+        if self.tick == 2000:
             self.tick = 0
-            # self.spawnEnemy()
+            self.spawnEnemy()
             self.player.heal(20)
     def updateDaySeconds(self):
         self.daySeconds=self.daySeconds+1
@@ -109,11 +130,21 @@ class Game:
             "sightRange": 400,
             "attackRange": 20,
             "position_center": position,
-            "path_to_image_up": "./graphics/player/enemy.png",
-            "path_to_image_down": "./graphics/player/enemy.png",
-            "path_to_image_left": "./graphics/player/enemy.png",
-            "path_to_image_right": "./graphics/player/enemy.png"
-        })
+            "path_to_image_up": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_down": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_left": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_right": "./graphics/entities/enemy/enemy.png",
+
+            "path_to_image_up_heal": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_down_heal": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_left_heal": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_right_heal": "./graphics/entities/enemy/enemy.png",
+
+            "path_to_image_up_damage": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_down_damage": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_left_damage": "./graphics/entities/enemy/enemy.png",
+            "path_to_image_right_damage": "./graphics/entities/enemy/enemy.png",
+        }, self.clock)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)
@@ -151,7 +182,8 @@ class Game:
             self.UiSprites.customDraw()
 
             # method for debugging values by writing them on screen
-            text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
+            # text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
+            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
             self.debug(text)
 
             self.updateDaySeconds()

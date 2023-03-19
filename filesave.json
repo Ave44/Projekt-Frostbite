@@ -27,10 +27,20 @@
         "maxHealth": 100,
         "currentHealth": 100,
         "position_center": [3000,3000],
-        "path_to_image_up": "./graphics/player/player_up.png",
-        "path_to_image_down": "./graphics/player/player_down.png",
-        "path_to_image_left": "./graphics/player/player_left.png",
-        "path_to_image_right": "./graphics/player/player_right.png"
+        "path_to_image_up": "./graphics/entities/player/player_up.png",
+        "path_to_image_down": "./graphics/entities/player/player_down.png",
+        "path_to_image_left": "./graphics/entities/player/player_left.png",
+        "path_to_image_right": "./graphics/entities/player/player_right.png",
+
+        "path_to_image_up_damage": "./graphics/entities/player/player_up_damage.png",
+        "path_to_image_down_damage": "./graphics/entities/player/player_down_damage.png",
+        "path_to_image_left_damage": "./graphics/entities/player/player_left_damage.png",
+        "path_to_image_right_damage": "./graphics/entities/player/player_right_damage.png",
+
+        "path_to_image_up_heal": "./graphics/entities/player/player_up_heal.png",
+        "path_to_image_down_heal": "./graphics/entities/player/player_down_heal.png",
+        "path_to_image_left_heal": "./graphics/entities/player/player_left_heal.png",
+        "path_to_image_right_heal": "./graphics/entities/player/player_right_heal.png"
     },
 
     "enemy_data": {
@@ -41,9 +51,19 @@
         "sightRange": 400,
         "attackRange": 20,
         "position_center": [3200,3200],
-        "path_to_image_up": "./graphics/player/enemy.png",
-        "path_to_image_down": "./graphics/player/enemy.png",
-        "path_to_image_left": "./graphics/player/enemy.png",
-        "path_to_image_right": "./graphics/player/enemy.png"
+        "path_to_image_up": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_down": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_left": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_right": "./graphics/entities/enemy/enemy.png",
+
+        "path_to_image_up_damage": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_down_damage": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_left_damage": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_right_damage": "./graphics/entities/enemy/enemy.png",
+
+        "path_to_image_up_heal": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_down_heal": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_left_heal": "./graphics/entities/enemy/enemy.png",
+        "path_to_image_right_heal": "./graphics/entities/enemy/enemy.png"
     }
 }

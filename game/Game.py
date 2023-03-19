@@ -29,7 +29,7 @@ class Game:
 
         self.tick = 0
 
-        self.map = self.createMap(512)
+        self.map = self.createMap(100)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)

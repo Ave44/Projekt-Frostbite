@@ -34,4 +34,4 @@ class MainMenu(Menu):
                              action=self.quitGame)
         menuButtons = [play_button, options_button, quit_button, create_game_button]
 
-        self.menuLoop(menuText, menuRect, menuButtons)
+        self.menuLoop([[menuText, menuRect]], menuButtons)

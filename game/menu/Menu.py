@@ -26,10 +26,11 @@ class Menu:
         pygame.quit()
         sys.exit()
 
-    def menuLoop(self, menuText, menuRect, menuButtons) -> None:
+    def menuLoop(self, menuTexts, menuButtons) -> None:
         while True:
             mousePos = pygame.mouse.get_pos()
-            self.screen.blit(menuText, menuRect)
+            for [menuText, menuRect] in menuTexts:
+                self.screen.blit(menuText, menuRect)
 
             for button in menuButtons:
                 button.update(self.screen, mousePos)

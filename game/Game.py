@@ -7,16 +7,7 @@ from config import *
 from game.entities.Enemy import Enemy
 from game.entities.Player import Player
 from game.InputManager import InputManager
-<<<<<<< HEAD
-from game.objects.Grass import Grass
-#from game.objects.effects.Ignite import Ignite
-from game.objects.Rock import Rock
-from game.objects.Tree import Tree
-#from game.objects.effects.IgniteAndRepair import IgniteAndRepair
-#from game.objects.effects.Repair import Repair
-=======
 from game.objects.trees.TreeSapling import TreeSapling
->>>>>>> origin
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -24,7 +15,9 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
+from game.DayCycle import dayCycle
 from gameInitialization.GenerateMap import generateMap
+
 
 
 class Game:
@@ -37,7 +30,7 @@ class Game:
         self.UiSprites = UiSpriteGroup()
 
         self.tick = 0
-        self.daySeconds=0
+        self.daySeconds = 0
 
         self.map = self.createMap(512)
 
@@ -66,17 +59,7 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-<<<<<<< HEAD
-        tree = Tree(self.visibleSprites, self.obstacleSprites, Vector2(3001, 3001), self.clock)
-        #Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100), self.clock)
-        #Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200), self.clock)
-        Rock(self.visibleSprites, self.obstacleSprites, Vector2(3100, 3100))
-        Grass(self.visibleSprites, self.obstacleSprites, Vector2(3200, 3200))
-        #effect = IgniteAndRepair(8, 4, 1, tree, self.clock)
-        #tree.addEffect(effect)
-=======
         TreeSapling(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
->>>>>>> origin
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -113,6 +96,7 @@ class Game:
             self.tick = 0
             self.spawnEnemy()
             self.player.heal(20)
+
     def updateDaySeconds(self):
         self.daySeconds=self.daySeconds+1
         if self.daySeconds == 3600:
@@ -156,17 +140,6 @@ class Game:
             if type(entity) is Enemy:
                 entity.searchForTarget(self.visibleSprites.entities)
 
-    def daycycle(self,daySeconds):
-
-        isDay=True
-        s = pygame.Surface((1920, 1080))
-        if(daySeconds<1800):
-            s.set_alpha(daySeconds/3600*256)
-        else:
-            s.set_alpha((3600-daySeconds)/3600*256)
-        print(daySeconds)
-        s.fill((0, 0, 0))
-        pygame.display.get_surface().blit(s, (0, 0))
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
         while True:
@@ -175,7 +148,6 @@ class Game:
             self.entitiesUpdate()
 
             self.visibleSprites.update()
-
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
@@ -187,6 +159,7 @@ class Game:
             self.debug(text)
 
             self.updateDaySeconds()
-            self.daycycle(self.daySeconds)
+            dayCycle(self.daySeconds)
+
             pygame.display.update()
             self.clock.tick(FPS)

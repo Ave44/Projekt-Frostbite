@@ -18,11 +18,7 @@ class Object(ABC, Sprite):
         self.visibleGroup = visibleGroup
 
         self.image = image
-<<<<<<< HEAD:game/objects/Object.py
-        self.rect = self.image.get_rect(midbottom=bottomCenter)
-=======
         self.rect = self.image.get_rect(midbottom=midBottom)
->>>>>>> origin:game/objects/domain/Object.py
 
         self.maxDurability = durability
         self.currentDurability = durability

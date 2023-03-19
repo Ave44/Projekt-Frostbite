@@ -34,3 +34,26 @@ class EnemyMob(Mob):
     @abstractmethod
     def afterAttackAction(self):
         pass
+
+    def moveToOrAttack(self, target: Entity | Object):
+        if self.isInAttackRange(target):
+            self.attack(target)
+        else:
+            self.moveTo(target)
+
+    def localUpdate(self):
+        if not self.target:
+            closestEntity = self.findClosestOtherEntity()
+            if closestEntity and self.isInSightRange(closestEntity):
+                self.target = closestEntity
+                self.moveToOrAttack(self.target)
+                return
+            self.moveRandomly()
+            return
+
+        if not self.isInSightRange(self.target):
+            self.target = None
+            self.destinationPosition = None
+            return
+
+        self.moveToOrAttack(self.target)

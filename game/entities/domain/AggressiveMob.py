@@ -10,7 +10,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 
-class EnemyMob(Mob):
+class AggressiveMob(Mob):
     def __init__(self,
                  visibleSprites: CameraSpriteGroup,
                  obstacleSprites: ObstacleSprites,

@@ -6,7 +6,7 @@ from pygame.math import Vector2
 from config import *
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
-from game.entities.domain.AggressiveMob import EnemyMob
+from game.entities.domain.AggressiveMob import AggressiveMob
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit
@@ -113,7 +113,7 @@ class Game:
 
     def entitiesUpdate(self):
         for entity in self.visibleSprites.entities:
-            if type(entity) is EnemyMob:
+            if type(entity) is AggressiveMob:
                 entity.searchForTarget(self.visibleSprites.entities)
 
     def play(self):

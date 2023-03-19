@@ -1,14 +1,12 @@
 from pygame import Vector2
 from pygame.time import Clock
 
-from game.entities.domain.AggressiveMob import EnemyMob
-from game.entities.domain.Entity import Entity
-from game.objects.domain.Object import Object
+from game.entities.domain.AggressiveMob import AggressiveMob
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 
-class Bomb(EnemyMob):
+class Bomb(AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  positionCenter: Vector2, clock: Clock):
         entityData = {

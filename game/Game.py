@@ -32,7 +32,7 @@ class Game:
 
         self.tick = 0
 
-        self.map = self.createMap(100)
+        self.map = self.createMap(512)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -92,12 +92,12 @@ class Game:
 
     def handleTick(self):
         self.tick = self.tick + 1
-        # if self.tick == 1000:
-        #     self.spawnBomb()
-        # if self.tick == 2000:
-        #     self.tick = 0
-        #     self.spawnBomb()
-        #     self.player.heal(20)
+        if self.tick == 1000:
+            self.spawnBomb()
+        if self.tick == 2000:
+            self.tick = 0
+            self.spawnBomb()
+            self.player.heal(20)
 
     def spawnBomb(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
@@ -110,17 +110,10 @@ class Game:
         mixer.music.play(-1)
         mixer.music.set_volume(MAIN_THEME_VOLUME)
 
-    def entitiesUpdate(self):
-        for entity in self.visibleSprites.entities:
-            if type(entity) is AggressiveMob:
-                entity.searchForTarget(self.visibleSprites.entities)
-
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.InputManager.handleInput()
-
-            self.entitiesUpdate()
 
             self.visibleSprites.update()
             self.handleTick()

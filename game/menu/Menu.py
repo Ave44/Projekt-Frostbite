@@ -3,6 +3,7 @@ import sys
 import pygame
 
 from config import BUTTON_FONT
+from game.ui.general import Button
 
 
 class Menu:
@@ -26,7 +27,7 @@ class Menu:
         pygame.quit()
         sys.exit()
 
-    def menuLoop(self, menuTexts: list[list[str, pygame.font.Font]], menuButtons) -> None:
+    def menuLoop(self, menuTexts: list[list[str, pygame.font.Font]], menuButtons: list[Button]) -> None:
         while True:
             mousePos = pygame.mouse.get_pos()
             for [menuText, menuRect] in menuTexts:

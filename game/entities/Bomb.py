@@ -32,7 +32,7 @@ class Bomb(AggressiveMob):
             "path_to_image_left_damage": "./graphics/entities/enemy/enemy.png",
             "path_to_image_right_damage": "./graphics/entities/enemy/enemy.png",
         }
-        super().__init__(visibleSprites, obstacleSprites, entityData, clock)
+        super().__init__(visibleSprites, obstacleSprites, entityData, clock, 200, 300, 500)
 
     def afterAttackAction(self):
         self.die()

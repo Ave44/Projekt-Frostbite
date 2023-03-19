@@ -4,6 +4,7 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
+from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
 from game.entities.domain.AggressiveMob import AggressiveMob
@@ -37,8 +38,6 @@ class Game:
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
         inventory.open()
 
-        self.rabbit = Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, Vector2(0, 0))
-
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
                              saveData["player_data"],
@@ -50,8 +49,6 @@ class Game:
                     if self.map[y][x]['walkable']:
                         self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
                         self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
-                        self.rabbit.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
-                        self.rabbit.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
                         break
                 else:
                     continue
@@ -62,7 +59,9 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        # Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -131,7 +130,7 @@ class Game:
 
             # method for debugging values by writing them on screen
             # text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
-            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}, fps:{self.clock.get_fps()}"
+            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
             self.debug(text)
 
             pygame.display.update()

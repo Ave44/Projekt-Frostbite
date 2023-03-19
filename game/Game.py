@@ -31,11 +31,13 @@ class Game:
 
         self.tick = 0
 
-        self.map = self.createMap(512)
+        self.map = self.createMap(100)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
         inventory.open()
+
+        self.rabbit = Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, Vector2(0, 0))
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
@@ -48,6 +50,8 @@ class Game:
                     if self.map[y][x]['walkable']:
                         self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
                         self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
+                        self.rabbit.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
+                        self.rabbit.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
                         break
                 else:
                     continue
@@ -58,8 +62,7 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
-        Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        # Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -90,12 +93,12 @@ class Game:
 
     def handleTick(self):
         self.tick = self.tick + 1
-        if self.tick == 1000:
-            self.spawnBomb()
-        if self.tick == 2000:
-            self.tick = 0
-            self.spawnBomb()
-            self.player.heal(20)
+        # if self.tick == 1000:
+        #     self.spawnBomb()
+        # if self.tick == 2000:
+        #     self.tick = 0
+        #     self.spawnBomb()
+        #     self.player.heal(20)
 
     def spawnBomb(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
@@ -128,7 +131,7 @@ class Game:
 
             # method for debugging values by writing them on screen
             # text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
-            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
+            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}, fps:{self.clock.get_fps()}"
             self.debug(text)
 
             pygame.display.update()

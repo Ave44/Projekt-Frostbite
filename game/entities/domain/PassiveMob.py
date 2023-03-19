@@ -12,3 +12,10 @@ class PassiveMob(Mob, ABC):
         yOffset = -fromEntity.rect.y + self.rect.bottom
         self.direction = Vector2(xOffset, yOffset)
         self.move()
+
+    def localUpdate(self):
+        closestOtherEntity = self.findClosestOtherEntity()
+        if closestOtherEntity and self.isInSightRange(closestOtherEntity):
+            self.runAway(closestOtherEntity)
+        else:
+            self.moveRandomly()

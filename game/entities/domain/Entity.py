@@ -132,11 +132,11 @@ class Entity(Sprite, ABC):
                 self.rect.midbottom = self.destinationPosition
                 self.direction = Vector2(0, 0)
             else:
-                newDirection = Vector2(xOffset, yOffset).normalize()
+                newDirection = Vector2(xOffset, yOffset)
                 self.direction.xy = newDirection
 
     def move(self):
-        if self.direction.x != 0 and self.direction.y != 0:
+        if self.direction.x != 0 or self.direction.y != 0:
             self.direction = self.direction.normalize()
 
         self.rect.x += round(self.direction.x * self.speed)

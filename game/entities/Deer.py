@@ -30,12 +30,4 @@ class Deer(PassiveMob):
             "path_to_image_left_heal": "./graphics/entities/deer/deer_left_heal.png",
             "path_to_image_right_heal": "./graphics/entities/deer/deer_right_heal.png"
         }
-        super().__init__(visibleSprites, obstacleSprites, clock, entityData, 400, 4000, 1000, 2000)
-
-    def localUpdate(self):
-        if self.state == State.DAMAGED and self.timeFromLastHealthChange <= 250:
-            closestEntity = self.findClosestOtherEntity()
-            if closestEntity and self.isEntityInSightRange(closestEntity):
-                self.runAway(closestEntity)
-        else:
-            self.moveRandomly()
+        super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 4000, 1000, 2000)

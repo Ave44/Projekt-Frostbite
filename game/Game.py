@@ -24,15 +24,19 @@ class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
+        self.getTicksLastFrame=0
+        self.deltaTime=0
+        self.daySeconds = 0
+        self.dayLengthInSeconds=24
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
         self.UiSprites = UiSpriteGroup()
 
         self.tick = 0
-        self.daySeconds = 0
 
-        self.map = self.createMap(512)
+
+        self.map = self.createMap(256)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -98,8 +102,13 @@ class Game:
             self.player.heal(20)
 
     def updateDaySeconds(self):
-        self.daySeconds=self.daySeconds+1
-        if self.daySeconds == 3600:
+        t = pygame.time.get_ticks()
+        self.deltaTime = (t - self.getTicksLastFrame) / 1000.0
+        self.getTicksLastFrame = t
+        self.daySeconds = self.daySeconds + self.deltaTime
+        print(self.deltaTime)
+        print(self.daySeconds)
+        if self.daySeconds >= self.dayLengthInSeconds:
             self.daySeconds=0
 
     def spawnEnemy(self):
@@ -159,7 +168,8 @@ class Game:
             self.debug(text)
 
             self.updateDaySeconds()
-            dayCycle(self.daySeconds)
+
+            dayCycle(self.daySeconds,self.dayLengthInSeconds)
 
             pygame.display.update()
             self.clock.tick(FPS)

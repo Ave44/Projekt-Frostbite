@@ -31,3 +31,6 @@ class Deer(PassiveMob):
             "path_to_image_right_heal": "./graphics/entities/deer/deer_right_heal.png"
         }
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 4000, 1000, 2000)
+
+    def drop(self) -> None:
+        pass

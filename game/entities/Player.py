@@ -48,10 +48,14 @@ class Player(Entity):
             self.setDestination(Vector2(sprite.rect.center), sprite)
             # self.inventory.addItem(sprite, self.selectedItem)
 
+    def drop(self) -> None:
+        pass
+
     def die(self):
         self.currentHealth = 0
         self.healthBar.update(self.currentHealth)
         self.remove(*self.groups())
+        self.drop()
         print("Game Over")
 
     def localUpdate(self):

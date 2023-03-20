@@ -36,3 +36,6 @@ class Bomb(AggressiveMob):
 
     def afterAttackAction(self):
         self.die()
+
+    def drop(self) -> None:
+        pass

@@ -30,3 +30,6 @@ class Rabbit(PassiveMob):
             "path_to_image_right_heal": "./graphics/entities/rabbit/rabbit_right_heal.png"
         }
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 2000, 500, 1500)
+
+    def drop(self) -> None:
+        pass

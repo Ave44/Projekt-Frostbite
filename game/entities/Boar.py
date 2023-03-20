@@ -36,3 +36,6 @@ class Boar(AggressiveMob):
 
     def afterAttackAction(self):
         pass
+
+    def drop(self) -> None:
+        pass

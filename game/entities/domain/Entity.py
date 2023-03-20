@@ -89,6 +89,10 @@ class Entity(Sprite, ABC):
     def localUpdate(self):
         pass
 
+    @abstractmethod
+    def drop(self) -> None:
+        pass
+
     def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites.getObstacles(self.rect.center):
             if not sprite.coliderRect.colliderect(self.rect):
@@ -171,6 +175,7 @@ class Entity(Sprite, ABC):
     def die(self):
         self.currentHealth = 0
         self.remove(*self.groups())
+        self.drop()
 
     def heal(self, amount: int):
         if self.currentHealth != self.maxHealth:

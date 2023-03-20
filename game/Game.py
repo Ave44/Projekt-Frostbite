@@ -106,8 +106,6 @@ class Game:
         self.deltaTime = (t - self.getTicksLastFrame) / 1000.0
         self.getTicksLastFrame = t
         self.daySeconds = self.daySeconds + self.deltaTime
-        print(self.deltaTime)
-        print(self.daySeconds)
         if self.daySeconds >= self.dayLengthInSeconds:
             self.daySeconds=0
 

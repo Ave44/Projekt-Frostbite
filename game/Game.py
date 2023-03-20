@@ -19,12 +19,11 @@ from game.DayCycle import DayCycle
 from gameInitialization.GenerateMap import generateMap
 
 
-
 class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
-        self.dayCycle=DayCycle(0, 60)
+        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen)
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
@@ -32,8 +31,7 @@ class Game:
 
         self.tick = 0
 
-
-        self.map = self.createMap(256)
+        self.map = self.createMap(512)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -43,7 +41,7 @@ class Game:
                              self.obstacleSprites,
                              saveData["player_data"],
                              inventory, self.clock)
-        
+
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
                 for x in range(len(self.map)):
@@ -82,7 +80,7 @@ class Game:
                     obstaclesMap[y][x] = tile
         self.visibleSprites.map = tilesMap
         self.obstacleSprites.map = obstaclesMap
-        return map        
+        return map
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -97,7 +95,6 @@ class Game:
             self.tick = 0
             self.spawnEnemy()
             self.player.heal(20)
-
 
     def spawnEnemy(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
@@ -148,7 +145,7 @@ class Game:
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
-            self.dayCycle.runDayCycle(self.clock)
+            self.dayCycle.updateDayCycle()
 
             self.UiSprites.customDraw()
 
@@ -156,8 +153,6 @@ class Game:
             # text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
             text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
             self.debug(text)
-
-
 
             pygame.display.update()
             self.clock.tick(FPS)

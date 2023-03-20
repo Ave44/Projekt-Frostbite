@@ -1,39 +1,38 @@
+import time
+
 import pygame
 from config import WINDOW_WIDTH, WINDOW_HEIGHT
+from pygame.time import Clock
+from pygame import Surface
+
+
 class DayCycle:
-    def __init__(self, daySeconds,dayLengthInSeconds):
-        self.daySeconds = daySeconds
-        self.dayLengthInSeconds = dayLengthInSeconds
-    def runDayCycle(self,clock):
-        #update daySeconds
-        deltaTime = clock.get_time() / 1000
-        self.daySeconds = self.daySeconds + deltaTime
-        if self.daySeconds >= self.dayLengthInSeconds:
-            self.daySeconds = 0
-        print(self.daySeconds)
+    def __init__(self, currentTimeInMs: int, dayLengthInMs: int, clock: Clock, screen: Surface):
+        self.screen = screen
+        self.clock = clock
+        self.currentTimeInMs = currentTimeInMs
+        self.dayLengthInMs = dayLengthInMs
+        self.blackSurface = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.blackSurface.fill((0, 0, 0))
 
-        #correlated with UI, resolution should somehow be passed into function
-        blackSurface = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.beginningOfNightTime = 21 / 24 * dayLengthInMs
+        self.nightTime = dayLengthInMs
+        self.beginningOfDayTime = 6 / 24 * dayLengthInMs
+        self.dayTime = 9 / 24 * dayLengthInMs
 
-        #constants
-        BEGINNING_OF_NIGHT_TIME = 21 / 24 * self.dayLengthInSeconds
-        NIGHT_TIME = self.dayLengthInSeconds
-        BEGINNING_OF_DAY_TIME = 6/24*self.dayLengthInSeconds
-        DAY_TIME = 9/24*self.dayLengthInSeconds
+    def updateDayCycle(self):
+        deltaTime = self.clock.get_time()
+        self.currentTimeInMs = self.currentTimeInMs + deltaTime
+        if self.currentTimeInMs >= self.dayLengthInMs:
+            self.currentTimeInMs = 0
 
-        #sunset
-        if (self.daySeconds > BEGINNING_OF_NIGHT_TIME and self.daySeconds<=NIGHT_TIME):
-            alphaValue=(self.daySeconds - BEGINNING_OF_NIGHT_TIME) / (6/24*self.dayLengthInSeconds) * 256
-            blackSurface.set_alpha(alphaValue)
-        #sunrise
-        elif (self.daySeconds > BEGINNING_OF_DAY_TIME and self.daySeconds<=DAY_TIME):
-            alphaValue = (DAY_TIME-self.daySeconds) / (6/24*self.dayLengthInSeconds) * 256
-            blackSurface.set_alpha(alphaValue)
-        #day time
-        elif (self.daySeconds > DAY_TIME and self.daySeconds<=BEGINNING_OF_NIGHT_TIME):
-            blackSurface.set_alpha(0)
-        #night time
+        if self.beginningOfNightTime < self.currentTimeInMs <= self.nightTime:
+            alphaValue = (self.currentTimeInMs - self.beginningOfNightTime) / (6 / 24 * self.dayLengthInMs) * 255
+        elif self.beginningOfDayTime < self.currentTimeInMs <= self.dayTime:
+            alphaValue = (self.dayTime - self.currentTimeInMs) / (6 / 24 * self.dayLengthInMs) * 255
+        elif self.dayTime < self.currentTimeInMs <= self.beginningOfNightTime:
+            alphaValue = 0
         else:
-            blackSurface.set_alpha(128)
-        blackSurface.fill((0, 0, 0))
-        pygame.display.get_surface().blit(blackSurface, (0, 0))
+            alphaValue = 128
+        self.blackSurface.set_alpha(alphaValue)
+        pygame.display.get_surface().blit(self.blackSurface, (0, 0))

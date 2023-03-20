@@ -1,20 +1,27 @@
 import pygame
 
 def dayCycle(daySeconds,dayLengthInSeconds):
-    isDay = True
+    #correlated with UI, resolution should somehow be passed into function from game settings, need to ask UI designer
     s = pygame.Surface((1920, 1080))
-    beginningOfNightTime = 21 / 24 * dayLengthInSeconds
-    nightTime = dayLengthInSeconds
-    beginningOfDayTime = 6/24*dayLengthInSeconds
-    dayTime = 9/24*dayLengthInSeconds
-    if (daySeconds > beginningOfNightTime and daySeconds<=nightTime):
-        alphaValue=(daySeconds - beginningOfNightTime) / (6/24*dayLengthInSeconds) * 256
+
+    #constants
+    BEGINNING_OF_NIGHT_TIME = 21 / 24 * dayLengthInSeconds
+    NIGHT_TIME = dayLengthInSeconds
+    BEGINNING_OF_DAY_TIME = 6/24*dayLengthInSeconds
+    DAY_TIME = 9/24*dayLengthInSeconds
+
+    #sunset
+    if (daySeconds > BEGINNING_OF_NIGHT_TIME and daySeconds<=NIGHT_TIME):
+        alphaValue=(daySeconds - BEGINNING_OF_NIGHT_TIME) / (6/24*dayLengthInSeconds) * 256
         s.set_alpha(alphaValue)
-    elif (daySeconds > beginningOfDayTime and daySeconds<=dayTime):
-        alphaValue = (dayTime-daySeconds) / (6/24*dayLengthInSeconds) * 256
+    #sunrise
+    elif (daySeconds > BEGINNING_OF_DAY_TIME and daySeconds<=DAY_TIME):
+        alphaValue = (DAY_TIME-daySeconds) / (6/24*dayLengthInSeconds) * 256
         s.set_alpha(alphaValue)
-    elif (daySeconds > dayTime and daySeconds<=beginningOfNightTime):
+    #day time
+    elif (daySeconds > DAY_TIME and daySeconds<=BEGINNING_OF_NIGHT_TIME):
         s.set_alpha(0)
+    #night time
     else:
         s.set_alpha(128)
     s.fill((0, 0, 0))

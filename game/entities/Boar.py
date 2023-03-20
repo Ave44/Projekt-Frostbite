@@ -32,7 +32,7 @@ class Boar(AggressiveMob):
             "path_to_image_left_damage": "./graphics/entities/boar/boar_left_damage.png",
             "path_to_image_right_damage": "./graphics/entities/boar/boar_right_damage.png",
         }
-        super().__init__(visibleSprites, obstacleSprites, entityData, clock, 700, 500, 1000)
+        super().__init__(visibleSprites, obstacleSprites, entityData, clock, 700, 500, 1000, 2000)
 
     def afterAttackAction(self):
         pass

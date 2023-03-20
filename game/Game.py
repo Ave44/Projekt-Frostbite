@@ -158,6 +158,10 @@ class Game:
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
+            self.updateDaySeconds()
+
+            dayCycle(self.daySeconds, self.dayLengthInSeconds)
+
             self.UiSprites.customDraw()
 
             # method for debugging values by writing them on screen
@@ -165,9 +169,7 @@ class Game:
             text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
             self.debug(text)
 
-            self.updateDaySeconds()
 
-            dayCycle(self.daySeconds,self.dayLengthInSeconds)
 
             pygame.display.update()
             self.clock.tick(FPS)

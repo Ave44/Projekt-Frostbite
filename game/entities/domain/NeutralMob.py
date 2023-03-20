@@ -6,7 +6,10 @@ from game.entities.domain.State import State
 
 class NeutralMob(AggressiveMob, ABC):
     def localUpdate(self):
-        if not self.target and self.state == State.DAMAGED:
+        if not self.target and self.state != State.DAMAGED:
+            return
+
+        if not self.target:
             closestEntity = self.findClosestOtherEntity()
             if closestEntity and self.isInSightRange(closestEntity):
                 self.target = closestEntity

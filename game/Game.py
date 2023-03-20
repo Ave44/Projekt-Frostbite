@@ -15,7 +15,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
-from game.DayCycle import dayCycle
+from game.DayCycle import DayCycle
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -24,10 +24,7 @@ class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
-        self.getTicksLastFrame=0
-        self.deltaTime=0
-        self.daySeconds = 0
-        self.dayLengthInSeconds=24
+        self.dayCycle=DayCycle(0, 60)
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
@@ -101,13 +98,6 @@ class Game:
             self.spawnEnemy()
             self.player.heal(20)
 
-    def updateDaySeconds(self):
-        t = pygame.time.get_ticks()
-        self.deltaTime = (t - self.getTicksLastFrame) / 1000.0
-        self.getTicksLastFrame = t
-        self.daySeconds = self.daySeconds + self.deltaTime
-        if self.daySeconds >= self.dayLengthInSeconds:
-            self.daySeconds=0
 
     def spawnEnemy(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
@@ -158,9 +148,7 @@ class Game:
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
-            self.updateDaySeconds()
-
-            dayCycle(self.daySeconds, self.dayLengthInSeconds)
+            self.dayCycle.runDayCycle(self.clock)
 
             self.UiSprites.customDraw()
 

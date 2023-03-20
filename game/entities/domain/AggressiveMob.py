@@ -15,12 +15,14 @@ class AggressiveMob(Mob):
                  visibleSprites: CameraSpriteGroup,
                  obstacleSprites: ObstacleSprites,
                  enemyData, clock: Clock, moveEveryMs: int,
-                 minMoveMs: int, maxMoveMs: int):
+                 minMoveMs: int, maxMoveMs: int, attackCooldownMs: int):
         super().__init__(visibleSprites, obstacleSprites, clock, enemyData,
                          enemyData["sightRange"], moveEveryMs, minMoveMs, maxMoveMs)
         self.attackRange = enemyData["attackRange"]
         self.damage = enemyData["damage"]
         self.target = None
+        self.attackCooldownMs = attackCooldownMs
+        self.timeFromLastAttack = 0
 
     def isInAttackRange(self, target: Entity | Object) -> bool:
         return self.isInRange(target, self.attackRange)
@@ -41,10 +43,12 @@ class AggressiveMob(Mob):
         pass
 
     def moveToOrAttack(self, target: Entity | Object):
-        if self.isInAttackRange(target):
+        if self.isInAttackRange(target) and self.timeFromLastAttack >= self.attackCooldownMs:
             self.attack(target)
+            self.timeFromLastAttack = 0
         else:
             self.moveTo(target)
+            self.timeFromLastAttack += self.clock.get_time()
 
     def localUpdate(self):
         if not self.target:
@@ -54,11 +58,13 @@ class AggressiveMob(Mob):
                 self.moveToOrAttack(self.target)
                 return
             self.moveRandomly()
+            self.timeFromLastAttack += self.clock.get_time()
             return
 
         if not self.isInSightRange(self.target):
             self.target = None
             self.destinationPosition = None
+            self.timeFromLastAttack += self.clock.get_time()
             return
 
         self.moveToOrAttack(self.target)

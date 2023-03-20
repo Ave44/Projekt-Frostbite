@@ -16,11 +16,13 @@ class NeutralMob(AggressiveMob, ABC):
                 self.moveToOrAttack(self.target)
                 return
             self.moveRandomly()
+            self.timeFromLastAttack += self.clock.get_time()
             return
 
         if not self.isInSightRange(self.target):
             self.target = None
             self.destinationPosition = None
+            self.timeFromLastAttack += self.clock.get_time()
             return
 
         self.moveToOrAttack(self.target)

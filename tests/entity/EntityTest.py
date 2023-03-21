@@ -2,7 +2,7 @@ import unittest
 
 import pygame
 
-from game.entities.Entity import Entity
+from game.entities.domain.Entity import Entity
 from main import game
 
 

@@ -1,13 +1,12 @@
 from abc import abstractmethod, ABC
 
 from pygame import Vector2, Surface
-import pygame.sprite
 
 from pygame.image import load
 from pygame.sprite import Sprite
 from pygame.time import Clock
 
-from game.entities.State import State
+from game.entities.domain.State import State
 
 
 class Entity(Sprite, ABC):
@@ -90,6 +89,10 @@ class Entity(Sprite, ABC):
     def localUpdate(self):
         pass
 
+    @abstractmethod
+    def drop(self) -> None:
+        pass
+
     def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites.getObstacles(self.rect.center):
             if not sprite.colliderRect.colliderect(self.rect):
@@ -115,8 +118,6 @@ class Entity(Sprite, ABC):
     def adjustDirection(self):
         if self.destinationPosition:
             self.moveTowards()
-        else:
-            self.direction.xy = [0, 0]
 
     def moveTowards(self):
         if Vector2(self.rect.midbottom) == self.destinationPosition:
@@ -131,11 +132,11 @@ class Entity(Sprite, ABC):
                 self.rect.midbottom = self.destinationPosition
                 self.direction = Vector2(0, 0)
             else:
-                newDirection = Vector2(xOffset, yOffset).normalize()
+                newDirection = Vector2(xOffset, yOffset)
                 self.direction.xy = newDirection
 
     def move(self):
-        if self.direction.x != 0 and self.direction.y != 0:
+        if self.direction.x != 0 or self.direction.y != 0:
             self.direction = self.direction.normalize()
 
         self.rect.x += round(self.direction.x * self.speed)
@@ -170,6 +171,7 @@ class Entity(Sprite, ABC):
     def die(self):
         self.currentHealth = 0
         self.remove(*self.groups())
+        self.drop()
 
     def heal(self, amount: int):
         if self.currentHealth != self.maxHealth:

@@ -15,9 +15,9 @@ class AggressiveMob(Mob):
                  visibleSprites: CameraSpriteGroup,
                  obstacleSprites: ObstacleSprites,
                  enemyData, clock: Clock, moveEveryMs: int,
-                 minMoveMs: int, maxMoveMs: int, attackCooldownMs: int):
+                 minMoveTimeMs: int, maxMoveTimeMs: int, attackCooldownMs: int):
         super().__init__(visibleSprites, obstacleSprites, clock, enemyData,
-                         enemyData["sightRange"], moveEveryMs, minMoveMs, maxMoveMs)
+                         enemyData["sightRange"], moveEveryMs, minMoveTimeMs, maxMoveTimeMs)
         self.attackRange = enemyData["attackRange"]
         self.damage = enemyData["damage"]
         self.target = None

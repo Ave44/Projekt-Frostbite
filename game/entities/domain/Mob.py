@@ -22,8 +22,8 @@ class Mob(Entity, ABC):
         self.moveTime = 0
         self.timeBetweenMoves = 0
         self.moveEveryMs = moveEveryMs
-        self.minMoveMs = minMoveMs
-        self.maxMoveMs = maxMoveMs
+        self.minMoveTimeMs = minMoveMs
+        self.maxMoveTimeMs = maxMoveMs
         self.visibleSprites = visibleSprites
 
     def isInRange(self, target: Entity | Object, rangeDistance: int) -> bool:
@@ -42,12 +42,12 @@ class Mob(Entity, ABC):
             return
         self.timeBetweenMoves += dt
         if self.timeBetweenMoves >= self.moveEveryMs:
-            self.__buildRandomMove(self.minMoveMs, self.maxMoveMs)
+            self.__buildRandomMove(self.minMoveTimeMs, self.maxMoveTimeMs)
 
-    def __buildRandomMove(self, moveTimeMin: int, moveTimeMax: int):
+    def __buildRandomMove(self, minMoveTime: int, maxMoveTime: int):
         self.timeBetweenMoves = 0
         self.movingTime = 0
-        self.moveTime = random.randint(moveTimeMin, moveTimeMax)
+        self.moveTime = random.randint(minMoveTime, maxMoveTime)
         self.direction = Vector2(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
 
     def findClosestOtherEntity(self) -> Entity | None:

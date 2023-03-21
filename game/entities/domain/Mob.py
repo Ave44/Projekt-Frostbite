@@ -1,6 +1,6 @@
-import math
 import random
 from abc import ABC
+from math import sqrt
 
 from pygame import Vector2
 from pygame.time import Clock
@@ -27,8 +27,8 @@ class Mob(Entity, ABC):
         self.visibleSprites = visibleSprites
 
     def isInRange(self, target: Entity | Object, rangeDistance: int) -> bool:
-        distance = math.sqrt((self.rect.centerx - target.rect.centerx) ** 2 +
-                             (self.rect.centery - target.rect.centery) ** 2)
+        distance = sqrt((self.rect.centerx - target.rect.centerx) ** 2 +
+                        (self.rect.centery - target.rect.centery) ** 2)
         return distance <= rangeDistance
 
     def isInSightRange(self, target: Entity | Object) -> bool:
@@ -56,8 +56,8 @@ class Mob(Entity, ABC):
         for entity in self.visibleSprites.entities:
             if type(self) == type(entity):
                 continue
-            distance = math.sqrt((self.rect.centerx - entity.rect.x) ** 2 +
-                                 (self.rect.centery - entity.rect.y) ** 2)
+            distance = sqrt((self.rect.centerx - entity.rect.x) ** 2 +
+                            (self.rect.centery - entity.rect.y) ** 2)
             if distance < closestDistance:
                 closestEntity = entity
                 closestDistance = distance

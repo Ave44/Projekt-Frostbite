@@ -116,12 +116,8 @@ class Entity(Sprite, ABC):
         self.destinationPosition = position
 
     def adjustDirection(self):
-        from game.entities.Player import Player
-
         if self.destinationPosition:
             self.moveTowards()
-        elif isinstance(self, Player):
-            self.direction.xy = [0, 0]
 
     def moveTowards(self):
         if Vector2(self.rect.midbottom) == self.destinationPosition:

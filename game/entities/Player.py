@@ -23,6 +23,12 @@ class Player(Entity):
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, HEALTHBAR_MAIN,
                              HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
 
+    def adjustDirection(self):
+        if self.destinationPosition:
+            self.moveTowards()
+        else:
+            self.direction.xy = [0, 0]
+
     def stopAutowalking(self):
         self.destinationPosition = None
         self.destinationTarget = None

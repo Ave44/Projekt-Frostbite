@@ -2,13 +2,15 @@ from pygame import Vector2
 from pygame.time import Clock
 
 from game.entities.domain.PassiveMob import PassiveMob
+from game.entities.domain.State import State
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
-
 class Rabbit(PassiveMob):
+
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  clock: Clock, positionCenter: Vector2):
+
         entityData = {
             "speed": 2,
             "maxHealth": 5,
@@ -30,6 +32,36 @@ class Rabbit(PassiveMob):
             "path_to_image_right_heal": "./graphics/entities/rabbit/rabbit_right_heal.png"
         }
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 2000, 500, 1500)
+        self.homePosition = positionCenter
+        self.isRunningHome = False
+        self.isInHome = False
 
     def drop(self) -> None:
         pass
+
+    def runHome(self):
+        self.setDestination(self.homePosition, None)
+        self.isRunningHome = True
+
+    def hide(self):
+        self.isRunningHome = False
+        self.isInHome = True
+        self.remove(*self.groups())
+
+    def goOut(self):
+        self.add(self.visibleSprites)
+        self.isInHome = False
+
+    def localUpdate(self):
+        if self.isInHome:
+            return
+        if self.state == State.DAMAGED:
+            self.runHome()
+            return
+        if self.rect.midbottom == self.homePosition and self.isRunningHome:
+            self.hide()
+            return
+        if self.destinationPosition:
+            self.move()
+            return
+        PassiveMob.localUpdate(self)

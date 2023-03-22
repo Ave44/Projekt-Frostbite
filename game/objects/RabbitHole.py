@@ -1,54 +1,63 @@
 import pygame
 from pygame import Vector2
+from pygame.time import Clock
 
 from config import ROOT_PATH
+from game.entities.Rabbit import Rabbit
 from game.items.ToolType import ToolType
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 
 class RabbitHole(Object):
-    def __init__(self, visibleGroup: CameraSpriteGroup, midBottom: Vector2):
+    def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
+                 midBottom: Vector2, clock: Clock):
         image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rabbit_hole.png")
         super().__init__(visibleGroup, midBottom, 50, ToolType.SHOVEL, image)
-        self.connectedRabbit = []
-        self.hiddenRabbits = []
-        self.daysFromConnectedRabbitChange = 0
+        self.rabbits = []
+        self.daysFromRabbitsChange = 0
+        self.obstacleSprites = obstacleSprites
+        self.clock = clock
 
-    def hideRabbit(self, rabbit: Rabbit):
-        if len(self.hiddenRabbits) >= 3:
-            ValueError("The hole is full")
-        self.hiddenRabbits.append(rabbit)
-        rabbit.changeStatus(Status.HIDDEN)
-
-    def releaseRabbits(self):
-        for rabbit in self.hiddenRabbits:
-            rabbit.changeStatus(Status.NORMAL)
+        self.spawnRabbit()
+        self.spawnRabbit()
+        self.spawnRabbit()
 
     def spawnRabbit(self):
-        newRabbit = Rabbit(self.visibleGroup, self.rect.center, self)
-        self.connectedRabbit.append(newRabbit)
-        self.daysFromConnectedRabbitChange = 0
+        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.clock,
+                           Vector2(self.rect.centerx, self.rect.centery))
+        self.rabbits.append(newRabbit)
+        self.daysFromRabbitsChange = 0
 
-    def disconnectRabbit(self, rabbit: Rabbit):
-        if rabbit in self.connectedRabbit:
-            self.connectedRabbit.remove(rabbit)
-            self.daysFromConnectedRabbitChange = 0
-        else:
-            ValueError("Rabbit not found")
+    def deleteDeadRabbit(self):
+        newRabbits = list(filter(lambda rabbit: rabbit.currentHealth > 0, self.rabbits))
+        if len(self.rabbits) != len(newRabbits):
+            self.daysFromRabbitsChange = 0
+            self.rabbits = newRabbits
+
+    def releaseRabbits(self):
+        self.deleteDeadRabbit()
+        for rabbit in self.rabbits:
+            if rabbit.isInHome:
+                rabbit.goOut()
+
+    def hideRabbits(self):
+        self.deleteDeadRabbit()
+        for rabbit in self.rabbits:
+            if not rabbit.isInHome:
+                rabbit.runHome()
 
     def drop(self) -> None:
-        if not self.hiddenRabbits:
-            self.spawnRabbit()
-        else:
-            self.releaseRabbits()
+        self.releaseRabbits()
 
     def interact(self) -> None:
         print("interacted with rabbit hole")
 
-    def handleDayChange(self):
-        self.daysFromConnectedRabbitChange += 1
-
-    def update(self):
-        if len(self.connectedRabbit) < 3 and self.daysFromConnectedRabbitChange >= 10:
+    def onNewDay(self):
+        self.releaseRabbits()
+        if len(self.rabbits) < 3 and self.daysFromRabbitsChange >= 10:
             self.spawnRabbit()
+
+    def onEvening(self):
+        self.hideRabbits()

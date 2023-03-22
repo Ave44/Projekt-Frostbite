@@ -35,11 +35,14 @@ class Rabbit(PassiveMob):
         self.homePosition = positionCenter
         self.isRunningHome = False
         self.isInHome = False
+        self.isHomeless = False
 
     def drop(self) -> None:
         pass
 
     def runHome(self):
+        if self.isHomeless:
+            return
         self.setDestination(self.homePosition, None)
         self.isRunningHome = True
 
@@ -55,13 +58,21 @@ class Rabbit(PassiveMob):
     def localUpdate(self):
         if self.isInHome:
             return
-        if self.state == State.DAMAGED:
+
+        if self.isHomeless:
+            PassiveMob.localUpdate(self)
+            return
+
+        if self.state == State.DAMAGED and not self.isHomeless:
             self.runHome()
             return
-        if self.rect.midbottom == self.homePosition and self.isRunningHome:
+
+        if self.rect.midbottom == self.homePosition and self.isRunningHome and not self.isHomeless:
             self.hide()
             return
+
         if self.destinationPosition:
             self.move()
             return
+
         PassiveMob.localUpdate(self)

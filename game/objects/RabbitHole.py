@@ -36,28 +36,39 @@ class RabbitHole(Object):
             self.daysFromRabbitsChange = 0
             self.rabbits = newRabbits
 
-    def releaseRabbits(self):
-        self.deleteDeadRabbit()
+    def releaseRabbits(self, forever: bool = False):
         for rabbit in self.rabbits:
-            if rabbit.isInHome:
-                rabbit.goOut()
+            if not rabbit.isInHome:
+                continue
+            if forever:
+                rabbit.isHomeless = True
+            rabbit.goOut()
 
     def hideRabbits(self):
-        self.deleteDeadRabbit()
         for rabbit in self.rabbits:
             if not rabbit.isInHome:
                 rabbit.runHome()
 
     def drop(self) -> None:
-        self.releaseRabbits()
+        self.deleteDeadRabbit()
+        self.releaseRabbits(True)
 
     def interact(self) -> None:
         print("interacted with rabbit hole")
 
     def onNewDay(self):
+        self.deleteDeadRabbit()
         self.releaseRabbits()
-        if len(self.rabbits) < 3 and self.daysFromRabbitsChange >= 10:
-            self.spawnRabbit()
+
+        if len(self.rabbits) >= 3:
+            return
+
+        if self.daysFromRabbitsChange < 10:
+            self.daysFromRabbitsChange += 1
+            return
+
+        self.spawnRabbit()
 
     def onEvening(self):
+        self.deleteDeadRabbit()
         self.hideRabbits()

@@ -2,7 +2,7 @@ import pygame
 from pygame.time import Clock
 
 from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN
-from game.entities.Entity import Entity
+from game.entities.domain.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
 from game.items.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
@@ -22,6 +22,12 @@ class Player(Entity):
 
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, HEALTHBAR_MAIN,
                              HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
+
+    def adjustDirection(self):
+        if self.destinationPosition:
+            self.moveTowards()
+        else:
+            self.direction.xy = [0, 0]
 
     def stopAutowalking(self):
         self.destinationPosition = None
@@ -48,10 +54,14 @@ class Player(Entity):
             self.setDestination(Vector2(sprite.rect.center), sprite)
             # self.inventory.addItem(sprite, self.selectedItem)
 
+    def drop(self) -> None:
+        pass
+
     def die(self):
         self.currentHealth = 0
         self.healthBar.update(self.currentHealth)
         self.remove(*self.groups())
+        self.drop()
         print("Game Over")
 
     def localUpdate(self):

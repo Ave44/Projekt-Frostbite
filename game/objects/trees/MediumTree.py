@@ -18,7 +18,8 @@ class MediumTree(CollisionObject, Flammable):
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 10, ToolType.AXE, image, colliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
+                                 midBottom, 10, ToolType.AXE, image, colliderRect)
         Flammable.__init__(self, clock)
 
         self.age = ageMs

@@ -9,7 +9,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 class Rabbit(PassiveMob):
 
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 clock: Clock, positionCenter: Vector2):
+                 clock: Clock, positionCenter: Vector2, homePositionCenter: Vector2 = None):
 
         entityData = {
             "speed": 2,
@@ -36,13 +36,13 @@ class Rabbit(PassiveMob):
         self.isRunningHome = False
         self.isInHome = False
         self.isHomeless = False
+        if not homePositionCenter:
+            self.isHomeless = True
 
     def drop(self) -> None:
         pass
 
     def runHome(self):
-        if self.isHomeless:
-            return
         self.setDestination(self.homePosition, None)
         self.isRunningHome = True
 
@@ -55,24 +55,16 @@ class Rabbit(PassiveMob):
         self.add(self.visibleSprites)
         self.isInHome = False
 
+    def getDamage(self, amount: int) -> None:
+        self.runHome()
+        super().getDamage(amount)
+
     def localUpdate(self):
-        if self.isInHome:
-            return
-
         if self.isHomeless:
-            PassiveMob.localUpdate(self)
-            return
-
-        if self.state == State.DAMAGED and not self.isHomeless:
-            self.runHome()
-            return
-
-        if self.rect.midbottom == self.homePosition and self.isRunningHome and not self.isHomeless:
+            super().localUpdate()
+        elif self.rect.midbottom == self.homePosition and self.isRunningHome and not self.isHomeless:
             self.hide()
-            return
-
-        if self.destinationPosition:
+        elif self.destinationPosition:
             self.move()
-            return
-
-        PassiveMob.localUpdate(self)
+        else:
+            super().localUpdate()

@@ -25,12 +25,12 @@ class RabbitHole(Object):
         self.spawnRabbit()
 
     def spawnRabbit(self):
-        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.clock,
-                           Vector2(self.rect.centerx, self.rect.centery))
+        pos = Vector2(self.rect.centerx, self.rect.centery)
+        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.clock, pos, pos)
         self.rabbits.append(newRabbit)
         self.daysFromRabbitsChange = 0
 
-    def deleteDeadRabbit(self):
+    def deleteDeadRabbits(self):
         newRabbits = list(filter(lambda rabbit: rabbit.currentHealth > 0, self.rabbits))
         if len(self.rabbits) != len(newRabbits):
             self.daysFromRabbitsChange = 0
@@ -50,14 +50,14 @@ class RabbitHole(Object):
                 rabbit.runHome()
 
     def drop(self) -> None:
-        self.deleteDeadRabbit()
+        self.deleteDeadRabbits()
         self.releaseRabbits(True)
 
     def interact(self) -> None:
         print("interacted with rabbit hole")
 
     def onNewDay(self):
-        self.deleteDeadRabbit()
+        self.deleteDeadRabbits()
         self.releaseRabbits()
 
         if len(self.rabbits) >= 3:
@@ -70,5 +70,5 @@ class RabbitHole(Object):
         self.spawnRabbit()
 
     def onEvening(self):
-        self.deleteDeadRabbit()
+        self.deleteDeadRabbits()
         self.hideRabbits()

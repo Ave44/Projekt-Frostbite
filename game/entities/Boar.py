@@ -3,6 +3,7 @@ from pygame.time import Clock
 
 from game.entities.domain.AggressiveMob import AggressiveMob
 from game.items.BigMeat import BigMeat
+from game.items.BoarFang import BoarFang
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
@@ -40,3 +41,4 @@ class Boar(AggressiveMob):
 
     def drop(self) -> None:
         BigMeat(self.visibleSprites, self.rect.center)
+        BoarFang(self.visibleSprites, self.rect.center)

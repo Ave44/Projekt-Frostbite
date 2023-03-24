@@ -2,6 +2,7 @@ from pygame import Vector2
 from pygame.time import Clock
 
 from game.entities.domain.AggressiveMob import AggressiveMob
+from game.items.BigMeat import BigMeat
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
@@ -38,4 +39,4 @@ class Boar(AggressiveMob):
         pass
 
     def drop(self) -> None:
-        pass
+        BigMeat(self.visibleSprites, self.rect.center)

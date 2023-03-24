@@ -4,7 +4,7 @@ from pygame.time import Clock
 from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN
 from game.entities.domain.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
-from game.items.Item import Item
+from game.items.domain.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 from game.ui.Bar import Bar
 from pygame.math import Vector2

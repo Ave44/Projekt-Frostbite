@@ -7,7 +7,6 @@ from config import *
 from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
-from game.entities.domain.AggressiveMob import AggressiveMob
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit
@@ -16,7 +15,7 @@ from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-from game.items.Item import Item
+from game.items.domain.Item import Item
 from game.items.Sword import Sword
 from gameInitialization.GenerateMap import generateMap
 
@@ -32,7 +31,7 @@ class Game:
 
         self.tick = 0
 
-        self.map = self.createMap(512)
+        self.map = self.createMap(100)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)

@@ -62,7 +62,7 @@ class Rabbit(PassiveMob):
     def localUpdate(self):
         if self.isHomeless:
             super().localUpdate()
-        elif self.rect.midbottom == self.homePosition and self.isRunningHome and not self.isHomeless:
+        elif self.rect.midbottom == self.homePosition and self.isRunningHome:
             self.hide()
         elif self.destinationPosition:
             self.move()

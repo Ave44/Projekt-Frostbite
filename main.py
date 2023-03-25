@@ -1,16 +1,7 @@
-import json
-
 from pygame import mixer
 
 from config import *
-from game.Game import Game
 from menu.MainMenu import MainMenu
-
-# loading savefile
-# (Later will be replaced with "load all savefile names", then only selected savefile will be loaded)
-fileSave = open("./filesave.json")
-saveData = json.load(fileSave)
-fileSave.close()
 
 # Program initialization
 pygame.init()
@@ -24,6 +15,5 @@ mixer.init()
 gameRunning = True
 
 if gameRunning:
-    game = Game(screen, saveData)
-    menu = MainMenu(screen, game.play)
+    menu = MainMenu(screen)
     menu.mainMenu()

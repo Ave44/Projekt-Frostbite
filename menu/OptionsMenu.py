@@ -1,5 +1,5 @@
 from config import FONT_MENU_COLOR
-from game.menu.Menu import Menu
+from menu.Menu import Menu
 from game.ui.general.Button import Button
 
 
@@ -12,10 +12,10 @@ class OptionsMenu(Menu):
         self.createBackground()
         menuText = self.font.render("OPTIONS", True, FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(640, 100))
-        back_button = Button(pos=(640, 650),
+        backButton = Button(pos=(640, 650),
                              textInput="BACK",
                              font=self.menuOptionFont,
                              action=self.backAction)
-        menuButtons = [back_button]
+        menuButtons = [backButton]
 
         self.menuLoop([[menuText, menuRect]], menuButtons)

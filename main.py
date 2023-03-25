@@ -4,7 +4,7 @@ from pygame import mixer
 
 from config import *
 from game.Game import Game
-from game.menu.MainMenu import MainMenu
+from menu.MainMenu import MainMenu
 
 # loading savefile
 # (Later will be replaced with "load all savefile names", then only selected savefile will be loaded)

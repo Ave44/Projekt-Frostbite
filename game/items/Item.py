@@ -11,8 +11,8 @@ class Item(pygame.sprite.Sprite):
         self.spriteGroup = sprite_group
         self.id = shortuuid.uuid()
         self.name = "Item without name"
-        self.image = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png")
-        self.icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png")
+        self.image = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png").convert_alpha()
+        self.icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png").convert_alpha()
         self.rect = self.image.get_rect(center=center)
 
     def drop(self, position: Vector2()) -> None:

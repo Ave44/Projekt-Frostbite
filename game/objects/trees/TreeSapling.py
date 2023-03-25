@@ -15,7 +15,7 @@ class TreeSapling(CollisionObject):
     _LIFESPAN = 20000
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/sapling.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/sapling.png").convert_alpha()
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image, colliderRect)

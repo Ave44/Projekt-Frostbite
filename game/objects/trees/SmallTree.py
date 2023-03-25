@@ -15,7 +15,7 @@ from game.objects.trees.MediumTree import MediumTree
 class SmallTree(CollisionObject, Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group,
                  midBottom: Vector2, clock: Clock, ageMs: int = 0):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/smallTree.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/smallTree.png").convert_alpha()
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 

@@ -40,7 +40,7 @@ def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable
     for biom in os.listdir(f"./graphics/tiles/{subfolderName}"):
         for imageFile in os.listdir(f"./graphics/tiles/{subfolderName}/{biom}"):
             name = imageFile[:-4]
-            image = pygame.image.load(f"./graphics/tiles/{subfolderName}/{biom}/{imageFile}")
+            image = pygame.image.load(f"./graphics/tiles/{subfolderName}/{biom}/{imageFile}").convert()
             imageRaw = pygame.surfarray.array3d(image)
             tilesData[name] = {"image": image, "imageRawMatrix": imageRaw, "walkable": isWalkable}
         tileId += 1
@@ -365,7 +365,7 @@ def getChunksImages(dataMatrix, progresNotiftFunc: callable):
             chunkImage = getChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
             chunkSurface = pygame.surface.Surface((chunkImageWidth, chunkImageHeight))
             pygame.surfarray.blit_array(chunkSurface, chunkImage)
-            chunksImages[chunkIndexY][chunkIndexX] = chunkSurface
+            chunksImages[chunkIndexY][chunkIndexX] = chunkSurface.convert()
 
     return chunksImages
 

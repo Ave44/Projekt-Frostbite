@@ -14,7 +14,7 @@ from game.objects.trees.BurntTree import BurntTree
 class Snag(CollisionObject, Flammable):
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock, age: int = 0):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/snag.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/snag.png").convert_alpha()
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 

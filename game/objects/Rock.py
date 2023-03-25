@@ -11,7 +11,7 @@ from game.objects.domain.CollisionObject import CollisionObject
 
 class Rock(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rock.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rock.png").convert_alpha()
         colliderRect = Rect((0, 0), (10, 10))
         colliderRect.midbottom = midBottom
 

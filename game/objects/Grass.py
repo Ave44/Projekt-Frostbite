@@ -10,7 +10,7 @@ from game.objects.domain.Object import Object
 
 class Grass(Object):
     def __init__(self, visibleGroup: Group, midBottom: Vector2):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/grass.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/grass.png").convert_alpha()
         super().__init__(visibleGroup,
                          midBottom, 1, ToolType.SHOVEL, image)
 

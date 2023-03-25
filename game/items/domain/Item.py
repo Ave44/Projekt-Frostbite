@@ -32,8 +32,8 @@ class Item(pygame.sprite.Sprite):
         self.rect.center = position
         self.show()
 
-    def onLeftClickAction(self, entity):
-        entity.inventory.addItem(self, entity.selectedItem)
+    def pickUp(self, player):
+        player.inventory.addItem(self, player.selectedItem)
 
     def show(self):
         self.add(self.visibleSprites)

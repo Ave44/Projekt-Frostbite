@@ -34,7 +34,7 @@ class Game:
 
         self.tick = 0
         
-        self.map = self.createMap(164)
+        self.map = self.createMap(564)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -163,6 +163,7 @@ class Game:
 
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
+        f =[]
         while True:
             # self.screen.fill('black')
             self.InputManager.handleInput()
@@ -170,7 +171,7 @@ class Game:
             self.entitiesUpdate()
 
             self.visibleSprites.update()
-            self.handleTick()
+            # self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
             self.UiSprites.customDraw()
@@ -180,5 +181,9 @@ class Game:
             text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}, {self.clock.get_fps()}"
             self.debug(text)
 
+            f.append(self.clock.get_fps())
+            if(len(f)) >= 1000:
+                print(sum(f)/len(f))
+                f = []
             pygame.display.update()
             self.clock.tick()

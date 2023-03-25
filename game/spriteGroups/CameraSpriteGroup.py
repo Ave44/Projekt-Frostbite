@@ -29,8 +29,6 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
         for sprite in self.sprites():
             spritePosition = sprite.rect.topleft - self.offset
-            # if sprite.rect.right > self.offset.x - self.halfWindowWidth and sprite.rect.left < self.offset.x + WINDOW_WIDTH:
-                # if sprite.rect.bottom > self.offset.y and sprite.rect.top < self.offset.y + WINDOW_HEIGHT:
             self.displaySurface.blit(sprite.image, spritePosition)
 
         # Displaying radiuses is causing a lot of lag use only to debug

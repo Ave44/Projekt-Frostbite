@@ -66,7 +66,7 @@ def generateMap(mapSize: int, progresNotiftFunc: callable):
     dataMatrix = populateNameMatrixWithData(namesMatrix) # ~0s dla 564x564
 
     probabilities = {"tree": 0.2, "rock": 0.1, "grass": 0.8}
-    objects = GenerateObjects(idMatrix, probabilities, progresNotiftFunc)
+    objects = {'trees':[],'rocks':[],'grasses':[]}#GenerateObjects(idMatrix, probabilities, progresNotiftFunc)
 
     chunks = getChunksImages(dataMatrix, progresNotiftFunc) # 120s dla 564x564
     progresNotiftFunc("Generating chunks - 100%")
@@ -362,9 +362,10 @@ def getChunksImages(dataMatrix, progresNotiftFunc: callable):
     for chunkIndexY in range(chunksAmountY):
         progresNotiftFunc(f"Generating chunks - {chunkIndexY*100//chunksAmountY}%")
         for chunkIndexX in range(chunksAmountX):
-            chunkImage = getChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
+            # chunkImage = getChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
             chunkSurface = pygame.surface.Surface((chunkImageWidth, chunkImageHeight))
-            pygame.surfarray.blit_array(chunkSurface, chunkImage)
+            blitChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkSurface)
+            # pygame.surfarray.blit_array(chunkSurface, chunkImage)
             chunksImages[chunkIndexY][chunkIndexX] = chunkSurface.convert()
 
     return chunksImages
@@ -397,3 +398,22 @@ def getChunkImage(dataMatrix, dataMatrixSize, chunkIndexX, chunkIndexY, tilesOnC
     # chunkImage[-1:, :] = [255, 255, 0]
     # chunkImage[:, -1:] = [0, 255, 0]
     return chunkImage
+
+def blitChunkImage(dataMatrix, dataMatrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, surface):
+    tileIndexOffsetX = chunkIndexX * tilesOnChunkX
+    tileIndexOffsetY = chunkIndexY * tilesOnChunkY
+
+    for tileOnChunkIndexY in range(tilesOnChunkY):
+        tileIndexY = tileOnChunkIndexY + tileIndexOffsetY
+
+        if dataMatrixSize > tileIndexY:
+            yStart = tileOnChunkIndexY * TILE_SIZE
+
+            for tileOnChunkIndexX in range(tilesOnChunkX):
+                tileIndexX = tileOnChunkIndexX + tileIndexOffsetX
+
+                if dataMatrixSize > tileIndexX:
+                    xStart = tileOnChunkIndexX * TILE_SIZE
+
+                    tileImage = dataMatrix[tileIndexY][tileIndexX]['image']
+                    surface.blit(tileImage, (xStart, yStart))

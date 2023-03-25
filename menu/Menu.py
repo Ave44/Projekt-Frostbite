@@ -23,6 +23,9 @@ class Menu:
             for y in range(0, screenHeight, imageHeight):
                 self.screen.blit(background, (x, y))
 
+    def createButtons(self) -> list[Button]:
+        pass
+
     def quitGame(self) -> None:
         pygame.quit()
         sys.exit()

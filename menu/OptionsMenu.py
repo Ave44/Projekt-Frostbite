@@ -8,14 +8,18 @@ class OptionsMenu(Menu):
         super().__init__(screen)
         self.backAction = backAction
 
+    def createButtons(self) -> list[Button]:
+        backButton = Button(pos=(640, 650),
+                            textInput="BACK",
+                            font=self.menuOptionFont,
+                            action=self.backAction)
+        return [backButton]
+
     def options(self) -> None:
         self.createBackground()
         menuText = self.font.render("OPTIONS", True, FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(640, 100))
-        backButton = Button(pos=(640, 650),
-                             textInput="BACK",
-                             font=self.menuOptionFont,
-                             action=self.backAction)
-        menuButtons = [backButton]
+
+        menuButtons = self.createButtons()
 
         self.menuLoop([[menuText, menuRect]], menuButtons)

@@ -12,10 +12,7 @@ class MainMenu(Menu):
         self.optionsMenu = OptionsMenu(screen, self.mainMenu)
         self.createGameMenu = CreateGame(screen, self.mainMenu)
 
-    def mainMenu(self) -> None:
-        self.createBackground()
-        menuText = self.font.render("MAIN MENU", True, FONT_MENU_COLOR)
-        menuRect = menuText.get_rect(center=(640, 100))
+    def createButtons(self) -> list[Button]:
         playButton = Button(pos=(640, 250),
                             textInput="PLAY",
                             font=self.menuOptionFont,
@@ -32,6 +29,12 @@ class MainMenu(Menu):
                             textInput="QUIT",
                             font=self.menuOptionFont,
                             action=self.quitGame)
-        menuButtons = [playButton, optionsButton, quitButton, createGameButton]
+        return [playButton, optionsButton, quitButton, createGameButton]
+
+    def mainMenu(self) -> None:
+        self.createBackground()
+        menuText = self.font.render("MAIN MENU", True, FONT_MENU_COLOR)
+        menuRect = menuText.get_rect(center=(640, 100))
+        menuButtons = self.createButtons()
 
         self.menuLoop([[menuText, menuRect]], menuButtons)

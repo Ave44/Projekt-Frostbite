@@ -9,7 +9,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 class Rabbit(PassiveMob):
 
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 clock: Clock, positionCenter: Vector2, homePositionCenter: Vector2 = None):
+                 clock: Clock, positionCenter: Vector2, home = None):
 
         entityData = {
             "speed": 2,
@@ -32,12 +32,15 @@ class Rabbit(PassiveMob):
             "path_to_image_right_heal": "./graphics/entities/rabbit/rabbit_right_heal.png"
         }
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 2000, 500, 1500)
-        self.homePosition = positionCenter
+        self.home = home
         self.isRunningHome = False
         self.isInHome = False
         self.isHomeless = False
-        if not homePositionCenter:
+        if not home:
             self.isHomeless = True
+            self.homePosition = None
+        else:
+            self.homePosition = Vector2(self.home.rect.centerx, self.home.rect.centery)
 
     def drop(self) -> None:
         pass
@@ -58,6 +61,10 @@ class Rabbit(PassiveMob):
     def getDamage(self, amount: int) -> None:
         self.runHome()
         super().getDamage(amount)
+
+    def die(self):
+        self.home.rabbits.remove(self)
+        super().die()
 
     def localUpdate(self):
         if self.isHomeless:

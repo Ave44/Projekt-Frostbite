@@ -56,11 +56,11 @@ def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[list[dict['
 
 def generateMap(mapSize: int, progresNotifFunc: callable):
     progresNotifFunc("Generating map")
-    idMatrix = generateIdMatrix(mapSize) # 29s dla 564x564
+    idMatrix = generateIdMatrix(mapSize)
 
-    namesMatrix = replaceIdWithNames(idMatrix) # ~0s dla 564x564
+    namesMatrix = replaceIdWithNames(idMatrix)
 
-    dataMatrix = populateNameMatrixWithData(namesMatrix) # ~0s dla 564x564
+    dataMatrix = populateNameMatrixWithData(namesMatrix)
 
     probabilities = {"tree": 0.2, "rock": 0.1, "grass": 0.8}
     objects = GenerateObjects(idMatrix, probabilities, progresNotifFunc)

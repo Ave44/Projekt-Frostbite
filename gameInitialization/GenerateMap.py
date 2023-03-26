@@ -53,7 +53,6 @@ def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[list[dict['
     
     return dataMatrix
 
-
 def generateMap(mapSize: int, progresNotifFunc: callable):
     progresNotifFunc("Generating map")
     idMatrix = generateIdMatrix(mapSize)

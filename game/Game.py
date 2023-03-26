@@ -4,10 +4,13 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
-from game.entities.Enemy import Enemy
+from game.entities.Boar import Boar
+from game.entities.Bomb import Bomb
+from game.entities.Deer import Deer
+from game.entities.domain.AggressiveMob import AggressiveMob
 from game.entities.Player import Player
 from game.InputManager import InputManager
-from game.objects.trees.TreeSapling import TreeSapling
+from game.entities.Rabbit import Rabbit
 from game.objects.trees.SmallTree import SmallTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.LargeTree import LargeTree
@@ -20,6 +23,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
+from game.DayCycle import DayCycle
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -27,6 +31,7 @@ class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
+        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen)
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
@@ -44,7 +49,7 @@ class Game:
                              self.obstacleSprites,
                              saveData["player_data"],
                              inventory, self.clock)
-        
+
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
                 for x in range(len(self.map)):
@@ -61,7 +66,9 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        TreeSapling(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
+        Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -116,60 +123,33 @@ class Game:
     def handleTick(self):
         self.tick = self.tick + 1
         if self.tick == 1000:
-            self.spawnEnemy()
+            self.spawnBomb()
         if self.tick == 2000:
             self.tick = 0
-            self.spawnEnemy()
+            self.spawnBomb()
             self.player.heal(20)
 
-    def spawnEnemy(self):
+    def spawnBomb(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
-        position = [self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y]
-        Enemy(self.visibleSprites, self.obstacleSprites, {
-            "speed": 3,
-            "maxHealth": 60,
-            "currentHealth": 60,
-            "damage": 20,
-            "sightRange": 400,
-            "attackRange": 20,
-            "position_center": position,
-            "path_to_image_up": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right": "./graphics/entities/enemy/enemy.png",
-
-            "path_to_image_up_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right_heal": "./graphics/entities/enemy/enemy.png",
-
-            "path_to_image_up_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right_damage": "./graphics/entities/enemy/enemy.png",
-        }, self.clock)
+        position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
+        Bomb(self.visibleSprites, self.obstacleSprites, position, self.clock)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)
         mixer.music.play(-1)
         mixer.music.set_volume(MAIN_THEME_VOLUME)
 
-    def entitiesUpdate(self):
-        for entity in self.visibleSprites.entities:
-            if type(entity) is Enemy:
-                entity.searchForTarget(self.visibleSprites.entities)
-
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.InputManager.handleInput()
 
-            self.entitiesUpdate()
-
             self.visibleSprites.update()
             # self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
+
+            self.dayCycle.updateDayCycle()
 
             self.UiSprites.customDraw()
 

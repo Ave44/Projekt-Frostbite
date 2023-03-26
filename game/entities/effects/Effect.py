@@ -4,7 +4,7 @@ from pygame.time import Clock
 
 
 class Effect(ABC):
-    from game.entities import Entity
+    from game.entities.domain import Entity
 
     def __init__(self, durationMs: int, timeBetweenActionsMs: int, target: Entity, clock: Clock):
         self.timeLeft = durationMs

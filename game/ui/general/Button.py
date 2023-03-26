@@ -1,5 +1,7 @@
+from config import BASE_BUTTON_COLOR, WHITE
+
 class Button:
-    def __init__(self, pos, textInput, font, baseColor, hoveringColor, action, image=None):
+    def __init__(self, pos, textInput, font, action, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, image=None):
         self.image = image
         self.x_pos = pos[0]
         self.y_pos = pos[1]

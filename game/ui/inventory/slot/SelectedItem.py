@@ -27,7 +27,7 @@ class SelectedItem(pygame.sprite.Sprite):
         self.item.drop(self.player.rect.midbottom)
         self.removeItem()
 
-    def action(self, entity):
+    def onLeftClickAction(self, entity):
         self.drop()
 
     def handleMouseRightClick(self, mousePos):

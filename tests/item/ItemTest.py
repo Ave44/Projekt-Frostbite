@@ -3,7 +3,7 @@ import unittest
 import pygame.sprite
 from pygame import Vector2
 
-from game.items.Item import Item
+from game.items.domain.Item import Item
 
 
 class ItemTest(unittest.TestCase):

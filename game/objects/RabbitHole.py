@@ -4,7 +4,7 @@ from pygame.time import Clock
 
 from config import ROOT_PATH
 from game.entities.Rabbit import Rabbit
-from game.items.ToolType import ToolType
+from game.items.domain.ToolType import ToolType
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites

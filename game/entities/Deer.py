@@ -3,6 +3,8 @@ from pygame.time import Clock
 
 from game.entities.domain.PassiveMob import PassiveMob
 from game.entities.domain.State import State
+from game.items.DeerAntlers import DeerAntlers
+from game.items.Leather import Leather
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
@@ -33,4 +35,5 @@ class Deer(PassiveMob):
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 4000, 1000, 2000)
 
     def drop(self) -> None:
-        pass
+        Leather(self.visibleSprites, self.rect.center)
+        DeerAntlers(self.visibleSprites, self.rect.center)

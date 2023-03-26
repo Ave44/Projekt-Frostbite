@@ -4,14 +4,13 @@ from perlin_noise import PerlinNoise
 import random
 from skimage.measure import label
 import numpy as np
-import math
-from config import TILE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH, BIOMES_ID
+from math import sqrt
+from config import BIOMES_ID
 from gameInitialization.GenerateObjects import GenerateObjects
 
-# biomesId = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
-
-def replaceIdWithNames(idMatrix):
-    namesMatrix = [[BIOMES_ID[idMatrix[row][column]] for column in range(len(idMatrix))] for row in range(len(idMatrix))]
+def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
+    matrixSize = len(idMatrix)
+    namesMatrix = [[BIOMES_ID[idMatrix[row][column]] for column in range(matrixSize)] for row in range(matrixSize)]
 
     # for y in range(1, len(idMatrix) - 1):
     #     for x in range(1, len(idMatrix) - 1):
@@ -23,12 +22,11 @@ def replaceIdWithNames(idMatrix):
 
     return namesMatrix
 
-def checkForBorder(idMatrix, namesMatrix, x: int, y: int, xOffset: int, yOffset: int, borderTag: str):
+def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str) -> None:
     if idMatrix[x + xOffset][y + yOffset] == 0:
         namesMatrix[x][y] = namesMatrix[x][y] + borderTag
 
-# returns {name: {image: pygame.image, walkable: bool}} loading all images in advance makes the code faster
-def loadTilesData():
+def loadTilesData() -> dict['image': pygame.image, 'walkable': bool]:
     tilesData = {}
     tileId = 0
     loadTilesByType(tilesData, tileId, "walkable", True)
@@ -36,16 +34,15 @@ def loadTilesData():
 
     return tilesData
 
-def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable: bool):
+def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable: bool) -> None:
     for biom in os.listdir(f"./graphics/tiles/{subfolderName}"):
         for imageFile in os.listdir(f"./graphics/tiles/{subfolderName}/{biom}"):
             name = imageFile[:-4]
             image = pygame.image.load(f"./graphics/tiles/{subfolderName}/{biom}/{imageFile}").convert()
-            imageRaw = pygame.surfarray.array3d(image)
-            tilesData[name] = {"image": image, "imageRawMatrix": imageRaw, "walkable": isWalkable}
+            tilesData[name] = {"image": image, "walkable": isWalkable}
         tileId += 1
 
-def populateNameMatrixWithData(namesMatrix):
+def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[list[dict['image': pygame.image, 'walkable': bool]]]:
     tilesData = loadTilesData()
     mapSize = len(namesMatrix)
     dataMatrix = [[None for x in range(mapSize)] for y in range(mapSize)]
@@ -57,8 +54,8 @@ def populateNameMatrixWithData(namesMatrix):
     return dataMatrix
 
 
-def generateMap(mapSize: int, progresNotiftFunc: callable):
-    progresNotiftFunc("Generating map")
+def generateMap(mapSize: int, progresNotifFunc: callable):
+    progresNotifFunc("Generating map")
     idMatrix = generateIdMatrix(mapSize) # 29s dla 564x564
 
     namesMatrix = replaceIdWithNames(idMatrix) # ~0s dla 564x564
@@ -66,12 +63,9 @@ def generateMap(mapSize: int, progresNotiftFunc: callable):
     dataMatrix = populateNameMatrixWithData(namesMatrix) # ~0s dla 564x564
 
     probabilities = {"tree": 0.2, "rock": 0.1, "grass": 0.8}
-    objects = {'trees':[],'rocks':[],'grasses':[]}#GenerateObjects(idMatrix, probabilities, progresNotiftFunc)
+    objects = GenerateObjects(idMatrix, probabilities, progresNotifFunc)
 
-    chunks = getChunksImages(dataMatrix, progresNotiftFunc) # 120s dla 564x564
-    progresNotiftFunc("Generating chunks - 100%")
-
-    return dataMatrix, chunks, objects
+    return dataMatrix, objects
 
 def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noise1 = PerlinNoise(octaves=5, seed=seed)
@@ -262,7 +256,7 @@ def findClosestPoints(pointsList1, pointsList2):
         for index2 in range(list2Len):
             p1 = pointsList1[index1]
             p2 = pointsList2[index2]
-            distance = math.sqrt((p1['x'] - p2['x'])**2 + (p1['y'] - p2['y'])**2)
+            distance = sqrt((p1['x'] - p2['x'])**2 + (p1['y'] - p2['y'])**2)
             if minDistance > distance:
                 minDistance = distance
                 point1 = p1
@@ -345,75 +339,3 @@ def createVerticalStep(matrix, point, val, rand1=random.random(), rand2=random.r
     matrix[point['y']][point['x'] + 1] = val
     if rand2 > 0.5:
         matrix[point['y']][point['x'] + 2] = val
-
-def getChunksImages(dataMatrix, progresNotiftFunc: callable):
-    matrixSize = len(dataMatrix)
-
-    tilesOnChunkX = math.ceil(WINDOW_WIDTH / TILE_SIZE)
-    tilesOnChunkY = math.ceil(WINDOW_HEIGHT / TILE_SIZE)
-
-    chunkImageWidth = tilesOnChunkX * TILE_SIZE
-    chunkImageHeight = tilesOnChunkY * TILE_SIZE
-
-    chunksAmountX = math.ceil(matrixSize * TILE_SIZE / chunkImageWidth)
-    chunksAmountY = math.ceil(matrixSize * TILE_SIZE / chunkImageHeight)
-
-    chunksImages = [[None for x in range(chunksAmountX)] for y in range(chunksAmountY)]
-    for chunkIndexY in range(chunksAmountY):
-        progresNotiftFunc(f"Generating chunks - {chunkIndexY*100//chunksAmountY}%")
-        for chunkIndexX in range(chunksAmountX):
-            # chunkImage = getChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight)
-            chunkSurface = pygame.surface.Surface((chunkImageWidth, chunkImageHeight))
-            blitChunkImage(dataMatrix, matrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkSurface)
-            # pygame.surfarray.blit_array(chunkSurface, chunkImage)
-            chunksImages[chunkIndexY][chunkIndexX] = chunkSurface.convert()
-
-    return chunksImages
-
-def getChunkImage(dataMatrix, dataMatrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, chunkImageWidth, chunkImageHeight):
-    chunkImage = np.zeros((chunkImageWidth, chunkImageHeight, 3), int)
-    tileIndexOffsetX = chunkIndexX * tilesOnChunkX
-    tileIndexOffsetY = chunkIndexY * tilesOnChunkY
-
-    for tileOnChunkIndexY in range(tilesOnChunkY):
-        tileIndexY = tileOnChunkIndexY + tileIndexOffsetY
-
-        if dataMatrixSize > tileIndexY:
-            yStart = tileOnChunkIndexY * TILE_SIZE
-            yEnd = yStart + TILE_SIZE
-
-            for tileOnChunkIndexX in range(tilesOnChunkX):
-                tileIndexX = tileOnChunkIndexX + tileIndexOffsetX
-
-                if dataMatrixSize > tileIndexX:
-                    xStart = tileOnChunkIndexX * TILE_SIZE
-                    xEnd = xStart + TILE_SIZE
-
-                    tileImage = dataMatrix[tileIndexY][tileIndexX]['imageRawMatrix']
-                    chunkImage[xStart:xEnd, yStart:yEnd] = tileImage
-
-    # chunk borders
-    # chunkImage[0:1, :] = [0, 0, 255]
-    # chunkImage[:, 0:1] = [255, 0, 0]
-    # chunkImage[-1:, :] = [255, 255, 0]
-    # chunkImage[:, -1:] = [0, 255, 0]
-    return chunkImage
-
-def blitChunkImage(dataMatrix, dataMatrixSize, chunkIndexX, chunkIndexY, tilesOnChunkX, tilesOnChunkY, surface):
-    tileIndexOffsetX = chunkIndexX * tilesOnChunkX
-    tileIndexOffsetY = chunkIndexY * tilesOnChunkY
-
-    for tileOnChunkIndexY in range(tilesOnChunkY):
-        tileIndexY = tileOnChunkIndexY + tileIndexOffsetY
-
-        if dataMatrixSize > tileIndexY:
-            yStart = tileOnChunkIndexY * TILE_SIZE
-
-            for tileOnChunkIndexX in range(tilesOnChunkX):
-                tileIndexX = tileOnChunkIndexX + tileIndexOffsetX
-
-                if dataMatrixSize > tileIndexX:
-                    xStart = tileOnChunkIndexX * TILE_SIZE
-
-                    tileImage = dataMatrix[tileIndexY][tileIndexX]['image']
-                    surface.blit(tileImage, (xStart, yStart))

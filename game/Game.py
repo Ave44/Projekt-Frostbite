@@ -34,7 +34,7 @@ class Game:
 
         self.tick = 0
         
-        self.map = self.createMap(564)
+        self.map = self.createMap(100)
 
         inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
         inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
@@ -70,7 +70,7 @@ class Game:
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
-        map, chunks, objects = generateMap(mapSize, print)
+        map, objects = generateMap(mapSize, print)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
@@ -82,7 +82,6 @@ class Game:
                 if not map[y][x]["walkable"]:
                     obstaclesMap[y][x] = tile
         self.visibleSprites.map = tilesMap
-        self.visibleSprites.chunks = chunks
         self.obstacleSprites.map = obstaclesMap
         self.createObjects(objects)
         return map
@@ -163,9 +162,7 @@ class Game:
 
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
-        f =[]
         while True:
-            # self.screen.fill('black')
             self.InputManager.handleInput()
 
             self.entitiesUpdate()
@@ -181,9 +178,5 @@ class Game:
             text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}, {self.clock.get_fps()}"
             self.debug(text)
 
-            f.append(self.clock.get_fps())
-            if(len(f)) >= 1000:
-                print(sum(f)/len(f))
-                f = []
             pygame.display.update()
             self.clock.tick()

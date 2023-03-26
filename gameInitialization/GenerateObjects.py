@@ -31,7 +31,7 @@ def GenerateObjects(idMatrix: list[list[int]], probabilities: dict, progresNotif
 
 def getBiomesCoordinatesDict(idMatrix: list[list[int]]) -> dict:
     matrixSize = len(idMatrix)
-    {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
+
     biomesCoordinatesDict = {}
     for _, value in BIOMES_ID.items():
         biomesCoordinatesDict[value] = []
@@ -47,7 +47,6 @@ def getBiomesCoordinatesDict(idMatrix: list[list[int]]) -> dict:
     return biomesCoordinatesDict
 
 def generateObjects(spawnObject: callable, probability: int, tiles: list[dict], objectsList: list[dict]) -> None:
-    # objectsList = []
     for tile in tiles:
         rand = random.random()
         while rand <= probability:

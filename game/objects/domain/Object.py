@@ -46,6 +46,5 @@ class Object(ABC, Sprite):
             self.currentDurability -= amount
 
     def destroy(self) -> None:
-        self.visibleGroup.remove(self)
-        self.obstaclesGroup.remove(self)
+        self.remove(*self.groups())
         self.drop()

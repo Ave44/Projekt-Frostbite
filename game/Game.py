@@ -18,6 +18,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Item import Item
 from game.items.Sword import Sword
+from game.DayCycle import DayCycle
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -25,6 +26,7 @@ class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
+        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen)
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
@@ -42,7 +44,7 @@ class Game:
                              self.obstacleSprites,
                              saveData["player_data"],
                              inventory, self.clock)
-        
+
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
                 for x in range(len(self.map)):
@@ -83,7 +85,7 @@ class Game:
                     obstaclesMap[y][x] = tile
         self.visibleSprites.map = tilesMap
         self.obstacleSprites.map = obstaclesMap
-        return map        
+        return map
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -118,6 +120,8 @@ class Game:
             self.visibleSprites.update()
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
+
+            self.dayCycle.updateDayCycle()
 
             self.UiSprites.customDraw()
 

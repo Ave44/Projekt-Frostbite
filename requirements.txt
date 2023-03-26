@@ -1,0 +1,5 @@
+pygame == 2.2.0
+shortuuid == 1.0.11
+perlin_noise == 1.12
+matplotlib
+scikit-image

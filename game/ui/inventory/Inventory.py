@@ -2,7 +2,7 @@ from pygame.math import Vector2
 
 from config import *
 from game.ui.inventory.slot.Slot import Slot
-from game.items.Item import Item
+from game.items.domain.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 
 
@@ -50,7 +50,7 @@ class Inventory(pygame.sprite.Sprite):
 
     def addItem(self, item: Item, selectedItem: SelectedItem) -> None:
         emptySlot: Slot | None = next(filter(lambda slot: (slot.isEmpty()), self.slotList), None)
-        item.removeFromSpriteGroup()
+        item.hide()
 
         if emptySlot:
             emptySlot.addItem(item)

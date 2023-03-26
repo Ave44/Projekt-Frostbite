@@ -4,7 +4,7 @@ from pygame.sprite import Group
 
 from config import ROOT_PATH
 from game.items.Sword import Sword
-from game.items.ToolType import ToolType
+from game.items.domain.ToolType import ToolType
 from game.objects.domain.Object import Object
 
 

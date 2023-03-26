@@ -2,6 +2,7 @@ from pygame import Vector2
 from pygame.time import Clock
 
 from game.entities.domain.PassiveMob import PassiveMob
+from game.items.SmallMeat import SmallMeat
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
@@ -32,4 +33,4 @@ class Rabbit(PassiveMob):
         super().__init__(visibleSprites, obstacleSprites, clock, entityData, 200, 2000, 500, 1500)
 
     def drop(self) -> None:
-        pass
+        SmallMeat(self.visibleSprites, self.rect.center)

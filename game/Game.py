@@ -153,7 +153,7 @@ class Game:
             self.InputManager.handleInput()
 
             self.visibleSprites.update()
-            # self.handleTick()
+            self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
             self.dayCycle.updateDayCycle()

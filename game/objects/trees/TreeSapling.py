@@ -4,10 +4,9 @@ from pygame.sprite import Group
 from pygame.time import Clock
 
 from config import ROOT_PATH
-from game.items.Item import Item
-from game.items.ToolType import ToolType
+from game.items.domain.Item import Item
+from game.items.domain.ToolType import ToolType
 from game.objects.domain.CollisionObject import CollisionObject
-from game.objects.domain.Object import Object
 from game.objects.trees.SmallTree import SmallTree
 
 

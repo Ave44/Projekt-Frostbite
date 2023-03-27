@@ -2,15 +2,16 @@ import pygame
 
 from config import ROOT_PATH
 from pygame.math import Vector2
-from game.items.Item import Item
+from game.items.domain.Item import Item
+from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class Sword(Item):
-    def __init__(self, groups: pygame.sprite.Group, center: Vector2()):
-        super().__init__(groups, center)
-        self.name = "Sword"
-        self.image = pygame.image.load(f"{ROOT_PATH}/graphics/items/sword.png").convert_alpha()
-        self.icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/sword.png").convert_alpha()
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2):
+        name = "Sword"
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/items/sword.png").convert_alpha()
+        icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/sword.png").convert_alpha()
+        super().__init__(visibleSprites, center, name, image, icon)
         self.damage = 10
         self.durability = 100
 

@@ -4,8 +4,8 @@ from pygame.math import Vector2
 from pygame.sprite import Group
 
 from config import ROOT_PATH
-from game.items.Item import Item
-from game.items.ToolType import ToolType
+from game.items.domain.Item import Item
+from game.items.domain.ToolType import ToolType
 from game.objects.domain.CollisionObject import CollisionObject
 
 

@@ -7,7 +7,7 @@ from game.entities.Player import Player
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.Slot import Slot
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
-from game.items.Item import Item
+from game.items.domain.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 
 

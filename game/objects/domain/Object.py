@@ -4,7 +4,7 @@ from pygame.math import Vector2
 from pygame.sprite import Group, Sprite
 from pygame.surface import Surface
 
-from game.items.ToolType import ToolType
+from game.items.domain.ToolType import ToolType
 
 
 class Object(ABC, Sprite):
@@ -46,6 +46,5 @@ class Object(ABC, Sprite):
             self.currentDurability -= amount
 
     def destroy(self) -> None:
-        self.visibleGroup.remove(self)
-        self.obstaclesGroup.remove(self)
+        self.remove(*self.groups())
         self.drop()

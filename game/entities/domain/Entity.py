@@ -123,7 +123,7 @@ class Entity(Sprite, ABC):
         if Vector2(self.rect.midbottom) == self.destinationPosition:
             self.destinationPosition = None
             if self.destinationTarget:
-                self.destinationTarget.action(self)
+                self.destinationTarget.onLeftClickAction(self)
                 self.destinationTarget = None
         else:
             xOffset = self.destinationPosition.x - self.rect.centerx

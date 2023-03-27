@@ -7,10 +7,10 @@ from config import *
 from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
-from game.entities.domain.AggressiveMob import AggressiveMob
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit
+from game.objects.RabbitHole import RabbitHole
 from game.objects.trees.SmallTree import SmallTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.LargeTree import LargeTree
@@ -21,7 +21,7 @@ from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-from game.items.Item import Item
+from game.items.domain.Item import Item
 from game.items.Sword import Sword
 from game.DayCycle import DayCycle
 from gameInitialization.GenerateMap import generateMap
@@ -36,6 +36,7 @@ class Game:
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
         self.UiSprites = UiSpriteGroup()
+        self.timeFromLastChange = 0
 
         self.tick = 0
 
@@ -66,9 +67,10 @@ class Game:
         self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
-        Boar(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        # Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        # Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        # Boar(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
+        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -143,6 +145,11 @@ class Game:
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
         while True:
+            self.timeFromLastChange += self.clock.get_time()
+            if 5000 > self.timeFromLastChange > 3000:
+                self.rabbitHole.onEvening()
+            if self.timeFromLastChange > 5000:
+                self.rabbitHole.onNewDay()
             self.InputManager.handleInput()
 
             self.visibleSprites.update()

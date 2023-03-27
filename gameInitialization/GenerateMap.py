@@ -6,7 +6,7 @@ from skimage.measure import label
 import numpy as np
 from math import sqrt
 from config import BIOMES_ID
-from gameInitialization.GenerateObjects import generateObjects
+from gameInitialization.GenerateObjects import GenerateObjects
 
 def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
     matrixSize = len(idMatrix)
@@ -62,7 +62,7 @@ def generateMap(mapSize: int, progresNotifFunc: callable):
     dataMatrix = populateNameMatrixWithData(namesMatrix)
 
     probabilities = {"tree": 0.2, "rock": 0.1, "grass": 0.8}
-    objects = generateObjects(idMatrix, probabilities, progresNotifFunc)
+    objects = GenerateObjects(idMatrix, probabilities, progresNotifFunc).objects
 
     return dataMatrix, objects
 

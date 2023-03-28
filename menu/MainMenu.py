@@ -5,7 +5,7 @@ from game.Game import Game
 from menu.CreateGame import CreateGame
 from menu.Menu import Menu
 from menu.OptionsMenu import OptionsMenu
-from game.ui.general.Button import Button
+from menu.general.Button import Button
 
 
 class MainMenu(Menu):

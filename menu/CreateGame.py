@@ -1,6 +1,6 @@
 from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR
 from menu.Menu import Menu
-from game.ui.general.Button import Button
+from menu.general.Button import Button
 
 
 class CreateGame(Menu):
@@ -12,13 +12,13 @@ class CreateGame(Menu):
         self.objectsQuantity = ["1", "2", "3", "4", "5"]
         self.objectsQuantityIndex = 2
 
-    def increment_map_size(self) -> None:
+    def incrementMapSize(self) -> None:
         if self.mapSizesIndex == 4:
             return
         self.mapSizesIndex += 1
         self.initiateCreateGame()
 
-    def decrement_map_size(self) -> None:
+    def decrementMapSize(self) -> None:
         if self.mapSizesIndex == 0:
             return
         self.mapSizesIndex -= 1
@@ -40,14 +40,15 @@ class CreateGame(Menu):
         return
 
     def createButtons(self) -> list[Button]:
-        mapSizeButtonIncrement = Button(pos=(1040, 250),
+        mapSizeButtonIncrement = Button(pos=(1200, 250),
                                         textInput="=>",
                                         font=self.menuOptionFont,
-                                        action=self.increment_map_size)
-        mapSizeButtonDecrement = Button(pos=(240, 250),
+                                        action=self.incrementMapSize)
+
+        mapSizeButtonDecrement = Button(pos=(80, 250),
                                         textInput="<=",
                                         font=self.menuOptionFont,
-                                        action=self.decrement_map_size)
+                                        action=self.decrementMapSize)
 
         objectsQuantityButtonIncrement = Button(pos=(1200, 350),
                                                 textInput="=>",

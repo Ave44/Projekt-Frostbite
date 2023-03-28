@@ -3,7 +3,7 @@ import sys
 import pygame
 
 from config import BUTTON_FONT
-from game.ui.general import Button
+from menu.general import Button
 
 
 class Menu:

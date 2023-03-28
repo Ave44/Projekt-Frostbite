@@ -8,7 +8,6 @@ from game.items.domain.ToolType import ToolType
 
 
 class Object(ABC, Sprite):
-
     def __init__(self, visibleGroup: Group,
                  midBottom: Vector2, durability: int,
                  toolType: ToolType,

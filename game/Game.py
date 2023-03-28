@@ -130,7 +130,7 @@ class Game:
     def loadGrasses(self, grassesData):
         grasses = []
         for grassData in grassesData:
-            grass = Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages)
+            grass = Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages, self.clock)
             grasses.append(grass)
         return grasses
 

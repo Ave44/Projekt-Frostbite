@@ -1,9 +1,8 @@
-import time
-
 import pygame
-from config import WINDOW_WIDTH, WINDOW_HEIGHT
-from pygame.time import Clock
 from pygame import Surface
+from pygame.time import Clock
+
+from config import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
 class DayCycle:
@@ -19,6 +18,9 @@ class DayCycle:
         self.nightTime = dayLengthInMs
         self.beginningOfDayTime = 6 / 24 * dayLengthInMs
         self.dayTime = 9 / 24 * dayLengthInMs
+        self.light = pygame.image.load("./graphics/lights/light.png")
+
+        self.filter = pygame.surface.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     def updateDayCycle(self):
         deltaTime = self.clock.get_time()
@@ -34,5 +36,10 @@ class DayCycle:
             alphaValue = 0
         else:
             alphaValue = 128
+
+        self.filter.fill(pygame.color.Color(255, 255, 255))
+        self.filter.blit(self.light, (pygame.mouse.get_pos()[0] - 50, pygame.mouse.get_pos()[1] - 50))
+
+        pygame.display.get_surface().blit(self.filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
         self.blackSurface.set_alpha(alphaValue)
         pygame.display.get_surface().blit(self.blackSurface, (0, 0))

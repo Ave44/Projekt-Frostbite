@@ -20,11 +20,19 @@ class Item(pygame.sprite.Sprite):
 
         self.image = image
         if not image:
+<<<<<<< HEAD
             self.image = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png").convert_alpha()
 
         self.icon = icon
         if not icon:
             self.icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png").convert_alpha()
+=======
+            self.image = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png")
+
+        self.icon = icon
+        if not icon:
+            self.icon = pygame.image.load(f"{ROOT_PATH}/graphics/items/undefined.png")
+>>>>>>> 4c6bb3c07f092165de99ed02913038a577cb5eb7
 
         self.rect = self.image.get_rect(center=center)
 

@@ -4,26 +4,23 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
-from game.entities.Boar import Boar
-from game.entities.Bomb import Bomb
-from game.entities.Deer import Deer
-from game.entities.Player import Player
+from game.DayCycle import DayCycle
 from game.InputManager import InputManager
-from game.entities.Rabbit import Rabbit
-from game.objects.RabbitHole import RabbitHole
-from game.objects.trees.SmallTree import SmallTree
-from game.objects.trees.MediumTree import MediumTree
-from game.objects.trees.LargeTree import LargeTree
-from game.objects.Rock import Rock
+from game.entities.Bomb import Bomb
+from game.entities.Player import Player
+from game.items.Sword import Sword
+from game.items.domain.Item import Item
 from game.objects.Grass import Grass
-from game.tiles.Tile import Tile
-from game.ui.inventory.Inventory import Inventory
+from game.objects.RabbitHole import RabbitHole
+from game.objects.Rock import Rock
+from game.objects.trees.LargeTree import LargeTree
+from game.objects.trees.MediumTree import MediumTree
+from game.objects.trees.SmallTree import SmallTree
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-from game.items.domain.Item import Item
-from game.items.Sword import Sword
-from game.DayCycle import DayCycle
+from game.tiles.Tile import Tile
+from game.ui.inventory.Inventory import Inventory
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -31,7 +28,7 @@ class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
-        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen)
+        self.dayCycle = DayCycle(30000, 60000, self.clock, self.screen)
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
@@ -94,16 +91,19 @@ class Game:
         self.obstacleSprites.map = obstaclesMap
         self.createObjects(objects)
         return map
-    
+
     def createObjects(self, objects):
         trees = []
         for treeData in objects['trees']:
             if treeData['growthStage'] == 1:
-                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock,
+                                 treeData['age'])
             if treeData['growthStage'] == 2:
-                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock,
+                                  treeData['age'])
             if treeData['growthStage'] == 3:
-                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock,
+                                 treeData['age'])
 
             trees.append(tree)
 

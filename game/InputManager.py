@@ -33,6 +33,10 @@ class InputManager:
                 if event.key == pygame.K_p:
                     self.player.heal(20)
 
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)
                 hoveredSprite = self.getHoveredSprite(mousePos)

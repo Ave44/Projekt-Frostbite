@@ -12,7 +12,6 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.halfWindowHeight = WINDOW_HEIGHT // 2
         self.halfWindowWidth = WINDOW_WIDTH // 2
         self.offset = Vector2()
-        self.tiles = []
         self.map = []
         self.entities = EntitiesGroup()
         # self.radiuses = []
@@ -34,10 +33,6 @@ class CameraSpriteGroup(pygame.sprite.Group):
         # for radius in self.radiuses:
         #     self.drawRadius(radius["radius"], radius["position"], radius["color"])
         self.radiuses = []
-
-
-    def addTile(self, tile):
-        self.tiles.append(tile)
 
     def drawTiles(self):
         xGap = int(self.offset.x / TILE_SIZE)

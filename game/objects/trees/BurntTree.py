@@ -11,7 +11,7 @@ from game.objects.domain.CollisionObject import CollisionObject
 
 class BurntTree(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/burntTree.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/burntTree.png").convert_alpha()
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup,

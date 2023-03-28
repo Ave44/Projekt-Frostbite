@@ -8,6 +8,6 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 class BoarFang(Item):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2):
         name = "Boar Fang"
-        img = image.load(f"{ROOT_PATH}/graphics/items/boar_fang.png")
-        icon = image.load(f"{ROOT_PATH}/graphics/items/boar_fang.png")
+        img = image.load(f"{ROOT_PATH}/graphics/items/boar_fang.png").convert_alpha()
+        icon = image.load(f"{ROOT_PATH}/graphics/items/boar_fang.png").convert_alpha()
         super().__init__(visibleSprites, center, name, img, icon)

@@ -13,7 +13,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 class RabbitHole(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  midBottom: Vector2, clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rabbit_hole.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rabbit_hole.png").convert_alpha()
         super().__init__(visibleGroup, midBottom, 50, ToolType.SHOVEL, image)
         self.rabbits = []
         self.daysFromRabbitsChange = 0

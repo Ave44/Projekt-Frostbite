@@ -11,6 +11,11 @@ from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit
 from game.objects.RabbitHole import RabbitHole
+from game.objects.trees.SmallTree import SmallTree
+from game.objects.trees.MediumTree import MediumTree
+from game.objects.trees.LargeTree import LargeTree
+from game.objects.Rock import Rock
+from game.objects.Grass import Grass
 from game.tiles.Tile import Tile
 from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -74,7 +79,7 @@ class Game:
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
-        map = generateMap(mapSize)
+        map, objects = generateMap(mapSize, print)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
@@ -87,7 +92,30 @@ class Game:
                     obstaclesMap[y][x] = tile
         self.visibleSprites.map = tilesMap
         self.obstacleSprites.map = obstaclesMap
+        self.createObjects(objects)
         return map
+    
+    def createObjects(self, objects):
+        trees = []
+        for treeData in objects['trees']:
+            if treeData['growthStage'] == 1:
+                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+            if treeData['growthStage'] == 2:
+                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+            if treeData['growthStage'] == 3:
+                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+
+            trees.append(tree)
+
+        rocks = []
+        for rockData in objects['rocks']:
+            rock = Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'])
+            rocks.append(rock)
+
+        grasses = []
+        for grassData in objects['grasses']:
+            grass = Grass(self.visibleSprites, grassData['midBottom'])
+            grasses.append(grass)
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -134,8 +162,8 @@ class Game:
 
             # method for debugging values by writing them on screen
             # text = f"mx:{pygame.mouse.get_pos()[0]}, my:{pygame.mouse.get_pos()[1]}"
-            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}"
+            text = f"x:{self.player.rect.centerx}, y:{self.player.rect.centery}, {self.clock.get_fps()}"
             self.debug(text)
 
             pygame.display.update()
-            self.clock.tick(FPS)
+            self.clock.tick()

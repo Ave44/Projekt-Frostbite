@@ -16,7 +16,7 @@ from game.objects.trees.Snag import Snag
 class LargeTree(CollisionObject, Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
                  clock: Clock, ageMs: int = 0):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/largeTree.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/largeTree.png").convert_alpha()
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 
@@ -25,7 +25,7 @@ class LargeTree(CollisionObject, Flammable):
         Flammable.__init__(self, clock)
 
         self.age = ageMs
-        self.LIFESPAN = 10000
+        self.LIFESPAN = 20000
 
     def interact(self) -> None:
         print("interacted with medium trees")  # in the future there will be a real implementation

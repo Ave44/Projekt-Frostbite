@@ -2,15 +2,15 @@ import os
 import pygame
 from perlin_noise import PerlinNoise
 import random
-import matplotlib.pyplot as plt
 from skimage.measure import label
 import numpy as np
-import math
+from math import sqrt
+from config import BIOMES_ID
+from gameInitialization.GenerateObjects import GenerateObjects
 
-biomesId = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
-
-def replaceIdWithNames(idMatrix):
-    namesMatrix = [[biomesId[idMatrix[row][column]] for column in range(len(idMatrix))] for row in range(len(idMatrix))]
+def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
+    matrixSize = len(idMatrix)
+    namesMatrix = [[BIOMES_ID[idMatrix[row][column]] for column in range(matrixSize)] for row in range(matrixSize)]
 
     # for y in range(1, len(idMatrix) - 1):
     #     for x in range(1, len(idMatrix) - 1):
@@ -22,12 +22,11 @@ def replaceIdWithNames(idMatrix):
 
     return namesMatrix
 
-def checkForBorder(idMatrix, namesMatrix, x: int, y: int, xOffset: int, yOffset: int, borderTag: str):
+def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str) -> None:
     if idMatrix[x + xOffset][y + yOffset] == 0:
         namesMatrix[x][y] = namesMatrix[x][y] + borderTag
 
-# returns {name: {image: pygame.image, walkable: bool}} loading all images in advance makes the code faster
-def loadTilesData():
+def loadTilesData() -> dict['image': pygame.image, 'walkable': bool]:
     tilesData = {}
     tileId = 0
     loadTilesByType(tilesData, tileId, "walkable", True)
@@ -35,15 +34,15 @@ def loadTilesData():
 
     return tilesData
 
-def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable: bool):
+def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable: bool) -> None:
     for biom in os.listdir(f"./graphics/tiles/{subfolderName}"):
         for imageFile in os.listdir(f"./graphics/tiles/{subfolderName}/{biom}"):
             name = imageFile[:-4]
-            image = pygame.image.load(f"./graphics/tiles/{subfolderName}/{biom}/{imageFile}")
+            image = pygame.image.load(f"./graphics/tiles/{subfolderName}/{biom}/{imageFile}").convert()
             tilesData[name] = {"image": image, "walkable": isWalkable}
         tileId += 1
 
-def populateNameMatrixWithData(namesMatrix):
+def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[list[dict['image': pygame.image, 'walkable': bool]]]:
     tilesData = loadTilesData()
     mapSize = len(namesMatrix)
     dataMatrix = [[None for x in range(mapSize)] for y in range(mapSize)]
@@ -54,13 +53,18 @@ def populateNameMatrixWithData(namesMatrix):
     
     return dataMatrix
 
-
-def generateMap(mapSize: int):
+def generateMap(mapSize: int, progresNotifFunc: callable):
+    progresNotifFunc("Generating map")
     idMatrix = generateIdMatrix(mapSize)
+
     namesMatrix = replaceIdWithNames(idMatrix)
+
     dataMatrix = populateNameMatrixWithData(namesMatrix)
 
-    return dataMatrix
+    probabilities = {"tree": 0.2, "rock": 0.1, "grass": 0.8}
+    objects = GenerateObjects(idMatrix, probabilities, progresNotifFunc).objects
+
+    return dataMatrix, objects
 
 def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noise1 = PerlinNoise(octaves=5, seed=seed)
@@ -251,7 +255,7 @@ def findClosestPoints(pointsList1, pointsList2):
         for index2 in range(list2Len):
             p1 = pointsList1[index1]
             p2 = pointsList2[index2]
-            distance = math.sqrt((p1['x'] - p2['x'])**2 + (p1['y'] - p2['y'])**2)
+            distance = sqrt((p1['x'] - p2['x'])**2 + (p1['y'] - p2['y'])**2)
             if minDistance > distance:
                 minDistance = distance
                 point1 = p1

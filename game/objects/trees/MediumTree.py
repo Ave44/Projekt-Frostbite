@@ -14,7 +14,7 @@ from game.objects.trees.LargeTree import LargeTree
 
 class MediumTree(CollisionObject, Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock, ageMs: int = 0):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/mediumTree.png")
+        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/mediumTree.png").convert_alpha()
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 
@@ -23,7 +23,7 @@ class MediumTree(CollisionObject, Flammable):
         Flammable.__init__(self, clock)
 
         self.age = ageMs
-        self.LIFESPAN = 10000
+        self.LIFESPAN = 20000
 
     def interact(self) -> None:
         print("interacted with medium trees")  # in the future there will be a real implementation

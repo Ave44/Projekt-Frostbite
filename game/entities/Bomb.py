@@ -8,31 +8,15 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Bomb(AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 positionCenter: Vector2, clock: Clock):
+                 loadedImages: dict, midbottom: Vector2, clock: Clock, currHealth: int = None):
         entityData = {
             "speed": 3,
             "maxHealth": 60,
-            "currentHealth": 60,
             "damage": 20,
             "sightRange": 400,
-            "attackRange": 20,
-            "position_center": positionCenter,
-            "path_to_image_up": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right": "./graphics/entities/enemy/enemy.png",
-
-            "path_to_image_up_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left_heal": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right_heal": "./graphics/entities/enemy/enemy.png",
-
-            "path_to_image_up_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_down_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_left_damage": "./graphics/entities/enemy/enemy.png",
-            "path_to_image_right_damage": "./graphics/entities/enemy/enemy.png",
+            "attackRange": 20
         }
-        super().__init__(visibleSprites, obstacleSprites, entityData, clock, 200, 300, 500, 0)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, entityData, clock, 200, 300, 500, 0, midbottom, currHealth)
 
     def afterAttackAction(self):
         self.die()

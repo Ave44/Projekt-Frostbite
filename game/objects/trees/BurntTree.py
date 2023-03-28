@@ -10,8 +10,9 @@ from game.objects.domain.CollisionObject import CollisionObject
 
 
 class BurntTree(CollisionObject):
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/burntTree.png").convert_alpha()
+    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, loadedImages: list):
+        self.loadedImages = loadedImages
+        image = loadedImages.burntTree[0]
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup,

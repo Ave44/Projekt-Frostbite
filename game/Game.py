@@ -4,6 +4,7 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
+from game.LoadedImages import LoadedImages
 from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
@@ -17,7 +18,6 @@ from game.objects.trees.LargeTree import LargeTree
 from game.objects.Rock import Rock
 from game.objects.Grass import Grass
 from game.tiles.Tile import Tile
-from game.ui.inventory.Inventory import Inventory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
@@ -36,20 +36,18 @@ class Game:
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
         self.UiSprites = UiSpriteGroup()
-        self.timeFromLastChange = 0
 
         self.tick = 0
 
+        self.loadedImages = LoadedImages()
         self.map = self.createMap(100)
-
-        inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
-        inventory = Inventory(self.UiSprites, 2, 12, inventoryPosition)
-        inventory.open()
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
-                             saveData["player_data"],
-                             inventory, self.clock)
+                             self.UiSprites,
+                             self.loadedImages.player,
+                             self.clock,
+                             Vector2(0,0))
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
@@ -62,15 +60,12 @@ class Game:
                     continue
                 break
 
-        self.UiSprites.player = self.player
-        self.UiSprites.inventory = inventory
-        self.UiSprites.selectedItem = self.player.selectedItem
 
         sword = Sword(self.visibleSprites, Vector2(200, 200))
-        # Deer(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
-        # Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
-        # Boar(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
-        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
+        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages.deer, self.clock, self.player.rect.midbottom)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages.rabbit , self.clock, self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages.boar , self.clock, self.player.rect.midbottom)
+        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom, self.clock)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -99,11 +94,11 @@ class Game:
         trees = []
         for treeData in objects['trees']:
             if treeData['growthStage'] == 1:
-                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
             if treeData['growthStage'] == 2:
-                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
             if treeData['growthStage'] == 3:
-                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.clock, treeData['age'])
+                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
 
             trees.append(tree)
 
@@ -126,16 +121,18 @@ class Game:
         self.tick = self.tick + 1
         if self.tick == 1000:
             self.spawnBomb()
+            self.rabbitHole.onNewDay()
         if self.tick == 2000:
             self.tick = 0
             self.spawnBomb()
+            self.rabbitHole.onEvening()
             self.player.heal(20)
 
     def spawnBomb(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
         position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
-        Bomb(self.visibleSprites, self.obstacleSprites, position, self.clock)
+        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, position, self.clock)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)
@@ -145,13 +142,7 @@ class Game:
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
         while True:
-            self.timeFromLastChange += self.clock.get_time()
-            if 5000 > self.timeFromLastChange > 3000:
-                self.rabbitHole.onEvening()
-            if self.timeFromLastChange > 5000:
-                self.rabbitHole.onNewDay()
             self.InputManager.handleInput()
-
             self.visibleSprites.update()
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))

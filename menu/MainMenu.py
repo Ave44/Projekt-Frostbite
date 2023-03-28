@@ -17,7 +17,7 @@ class MainMenu(Menu):
     def playGame(self) -> None:
         # loading savefile
         # (Later will be replaced with "load all savefile names", then only selected savefile will be loaded)
-        fileSave = open("./filesave.json")
+        fileSave = open("./savefiles/savefile1.json")
         saveData = json.load(fileSave)
         fileSave.close()
 

@@ -12,9 +12,10 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class RabbitHole(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 midBottom: Vector2, clock: Clock):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/rabbit_hole.png").convert_alpha()
+                 loadedImages: dict, midBottom: Vector2, clock: Clock):
+        image = loadedImages.rabbitHole
         super().__init__(visibleGroup, midBottom, 50, ToolType.SHOVEL, image)
+        self.loadedRabbitImages = loadedImages.rabbit
         self.rabbits = []
         self.daysFromRabbitsChange = 0
         self.obstacleSprites = obstacleSprites
@@ -26,17 +27,14 @@ class RabbitHole(Object):
 
     def spawnRabbit(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.clock, pos, self)
+        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.loadedRabbitImages, self.clock, pos, self)
         self.rabbits.append(newRabbit)
         self.daysFromRabbitsChange = 0
 
-    def releaseRabbits(self, forever: bool = False):
+    def releaseRabbits(self):
         for rabbit in self.rabbits:
-            if not rabbit.isInHome:
-                continue
-            if forever:
-                rabbit.isHomeless = True
-            rabbit.goOut()
+            if rabbit.isInHome:
+                rabbit.goOut()
 
     def hideRabbits(self):
         for rabbit in self.rabbits:
@@ -44,7 +42,9 @@ class RabbitHole(Object):
                 rabbit.runHome()
 
     def drop(self) -> None:
-        self.releaseRabbits(True)
+        for rabbit in self.rabbits:
+            rabbit.isHomeless = True
+            rabbit.goOut()
 
     def interact(self) -> None:
         print("interacted with rabbit hole")

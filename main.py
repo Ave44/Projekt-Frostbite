@@ -11,6 +11,7 @@ pygame.display.set_icon(ICON)
 
 # Initialize music
 mixer.init()
+
 # Game view
 gameRunning = True
 

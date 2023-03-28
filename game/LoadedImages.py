@@ -96,6 +96,6 @@ class LoadedImages:
 
         self.grass = [load("./graphics/objects/grass.png").convert_alpha()]
 
-        self.rock = load("./graphics/objects/rock.png").convert_alpha()
+        self.rock = [load("./graphics/objects/rock.png").convert_alpha()]
 
         self.rabbitHole = load("./graphics/objects/rabbit_hole.png").convert_alpha()

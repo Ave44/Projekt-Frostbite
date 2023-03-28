@@ -102,15 +102,37 @@ class Game:
 
             trees.append(tree)
 
-        rocks = []
-        for rockData in objects['rocks']:
-            rock = Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'])
-            rocks.append(rock)
+    def createObjects(self, objects):
+        trees = self.loadTrees(objects['trees'])
+        rocks = self.loadRocks(objects['rocks'])
+        grasses = self.loadGrasses(objects['grasses'])
 
+    def loadTrees(self, treesData):
+        trees = []
+        for treeData in treesData:
+            if treeData['growthStage'] == 1:
+                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+            elif treeData['growthStage'] == 2:
+                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+            else:
+                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+
+            trees.append(tree)
+        return trees
+
+    def loadRocks(self, rocksData):
+        rocks = []
+        for rockData in rocksData:
+            rock = Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'], self.loadedImages)
+            rocks.append(rock)
+        return rocks
+
+    def loadGrasses(self, grassesData):
         grasses = []
-        for grassData in objects['grasses']:
-            grass = Grass(self.visibleSprites, grassData['midBottom'])
+        for grassData in grassesData:
+            grass = Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages)
             grasses.append(grass)
+        return grasses
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)

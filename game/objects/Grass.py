@@ -13,7 +13,7 @@ class Grass(Object, AnimatedObject):
         image = loadedImages.grass[0]
         Object.__init__(self, visibleGroup,
                          midBottom, 1, ToolType.SHOVEL, image)
-        AnimatedObject.__init__(self, loadedImages.grass, clock, 150)
+        AnimatedObject.__init__(self, loadedImages.grass, clock, 120)
 
     def interact(self) -> None:
         # do something

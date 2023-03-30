@@ -1,9 +1,7 @@
-import pygame
 from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
 
-from config import ROOT_PATH
 from game.items.domain.Item import Item
 from game.items.domain.ToolType import ToolType
 from game.objects.domain.CollisionObject import CollisionObject
@@ -12,7 +10,7 @@ from game.objects.domain.CollisionObject import CollisionObject
 class BurntTree(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, loadedImages: list):
         self.loadedImages = loadedImages
-        image = loadedImages.burntTree[0]
+        image = loadedImages.burntTree
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup,

@@ -1,5 +1,6 @@
 from pygame.image import load
 from pygame import Surface
+from os import listdir
 
 class LoadedImages:
     def __init__(self):
@@ -93,22 +94,18 @@ class LoadedImages:
         self.mediumTree = [load("./graphics/objects/trees/mediumTree.png").convert_alpha()]
         self.largeTree = [load("./graphics/objects/trees/largeTree.png").convert_alpha()]
         self.snag = [load("./graphics/objects/trees/snag.png").convert_alpha()]
-        self.burntTree = [load("./graphics/objects/trees/burntTree.png").convert_alpha()]
+        self.burntTree = load("./graphics/objects/trees/burntTree.png").convert_alpha()
 
-        self.tree = [[load("./graphics/objects/trees/smallTree.png").convert_alpha()],
-                     [load("./graphics/objects/trees/mediumTree.png").convert_alpha()],
-                     [load("./graphics/objects/trees/largeTree.png").convert_alpha()],
-                     [load("./graphics/objects/trees/snag.png").convert_alpha()]]
+        self.grass = self.loadImages("./graphics/objects/grass", "grass")
 
-        self.grass = self.loadImages("./graphics/objects/grass/grass", 64)
-
-        self.rock = [load("./graphics/objects/rock.png").convert_alpha()]
+        self.rock = load("./graphics/objects/rock.png").convert_alpha()
 
         self.rabbitHole = load("./graphics/objects/rabbit_hole.png").convert_alpha()
 
-    def loadImages(self, path: str, amount: int) -> list[Surface]:
+    def loadImages(self, path: str, filename) -> list[Surface]:
+        filesAmount = len(listdir(path))
         imagesList = []
-        for index in range(amount):
-            image = load(f"{path}{index + 1}.png").convert_alpha()
+        for index in range(filesAmount):
+            image = load(f"{path}/{filename}{index + 1}.png").convert_alpha()
             imagesList.append(image)
         return imagesList

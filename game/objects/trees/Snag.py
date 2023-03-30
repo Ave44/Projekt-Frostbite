@@ -1,6 +1,7 @@
 from pygame import Vector2, Rect
 from pygame.sprite import Group
 from pygame.time import Clock
+from game.LoadedImages import LoadedImages
 
 from game.items.domain.Item import Item
 from game.items.domain.ToolType import ToolType
@@ -12,7 +13,7 @@ from game.objects.trees.BurntTree import BurntTree
 class Snag(CollisionObject, Flammable):
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, 
-                 loadedImages: list, clock: Clock, age: int = 0):
+                 loadedImages: LoadedImages, clock: Clock, age: int = 0):
         self.loadedImages = loadedImages
         image = loadedImages.snag[0]
         colliderRect = Rect((0, 0), (5, 5))

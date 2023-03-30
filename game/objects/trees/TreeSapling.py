@@ -1,6 +1,7 @@
 from pygame import Vector2, Rect
 from pygame.sprite import Group
 from pygame.time import Clock
+from game.LoadedImages import LoadedImages
 
 from game.items.domain.Item import Item
 from game.items.domain.ToolType import ToolType
@@ -12,7 +13,7 @@ class TreeSapling(CollisionObject):
     _LIFESPAN = 20000
 
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
-                 loadedImages: list, clock: Clock):
+                 loadedImages: LoadedImages, clock: Clock):
         self.loadedImages = loadedImages
         image = loadedImages.sapling[0]
         colliderRect = Rect((0, 0), (5, 5))

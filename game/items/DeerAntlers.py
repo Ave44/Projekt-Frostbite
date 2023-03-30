@@ -1,13 +1,13 @@
-from pygame import Vector2, image
+from pygame import Vector2
+from game.LoadedImages import LoadedImages
 
-from config import ROOT_PATH
 from game.items.domain.Item import Item
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class DeerAntlers(Item):
-    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
         name = "Deer Antlers"
-        img = image.load(f"{ROOT_PATH}/graphics/items/deer_antlers.png").convert_alpha()
-        icon = image.load(f"{ROOT_PATH}/graphics/items/deer_antlers.png").convert_alpha()
-        super().__init__(visibleSprites, center, name, img, icon)
+        img = loadedImages.deerAntlers
+        icon = loadedImages.deerAntlers
+        Item.__init__(self, visibleSprites, center, name, img, icon)

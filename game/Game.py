@@ -61,10 +61,10 @@ class Game:
                 break
 
 
-        sword = Sword(self.visibleSprites, Vector2(200, 200))
-        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages.deer, self.clock, self.player.rect.midbottom)
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages.rabbit , self.clock, self.player.rect.midbottom)
-        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages.boar , self.clock, self.player.rect.midbottom)
+        sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
+        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages , self.clock, self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages , self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom, self.clock)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))

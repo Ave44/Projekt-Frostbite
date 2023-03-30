@@ -4,6 +4,11 @@ from os import listdir
 
 class LoadedImages:
     def __init__(self):
+        self.loadEntitiesImages()
+        self.loadObjectsImages()
+        self.loadItemsImages()
+        
+    def loadEntitiesImages(self):
         self.player = {
             "image_up": load("./graphics/entities/player/player_up.png").convert_alpha(),
             "image_down": load("./graphics/entities/player/player_down.png").convert_alpha(),
@@ -89,6 +94,7 @@ class LoadedImages:
             "image_right_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha()
         }
 
+    def loadObjectsImages(self):
         self.sapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]
         self.smallTree = [load("./graphics/objects/trees/smallTree.png").convert_alpha()]
         self.mediumTree = [load("./graphics/objects/trees/mediumTree.png").convert_alpha()]
@@ -101,6 +107,14 @@ class LoadedImages:
         self.rock = load("./graphics/objects/rock.png").convert_alpha()
 
         self.rabbitHole = load("./graphics/objects/rabbit_hole.png").convert_alpha()
+
+    def loadItemsImages(self):
+        self.bigMeat = load("./graphics/items/big_meat.png").convert_alpha()
+        self.boarFang = load("./graphics/items/boar_fang.png").convert_alpha()
+        self.deerAntlers = load("./graphics/items/deer_antlers.png").convert_alpha()
+        self.leather = load("./graphics/items/leather.png").convert_alpha()
+        self.smallMeat = load("./graphics/items/small_meat.png").convert_alpha()
+        self.sword = load("./graphics/items/sword.png").convert_alpha()
 
     def loadImages(self, path: str, filename) -> list[Surface]:
         filesAmount = len(listdir(path))

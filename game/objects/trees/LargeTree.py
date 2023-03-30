@@ -2,6 +2,7 @@ from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
 from pygame.time import Clock
+from game.LoadedImages import LoadedImages
 
 from game.items.domain.Item import Item
 from game.items.domain.ToolType import ToolType
@@ -13,7 +14,7 @@ from game.objects.trees.Snag import Snag
 
 class LargeTree(CollisionObject, Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
-                 loadedImages: list, clock: Clock, ageMs: int = 0):
+                 loadedImages: LoadedImages, clock: Clock, ageMs: int = 0):
         self.loadedImages = loadedImages
         image = loadedImages.largeTree[0]
         colliderRect = Rect((0, 0), (5, 5))

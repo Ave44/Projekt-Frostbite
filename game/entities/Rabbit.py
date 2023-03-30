@@ -1,5 +1,6 @@
 from pygame import Vector2
 from pygame.time import Clock
+from game.LoadedImages import LoadedImages
 
 from game.entities.domain.PassiveMob import PassiveMob
 from game.items.SmallMeat import SmallMeat
@@ -9,12 +10,13 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 class Rabbit(PassiveMob):
 
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: dict, clock: Clock, midbottom: Vector2, home = None, currHealth: int = None):
+                 loadedImages: LoadedImages, clock: Clock, midbottom: Vector2, home = None, currHealth: int = None):
         entityData = {
             "speed": 2,
             "maxHealth": 5
         }
-        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, clock, entityData, 200, 2000, 500, 1500, midbottom, currHealth)
+        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, clock, entityData, 200, 2000, 500, 1500, midbottom, currHealth)
+        self.loadedImages = loadedImages
         self.home = home
         self.isRunningHome = False
         self.isInHome = False
@@ -26,7 +28,7 @@ class Rabbit(PassiveMob):
             self.homePosition = Vector2(self.home.rect.centerx, self.home.rect.centery)
 
     def drop(self) -> None:
-        SmallMeat(self.visibleSprites, self.rect.center)
+        SmallMeat(self.visibleSprites, self.rect.center, self.loadedImages)
 
     def runHome(self):
         self.setDestination(self.homePosition, None)

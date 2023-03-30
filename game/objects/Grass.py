@@ -1,6 +1,7 @@
 from pygame.math import Vector2
 from pygame.time import Clock
 from pygame.sprite import Group
+from game.LoadedImages import LoadedImages
 
 from game.items.Sword import Sword
 from game.items.domain.ToolType import ToolType
@@ -9,7 +10,7 @@ from game.objects.domain.AnimatedObject import AnimatedObject
 
 
 class Grass(Object, AnimatedObject):
-    def __init__(self, visibleGroup: Group, midBottom: Vector2, loadedImages: list, clock: Clock):
+    def __init__(self, visibleGroup: Group, midBottom: Vector2, loadedImages: LoadedImages, clock: Clock):
         image = loadedImages.grass[0]
         Object.__init__(self, visibleGroup,
                          midBottom, 1, ToolType.SHOVEL, image)

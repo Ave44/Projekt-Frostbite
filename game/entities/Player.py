@@ -2,7 +2,9 @@ import pygame
 from pygame.time import Clock
 
 from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN
+from game.lightning.Glowing import Glowing
 from game.entities.domain.Entity import Entity
+from game.lightning.LightSize import LightSize
 from game.ui.inventory.Inventory import Inventory
 from game.items.domain.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
@@ -10,13 +12,15 @@ from game.ui.Bar import Bar
 from pygame.math import Vector2
 
 
-class Player(Entity):
+class Player(Entity, Glowing):
     def __init__(self,
                  groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
                  playerData,
                  inventory: Inventory, clock: Clock):
         super().__init__(groups, obstacleSprites, playerData, clock)
+        Glowing.__init__(self, LightSize.MEDIUM)
+
         self.selectedItem = SelectedItem(self)
         self.inventory = inventory
 

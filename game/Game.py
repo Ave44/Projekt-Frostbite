@@ -4,7 +4,7 @@ from pygame import mixer
 from pygame.math import Vector2
 
 from config import *
-from game.DayCycle import DayCycle
+from game.lightning.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.entities.Bomb import Bomb
 from game.entities.Player import Player
@@ -28,13 +28,13 @@ class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
-        self.dayCycle = DayCycle(30000, 60000, self.clock, self.screen)
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
         self.UiSprites = UiSpriteGroup()
         self.timeFromLastChange = 0
 
+        self.dayCycle = DayCycle(self.visibleSprites, 50000, 60000, self.clock)
         self.tick = 0
 
         self.map = self.createMap(100)
@@ -47,6 +47,8 @@ class Game:
                              self.obstacleSprites,
                              saveData["player_data"],
                              inventory, self.clock)
+
+
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):

@@ -97,7 +97,7 @@ class Store:
     def createPlayer(self, savefileData):
         return Player(self.visibleSprites,
                       self.obstacleSprites,
-                      self.LoadedImages.player,
+                      self.loadedImages.player,
                       self.clock,
                       savefileData.player['midBottom'],
                       savefileData.player['currHealth'])

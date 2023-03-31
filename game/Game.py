@@ -144,7 +144,7 @@ class Game:
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
         while True:
-            self.InputManager.handleInput()
+            self.inputManager.handleInput()
             self.visibleSprites.update()
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))

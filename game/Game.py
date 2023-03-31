@@ -10,7 +10,9 @@ from game.entities.Deer import Deer
 from game.entities.Player import Player
 from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit
+from game.entities.Goblin import Goblin
 from game.objects.RabbitHole import RabbitHole
+from game.objects.GoblinHideout import GoblinHideout
 from game.objects.trees.SmallTree import SmallTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.LargeTree import LargeTree
@@ -31,7 +33,7 @@ class Game:
     def __init__(self, screen, saveData):
         self.screen = screen
         self.clock = pygame.time.Clock()
-        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen)
+        self.dayCycle = DayCycle(0, 24000, self.clock, self.screen)
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
@@ -71,6 +73,7 @@ class Game:
         # Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         # Boar(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
+        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
@@ -148,8 +151,10 @@ class Game:
             self.timeFromLastChange += self.clock.get_time()
             if 5000 > self.timeFromLastChange > 3000:
                 self.rabbitHole.onEvening()
+                self.goblinHideout.onEvening()
             if self.timeFromLastChange > 5000:
                 self.rabbitHole.onNewDay()
+                self.goblinHideout.onNewDay()
             self.InputManager.handleInput()
 
             self.visibleSprites.update()

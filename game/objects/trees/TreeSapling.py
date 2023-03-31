@@ -15,7 +15,7 @@ class TreeSapling(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
                  loadedImages: LoadedImages, clock: Clock):
         self.loadedImages = loadedImages
-        image = loadedImages.sapling[0]
+        image = loadedImages.treeSapling[0]
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
         super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image, colliderRect)

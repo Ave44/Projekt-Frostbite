@@ -95,7 +95,7 @@ class LoadedImages:
         }
 
     def loadObjectsImages(self):
-        self.sapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]
+        self.treeSapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]
         self.smallTree = [load("./graphics/objects/trees/smallTree.png").convert_alpha()]
         self.mediumTree = [load("./graphics/objects/trees/mediumTree.png").convert_alpha()]
         self.largeTree = [load("./graphics/objects/trees/largeTree.png").convert_alpha()]
@@ -116,6 +116,12 @@ class LoadedImages:
         self.leather = load("./graphics/items/leather.png").convert_alpha()
         self.smallMeat = load("./graphics/items/small_meat.png").convert_alpha()
         self.sword = load("./graphics/items/sword.png").convert_alpha()
+
+        self.pebble = load("./graphics/items/pebble.png").convert_alpha()
+        self.grassFibers = load("./graphics/items/grassFibers.png").convert_alpha()
+        self.accorn = load("./graphics/items/accorn.png").convert_alpha()
+        self.sharpRock = load("./graphics/items/sharpRock.png").convert_alpha()
+        self.wood = load("./graphics/items/wood.png").convert_alpha()
 
     def loadImages(self, path: str, filename) -> list[Surface]:
         filesAmount = len(listdir(path))

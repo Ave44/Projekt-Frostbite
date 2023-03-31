@@ -1,14 +1,15 @@
+import pygame
 from pygame.math import Vector2
-
-from config import *
+from pygame.sprite import Sprite, Group
+from constants import BG_COLOR, SLOT_GAP, SLOT_SIZE
 from game.ui.inventory.slot.Slot import Slot
 from game.items.domain.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 
 
-class Inventory(pygame.sprite.Sprite):
+class Inventory(Sprite):
     def __init__(self,
-                 spriteGroup: pygame.sprite.Group,
+                 spriteGroup: Group,
                  inventoryHeight: int,
                  inventoryWidth: int,
                  center: Vector2):

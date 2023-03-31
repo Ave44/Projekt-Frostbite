@@ -1,14 +1,15 @@
 import pygame
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
 
-from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE
+from constants import TILE_SIZE
+from Config import Config
 
 
 class ObstacleSprites(pygame.sprite.Group):
-    def __init__(self):
+    def __init__(self, config: Config):
         super().__init__()
-        self.halfWindowHeight = WINDOW_HEIGHT // 2
-        self.halfWindowWidth = WINDOW_WIDTH // 2
+        self.halfWindowHeight = config.WINDOW_HEIGHT // 2
+        self.halfWindowWidth = config.WINDOW_WIDTH // 2
         self.map = []
         self.entities = EntitiesGroup()
 

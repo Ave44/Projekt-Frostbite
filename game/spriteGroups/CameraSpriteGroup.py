@@ -2,15 +2,17 @@ import pygame
 from pygame.math import Vector2
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
 
-from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILES_ON_SCREEN_HEIGHT, TILES_ON_SCREEN_WIDTH, TILE_SIZE
-
+from constants import TILE_SIZE
+from Config import Config
 
 class CameraSpriteGroup(pygame.sprite.Group):
-    def __init__(self):
+    def __init__(self, config: Config):
         super().__init__()
         self.displaySurface = pygame.display.get_surface()
-        self.halfWindowHeight = WINDOW_HEIGHT // 2
-        self.halfWindowWidth = WINDOW_WIDTH // 2
+        self.halfWindowHeight = config.WINDOW_HEIGHT // 2
+        self.halfWindowWidth = config.WINDOW_WIDTH // 2
+        self.tilesOnScreenHeight = config.TILES_ON_SCREEN_HEIGHT
+        self.tilesOnScreenWidth = config.TILES_ON_SCREEN_WIDTH
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
@@ -29,16 +31,13 @@ class CameraSpriteGroup(pygame.sprite.Group):
             spritePosition = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image, spritePosition)
 
-        # Displaying radiuses is causing a lot of lag use only to debug
-        # for radius in self.radiuses:
-        #     self.drawRadius(radius["radius"], radius["position"], radius["color"])
-        self.radiuses = []
+        # self.radiuses = []
 
     def drawTiles(self):
         xGap = int(self.offset.x / TILE_SIZE)
         yGap = int(self.offset.y / TILE_SIZE)
-        for y in range(TILES_ON_SCREEN_HEIGHT):
-            for x in range(TILES_ON_SCREEN_WIDTH):
+        for y in range(self.tilesOnScreenHeight):
+            for x in range(self.tilesOnScreenWidth):
                 if x + xGap < len(self.map) and y + yGap < len(self.map):
                     tile = self.map[y + yGap][x + xGap]
                     spritePosition = tile.rect.topleft - self.offset

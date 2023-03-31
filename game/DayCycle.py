@@ -1,18 +1,18 @@
 import time
 
 import pygame
-from config import WINDOW_WIDTH, WINDOW_HEIGHT
+from Config import Config
 from pygame.time import Clock
 from pygame import Surface
 
 
 class DayCycle:
-    def __init__(self, currentTimeInMs: int, dayLengthInMs: int, clock: Clock, screen: Surface):
+    def __init__(self, currentTimeInMs: int, dayLengthInMs: int, clock: Clock, screen: Surface, config: Config):
         self.screen = screen
         self.clock = clock
         self.currentTimeInMs = currentTimeInMs
         self.dayLengthInMs = dayLengthInMs
-        self.blackSurface = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.blackSurface = pygame.Surface((config.WINDOW_WIDTH, config.WINDOW_HEIGHT))
         self.blackSurface.fill((0, 0, 0))
 
         self.beginningOfNightTime = 21 / 24 * dayLengthInMs

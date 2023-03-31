@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from config import BUTTON_FONT
+from constants import BUTTON_FONT
 from game.ui.general import Button
 
 
@@ -14,7 +14,7 @@ class Menu:
 
     def createBackground(self) -> None:
         # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.
-        background = pygame.image.load("graphics/tiles/walkable/medow/medow.png")
+        background = pygame.image.load("graphics/tiles/walkable/medow/medow.png").convert_alpha()
         self.screen.fill((255, 255, 255))
         screenWidth, screenHeight = self.screen.get_size()
         imageWidth, imageHeight = background.get_size()

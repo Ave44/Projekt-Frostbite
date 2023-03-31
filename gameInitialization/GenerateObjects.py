@@ -1,4 +1,4 @@
-from config import TILE_SIZE, BIOMES_ID
+from constants import BIOMES_ID, TILE_SIZE
 import random
 
 class GenerateObjects:

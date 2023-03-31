@@ -1,9 +1,9 @@
 import sys
 
+import pygame
 from pygame.sprite import Sprite
 from pygame.math import Vector2
 
-from config import *
 from game.entities.Player import Player
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup

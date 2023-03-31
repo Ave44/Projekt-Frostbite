@@ -1,4 +1,5 @@
 import pygame
+from pygame import Surface
 from pygame.math import Vector2
 
 from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILES_ON_SCREEN_HEIGHT, TILES_ON_SCREEN_WIDTH, TILE_SIZE
@@ -15,7 +16,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
-        self.sunlight = None
+        self.sunlight: Surface | None = None
         # self.radiuses = []
 
     def customDraw(self, center):
@@ -25,16 +26,16 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
         for sprite in self.entities.sprites():
             self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and self.sunlight:
+            if isinstance(sprite, Glowing) and self.sunlight.get_alpha():
                 self.drawLightning(sprite)
 
         for sprite in self.sprites():
             self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and self.sunlight:
+            if isinstance(sprite, Glowing) and self.sunlight.get_alpha():
                 self.drawLightning(sprite)
 
-        if self.sunlight:
-            self.displaySurface.blit(self.sunlight.image, (0, 0))
+        if self.sunlight.get_alpha():
+            self.displaySurface.blit(self.sunlight, (0, 0))
 
         # Displaying radiuses is causing a lot of lag use only to debug
         # for radius in self.radiuses:
@@ -68,4 +69,4 @@ class CameraSpriteGroup(pygame.sprite.Group):
     def drawLightning(self, sprite: Glowing):
         halfLightSize = tuple(map(lambda x: x // 2, sprite.light.get_size()))
         lightPosition = sprite.rect.center - self.offset - Vector2(halfLightSize[0], halfLightSize[1])
-        self.sunlight.image.blit(sprite.light, lightPosition, special_flags=pygame.BLEND_RGBA_SUB)
+        self.sunlight.blit(sprite.light, lightPosition, special_flags=pygame.BLEND_RGBA_SUB)

@@ -9,7 +9,7 @@ from pygame.time import Clock
 from game.entities.domain.State import State
 
 
-class   Entity(Sprite, ABC):
+class Entity(Sprite, ABC):
     from game.entities.effects.Effect import Effect
 
     def __init__(self, spriteGroup, obstacleSprites, entityData: dict, clock: Clock):

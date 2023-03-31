@@ -11,15 +11,18 @@ class DayCycle:
         self.currentTime = currentTimeInMs
         self.dayLengthInMs = dayLengthInMs
 
-        self.image = Surface((WINDOW_WIDTH, WINDOW_HEIGHT), SRCALPHA)
-        self.image.fill((0, 0, 0))
+        self.nightMask = Surface((WINDOW_WIDTH, WINDOW_HEIGHT), SRCALPHA)
+        self.nightMask.fill((255, 255, 255))
 
         self.dawnStart = 6/24 * dayLengthInMs
         self.dayStart = 8/24 * dayLengthInMs
         self.eveningStart = 20/24 * dayLengthInMs
         self.nightStart = 22/24 * dayLengthInMs
 
-        visibleSprites.sunlight = self.image
+        self.dawnLength = self.dayStart - self.dawnStart
+        self.eveningLength = self.nightStart - self.eveningStart
+
+        visibleSprites.sunlight = self.nightMask
 
     def updateDayCycle(self):
         deltaTime = self.clock.get_time()
@@ -27,19 +30,18 @@ class DayCycle:
         if self.currentTime >= self.dayLengthInMs:
             self.currentTime = 0
 
-        alphaValue = self.calculateAlpha()
-        self.image.fill((0, 0, 0))
-        self.image.set_alpha(alphaValue)
+        brightness = self.calculateBrightness()
+        self.nightMask.fill((brightness, brightness, brightness))
 
-    def calculateAlpha(self) -> int:
+    def calculateBrightness(self) -> int:
         if self.currentTime < self.dawnStart:
-            alphaValue = 128
+            brightness = 0
         elif self.currentTime < self.dayStart:
-            alphaValue = (self.dayStart-self.currentTime) / (6/24 * self.dayLengthInMs) * 255
+            brightness = (self.currentTime - self.dawnStart) / self.dawnLength * 255
         elif self.currentTime < self.eveningStart:
-            alphaValue = 0
+            brightness = 255
         elif self.currentTime < self.nightStart:
-            alphaValue = (self.currentTime-self.eveningStart) / (6/24 * self.dayLengthInMs) * 255
+            brightness = 255 - (self.currentTime - self.eveningStart) / self.eveningLength * 255
         else:
-            alphaValue = 128
-        return alphaValue
+            brightness = 0
+        return brightness

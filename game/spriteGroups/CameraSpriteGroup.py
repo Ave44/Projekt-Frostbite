@@ -34,8 +34,8 @@ class CameraSpriteGroup(pygame.sprite.Group):
             if isinstance(sprite, Glowing) and self.sunlight.get_alpha():
                 self.drawLightning(sprite)
 
-        if self.sunlight.get_alpha():
-            self.displaySurface.blit(self.sunlight, (0, 0))
+        if self.sunlight:
+            self.displaySurface.blit(self.sunlight, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
         # Displaying radiuses is causing a lot of lag use only to debug
         # for radius in self.radiuses:
@@ -55,18 +55,17 @@ class CameraSpriteGroup(pygame.sprite.Group):
                     tile = self.map[y + yGap][x + xGap]
                     self.drawSprite(tile)
 
-    def addRadius(self, radius, position, color):
-        self.radiuses.append({"radius": radius, "position": position, "color": color})
-
-    def drawRadius(self, radius, position, color):
-        circleSurface = pygame.Surface((radius * 2, radius * 2))
-        circleSurface.set_colorkey((0, 0, 0))
-        circleSurface.set_alpha(80)
-        pygame.draw.circle(circleSurface, color, (radius, radius), radius)
-        self.displaySurface.blit(circleSurface,
-                                 (position[0] - radius - self.offset.x, position[1] - radius - self.offset.y))
-
     def drawLightning(self, sprite: Glowing):
-        halfLightSize = tuple(map(lambda x: x // 2, sprite.light.get_size()))
-        lightPosition = sprite.rect.center - self.offset - Vector2(halfLightSize[0], halfLightSize[1])
-        self.sunlight.blit(sprite.light, lightPosition, special_flags=pygame.BLEND_RGBA_SUB)
+        halfLightSize = sprite.light.get_size()[0] // 2
+        lightPosition = sprite.rect.center - self.offset - Vector2(halfLightSize, halfLightSize)
+        self.sunlight.blit(sprite.light, lightPosition)
+
+    # def addRadius(self, radius, position, color):
+    #     self.radiuses.append({"radius": radius, "position": position, "color": color})
+
+    # def drawRadius(self, radius, position, color):
+    #     circleSurface = pygame.Surface((radius * 2, radius * 2))
+    #     circleSurface.set_colorkey((0, 0, 0))
+    #     circleSurface.set_alpha(80)
+    #     pygame.draw.circle(circleSurface, color, (radius, radius), radius)
+    #     self.displaySurface.blit(circleSurface, (position[0] - radius - self.offset.x, position[1] - radius - self.offset.y))

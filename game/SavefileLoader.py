@@ -26,7 +26,7 @@ class Store:
 
         self.visibleSprites = CameraSpriteGroup()
         self.obstacleSprites = ObstacleSprites()
-        self.UiSprites = UiSpriteGroup()
+        self.uiSprites = UiSpriteGroup()
 
         self.map = savefileData.map
         self.loadMap()

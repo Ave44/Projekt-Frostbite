@@ -73,7 +73,7 @@ class Game:
         self.player.inventory.addItem(sword, self.player.selectedItem)
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
 
-        self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
+        self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
     # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):

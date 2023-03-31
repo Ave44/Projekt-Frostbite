@@ -38,7 +38,7 @@ class Game:
 
         self.visibleSprites = CameraSpriteGroup(config)
         self.obstacleSprites = ObstacleSprites(config)
-        self.UiSprites = UiSpriteGroup(config)
+        self.UiSprites = UiSpriteGroup()
 
         self.tick = 0
 
@@ -92,18 +92,6 @@ class Game:
         self.obstacleSprites.map = obstaclesMap
         self.createObjects(objects)
         return map
-    
-    def createObjects(self, objects):
-        trees = []
-        for treeData in objects['trees']:
-            if treeData['growthStage'] == 1:
-                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
-            if treeData['growthStage'] == 2:
-                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
-            if treeData['growthStage'] == 3:
-                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
-
-            trees.append(tree)
 
     def createObjects(self, objects: dict) -> None:
         self.loadTrees(objects['trees'])

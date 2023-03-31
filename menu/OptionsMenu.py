@@ -1,12 +1,11 @@
 from constants import FONT_MENU_COLOR
-from Config import Config
 from menu.Menu import Menu
 from game.ui.general.Button import Button
 
 
 class OptionsMenu(Menu):
-    def __init__(self, screen, config: Config, backAction):
-        Menu.__init__(self, screen, config)
+    def __init__(self, screen, backAction):
+        Menu.__init__(self, screen)
         self.backAction = backAction
 
     def createButtons(self) -> list[Button]:

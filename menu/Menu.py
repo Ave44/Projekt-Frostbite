@@ -3,14 +3,12 @@ import sys
 import pygame
 
 from constants import BUTTON_FONT
-from Config import Config
 from game.ui.general import Button
 
 
 class Menu:
-    def __init__(self, screen, config: Config):
+    def __init__(self, screen):
         self.screen = screen
-        self.config = config
         self.font = pygame.font.Font(BUTTON_FONT, 100)
         self.menuOptionFont = pygame.font.Font(BUTTON_FONT, 50)
 

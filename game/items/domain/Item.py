@@ -31,7 +31,7 @@ class Item(pygame.sprite.Sprite):
         self.rect.center = position
         self.show()
 
-    def pickUp(self, player):
+    def onLeftClickAction(self, player):
         player.inventory.addItem(self, player.selectedItem)
 
     def show(self):

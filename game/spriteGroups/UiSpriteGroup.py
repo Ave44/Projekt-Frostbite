@@ -1,16 +1,15 @@
 import pygame
 from pygame.math import Vector2
 
-from Config import Config
+from constants import SLOT_SIZE
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 
 
 class UiSpriteGroup(pygame.sprite.Group):
-    def __init__(self, config: Config):
+    def __init__(self):
         super().__init__()
         self.displaySurface = pygame.display.get_surface()
-        self.config = config
         self.inventory = Inventory
         self.selectedItem = SelectedItem
         self.player = None
@@ -25,7 +24,7 @@ class UiSpriteGroup(pygame.sprite.Group):
 
         if not self.selectedItem.isEmpty():
             mousePos = Vector2(pygame.mouse.get_pos())
-            displayPos = (mousePos.x - self.config.SLOT_SIZE / 2, mousePos.y - self.config.SLOT_SIZE / 2)
+            displayPos = (mousePos.x - SLOT_SIZE / 2, mousePos.y - SLOT_SIZE / 2)
             self.displaySurface.blit(self.selectedItem.item.icon, displayPos)
 
         self.player.healthBar.draw(self.displaySurface)

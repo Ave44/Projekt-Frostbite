@@ -11,9 +11,10 @@ from game.ui.general.Button import Button
 
 class MainMenu(Menu):
     def __init__(self, screen, config: Config):
-        Menu.__init__(self, screen, config)
-        self.optionsMenu = OptionsMenu(screen, config, self.mainMenu)
-        self.createGameMenu = CreateGame(screen, config, self.mainMenu)
+        Menu.__init__(self, screen)
+        self.optionsMenu = OptionsMenu(screen, self.mainMenu)
+        self.createGameMenu = CreateGame(screen, self.mainMenu)
+        self.config = config
 
     def playGame(self) -> None:
         # loading savefile

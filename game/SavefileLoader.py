@@ -31,7 +31,7 @@ class Store:
         self.map = savefileData.map
         self.loadMap()
 
-        self.LoadedImages = LoadedImages()
+        self.loadedImages = LoadedImages()
 
         self.loadObjects(savefileData.objects)
 

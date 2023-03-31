@@ -1,11 +1,11 @@
-from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR
+from Config import Config
 from menu.Menu import Menu
 from game.ui.general.Button import Button
 
 
 class CreateGame(Menu):
-    def __init__(self, screen, backAction):
-        super().__init__(screen)
+    def __init__(self, screen, config: Config, backAction):
+        Menu.__init__(self, screen, config)
         self.backAction = backAction
         self.mapSizes = ["XS", "S", "M", "L", "XL"]
         self.mapSizesIndex = 2
@@ -73,13 +73,13 @@ class CreateGame(Menu):
 
     def initiateCreateGame(self) -> None:
         self.createBackground()
-        menuText = self.font.render("CREATE GAME", True, FONT_MENU_COLOR)
+        menuText = self.font.render("CREATE GAME", True, self.config.FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(640, 100))
         mapSizeText = self.menuOptionFont.render("MAP SIZE: " + self.mapSizes[self.mapSizesIndex], True,
-                                                 BASE_BUTTON_COLOR)
+                                                 self.config.BASE_BUTTON_COLOR)
         mapSizeRect = menuText.get_rect(center=(920, 275))
         objectsQuantityText = self.menuOptionFont.render(
-            "OBJECTS QUANTITY: " + self.objectsQuantity[self.objectsQuantityIndex], True, BASE_BUTTON_COLOR)
+            "OBJECTS QUANTITY: " + self.objectsQuantity[self.objectsQuantityIndex], True, self.config.BASE_BUTTON_COLOR)
         objectsQuantityRect = menuText.get_rect(center=(720, 375))
 
         menuButtons = self.createButtons()

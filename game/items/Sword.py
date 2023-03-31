@@ -8,9 +8,9 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 class Sword(Item):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
         name = "Sword"
-        image = loadedImages.sword
+        img = loadedImages.sword
         icon = loadedImages.sword
-        Item.__init__(self, visibleSprites, center, name, image, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
         self.damage = 10
         self.durability = 100
 

@@ -10,4 +10,4 @@ class BoarFang(Item):
         name = "Boar Fang"
         img = loadedImages.boarFang
         icon = loadedImages.boarFang
-        Item.__init__(self, visibleSprites, center, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)

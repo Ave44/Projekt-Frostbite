@@ -1,6 +1,7 @@
 import json
 
-from config import FONT_MENU_COLOR
+from constants import FONT_MENU_COLOR
+from Config import Config
 from game.Game import Game
 from menu.CreateGame import CreateGame
 from menu.Menu import Menu
@@ -9,10 +10,10 @@ from game.ui.general.Button import Button
 
 
 class MainMenu(Menu):
-    def __init__(self, screen):
-        super().__init__(screen)
-        self.optionsMenu = OptionsMenu(screen, self.mainMenu)
-        self.createGameMenu = CreateGame(screen, self.mainMenu)
+    def __init__(self, screen, config: Config):
+        Menu.__init__(self, screen, config)
+        self.optionsMenu = OptionsMenu(screen, config, self.mainMenu)
+        self.createGameMenu = CreateGame(screen, config, self.mainMenu)
 
     def playGame(self) -> None:
         # loading savefile
@@ -21,7 +22,7 @@ class MainMenu(Menu):
         saveData = json.load(fileSave)
         fileSave.close()
 
-        game = Game(self.screen, saveData)
+        game = Game(self.screen, self.config, saveData)
         game.play()
 
     def createButtons(self) -> list[Button]:

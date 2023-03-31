@@ -10,4 +10,4 @@ class Leather(Item):
         name = "Leather"
         img = loadedImages.leather
         icon = loadedImages.leather
-        Item.__init__(self, visibleSprites, center, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)

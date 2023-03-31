@@ -16,7 +16,7 @@ from game.objects.trees.LargeTree import LargeTree
 from game.objects.Rock import Rock
 from game.objects.Grass import Grass
 
-from config import TILE_SIZE
+from Config import TILE_SIZE
 
 class Store:
     def __init__(self, savefileData, savefileName) -> None:

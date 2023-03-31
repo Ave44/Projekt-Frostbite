@@ -1,9 +1,12 @@
 import random
 
+import pygame
 from pygame import mixer
+from pygame.time import Clock
 from pygame.math import Vector2
 
-from config import *
+from constants import TILE_SIZE, HAPPY_THEME
+from Config import Config
 from game.LoadedImages import LoadedImages
 from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
@@ -28,14 +31,14 @@ from gameInitialization.GenerateMap import generateMap
 
 
 class Game:
-    def __init__(self, screen, saveData):
+    def __init__(self, screen, config: Config, saveData):
         self.screen = screen
-        self.clock = pygame.time.Clock()
-        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen)
+        self.clock = Clock()
+        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen, config)
 
-        self.visibleSprites = CameraSpriteGroup()
-        self.obstacleSprites = ObstacleSprites()
-        self.UiSprites = UiSpriteGroup()
+        self.visibleSprites = CameraSpriteGroup(config)
+        self.obstacleSprites = ObstacleSprites(config)
+        self.UiSprites = UiSpriteGroup(config)
 
         self.tick = 0
 
@@ -46,6 +49,7 @@ class Game:
                              self.obstacleSprites,
                              self.UiSprites,
                              self.loadedImages.player,
+                             config,
                              self.clock,
                              Vector2(0,0))
 
@@ -60,14 +64,13 @@ class Game:
                     continue
                 break
 
-
-        sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
         Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages , self.clock, self.player.rect.midbottom)
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages , self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom, self.clock)
+        sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
+        unknownItem = Item(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
-        unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)
 
         self.InputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
@@ -102,37 +105,27 @@ class Game:
 
             trees.append(tree)
 
-    def createObjects(self, objects):
-        trees = self.loadTrees(objects['trees'])
-        rocks = self.loadRocks(objects['rocks'])
-        grasses = self.loadGrasses(objects['grasses'])
+    def createObjects(self, objects: dict) -> None:
+        self.loadTrees(objects['trees'])
+        self.loadRocks(objects['rocks'])
+        self.loadGrasses(objects['grasses'])
 
-    def loadTrees(self, treesData):
-        trees = []
+    def loadTrees(self, treesData: dict) -> None:
         for treeData in treesData:
             if treeData['growthStage'] == 1:
-                tree = SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+                SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
             elif treeData['growthStage'] == 2:
-                tree = MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+                MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
             else:
-                tree = LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+                LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
 
-            trees.append(tree)
-        return trees
-
-    def loadRocks(self, rocksData):
-        rocks = []
+    def loadRocks(self, rocksData: dict) -> None:
         for rockData in rocksData:
-            rock = Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'], self.loadedImages)
-            rocks.append(rock)
-        return rocks
+            Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'], self.loadedImages)
 
-    def loadGrasses(self, grassesData):
-        grasses = []
+    def loadGrasses(self, grassesData: dict) -> None:
         for grassData in grassesData:
-            grass = Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages, self.clock)
-            grasses.append(grass)
-        return grasses
+            Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages, self.clock)
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
@@ -159,7 +152,6 @@ class Game:
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)
         mixer.music.play(-1)
-        mixer.music.set_volume(MAIN_THEME_VOLUME)
 
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)

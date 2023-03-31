@@ -1,7 +1,8 @@
 import pygame
 from pygame.time import Clock
 
-from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN, WINDOW_WIDTH, WINDOW_HEIGHT
+from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE
+from Config import Config
 from game.entities.domain.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
 from game.items.domain.Item import Item
@@ -16,6 +17,7 @@ class Player(Entity):
                  obstacleSprites: pygame.sprite.Group,
                  UiSprites: pygame.sprite.Group,
                  playerImages: dict,
+                 config: Config,
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None):
@@ -23,7 +25,7 @@ class Player(Entity):
         Entity.__init__(self, groups, obstacleSprites, playerData, playerImages, clock, midbottom, currHealth)
         self.selectedItem = SelectedItem(self)
 
-        inventoryPosition = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 60)
+        inventoryPosition = Vector2(config.WINDOW_WIDTH / 2, config.WINDOW_HEIGHT - 60)
         self.inventory = Inventory(UiSprites, 2, 12, inventoryPosition)
         self.inventory.open()
 

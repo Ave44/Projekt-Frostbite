@@ -109,6 +109,7 @@ class LoadedImages:
         self.rabbitHole = load("./graphics/objects/rabbit_hole.png").convert_alpha()
 
     def loadItemsImages(self):
+        self.undefined = load("./graphics/items/undefined.png").convert_alpha()
         self.bigMeat = load("./graphics/items/big_meat.png").convert_alpha()
         self.boarFang = load("./graphics/items/boar_fang.png").convert_alpha()
         self.deerAntlers = load("./graphics/items/deer_antlers.png").convert_alpha()

@@ -10,4 +10,4 @@ class SmallMeat(Item):
         name = "Small Meat"
         img = loadedImages.smallMeat
         icon = loadedImages.smallMeat
-        Item.__init__(self, visibleSprites, center, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)

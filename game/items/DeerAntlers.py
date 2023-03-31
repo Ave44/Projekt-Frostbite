@@ -10,4 +10,4 @@ class DeerAntlers(Item):
         name = "Deer Antlers"
         img = loadedImages.deerAntlers
         icon = loadedImages.deerAntlers
-        Item.__init__(self, visibleSprites, center, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)

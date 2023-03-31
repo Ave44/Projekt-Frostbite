@@ -10,7 +10,7 @@ class BigMeat(Item):
         name = "Big Meat"
         img = loadedImages.bigMeat
         icon = loadedImages.bigMeat
-        Item.__init__(self, visibleSpritesGroup, center, name, img, icon)
+        Item.__init__(self, visibleSpritesGroup, center, loadedImages, name, img, icon)
 
     def use(self):
         print(self, "was used")

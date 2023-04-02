@@ -73,7 +73,7 @@ class Game:
         # Rabbit(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         # Boar(self.visibleSprites, self.obstacleSprites, self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
-        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.player.rect.midbottom, self.clock)
+        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, (self.player.rect.midbottom[0]+128,self.player.rect.midbottom[1]+128), self.clock)
         self.player.inventory.addItem(sword, self.player.selectedItem)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200))
         self.player.inventory.addItem(unknownItem, self.player.selectedItem)

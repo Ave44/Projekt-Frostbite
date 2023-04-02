@@ -29,14 +29,6 @@ class GoblinHideout(Object):
         self.goblins.append(newGoblin)
         self.daysFromGoblinsChange = 0
 
-    def releaseGoblins(self, forever: bool = False):
-        for goblin in self.goblins:
-            if not goblin.isInHome:
-                continue
-            if forever:
-                goblin.isHomeless = True
-            goblin.goOut()
-
     def drop(self) -> None:
         self.releaseGoblins(True)
 
@@ -52,8 +44,6 @@ class GoblinHideout(Object):
             goblin.goOut()
 
     def onNewDay(self):
-        self.releaseGoblins()
-
         if len(self.goblins) >= 2:
             return
 
@@ -64,4 +54,4 @@ class GoblinHideout(Object):
         self.spawnGoblin()
 
     def onEvening(self):
-        self.hideGoblins()
+        pass

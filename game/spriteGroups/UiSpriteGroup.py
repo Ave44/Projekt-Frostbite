@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 
-from config import SLOT_SIZE
+from constants import SLOT_SIZE
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 

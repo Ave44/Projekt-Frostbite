@@ -1,10 +1,9 @@
-import pygame
 from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
 from pygame.time import Clock
+from game.LoadedImages import LoadedImages
 
-from config import ROOT_PATH
 from game.items.domain.Item import Item
 from game.items.domain.ToolType import ToolType
 from game.objects.domain.CollisionObject import CollisionObject
@@ -15,8 +14,9 @@ from game.objects.trees.Snag import Snag
 
 class LargeTree(CollisionObject, Flammable):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
-                 clock: Clock, ageMs: int = 0):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/largeTree.png").convert_alpha()
+                 loadedImages: LoadedImages, clock: Clock, ageMs: int = 0):
+        self.loadedImages = loadedImages
+        image = loadedImages.largeTree[0]
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 
@@ -25,6 +25,7 @@ class LargeTree(CollisionObject, Flammable):
         Flammable.__init__(self, clock)
 
         self.age = ageMs
+        self.growthStage = 3
         self.LIFESPAN = 20000
 
     def interact(self) -> None:
@@ -35,7 +36,7 @@ class LargeTree(CollisionObject, Flammable):
 
     def burn(self):
         self.remove(*self.groups())
-        BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom)
+        BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages)
 
     def update(self):
         if self.isOnFire and self.timeToBurn:
@@ -44,4 +45,4 @@ class LargeTree(CollisionObject, Flammable):
         self.age += self.clock.get_time()
         if self.age >= self.LIFESPAN:
             self.remove(*self.groups())
-            Snag(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.clock)
+            Snag(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages, self.clock)

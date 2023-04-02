@@ -1,16 +1,16 @@
-from pygame import Vector2, image
+from pygame import Vector2
+from game.LoadedImages import LoadedImages
 
-from config import ROOT_PATH
 from game.items.domain.Item import Item
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class BigMeat(Item):
-    def __init__(self, visibleSpritesGroup: CameraSpriteGroup, center: Vector2):
+    def __init__(self, visibleSpritesGroup: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
         name = "Big Meat"
-        img = image.load(f"{ROOT_PATH}/graphics/items/big_meat.png").convert_alpha()
-        icon = image.load(f"{ROOT_PATH}/graphics/items/big_meat.png").convert_alpha()
-        super().__init__(visibleSpritesGroup, center, name, img, icon)
+        img = loadedImages.bigMeat
+        icon = loadedImages.bigMeat
+        Item.__init__(self, visibleSpritesGroup, center, loadedImages, name, img, icon)
 
     def use(self):
         print(self, "was used")

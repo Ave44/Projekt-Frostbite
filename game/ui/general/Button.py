@@ -1,4 +1,4 @@
-from config import BASE_BUTTON_COLOR, WHITE
+from constants import BASE_BUTTON_COLOR, WHITE
 
 class Button:
     def __init__(self, pos, textInput, font, action, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, image=None):

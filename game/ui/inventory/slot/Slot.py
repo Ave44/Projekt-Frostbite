@@ -2,7 +2,7 @@ import pygame.sprite
 from pygame import Surface
 from pygame.math import Vector2
 
-from config import *
+from constants import ROOT_PATH
 from game.items.domain.Item import Item
 
 

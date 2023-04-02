@@ -1,9 +1,7 @@
-from pygame import image as pyimage
 
-from config import ROOT_PATH
-from game.lightning.LightSize import LightSize
+from game.LoadedImages import LoadedImages
 
 
 class Glowing:
-    def __init__(self, size: LightSize):
-        self.light = pyimage.load(f"{ROOT_PATH}/graphics/lights/{size.value}Light.png").convert_alpha()
+    def __init__(self):
+        self.light = LoadedImages().mediumLight

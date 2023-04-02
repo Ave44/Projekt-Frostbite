@@ -5,7 +5,7 @@ import random
 from skimage.measure import label
 import numpy as np
 from math import sqrt
-from config import BIOMES_ID
+from constants import BIOMES_ID
 from gameInitialization.GenerateObjects import GenerateObjects
 
 def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:

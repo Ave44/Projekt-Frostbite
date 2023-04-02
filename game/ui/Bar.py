@@ -3,7 +3,7 @@ from pygame.rect import Rect
 from pygame.sprite import Sprite
 from pygame.surface import Surface
 
-from config import *
+from constants import BG_COLOR, BORDER_COLOR, BORDER_SIZE
 
 
 class Bar(Sprite):

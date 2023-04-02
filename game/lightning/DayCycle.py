@@ -1,17 +1,17 @@
 from pygame import Surface, SRCALPHA
 from pygame.time import Clock
 
-from config import WINDOW_WIDTH, WINDOW_HEIGHT
+from Config import Config
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
-
 class DayCycle:
-    def __init__(self, visibleSprites: CameraSpriteGroup, currentTimeInMs: int, dayLengthInMs: int, clock: Clock):
+    def __init__(self, visibleSprites: CameraSpriteGroup, currentTimeInMs: int,
+                 dayLengthInMs: int, clock: Clock, config: Config):
         self.clock = clock
         self.currentTime = currentTimeInMs
         self.dayLengthInMs = dayLengthInMs
 
-        self.nightMask = Surface((WINDOW_WIDTH, WINDOW_HEIGHT), SRCALPHA)
+        self.nightMask = Surface((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), SRCALPHA)
         self.nightMask.fill((255, 255, 255))
 
         self.dawnStart = 6/24 * dayLengthInMs

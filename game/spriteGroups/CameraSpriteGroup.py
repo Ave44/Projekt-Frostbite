@@ -2,17 +2,20 @@ import pygame
 from pygame import Surface
 from pygame.math import Vector2
 
-from config import WINDOW_HEIGHT, WINDOW_WIDTH, TILES_ON_SCREEN_HEIGHT, TILES_ON_SCREEN_WIDTH, TILE_SIZE
 from game.lightning.Glowing import Glowing
+from constants import TILE_SIZE
+from Config import Config
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
 
 
 class CameraSpriteGroup(pygame.sprite.Group):
-    def __init__(self):
+    def __init__(self, config: Config):
         super().__init__()
         self.displaySurface = pygame.display.get_surface()
-        self.halfWindowHeight = WINDOW_HEIGHT // 2
-        self.halfWindowWidth = WINDOW_WIDTH // 2
+        self.halfWindowHeight = config.WINDOW_HEIGHT // 2
+        self.halfWindowWidth = config.WINDOW_WIDTH // 2
+        self.tilesOnScreenHeight = config.TILES_ON_SCREEN_HEIGHT
+        self.tilesOnScreenWidth = config.TILES_ON_SCREEN_WIDTH
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
@@ -37,10 +40,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         if self.sunlight:
             self.displaySurface.blit(self.sunlight, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
-        # Displaying radiuses is causing a lot of lag use only to debug
-        # for radius in self.radiuses:
-        #     self.drawRadius(radius["radius"], radius["position"], radius["color"])
-        self.radiuses = []
+        # self.radiuses = []
 
     def drawSprite(self, sprite):
         spritePosition = sprite.rect.topleft - self.offset
@@ -49,8 +49,8 @@ class CameraSpriteGroup(pygame.sprite.Group):
     def drawTiles(self):
         xGap = int(self.offset.x / TILE_SIZE)
         yGap = int(self.offset.y / TILE_SIZE)
-        for y in range(TILES_ON_SCREEN_HEIGHT):
-            for x in range(TILES_ON_SCREEN_WIDTH):
+        for y in range(self.tilesOnScreenHeight):
+            for x in range(self.tilesOnScreenWidth):
                 if x + xGap < len(self.map) and y + yGap < len(self.map):
                     tile = self.map[y + yGap][x + xGap]
                     self.drawSprite(tile)

@@ -1,10 +1,10 @@
 import pygame
 from pygame.time import Clock
 
-from config import HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HEALTHBAR_MAIN
-from game.lightning.Glowing import Glowing
+from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE
+from Config import Config
 from game.entities.domain.Entity import Entity
-from game.lightning.LightSize import LightSize
+from game.lightning.Glowing import Glowing
 from game.ui.inventory.Inventory import Inventory
 from game.items.domain.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
@@ -16,16 +16,27 @@ class Player(Entity, Glowing):
     def __init__(self,
                  groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
-                 playerData,
-                 inventory: Inventory, clock: Clock):
-        super().__init__(groups, obstacleSprites, playerData, clock)
-        Glowing.__init__(self, LightSize.MEDIUM)
-
+                 UiSprites: pygame.sprite.Group,
+                 playerImages: dict,
+                 config: Config,
+                 clock: Clock,
+                 midbottom: Vector2,
+                 currHealth: int = None):
+        playerData = {"speed": 6, "maxHealth": 100}
+        Entity.__init__(self, groups, obstacleSprites, playerData, playerImages, clock, midbottom, currHealth)
+        Glowing.__init__(self)
         self.selectedItem = SelectedItem(self)
-        self.inventory = inventory
 
-        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200, HEALTHBAR_MAIN,
-                             HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
+        inventoryPosition = Vector2(config.WINDOW_WIDTH / 2, config.WINDOW_HEIGHT - 60)
+        self.inventory = Inventory(UiSprites, 2, 12, inventoryPosition)
+        self.inventory.open()
+
+        UiSprites.player = self
+        UiSprites.inventory = self.inventory
+        UiSprites.selectedItem = self.selectedItem
+
+        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200,
+                             HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
 
     def adjustDirection(self):
         if self.destinationPosition:

@@ -1,11 +1,11 @@
-from config import FONT_MENU_COLOR, BASE_BUTTON_COLOR
+from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR
 from menu.Menu import Menu
 from game.ui.general.Button import Button
 
 
 class CreateGame(Menu):
     def __init__(self, screen, backAction):
-        super().__init__(screen)
+        Menu.__init__(self, screen)
         self.backAction = backAction
         self.mapSizes = ["XS", "S", "M", "L", "XL"]
         self.mapSizesIndex = 2

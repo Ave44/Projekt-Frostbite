@@ -10,7 +10,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 
-class Goblin(AggressiveMob,AnimatedEntity):
+class Goblin(AggressiveMob, AnimatedEntity):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, clock: Clock, midbottom: Vector2, currHealth: int = None):
         entityData = {
@@ -29,5 +29,3 @@ class Goblin(AggressiveMob,AnimatedEntity):
     def drop(self) -> None:
         BigMeat(self.visibleSprites, self.rect.center, self.loadedImages)
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
-
-

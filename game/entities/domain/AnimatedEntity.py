@@ -2,6 +2,7 @@ from pygame import Surface
 from pygame.time import Clock
 import random
 
+
 class AnimatedEntity:
     def __init__(self, images: list[Surface], clock: Clock, timeMsBetweenFrames: int):
         self.images = images
@@ -17,7 +18,6 @@ class AnimatedEntity:
         if self.currFrame == self.lastFrame:
             self.currFrame = 0
         self.image = self.images[self.currFrame]
-
 
     def animationUpdate(self):
         self.timeOnFrame += self.clock.get_time()

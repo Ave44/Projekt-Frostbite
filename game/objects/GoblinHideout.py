@@ -15,7 +15,7 @@ class GoblinHideout(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, midBottom: Vector2, clock: Clock):
         image = loadedImages.goblinHideout
-        Object.__init__(self,visibleGroup, midBottom, 50, ToolType.PICKAXE, image)
+        Object.__init__(self, visibleGroup, midBottom, 50, ToolType.PICKAXE, image)
         self.loadedImages = loadedImages
         self.goblins = []
         self.daysFromGoblinsChange = 0
@@ -27,7 +27,7 @@ class GoblinHideout(Object):
 
     def spawnGoblins(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        for i in range(0,self.numberOfGoblinsToSpawn):
+        for i in range(0, self.numberOfGoblinsToSpawn):
             newGoblin = Goblin(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.clock, pos)
             self.goblins.append(newGoblin)
         self.daysFromGoblinsChange = 0

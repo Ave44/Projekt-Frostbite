@@ -1,4 +1,4 @@
-import pygame
+from pygame import Surface
 from pygame.math import Vector2
 from pygame.sprite import Sprite, Group
 from constants import BG_COLOR, SLOT_GAP, SLOT_SIZE
@@ -19,7 +19,7 @@ class Inventory(Sprite):
         self.inventoryWidth = inventoryWidth
         self.isOpen: bool = False
         self.spriteGroup = spriteGroup
-        self.image = pygame.Surface(
+        self.image = Surface(
             [inventoryWidth * (SLOT_SIZE + SLOT_GAP) + SLOT_GAP, inventoryHeight * (SLOT_SIZE + SLOT_GAP) + SLOT_GAP],
             pygame.SRCALPHA, 32)
         self.image.fill(BG_COLOR)

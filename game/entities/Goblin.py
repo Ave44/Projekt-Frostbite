@@ -1,6 +1,7 @@
 from pygame import Vector2
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
+from game.entities.domain.AnimatedEntity import AnimatedEntity
 
 from game.entities.domain.AggressiveMob import AggressiveMob
 from game.items.BigMeat import BigMeat
@@ -9,7 +10,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 
-class Goblin(AggressiveMob):
+class Goblin(AggressiveMob,AnimatedEntity):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, clock: Clock, midbottom: Vector2, currHealth: int = None):
         entityData = {
@@ -28,3 +29,5 @@ class Goblin(AggressiveMob):
     def drop(self) -> None:
         BigMeat(self.visibleSprites, self.rect.center, self.loadedImages)
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
+
+

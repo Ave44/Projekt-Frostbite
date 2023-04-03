@@ -111,6 +111,7 @@ class LoadedImages:
             "image_right_damage": load("./graphics/entities/goblin/goblin_right_damage.png").convert_alpha()
         }
 
+
     def loadObjectsImages(self):
         self.treeSapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]
         self.smallTree = [load("./graphics/objects/trees/smallTree.png").convert_alpha()]
@@ -124,6 +125,7 @@ class LoadedImages:
         self.rock = load("./graphics/objects/rock.png").convert_alpha()
 
         self.rabbitHole = load("./graphics/objects/rabbit_hole.png").convert_alpha()
+
         self.goblinHideout = load("./graphics/objects/goblin_hideout.png").convert_alpha()
 
     def loadItemsImages(self):

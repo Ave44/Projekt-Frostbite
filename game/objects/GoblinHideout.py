@@ -49,6 +49,3 @@ class GoblinHideout(Object):
             return
 
         self.spawnGoblins()
-
-    def onEvening(self):
-        pass

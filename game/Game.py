@@ -132,7 +132,6 @@ class Game:
             self.tick = 0
             self.spawnBomb()
             self.rabbitHole.onEvening()
-            self.goblinHideout.onEvening()
             self.player.heal(20)
 
     def spawnBomb(self):

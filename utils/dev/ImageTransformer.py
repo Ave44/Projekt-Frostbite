@@ -1,7 +1,7 @@
 import numpy
 from imageio.v3 import imread, imwrite
 
-from config import ROOT_PATH
+from constants import ROOT_PATH
 
 
 class ImageTransformerMeta(type):
@@ -43,7 +43,7 @@ class ImageTransformer(metaclass=ImageTransformerMeta):
         return imageOutPath
 
     @staticmethod
-    def _transformImage(image: numpy.ndarray, colorRGBA: [int, int, int, int]) -> numpy.ndarray:
+    def _transformImage(image: numpy.ndarray, colorRGBA: list[int, int, int, int]) -> numpy.ndarray:
         imageCopy = numpy.array(image)
         imageCopy[imageCopy.sum() != 0] = numpy.add(imageCopy, colorRGBA)
         return imageCopy

@@ -13,9 +13,9 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Mob(Entity, ABC):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 clock: Clock, entityData, sightRange: int, moveEveryMs: int,
-                 minMoveMs: int, maxMoveMs: int):
-        super().__init__(visibleSprites, obstacleSprites, entityData, clock)
+                 loadedImages: dict, clock: Clock, entityData, sightRange: int, moveEveryMs: int,
+                 minMoveMs: int, maxMoveMs: int, midbottom: Vector2, currHealth: int = None):
+        Entity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages, clock, midbottom, currHealth)
         self.sightRange = sightRange
         self.isMoving = False
         self.movingTime = 0

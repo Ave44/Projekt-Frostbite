@@ -13,11 +13,12 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 class AggressiveMob(Mob):
     def __init__(self,
                  visibleSprites: CameraSpriteGroup,
-                 obstacleSprites: ObstacleSprites,
+                 obstacleSprites: ObstacleSprites, loadedImages: dict,
                  enemyData, clock: Clock, moveEveryMs: int,
-                 minMoveTimeMs: int, maxMoveTimeMs: int, attackCooldownMs: int):
-        super().__init__(visibleSprites, obstacleSprites, clock, enemyData,
-                         enemyData["sightRange"], moveEveryMs, minMoveTimeMs, maxMoveTimeMs)
+                 minMoveTimeMs: int, maxMoveTimeMs: int, attackCooldownMs: int,
+                 midbottom: Vector2, currHealth: int = None):
+        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, clock, enemyData,
+                     enemyData["sightRange"], moveEveryMs, minMoveTimeMs, maxMoveTimeMs, midbottom, currHealth)
         self.attackRange = enemyData["attackRange"]
         self.damage = enemyData["damage"]
         self.target = None

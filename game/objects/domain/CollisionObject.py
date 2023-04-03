@@ -13,7 +13,7 @@ class CollisionObject(Object, ABC):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group,
                  midBottom: Vector2, durability: int, toolType: ToolType,
                  image: Surface, colliderRect: Rect):
-        super().__init__(visibleGroup, midBottom, durability, toolType, image)
+        Object.__init__(self, visibleGroup, midBottom, durability, toolType, image)
         Sprite.__init__(self, obstaclesGroup, visibleGroup)
         self.obstaclesGroup = obstaclesGroup
         self.colliderRect = colliderRect

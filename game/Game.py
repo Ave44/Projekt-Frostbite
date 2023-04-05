@@ -48,7 +48,7 @@ class Game:
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
                              self.UiSprites,
-                             self.loadedImages.player,
+                             self.loadedImages,
                              config,
                              self.clock,
                              Vector2(0, 0))

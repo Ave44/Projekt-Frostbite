@@ -56,9 +56,8 @@ class CameraSpriteGroup(pygame.sprite.Group):
                     self.drawSprite(tile)
 
     def drawLightning(self, sprite: Glowing):
-        halfLightSize = sprite.light.get_size()[0] // 2
-        lightPosition = sprite.rect.center - self.offset - Vector2(halfLightSize, halfLightSize)
-        self.sunlight.blit(sprite.light, lightPosition)
+        lightPosition = sprite.calculateTopLeftPosition() - self.offset
+        self.sunlight.blit(sprite.lightImage, lightPosition)
 
     # def addRadius(self, radius, position, color):
     #     self.radiuses.append({"radius": radius, "position": position, "color": color})

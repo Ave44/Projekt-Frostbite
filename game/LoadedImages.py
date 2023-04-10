@@ -78,20 +78,20 @@ class LoadedImages:
         }
 
         self.bomb = {
-            "image_up": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
+            "image_up": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_down": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_left": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_right": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
 
-            "image_up_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
+            "image_up_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_down_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_left_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_right_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
 
-            "image_up_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha()
+            "image_up_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_down_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_left_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_right_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha()
         }
 
         self.goblin = {

@@ -8,7 +8,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Bomb(AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: dict, midbottom: Vector2, clock: Clock, currHealth: int = None):
+                 loadedImages: dict, loadedSounds: dict, midbottom: Vector2, clock: Clock, currHealth: int = None):
         entityData = {
             "speed": 3,
             "maxHealth": 60,
@@ -16,7 +16,7 @@ class Bomb(AggressiveMob):
             "sightRange": 400,
             "attackRange": 20
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, entityData, clock, 200, 300, 500, 0, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, entityData, clock, 200, 300, 500, 0, midbottom, currHealth)
 
     def afterAttackAction(self):
         self.die()

@@ -17,12 +17,13 @@ class Player(Entity):
                  obstacleSprites: pygame.sprite.Group,
                  UiSprites: pygame.sprite.Group,
                  playerImages: dict,
+                 playerSounds: dict,
                  config: Config,
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None):
         playerData = {"speed": 6, "maxHealth": 100}
-        Entity.__init__(self, groups, obstacleSprites, playerData, playerImages, clock, midbottom, currHealth)
+        Entity.__init__(self, groups, obstacleSprites, playerData, playerImages, playerSounds, clock, midbottom, currHealth)
         self.selectedItem = SelectedItem(self)
 
         inventoryPosition = Vector2(config.WINDOW_WIDTH / 2, config.WINDOW_HEIGHT - 60)

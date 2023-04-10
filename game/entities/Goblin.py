@@ -1,6 +1,7 @@
 from pygame import Vector2
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
+from game.LoadedSounds import LoadedSounds
 from game.entities.domain.AnimatedEntity import AnimatedEntity
 
 from game.entities.domain.AggressiveMob import AggressiveMob
@@ -12,7 +13,8 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Goblin(AggressiveMob, AnimatedEntity):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, clock: Clock, midbottom: Vector2, currHealth: int = None):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2,
+                 currHealth: int = None):
         entityData = {
             "speed": 3,
             "maxHealth": 50,
@@ -20,11 +22,13 @@ class Goblin(AggressiveMob, AnimatedEntity):
             "sightRange": 150,
             "attackRange": 50
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, entityData, clock, 700, 500, 1000, 2000, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, entityData, clock, 700, 500,
+                               1000, 2000, midbottom, currHealth)
         self.loadedImages = loadedImages
+        self.loadedSounds = loadedSounds
 
     def afterAttackAction(self):
-        pass
+        self.playSound(self.soundAttack)
 
     def drop(self) -> None:
         BigMeat(self.visibleSprites, self.rect.center, self.loadedImages)

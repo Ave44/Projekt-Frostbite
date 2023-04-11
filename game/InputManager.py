@@ -81,5 +81,10 @@ class InputManager:
 
         for sprite in self.visibleSprites.sprites():
             if sprite.rect.collidepoint(mousePosInWorld):
-                return sprite
+                spriteMask = pygame.mask.from_surface(sprite.image)
+                mousePositionAtMaskX = mousePosInWorld.x - sprite.rect.x
+                mousePositionAtMaskY = mousePosInWorld.y - sprite.rect.y
+                mousePositionAtMask = (mousePositionAtMaskX, mousePositionAtMaskY)
+                if spriteMask.get_at(mousePositionAtMask):
+                    return sprite
         return None

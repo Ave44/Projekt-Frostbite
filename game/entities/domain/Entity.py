@@ -161,15 +161,15 @@ class Entity(Sprite, ABC):
             self.image = self.imageUp
 
     def getDamage(self, amount: int) -> None:
-        if self.currentHealth:
-            self.timeFromLastHealthChange = 0
-            self.state = State.DAMAGED
         if self.currentHealth <= amount:
             self.die()
-        else:
+        if self.state != State.DEAD:
+            self.timeFromLastHealthChange = 0
+            self.state = State.DAMAGED
             self.currentHealth -= amount
 
     def die(self):
+        self.state = State.DEAD
         self.currentHealth = 0
         self.remove(*self.groups())
         self.drop()

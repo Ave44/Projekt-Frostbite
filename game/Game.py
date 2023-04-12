@@ -7,6 +7,7 @@ from pygame.math import Vector2
 
 from constants import TILE_SIZE, HAPPY_THEME
 from Config import Config
+from game.DayNightClock import DayNightClock
 from game.LoadedImages import LoadedImages
 from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
@@ -53,6 +54,10 @@ class Game:
                              config,
                              self.clock,
                              Vector2(0,0))
+
+        bg = pygame.image.load("./graphics/cycles/day-night.png")
+        hand = pygame.image.load("./graphics/cycles/clock-hand.png")
+        self.dayNightClock = DayNightClock(bg, 200, 50, self.UiSprites, hand)
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):

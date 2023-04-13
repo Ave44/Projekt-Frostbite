@@ -16,7 +16,7 @@ from game.entities.Player import Player
 from game.entities.Rabbit import Rabbit
 from game.items.Sword import Sword
 from game.items.domain.Item import Item
-from game.lightning.DayCycle import DayCycle
+from game.dayCycle.DayCycle import DayCycle
 from game.objects.Grass import Grass
 from game.objects.RabbitHole import RabbitHole
 from game.objects.Rock import Rock

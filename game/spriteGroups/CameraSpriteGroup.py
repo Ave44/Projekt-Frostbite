@@ -27,17 +27,19 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset.y = center.y - self.halfWindowHeight
         self.drawTiles()
 
+        sunlightBrightness = self.sunlight.get_at((0, 0))[0]
+
         for sprite in self.entities.sprites():
             self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and self.sunlight.get_alpha():
+            if isinstance(sprite, Glowing) and sunlightBrightness != 255:
                 self.drawLightning(sprite)
 
         for sprite in self.sprites():
             self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and self.sunlight.get_alpha():
+            if isinstance(sprite, Glowing) and sunlightBrightness != 255:
                 self.drawLightning(sprite)
 
-        if self.sunlight:
+        if sunlightBrightness != 255:
             self.displaySurface.blit(self.sunlight, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
         # self.radiuses = []

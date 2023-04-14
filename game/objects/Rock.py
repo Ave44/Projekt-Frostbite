@@ -4,7 +4,7 @@ from pygame.sprite import Group
 from game.LoadedImages import LoadedImages
 
 from game.items.Sword import Sword
-from game.items.domain.ToolType import ToolType
+from game.items.domain.Pickaxe import Pickaxe
 from game.objects.domain.CollisionObject import CollisionObject
 
 
@@ -15,8 +15,7 @@ class Rock(CollisionObject):
         colliderRect = Rect((0, 0), (10, 10))
         colliderRect.midbottom = midBottom
 
-        super().__init__(visibleGroup, obstaclesGroup,
-                         midBottom, 40, ToolType.PICKAXE, image, colliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,midBottom, 40, Pickaxe, image, colliderRect)
 
     def interact(self) -> None:
         # do something

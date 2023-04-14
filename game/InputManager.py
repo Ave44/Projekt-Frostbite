@@ -7,6 +7,7 @@ from pygame.math import Vector2
 from game.entities.Player import Player
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
+from game.ui.inventory.slot.Slot import Slot
 
 
 class InputManager:
@@ -43,7 +44,9 @@ class InputManager:
 
                 if event.button == 1:
                     if mouseHoversOverInventory:
-                        self.player.inventory.handleMouseLeftClick(mousePos, self.player.selectedItem)
+                        hoveredSlot = self.getHoveredSlotSprite(mousePos)
+                        if hoveredSlot:
+                            hoveredSlot.handleMouseLeftClick(self.player)
                     elif hoveredSprite:
                         self.player.handleMouseLeftClick(hoveredSprite)
                     elif not self.player.selectedItem.isEmpty():   
@@ -55,7 +58,9 @@ class InputManager:
 
                 if event.button == 3:
                     if mouseHoversOverInventory:
-                        self.player.inventory.handleMouseRightClick(mousePos)
+                        hoveredSlot = self.getHoveredSlotSprite(mousePos)
+                        if hoveredSlot:
+                            hoveredSlot.handleMouseRightClick(self.player)
                     elif not self.player.selectedItem.isEmpty():
                         self.player.selectedItem.handleMouseRightClick(mousePos)
 
@@ -72,7 +77,7 @@ class InputManager:
             self.player.moveRight()
 
     def checkIfMouseHoversOverInventory(self, mousePos) -> bool:
-        if self.UiSprites.inventory.rect.collidepoint(mousePos):
+        if self.UiSprites.inventory.rect.collidepoint(mousePos) or self.UiSprites.equipmentBackgroundRect.collidepoint(mousePos):
             return True
         return False
 
@@ -88,3 +93,13 @@ class InputManager:
                 if spriteMask.get_at(mousePositionAtMask):
                     return sprite
         return None
+
+    def getHoveredSlotSprite(self, mousePos) -> Slot:
+        if self.player.handSlot.rect.collidepoint(mousePos):
+            return self.player.handSlot
+        if self.player.bodySlot.rect.collidepoint(mousePos):
+            return self.player.bodySlot
+        
+        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.player.inventory.slotList), None)
+        return hoveredSlot
+  

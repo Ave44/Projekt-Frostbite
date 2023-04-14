@@ -1,15 +1,17 @@
-import pygame
 import shortuuid
+
 from pygame import Surface
+from pygame.sprite import Sprite
 from pygame.math import Vector2
+
 from game.LoadedImages import LoadedImages
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
-class Item(pygame.sprite.Sprite):
+class Item(Sprite):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages,
                  name: str = None, image: Surface = None, icon: Surface = None):
-        super().__init__(visibleSprites)
+        Sprite.__init__(self, visibleSprites)
         self.visibleSprites = visibleSprites
         self.id = shortuuid.uuid()
 
@@ -28,7 +30,7 @@ class Item(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=center)
 
     def drop(self, position: Vector2) -> None:
-        self.rect.center = position
+        self.rect.midbottom = position
         self.show()
 
     def onLeftClickAction(self, player):

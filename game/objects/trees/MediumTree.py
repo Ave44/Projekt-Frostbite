@@ -4,7 +4,7 @@ from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 
 from game.items.domain.Item import Item
-from game.items.domain.ToolType import ToolType
+from game.items.domain.Axe import Axe
 from game.objects.domain.CollisionObject import CollisionObject
 from game.objects.domain.Flammable import Flammable
 from game.objects.trees.BurntTree import BurntTree
@@ -20,7 +20,7 @@ class MediumTree(CollisionObject, Flammable):
         colliderRect.midbottom = midBottom
 
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
-                                 midBottom, 10, ToolType.AXE, image, colliderRect)
+                                 midBottom, 10, Axe, image, colliderRect)
         Flammable.__init__(self, clock)
 
         self.age = ageMs

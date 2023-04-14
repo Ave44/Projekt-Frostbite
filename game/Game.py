@@ -27,6 +27,8 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.domain.Item import Item
 from game.items.Sword import Sword
+from game.items.WoodenArmor import WoodenArmor
+from game.items.LeatherArmor import LeatherArmor
 from game.DayCycle import DayCycle
 from gameInitialization.GenerateMap import generateMap
 
@@ -49,7 +51,7 @@ class Game:
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
                              self.UiSprites,
-                             self.loadedImages.player,
+                             self.loadedImages,
                              config,
                              self.clock,
                              Vector2(0,0))
@@ -70,10 +72,12 @@ class Game:
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages , self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom, self.clock)
         self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom, self.clock)
+        
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
-        unknownItem = Item(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
-        self.player.inventory.addItem(unknownItem, self.player.selectedItem)
+        self.player.inventory.addItem(Item(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 

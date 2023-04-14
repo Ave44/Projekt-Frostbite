@@ -17,6 +17,12 @@ from game.entities.Rabbit import Rabbit
 from game.items.Sword import Sword
 from game.items.domain.Item import Item
 from game.dayCycle.DayCycle import DayCycle
+from game.objects.RabbitHole import RabbitHole
+from game.objects.GoblinHideout import GoblinHideout
+from game.objects.trees.SmallTree import SmallTree
+from game.objects.trees.MediumTree import MediumTree
+from game.objects.trees.LargeTree import LargeTree
+from game.objects.Rock import Rock
 from game.objects.Grass import Grass
 from game.objects.RabbitHole import RabbitHole
 from game.objects.Rock import Rock
@@ -65,10 +71,13 @@ class Game:
                 break
 
         Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
+
         Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
-        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages,
-                                     self.player.rect.midbottom, self.clock)
+        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom,
+                                 self.clock)
+        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+                                       self.player.rect.midbottom, self.clock)
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
@@ -76,7 +85,7 @@ class Game:
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
-    # later will be replaced with LoadGame(savefile) class
+# later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
         map, objects = generateMap(mapSize, print)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
@@ -94,10 +103,12 @@ class Game:
         self.createObjects(objects)
         return map
 
+
     def createObjects(self, objects: dict) -> None:
         self.loadTrees(objects['trees'])
         self.loadRocks(objects['rocks'])
         self.loadGrasses(objects['grasses'])
+
 
     def loadTrees(self, treesData: dict) -> None:
         for treeData in treesData:
@@ -111,29 +122,35 @@ class Game:
                 LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages,
                           self.clock, treeData['age'])
 
+
     def loadRocks(self, rocksData: dict) -> None:
         for rockData in rocksData:
             Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'], self.loadedImages)
 
+
     def loadGrasses(self, grassesData: dict) -> None:
         for grassData in grassesData:
             Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages, self.clock)
+
 
     def debug(self, text):
         font = pygame.font.SysFont(None, 24)
         img = font.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
 
+
     def handleTick(self):
         self.tick = self.tick + 1
         if self.tick == 1000:
             self.spawnBomb()
             self.rabbitHole.onNewDay()
+            self.goblinHideout.onNewDay()
         if self.tick == 2000:
             self.tick = 0
             self.spawnBomb()
             self.rabbitHole.onEvening()
             self.player.heal(20)
+
 
     def spawnBomb(self):
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
@@ -141,9 +158,11 @@ class Game:
         position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
         Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, position, self.clock)
 
+
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)
         mixer.music.play(-1)
+
 
     def play(self):
         self.changeMusicTheme(HAPPY_THEME)
@@ -153,7 +172,6 @@ class Game:
             self.visibleSprites.update()
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
-
 
             self.UiSprites.customDraw()
 

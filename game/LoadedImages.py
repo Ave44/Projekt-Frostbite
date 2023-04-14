@@ -95,6 +95,24 @@ class LoadedImages:
             "image_right_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha()
         }
 
+        self.goblin = {
+            "image_up": load("./graphics/entities/goblin/goblin_up.png").convert_alpha(),
+            "image_down": load("./graphics/entities/goblin/goblin_down.png").convert_alpha(),
+            "image_left": load("./graphics/entities/goblin/goblin_left.png").convert_alpha(),
+            "image_right": load("./graphics/entities/goblin/goblin_right.png").convert_alpha(),
+
+            "image_up_heal": load("./graphics/entities/goblin/goblin_up_heal.png").convert_alpha(),
+            "image_down_heal": load("./graphics/entities/goblin/goblin_down_heal.png").convert_alpha(),
+            "image_left_heal": load("./graphics/entities/goblin/goblin_left_heal.png").convert_alpha(),
+            "image_right_heal": load("./graphics/entities/goblin/goblin_right_heal.png").convert_alpha(),
+
+            "image_up_damage": load("./graphics/entities/goblin/goblin_up_damage.png").convert_alpha(),
+            "image_down_damage": load("./graphics/entities/goblin/goblin_down_damage.png").convert_alpha(),
+            "image_left_damage": load("./graphics/entities/goblin/goblin_left_damage.png").convert_alpha(),
+            "image_right_damage": load("./graphics/entities/goblin/goblin_right_damage.png").convert_alpha()
+        }
+
+
     def loadObjectsImages(self):
         self.treeSapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]
         self.smallTree = [load("./graphics/objects/trees/smallTree.png").convert_alpha()]
@@ -109,10 +127,13 @@ class LoadedImages:
 
         self.rabbitHole = load("./graphics/objects/rabbit_hole.png").convert_alpha()
 
+        self.goblinHideout = load("./graphics/objects/goblin_hideout.png").convert_alpha()
+
     def loadItemsImages(self):
         self.undefined = load("./graphics/items/undefined.png").convert_alpha()
         self.bigMeat = load("./graphics/items/big_meat.png").convert_alpha()
         self.boarFang = load("./graphics/items/boar_fang.png").convert_alpha()
+        self.goblinFang = load("./graphics/items/goblin_fang.png").convert_alpha()
         self.deerAntlers = load("./graphics/items/deer_antlers.png").convert_alpha()
         self.leather = load("./graphics/items/leather.png").convert_alpha()
         self.smallMeat = load("./graphics/items/small_meat.png").convert_alpha()

@@ -149,11 +149,11 @@ class Game:
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.inputManager.handleInput()
+            self.dayCycle.updateDayCycle()
             self.visibleSprites.update()
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
 
-            self.dayCycle.updateDayCycle()
 
             self.UiSprites.customDraw()
 

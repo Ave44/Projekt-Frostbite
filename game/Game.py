@@ -2,33 +2,32 @@ import random
 
 import pygame
 from pygame import mixer
-from pygame.time import Clock
 from pygame.math import Vector2
+from pygame.time import Clock
 
-from constants import TILE_SIZE, HAPPY_THEME
 from Config import Config
-from game.DayNightClock import DayNightClock
+from constants import TILE_SIZE, HAPPY_THEME
+from game.DayCycle import DayCycle
+from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
 from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
 from game.entities.Player import Player
-from game.InputManager import InputManager
 from game.entities.Rabbit import Rabbit
-from game.objects.RabbitHole import RabbitHole
+from game.items.Sword import Sword
+from game.items.domain.Item import Item
 from game.objects.GoblinHideout import GoblinHideout
-from game.objects.trees.SmallTree import SmallTree
-from game.objects.trees.MediumTree import MediumTree
-from game.objects.trees.LargeTree import LargeTree
-from game.objects.Rock import Rock
 from game.objects.Grass import Grass
-from game.tiles.Tile import Tile
+from game.objects.RabbitHole import RabbitHole
+from game.objects.Rock import Rock
+from game.objects.trees.LargeTree import LargeTree
+from game.objects.trees.MediumTree import MediumTree
+from game.objects.trees.SmallTree import SmallTree
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-from game.items.domain.Item import Item
-from game.items.Sword import Sword
-from game.DayCycle import DayCycle
+from game.tiles.Tile import Tile
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -45,16 +44,15 @@ class Game:
 
         self.loadedImages = LoadedImages()
         self.map = self.createMap(100)
-        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen, config, self.UiSprites)
+        self.dayCycle = DayCycle(0, 60000, self.clock, config, self.UiSprites, self.visibleSprites)
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
                              self.UiSprites,
-                             self.loadedImages.player,
+                             self.loadedImages,
                              config,
                              self.clock,
-                             Vector2(0,0))
-
+                             Vector2(0, 0))
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
@@ -68,10 +66,14 @@ class Game:
                 break
 
         Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages , self.clock, self.player.rect.midbottom)
-        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages , self.clock, self.player.rect.midbottom)
-        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom, self.clock)
-        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom, self.clock)
+
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
+        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+                                     self.player.rect.midbottom,
+                                     self.clock)
+        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+                                           self.player.rect.midbottom, self.clock)
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
@@ -105,11 +107,14 @@ class Game:
     def loadTrees(self, treesData: dict) -> None:
         for treeData in treesData:
             if treeData['growthStage'] == 1:
-                SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+                SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages,
+                          self.clock, treeData['age'])
             elif treeData['growthStage'] == 2:
-                MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+                MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages,
+                           self.clock, treeData['age'])
             else:
-                LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages, self.clock, treeData['age'])
+                LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages,
+                          self.clock, treeData['age'])
 
     def loadRocks(self, rocksData: dict) -> None:
         for rockData in rocksData:
@@ -150,11 +155,10 @@ class Game:
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.inputManager.handleInput()
+            self.dayCycle.updateDayCycle()
             self.visibleSprites.update()
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
-
-            self.dayCycle.updateDayCycle()
 
             self.UiSprites.customDraw()
 

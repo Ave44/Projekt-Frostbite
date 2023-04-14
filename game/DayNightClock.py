@@ -16,7 +16,7 @@ class DayNightClock(Sprite):
         self.backgroundRect = self.background.get_rect()
 
         self.image = Surface(Vector2(size, size), SRCALPHA)
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(topright=(Config().WINDOW_WIDTH - 10, 10))
 
         self.fullCycleTime = sum(list(map(lambda x: x[0], timesOfTheDay)))
         self.currentTime = currentTime

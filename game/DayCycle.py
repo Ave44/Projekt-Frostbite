@@ -29,10 +29,11 @@ class DayCycle:
         self.eveningLength = self.nightStart - self.eveningStart
 
         timesOfTheDay = [
+            (self.dawnStart, Color(46, 54, 87)),
             (self.dawnLength, Color(205, 131, 122)),
             (self.eveningStart - self.dayStart, Color(254, 212, 86)),
-            (self.eveningStart, Color(165, 91, 82)),
-            (self.nightStart - self.dawnStart, Color(46, 54, 87))
+            (self.eveningLength, Color(165, 91, 82)),
+            (dayLengthInMs - self.nightStart, Color(46, 54, 87))
         ]
         self.dayCycleClock = DayNightClock(timesOfTheDay, self.currentTime, self.uiSprites, 200)
 
@@ -40,7 +41,6 @@ class DayCycle:
         deltaTime = self.clock.get_time()
         self.currentTime += deltaTime
         if self.currentTime >= self.dayLength:
-            print("a")
             self.currentTime = 0
 
         brightness = self.calculateBrightness()

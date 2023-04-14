@@ -1,7 +1,7 @@
-from math import cos, radians, sin
+from math import cos, radians, sin, pi
 
 import pygame.image
-from pygame import Surface, Vector2, SRCALPHA
+from pygame import Surface, Vector2, SRCALPHA, Color, Rect
 from pygame.sprite import Sprite
 from pygame.transform import rotate
 
@@ -10,43 +10,54 @@ from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 
 
 class DayNightClock(Sprite):
-    def __init__(self, backgroundImage: Surface, fullCycleTimeMS: int, currentTimeMS: int, uiSprites: UiSpriteGroup,
-                 clockHand: Surface):
+    def __init__(self, timesOfTheDay: list[tuple[float, Color]], currentTime: int, uiSprites: UiSpriteGroup, size: int):
         super().__init__(uiSprites)
-        self.image = Surface(Vector2(200, 200), SRCALPHA)
+        self.background = Surface(Vector2(size, size), SRCALPHA)
+        self.backgroundRect = self.background.get_rect()
+
+        self.image = Surface(Vector2(size, size), SRCALPHA)
         self.rect = self.image.get_rect()
-        self.fullCycleTimeMS = fullCycleTimeMS
-        self.currentTimeMS = currentTimeMS
 
-        # imageRect = self.image.get_rect()
-        # r = Vector2(imageRect.midtop[0], imageRect.midtop[1])
-        # x = Vector2(clockHand.get_width() // 2, 0)
-        # angle = 30
-        # clockHand = rotate(clockHand, -angle)
+        self.fullCycleTime = sum(list(map(lambda x: x[0], timesOfTheDay)))
+        self.currentTime = currentTime
+        self.radius = size / 2
+        self.center = Vector2(self.radius, self.radius)
 
-        # c = Vector2(90 - angle + 15, 0)
-        # if angle < 90:
-        #     d = clockHand.get_rect(bottomleft = Vector2(backgroundImage.get_width() // 2, backgroundImage.get_height() // 2) - c)
-        # elif angle == 90:
-        #     d = clockHand.get_rect(midleft = Vector2(backgroundImage.get_width() // 2, backgroundImage.get_height() // 2) - c)
-        # elif angle <= 180:
-        #     d = clockHand.get_rect(topright = Vector2(backgroundImage.get_width() // 2, backgroundImage.get_height() // 2) + c)
-        # else:
-        #     d = (0, 0)
+        self.updateBackground(timesOfTheDay)
+        self.__drawClock()
 
-        # pygame.draw.line()
-        # self.image.blit(clockHand, d)
+    def updateBackground(self, newTimesOfTheDay: list[tuple[float, Color]]):
+        startAngle = 0
+        for newTimeOfTheDay in newTimesOfTheDay:
+            arc = newTimeOfTheDay[0] / self.fullCycleTime * 360
+            self.__drawBackground(newTimeOfTheDay[1], startAngle, startAngle + arc)
+            startAngle += arc
 
-        def pie(scr, color, center, radius, start_angle, stop_angle):
-            theta = start_angle
-            while theta <= stop_angle:
-                pygame.draw.line(scr, color, center,
-                                 (center[0] + radius * cos(radians(theta - 90)) , center[1] + radius * sin(radians(theta - 90))),
-                                 2)
-                theta += 0.01
+        pygame.draw.circle(self.background, Color(0, 0 ,0), self.center, self.radius, 5)
 
-        pie(self.image, (205, 131, 122), Vector2(100, 100), 100, 0, 30)
-        pie(self.image, (254, 212, 86), Vector2(100, 100), 100, 31, 210)
-        pie(self.image, (165, 91, 82), Vector2(100, 100), 100, 211, 240)
-        pie(self.image, (46, 54, 87), Vector2(100, 100), 100, 241, 359)
+    def __drawBackground(self, color: Color, startAngle: int, stopAngle: int):
+        theta = startAngle
+        while theta <= stopAngle:
+            pygame.draw.line(self.background, color, self.center,
+                             (self.center.x + (self.radius-5) * cos(radians(theta - 90)),
+                              self.center.y + (self.radius-5) * sin(radians(theta - 90))),
+                             2)
+            theta += 0.01
 
+    def __drawClockHand(self):
+        hourAngle = ((self.currentTime % self.fullCycleTime) / self.fullCycleTime) * 2 * pi
+        hourAngle -= pi / 2
+
+        handX = self.center.x + self.radius * cos(hourAngle)
+        handY = self.center.y + self.radius * sin(hourAngle)
+        handEnd = (handX, handY)
+
+        pygame.draw.line(self.image, Color(0, 0, 0), self.center, handEnd, 3)
+
+    def __drawClock(self):
+        self.image.blit(self.background, self.backgroundRect)
+        self.__drawClockHand()
+
+    def update(self, newCurrentTime: int):
+        self.currentTime = newCurrentTime
+        self.__drawClock()

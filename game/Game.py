@@ -36,7 +36,6 @@ class Game:
     def __init__(self, screen, config: Config, saveData):
         self.screen = screen
         self.clock = Clock()
-        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen, config)
 
         self.visibleSprites = CameraSpriteGroup(config)
         self.obstacleSprites = ObstacleSprites(config)
@@ -46,6 +45,7 @@ class Game:
 
         self.loadedImages = LoadedImages()
         self.map = self.createMap(100)
+        self.dayCycle = DayCycle(0, 60000, self.clock, self.screen, config, self.UiSprites)
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
@@ -55,9 +55,6 @@ class Game:
                              self.clock,
                              Vector2(0,0))
 
-        bg = pygame.image.load("./graphics/cycles/day-night.png")
-        hand = pygame.image.load("./graphics/cycles/clock-hand.png")
-        self.dayNightClock = DayNightClock(bg, 200, 50, self.UiSprites, hand)
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):

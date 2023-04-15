@@ -1,4 +1,5 @@
 import os.path
+from pygame import Color
 from pygame.image import load
 
 TILE_SIZE = 128
@@ -23,6 +24,13 @@ SLOT_GAP = 6
 BASE_BUTTON_COLOR = "#d7fcd4"
 WHITE = "White"
 FONT_MENU_COLOR = "#b68f40"
+
+CLOCK_OUTLINE = Color(0, 0, 0)
+CLOCK_OUTLINE_SHADOW = Color(0, 0, 0, 64)
+DAWN_COLOR = Color(205, 131, 122)
+DAY_COLOR = Color(254, 212, 86)
+EVENING_COLOR = Color(165, 91, 82)
+NIGHT_COLOR = Color(46, 54, 87)
 
 # MUSIC
 HAPPY_THEME = 'music/custom/happy-theme.mp3'

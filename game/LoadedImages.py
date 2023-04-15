@@ -141,7 +141,7 @@ class LoadedImages:
 
         self.pebble = load("./graphics/items/pebble.png").convert_alpha()
         self.grassFibers = load("./graphics/items/grassFibers.png").convert_alpha()
-        # self.accorn = load("./graphics/items/accorn.png").convert_alpha()
+        self.accorn = load("./graphics/items/accorn.png").convert_alpha()
         self.sharpRock = load("./graphics/items/sharpRock.png").convert_alpha()
         self.wood = load("./graphics/items/wood.png").convert_alpha()
 

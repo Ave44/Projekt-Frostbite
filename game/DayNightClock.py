@@ -1,63 +1,71 @@
-from math import cos, radians, sin, pi
+from math import cos, radians, sin
 
 import pygame.image
-from pygame import Surface, Vector2, SRCALPHA, Color, Rect
-from pygame.sprite import Sprite
-from pygame.transform import rotate
+from pygame import Surface, Rect, Vector2, SRCALPHA, Color
 
-from Config import Config
-from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
+from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, BORDER_SIZE
 
 
-class DayNightClock(Sprite):
-    def __init__(self, timesOfTheDay: list[tuple[float, Color]], currentTime: int, uiSprites: UiSpriteGroup, size: int):
-        super().__init__(uiSprites)
-        self.background = Surface(Vector2(size, size), SRCALPHA)
-        self.backgroundRect = self.background.get_rect()
-
-        self.image = Surface(Vector2(size, size), SRCALPHA)
-        self.rect = self.image.get_rect(topright=(Config().WINDOW_WIDTH - 10, 10))
-
-        self.fullCycleTime = sum(list(map(lambda x: x[0], timesOfTheDay)))
+class DayNightClock():
+    def __init__(self, dayPhases: list[tuple[float, Color]], daySegments: int,
+                 currentTime: int, size: int):
+        self.dayLengthMs = sum(list(map(lambda x: x[0], dayPhases)))
         self.currentTime = currentTime
         self.radius = size / 2
         self.center = Vector2(self.radius, self.radius)
 
-        self.updateBackground(timesOfTheDay)
-        self.__drawClock()
+        self.background = Surface(Vector2(size, size), SRCALPHA)
+        self.backgroundOutline = Surface(Vector2(size, size), SRCALPHA)
+        self.createBackgroundOutline(daySegments)
+        self.updateBackground(dayPhases)
 
-    def updateBackground(self, newTimesOfTheDay: list[tuple[float, Color]]):
-        startAngle = 0
-        for newTimeOfTheDay in newTimesOfTheDay:
-            arc = newTimeOfTheDay[0] / self.fullCycleTime * 360
-            self.__drawBackground(newTimeOfTheDay[1], startAngle, startAngle + arc)
-            startAngle += arc
+        self.hand = Surface(Vector2(size, size), SRCALPHA)
+        pygame.draw.line(self.hand, CLOCK_OUTLINE,
+                         (self.center.x, self.center.y - self.radius),  
+                         (self.center.x, self.center.y - self.radius / 2), 5)
 
-        pygame.draw.circle(self.background, Color(0, 0 ,0), self.center, self.radius, 5)
+    def updateBackground(self, newDayPhases: list[tuple[float, Color]]):
+        angleStart = 0
+        for newDayPhase in newDayPhases:
+            arc = newDayPhase[0] / self.dayLengthMs * 360
+            angleEnd = angleStart + arc
+            self.drawCircleCutout(self.background, angleStart, angleEnd, 0.02, self.radius / 2, self.radius, newDayPhase[1])
+            angleStart = angleEnd
 
-    def __drawBackground(self, color: Color, startAngle: int, stopAngle: int):
-        theta = startAngle
-        while theta <= stopAngle:
-            pygame.draw.line(self.background, color, self.center,
-                             (self.center.x + (self.radius-5) * cos(radians(theta - 90)),
-                              self.center.y + (self.radius-5) * sin(radians(theta - 90))),
-                             2)
-            theta += 0.01
+        self.background.blit(self.backgroundOutline, (0, 0))
 
-    def __drawClockHand(self):
-        hourAngle = ((self.currentTime % self.fullCycleTime) / self.fullCycleTime) * 2 * pi
-        hourAngle -= pi / 2
+    def createBackgroundOutline(self, daySegments: int):
+        segmentAngle = 360 / daySegments
 
-        handX = self.center.x + self.radius * cos(hourAngle)
-        handY = self.center.y + self.radius * sin(hourAngle)
-        handEnd = (handX, handY)
+        halfDaySegments = int(daySegments / 2)
+        for segment in range(halfDaySegments):
+            angleStart = (segment * 2) * segmentAngle
+            angleEnd = angleStart + segmentAngle
+            self.drawCircleCutout(self.backgroundOutline, angleStart, angleEnd, 0.02, self.radius / 2, self.radius, CLOCK_OUTLINE_SHADOW)
+        
+        self.drawCircleCutout(self.backgroundOutline, 0, 360, segmentAngle, self.radius / 2, self.radius, CLOCK_OUTLINE)
 
-        pygame.draw.line(self.image, Color(0, 0, 0), self.center, handEnd, 3)
+        self.drawCircleCutout(self.backgroundOutline, 0, 360, 0.02, self.radius - BORDER_SIZE + 1, self.radius, CLOCK_OUTLINE)
+        self.drawCircleCutout(self.backgroundOutline, 0, 360, 0.1, self.radius / 2 - BORDER_SIZE + 1, self.radius / 2, CLOCK_OUTLINE)
 
-    def __drawClock(self):
-        self.image.blit(self.background, self.backgroundRect)
-        self.__drawClockHand()
+    def drawCircleCutout(self, surface: Surface, angleStart: float, angleEnd: float, angleStep: float, radiusStart: float, radiusEnd: float, color: Color):
+        angle = angleStart
+        while angle <= angleEnd:
+            pygame.draw.line(surface, color,
+                             (self.center.x + radiusStart * cos(radians(angle - 90)),
+                              self.center.y + radiusStart * sin(radians(angle - 90))),
+                             
+                             (self.center.x + radiusEnd * cos(radians(angle - 90)),
+                              self.center.y + radiusEnd * sin(radians(angle - 90))),
+                             1)
+            angle += angleStep
+
+    def drawHand(self, displaySurface: Surface, rect: Rect):
+        angle = (self.currentTime / self.dayLengthMs) * -360
+        rotatedHand = pygame.transform.rotate(self.hand, angle)
+        handPosition = (rect.centerx - rotatedHand.get_width() / 2, rect.centery - rotatedHand.get_height() / 2)
+
+        displaySurface.blit(rotatedHand, handPosition)
 
     def update(self, newCurrentTime: int):
         self.currentTime = newCurrentTime
-        self.__drawClock()

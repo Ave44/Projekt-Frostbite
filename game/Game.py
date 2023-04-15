@@ -38,13 +38,13 @@ class Game:
 
         self.visibleSprites = CameraSpriteGroup(config)
         self.obstacleSprites = ObstacleSprites(config)
-        self.UiSprites = UiSpriteGroup()
+        self.UiSprites = UiSpriteGroup(config)
 
         self.tick = 0
 
         self.loadedImages = LoadedImages()
         self.map = self.createMap(100)
-        self.dayCycle = DayCycle(0, 60000, self.clock, config, self.UiSprites, self.visibleSprites)
+        self.dayCycle = DayCycle(0, 48000, self.clock, config, self.UiSprites, self.visibleSprites)
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
@@ -69,9 +69,9 @@ class Game:
 
         Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
-        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages,
-                                     self.player.rect.midbottom,
-                                     self.clock)
+        # self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+        #                              self.player.rect.midbottom,
+        #                              self.clock)
         self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages,
                                            self.player.rect.midbottom, self.clock)
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
@@ -133,12 +133,12 @@ class Game:
         self.tick = self.tick + 1
         if self.tick == 1000:
             self.spawnBomb()
-            self.rabbitHole.onNewDay()
+            # self.rabbitHole.onNewDay()
             self.goblinHideout.onNewDay()
         if self.tick == 2000:
             self.tick = 0
             self.spawnBomb()
-            self.rabbitHole.onEvening()
+            # self.rabbitHole.onEvening()
             self.player.heal(20)
 
     def spawnBomb(self):

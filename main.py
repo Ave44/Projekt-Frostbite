@@ -17,8 +17,6 @@ pygame.display.set_icon(ICON)
 # Initialize music
 mixer.init()
 mixer.music.set_volume(config.MUSIC_VOLUME)
-mixer.music.load(constants.MENU_THEME)
-mixer.music.play()
 
 # Game view
 gameRunning = True

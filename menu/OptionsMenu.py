@@ -1,4 +1,5 @@
 import pygame
+from pygame import mixer
 
 from Config import Config
 from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR
@@ -38,14 +39,18 @@ class OptionsMenu(Menu):
     def incrementVolume(self) -> None:
         if self.volumeIndex == 4:
             return
-        self.volumeIndex += 1
-        self.options()
+        else:
+            self.volumeIndex += 1
+            self.updateMusicVolume()
+            self.options()
 
     def decrementVolume(self) -> None:
         if self.volumeIndex == 0:
             return
-        self.volumeIndex -= 1
-        self.options()
+        else:
+            self.volumeIndex -= 1
+            self.updateMusicVolume()
+            self.options()
 
     def createButtons(self) -> list[Button]:
         backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT),
@@ -107,3 +112,7 @@ class OptionsMenu(Menu):
         screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
         resized_screen = pygame.transform.scale(screen, (self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
         self.screen.blit(resized_screen, (0, 0))
+
+    def updateMusicVolume(self):
+        self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2
+        mixer.music.set_volume(self.config.MUSIC_VOLUME)

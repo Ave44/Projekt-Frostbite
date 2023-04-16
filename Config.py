@@ -10,5 +10,5 @@ class Config:
         self.TILES_ON_SCREEN_HEIGHT = ceil(self.WINDOW_HEIGHT / TILE_SIZE + 1)
 
         # MUSIC
-        self.MUSIC_VOLUME = 0 #.5
+        self.MUSIC_VOLUME = 0
         self.SOUNDS_VOLUME = 0

@@ -1,6 +1,7 @@
 import pygame
 from pygame import mixer
 
+import constants
 from constants import CAPTION, ICON
 from Config import Config
 
@@ -16,6 +17,8 @@ pygame.display.set_icon(ICON)
 # Initialize music
 mixer.init()
 mixer.music.set_volume(config.MUSIC_VOLUME)
+mixer.music.load(constants.MENU_THEME)
+mixer.music.play()
 
 # Game view
 gameRunning = True

@@ -12,9 +12,9 @@ from menu.general.Button import Button
 class MainMenu(Menu):
     def __init__(self, screen, config: Config):
         Menu.__init__(self, screen)
-        self.optionsMenu = OptionsMenu(screen, self.mainMenu)
-        self.createGameMenu = CreateGame(screen, self.mainMenu)
         self.config = config
+        self.optionsMenu = OptionsMenu(screen, self.mainMenu, self.config)
+        self.createGameMenu = CreateGame(screen, self.mainMenu, self.config)
 
     def playGame(self) -> None:
         # loading savefile
@@ -27,19 +27,19 @@ class MainMenu(Menu):
         game.play()
 
     def createButtons(self) -> list[Button]:
-        playButton = Button(pos=(640, 250),
+        playButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                             textInput="PLAY",
                             font=self.menuOptionFont,
                             action=self.playGame)
-        createGameButton = Button(pos=(640, 350),
+        createGameButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                   textInput="CREATE GAME",
                                   font=self.menuOptionFont,
                                   action=self.createGameMenu.initiateCreateGame)
-        optionsButton = Button(pos=(640, 450),
+        optionsButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.625 * self.config.WINDOW_HEIGHT),
                                textInput="OPTIONS",
                                font=self.menuOptionFont,
                                action=self.optionsMenu.options)
-        quitButton = Button(pos=(640, 550),
+        quitButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.764 * self.config.WINDOW_HEIGHT),
                             textInput="QUIT",
                             font=self.menuOptionFont,
                             action=self.quitGame)
@@ -48,7 +48,7 @@ class MainMenu(Menu):
     def mainMenu(self) -> None:
         self.createBackground()
         menuText = self.font.render("MAIN MENU", True, FONT_MENU_COLOR)
-        menuRect = menuText.get_rect(center=(640, 100))
+        menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
         menuButtons = self.createButtons()
 
         self.menuLoop([[menuText, menuRect]], menuButtons)

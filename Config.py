@@ -1,6 +1,7 @@
 from math import ceil
 from constants import TILE_SIZE
 
+
 class Config:
     def __init__(self) -> None:
         self.WINDOW_WIDTH = 1920

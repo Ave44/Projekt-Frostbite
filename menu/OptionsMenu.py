@@ -98,7 +98,7 @@ class OptionsMenu(Menu):
 
         self.menuLoop([[menuText, menuRect], [volumeText, volumeRect], [resolutionText, resolutionRect]], menuButtons)
 
-    def updateResolution(self):
+    def updateResolution(self) -> None:
         if self.resolutions[self.resolutionsIndex] == "1920x1080":
             self.config.WINDOW_HEIGHT = 1080
             self.config.WINDOW_WIDTH = 1920
@@ -108,11 +108,11 @@ class OptionsMenu(Menu):
             self.config.WINDOW_WIDTH = 1080
             self.updateScreen()
 
-    def updateScreen(self):
+    def updateScreen(self) -> None:
         screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
         resized_screen = pygame.transform.scale(screen, (self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
         self.screen.blit(resized_screen, (0, 0))
 
-    def updateMusicVolume(self):
+    def updateMusicVolume(self) -> None:
         self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2
         mixer.music.set_volume(self.config.MUSIC_VOLUME)

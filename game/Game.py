@@ -6,7 +6,7 @@ from pygame.math import Vector2
 from pygame.time import Clock
 
 from Config import Config
-from constants import TILE_SIZE, HAPPY_THEME
+from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR, BUTTON_FONT
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
 from game.entities.Boar import Boar
@@ -38,6 +38,8 @@ from gameInitialization.GenerateMap import generateMap
 
 class Game:
     def __init__(self, screen, config: Config, saveData):
+        self.config = config
+        self.font = pygame.font.Font(BUTTON_FONT, 100)
         self.screen = screen
         self.clock = Clock()
 
@@ -85,9 +87,16 @@ class Game:
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
-# later will be replaced with LoadGame(savefile) class
+    def generateMapLoadingScreen(self, information: str) -> None:
+        self.screen.fill((0, 0, 0))
+        infoText = self.font.render(information, True, FONT_MENU_COLOR)
+        infoRect = infoText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.5 * self.config.WINDOW_HEIGHT))
+        self.screen.blit(infoText, infoRect)
+        pygame.display.flip()
+
+    # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
-        map, objects = generateMap(mapSize, print)
+        map, objects = generateMap(mapSize, self.generateMapLoadingScreen)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):

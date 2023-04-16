@@ -44,7 +44,7 @@ class Game:
 
         self.loadedImages = LoadedImages()
         self.map = self.createMap(100)
-        self.dayCycle = DayCycle(0, 48000, self.clock, config, self.UiSprites, self.visibleSprites)
+        self.dayCycle = DayCycle(0, 1, 2000, self.clock, config, self.UiSprites, self.visibleSprites)
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,

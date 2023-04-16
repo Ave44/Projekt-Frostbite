@@ -23,13 +23,15 @@ SLOT_GAP = 6
 # COLORS
 BASE_BUTTON_COLOR = "#d7fcd4"
 WHITE = "White"
+FONT_COLOR = Color(255, 255, 255)
 FONT_MENU_COLOR = "#b68f40"
 
 CLOCK_OUTLINE = Color(0, 0, 0)
 CLOCK_OUTLINE_SHADOW = Color(0, 0, 0, 64)
+SHADOW = Color(0, 0, 0, 160)
 DAWN_COLOR = Color(205, 131, 122)
 DAY_COLOR = Color(254, 212, 86)
-EVENING_COLOR = Color(165, 91, 82)
+DUSK_COLOR = Color(165, 91, 82)
 NIGHT_COLOR = Color(46, 54, 87)
 
 # MUSIC
@@ -37,4 +39,6 @@ HAPPY_THEME = 'music/custom/happy-theme.mp3'
 MENU_THEME = 'music/custom/menu_theme.mp3'
 
 # FONTS
+FONT = "graphics/fonts/font.ttf"
+FONT_SIZE = 24
 BUTTON_FONT = "graphics/fonts/font.ttf"

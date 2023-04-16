@@ -35,8 +35,7 @@ class UiSpriteGroup(pygame.sprite.Group):
 
         self.player.healthBar.draw(self.displaySurface)
 
-        self.displaySurface.blit(self.clock.background, self.clockRect)
-        self.clock.drawHand(self.displaySurface, self.clockRect)
+        self.clock.draw(self.displaySurface, self.clockRect)
 
     def setClock(self, clock: DayNightClock):
         self.clock = clock

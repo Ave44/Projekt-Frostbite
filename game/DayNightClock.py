@@ -1,28 +1,32 @@
 from math import cos, radians, sin
 
 import pygame.image
-from pygame import Surface, Rect, Vector2, SRCALPHA, Color
+from pygame import Surface, Rect, Vector2, Color, SRCALPHA
+from pygame.font import Font
 
-from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, BORDER_SIZE
+from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, SHADOW, BORDER_SIZE, FONT_COLOR, FONT, FONT_SIZE
 
 
 class DayNightClock():
     def __init__(self, dayPhases: list[tuple[float, Color]], daySegments: int,
-                 currentTime: int, size: int):
+                 currentTime: int, currentDay: int, size: int):
         self.dayLengthMs = sum(list(map(lambda x: x[0], dayPhases)))
+        self.currentDay = currentDay
         self.currentTime = currentTime
         self.radius = size / 2
         self.center = Vector2(self.radius, self.radius)
+        self.font = Font(FONT, FONT_SIZE)
 
         self.background = Surface(Vector2(size, size), SRCALPHA)
         self.backgroundOutline = Surface(Vector2(size, size), SRCALPHA)
         self.createBackgroundOutline(daySegments)
+        self.drawCircleCutout(self.background, 0, 360, 0.1, 0, self.radius / 2 - BORDER_SIZE, SHADOW)
         self.updateBackground(dayPhases)
 
         self.hand = Surface(Vector2(size, size), SRCALPHA)
         pygame.draw.line(self.hand, CLOCK_OUTLINE,
                          (self.center.x, self.center.y - self.radius),  
-                         (self.center.x, self.center.y - self.radius / 2), 5)
+                         (self.center.x, self.center.y - self.radius / 2), 4)
 
     def updateBackground(self, newDayPhases: list[tuple[float, Color]]):
         angleStart = 0
@@ -60,7 +64,12 @@ class DayNightClock():
                              1)
             angle += angleStep
 
-    def drawHand(self, displaySurface: Surface, rect: Rect):
+    def draw(self, displaySurface: Surface, rect: Rect):
+        displaySurface.blit(self.background, rect)
+        dayCount = self.font.render(str(self.currentDay), True, FONT_COLOR)
+        dayCountRect = dayCount.get_rect(center= rect.center)
+        displaySurface.blit(dayCount, dayCountRect)
+
         angle = (self.currentTime / self.dayLengthMs) * -360
         rotatedHand = pygame.transform.rotate(self.hand, angle)
         handPosition = (rect.centerx - rotatedHand.get_width() / 2, rect.centery - rotatedHand.get_height() / 2)

@@ -1,8 +1,6 @@
 from abc import abstractmethod, ABC
 
 from pygame import Vector2, Surface
-
-from pygame.image import load
 from pygame.sprite import Sprite
 from pygame.time import Clock
 
@@ -12,26 +10,26 @@ from game.entities.domain.State import State
 class Entity(Sprite, ABC):
     from game.entities.effects.Effect import Effect
 
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, clock: Clock):
+    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict, clock: Clock, midbottom: Vector2, currHealth: int = None):
         from game.entities.effects.Effect import Effect
 
-        super().__init__(spriteGroup)
+        Sprite.__init__(self, spriteGroup)
         spriteGroup.entities.add(self)
 
-        self.imageUpNormal = load(entityData["path_to_image_up"]).convert_alpha()
-        self.imageDownNormal = load(entityData["path_to_image_down"]).convert_alpha()
-        self.imageLeftNormal = load(entityData["path_to_image_left"]).convert_alpha()
-        self.imageRightNormal = load(entityData["path_to_image_right"]).convert_alpha()
+        self.imageUpNormal = entityImages["image_up"]
+        self.imageDownNormal = entityImages["image_down"]
+        self.imageLeftNormal = entityImages["image_left"]
+        self.imageRightNormal = entityImages["image_right"]
 
-        self.imageUpHeal = load(entityData["path_to_image_up_heal"]).convert_alpha()
-        self.imageDownHeal = load(entityData["path_to_image_down_heal"]).convert_alpha()
-        self.imageLeftHeal = load(entityData["path_to_image_left_heal"]).convert_alpha()
-        self.imageRightHeal = load(entityData["path_to_image_right_heal"]).convert_alpha()
+        self.imageUpHeal = entityImages["image_up_heal"]
+        self.imageDownHeal = entityImages["image_down_heal"]
+        self.imageLeftHeal = entityImages["image_left_heal"]
+        self.imageRightHeal = entityImages["image_right_heal"]
 
-        self.imageUpDamage = load(entityData["path_to_image_up_damage"]).convert_alpha()
-        self.imageDownDamage = load(entityData["path_to_image_down_damage"]).convert_alpha()
-        self.imageLeftDamage = load(entityData["path_to_image_left_damage"]).convert_alpha()
-        self.imageRightDamage = load(entityData["path_to_image_right_damage"]).convert_alpha()
+        self.imageUpDamage = entityImages["image_up_damage"]
+        self.imageDownDamage = entityImages["image_down_damage"]
+        self.imageLeftDamage = entityImages["image_left_damage"]
+        self.imageRightDamage = entityImages["image_right_damage"]
 
         self.imageUp = self.imageUpNormal
         self.imageDown = self.imageDownNormal
@@ -39,14 +37,17 @@ class Entity(Sprite, ABC):
         self.imageRight = self.imageRightNormal
 
         self.image = self.imageDown
-        self.rect = self.image.get_rect(center=entityData["position_center"])
+        self.rect = self.image.get_rect(midbottom=midbottom)
 
         self.speed = entityData["speed"]
         self.direction = Vector2()
         self.obstacleSprites = obstacleSprites
 
         self.maxHealth = entityData["maxHealth"]
-        self.currentHealth = entityData["currentHealth"]
+        if currHealth:
+            self.currentHealth = currHealth
+        else:
+            self.currentHealth = self.maxHealth
         self.timeFromLastHealthChange = 0
         self._state = State.NORMAL
 
@@ -123,7 +124,7 @@ class Entity(Sprite, ABC):
         if Vector2(self.rect.midbottom) == self.destinationPosition:
             self.destinationPosition = None
             if self.destinationTarget:
-                self.destinationTarget.action(self)
+                self.destinationTarget.onLeftClickAction(self)
                 self.destinationTarget = None
         else:
             xOffset = self.destinationPosition.x - self.rect.centerx

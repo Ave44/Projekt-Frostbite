@@ -1,9 +1,9 @@
 import sys
 
+import pygame
 from pygame.sprite import Sprite
 from pygame.math import Vector2
 
-from config import *
 from game.entities.Player import Player
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
@@ -32,6 +32,10 @@ class InputManager:
 
                 if event.key == pygame.K_p:
                     self.player.heal(20)
+
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
 
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)

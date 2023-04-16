@@ -1,11 +1,10 @@
-import pygame
 from pygame import Vector2, Rect
 from pygame.sprite import Group
 from pygame.time import Clock
+from game.LoadedImages import LoadedImages
 
-from config import ROOT_PATH
-from game.items.Item import Item
-from game.items.ToolType import ToolType
+from game.items.domain.Item import Item
+from game.items.domain.ToolType import ToolType
 from game.objects.domain.CollisionObject import CollisionObject
 from game.objects.domain.Flammable import Flammable
 from game.objects.trees.BurntTree import BurntTree
@@ -13,8 +12,10 @@ from game.objects.trees.LargeTree import LargeTree
 
 
 class MediumTree(CollisionObject, Flammable):
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, clock: Clock, ageMs: int = 0):
-        image = pygame.image.load(f"{ROOT_PATH}/graphics/objects/trees/mediumTree.png")
+    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
+                 loadedImages: LoadedImages, clock: Clock, ageMs: int = 0):
+        self.loadedImages = loadedImages
+        image = loadedImages.mediumTree[0]
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 
@@ -23,7 +24,8 @@ class MediumTree(CollisionObject, Flammable):
         Flammable.__init__(self, clock)
 
         self.age = ageMs
-        self.LIFESPAN = 10000
+        self.growthStage = 2
+        self.LIFESPAN = 20000
 
     def interact(self) -> None:
         print("interacted with medium trees")  # in the future there will be a real implementation
@@ -33,7 +35,7 @@ class MediumTree(CollisionObject, Flammable):
 
     def burn(self):
         self.remove(*self.groups())
-        BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom)
+        BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages)
 
     def update(self):
         if self.isOnFire and self.timeToBurn:
@@ -42,4 +44,4 @@ class MediumTree(CollisionObject, Flammable):
         self.age += self.clock.get_time()
         if self.age >= self.LIFESPAN:
             self.remove(*self.groups())
-            LargeTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.clock)
+            LargeTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages, self.clock)

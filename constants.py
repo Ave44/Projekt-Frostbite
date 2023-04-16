@@ -1,20 +1,11 @@
 import os.path
-import math
-import pygame
+from pygame.image import load
 
-WINDOW_WIDTH = 1280  # 1920
-WINDOW_HEIGHT = 720  # 1080
 TILE_SIZE = 128
-TILES_ON_SCREEN_WIDTH = math.ceil(WINDOW_WIDTH / TILE_SIZE + 1)
-TILES_ON_SCREEN_HEIGHT = math.ceil(WINDOW_HEIGHT / TILE_SIZE + 1)
-FPS = 60
 CAPTION = 'Project Frostbite'
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-ICON = pygame.image.load(f"{ROOT_PATH}/graphics/icon.png")
-
-# SLOTS
-SLOT_SIZE = pygame.image.load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
-SLOT_GAP = 6
+ICON = load(f"{ROOT_PATH}/graphics/icon.png")
+BIOMES_ID = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
 # UI
 BG_COLOR = (50, 50, 50)
@@ -24,13 +15,16 @@ HEALTHBAR_MAIN = (214, 30, 17)
 HEALTHBAR_INCREASE = (82, 255, 20)
 HEALTHBAR_DECREASE = (240, 212, 29)
 
+# SLOTS
+SLOT_SIZE = load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
+SLOT_GAP = 6
+
 # COLORS
 BASE_BUTTON_COLOR = "#d7fcd4"
 WHITE = "White"
 FONT_MENU_COLOR = "#b68f40"
 
 # MUSIC
-MAIN_THEME_VOLUME = 0#.5
 HAPPY_THEME = 'music/custom/happy-theme.mp3'
 MENU_THEME = 'music/custom/menu_theme.mp3'
 

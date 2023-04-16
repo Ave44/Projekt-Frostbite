@@ -1,3 +1,5 @@
+import pygame
+
 from Config import Config
 from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR
 from menu.Menu import Menu
@@ -8,23 +10,30 @@ class OptionsMenu(Menu):
     def __init__(self, screen, backAction, config: Config):
         Menu.__init__(self, screen)
         self.backAction = backAction
+        self.config = config
+        if self.config.WINDOW_WIDTH == 1280:
+            self.resolutionsIndex = 0
+        else:
+            self.resolutionsIndex = 1
         self.resolutions = ["1280x720", "1920x1080"]
-        self.resolutionsIndex = 0
         self.volume = ["0", "1", "2", "3", "4"]
         self.volumeIndex = 0
-        self.config = config
 
     def incrementResolution(self) -> None:
         if self.resolutionsIndex == 1:
             return
-        self.resolutionsIndex += 1
-        self.options()
+        else:
+            self.resolutionsIndex += 1
+            self.updateResolution()
+            self.options()
 
     def decrementResolution(self) -> None:
         if self.resolutionsIndex == 0:
             return
-        self.resolutionsIndex -= 1
-        self.options()
+        else:
+            self.resolutionsIndex -= 1
+            self.updateResolution()
+            self.options()
 
     def incrementVolume(self) -> None:
         if self.volumeIndex == 4:
@@ -83,3 +92,18 @@ class OptionsMenu(Menu):
         menuButtons = self.createButtons()
 
         self.menuLoop([[menuText, menuRect], [volumeText, volumeRect], [resolutionText, resolutionRect]], menuButtons)
+
+    def updateResolution(self):
+        if self.resolutions[self.resolutionsIndex] == "1920x1080":
+            self.config.WINDOW_HEIGHT = 1080
+            self.config.WINDOW_WIDTH = 1920
+            self.updateScreen()
+        else:
+            self.config.WINDOW_HEIGHT = 720
+            self.config.WINDOW_WIDTH = 1080
+            self.updateScreen()
+
+    def updateScreen(self):
+        screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
+        resized_screen = pygame.transform.scale(screen, (self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
+        self.screen.blit(resized_screen, (0, 0))

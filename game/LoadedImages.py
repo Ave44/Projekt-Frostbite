@@ -5,9 +5,27 @@ from os import listdir
 class LoadedImages:
     def __init__(self):
         self.loadEntitiesImages()
+        self.loadAnimatedEntitiesImages()
         self.loadObjectsImages()
         self.loadItemsImages()
-        
+
+    def loadAnimatedEntitiesImages(self):
+        self.goblinChampion = {
+            "image_up": self.loadImages("./graphics/entities/goblinChampion/goblinChampionUp", "goblinChampionUp"),
+            "image_down": self.loadImages("./graphics/entities/goblinChampion/goblinChampionDown", "goblinChampionDown"),
+            "image_left": self.loadImages("./graphics/entities/goblinChampion/goblinChampionLeft", "goblinChampionLeft"),
+            "image_right": self.loadImages("./graphics/entities/goblinChampion/goblinChampionRight", "goblinChampionRight"),
+
+            "image_up_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionUpDamage", "goblinChampionUpDamage"),
+            "image_down_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionDownDamage", "goblinChampionDownDamage"),
+            "image_left_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionLeftDamage", "goblinChampionLeftDamage"),
+            "image_right_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionRightDamage", "goblinChampionRightDamage"),
+
+            "image_up_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionUpHeal", "goblinChampionUpHeal"),
+            "image_down_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionDownHeal", "goblinChampionDownHeal"),
+            "image_left_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionLeftHeal", "goblinChampionLeftHeal"),
+            "image_right_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionRightHeal", "goblinChampionRightHeal"),
+        }
     def loadEntitiesImages(self):
         self.player = {
             "image_up": load("./graphics/entities/player/player_up.png").convert_alpha(),

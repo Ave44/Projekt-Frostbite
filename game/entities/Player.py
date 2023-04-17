@@ -18,13 +18,14 @@ class Player(Entity, Glowing):
                  groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
                  UiSprites: pygame.sprite.Group,
-                 images: LoadedImages,
+                 loadedImages: LoadedImages,
+                 playerSounds: dict,
                  config: Config,
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None):
         playerData = {"speed": 6, "maxHealth": 100}
-        Entity.__init__(self, groups, obstacleSprites, playerData, images.player, clock, midbottom, currHealth)
+        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, playerSounds, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
         offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)

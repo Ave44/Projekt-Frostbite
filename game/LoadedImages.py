@@ -2,13 +2,33 @@ from pygame.image import load
 from pygame import Surface
 from os import listdir
 
+
 class LoadedImages:
     def __init__(self):
         self.loadEntitiesImages()
+        self.loadAnimatedEntitiesImages()
         self.loadObjectsImages()
         self.loadItemsImages()
         self.loadLightsImages()
-        
+
+    def loadAnimatedEntitiesImages(self):
+        self.goblinChampion = {
+            "image_up": self.loadImages("./graphics/entities/goblinChampion/goblinChampionUp", "goblinChampionUp"),
+            "image_down": self.loadImages("./graphics/entities/goblinChampion/goblinChampionDown", "goblinChampionDown"),
+            "image_left": self.loadImages("./graphics/entities/goblinChampion/goblinChampionLeft", "goblinChampionLeft"),
+            "image_right": self.loadImages("./graphics/entities/goblinChampion/goblinChampionRight", "goblinChampionRight"),
+
+            "image_up_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionUpDamage", "goblinChampionUpDamage"),
+            "image_down_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionDownDamage", "goblinChampionDownDamage"),
+            "image_left_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionLeftDamage", "goblinChampionLeftDamage"),
+            "image_right_damage": self.loadImages("./graphics/entities/goblinChampion/goblinChampionRightDamage", "goblinChampionRightDamage"),
+
+            "image_up_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionUpHeal", "goblinChampionUpHeal"),
+            "image_down_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionDownHeal", "goblinChampionDownHeal"),
+            "image_left_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionLeftHeal", "goblinChampionLeftHeal"),
+            "image_right_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionRightHeal", "goblinChampionRightHeal"),
+        }
+
     def loadEntitiesImages(self):
         self.player = {
             "image_up": load("./graphics/entities/player/player_up.png").convert_alpha(),
@@ -79,20 +99,20 @@ class LoadedImages:
         }
 
         self.bomb = {
-            "image_up": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
+            "image_up": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_down": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_left": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_right": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
 
-            "image_up_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
+            "image_up_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_down_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_left_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_right_heal": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
 
-            "image_up_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha()
+            "image_up_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_down_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_left_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha(),
+            "image_right_damage": load("./graphics/entities/bomb/bomb.png").convert_alpha()
         }
 
         self.goblin = {
@@ -111,7 +131,6 @@ class LoadedImages:
             "image_left_damage": load("./graphics/entities/goblin/goblin_left_damage.png").convert_alpha(),
             "image_right_damage": load("./graphics/entities/goblin/goblin_right_damage.png").convert_alpha()
         }
-
 
     def loadObjectsImages(self):
         self.treeSapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]

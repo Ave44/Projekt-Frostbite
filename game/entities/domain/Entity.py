@@ -6,15 +6,20 @@ from pygame.time import Clock
 
 from game.entities.domain.State import State
 
-
 class Entity(Sprite, ABC):
     from game.entities.effects.Effect import Effect
 
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict, clock: Clock, midbottom: Vector2, currHealth: int = None):
+    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict, entitySounds: dict,
+                 clock: Clock, midbottom: Vector2, currHealth: int = None):
         from game.entities.effects.Effect import Effect
 
         Sprite.__init__(self, spriteGroup)
         spriteGroup.entities.add(self)
+
+        self.soundIdle = entitySounds["idle"]
+        self.soundMovement = entitySounds["movement"]
+        self.soundAttack = entitySounds["attack"]
+        self.soundDamaged = entitySounds["damaged"]
 
         self.imageUpNormal = entityImages["image_up"]
         self.imageDownNormal = entityImages["image_down"]
@@ -187,6 +192,9 @@ class Entity(Sprite, ABC):
         filteredActiveEffects = list(filter(lambda x: (x.__class__ != effect.__class__), self.activeEffects))
         filteredActiveEffects.append(effect)
         self.activeEffects = filteredActiveEffects
+
+    def playSound(self, sound):
+        sound.play()
 
     def update(self) -> None:
         self.localUpdate()

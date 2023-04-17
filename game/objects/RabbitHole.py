@@ -1,20 +1,24 @@
 from pygame import Vector2
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
+from game.LoadedSounds import LoadedSounds
 
 from game.entities.Rabbit import Rabbit
 from game.items.domain.ToolType import ToolType
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
+from game.LoadedSounds import LoadedSounds
+from game.LoadedImages import LoadedImages
 
 
 class RabbitHole(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, midBottom: Vector2, clock: Clock):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
         image = loadedImages.rabbitHole
         super().__init__(visibleGroup, midBottom, 50, ToolType.SHOVEL, image)
         self.loadedImages = loadedImages
+        self.loadedSounds = loadedSounds
         self.rabbits = []
         self.daysFromRabbitsChange = 0
         self.obstacleSprites = obstacleSprites
@@ -26,7 +30,7 @@ class RabbitHole(Object):
 
     def spawnRabbit(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.clock, pos, self)
+        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos, self)
         self.rabbits.append(newRabbit)
         self.daysFromRabbitsChange = 0
 

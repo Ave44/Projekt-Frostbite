@@ -2,8 +2,7 @@ import json
 
 from pygame import mixer
 
-import constants
-from constants import FONT_MENU_COLOR
+from constants import FONT_MENU_COLOR, MENU_THEME
 from Config import Config
 from game.Game import Game
 from menu.CreateGame import CreateGame
@@ -49,7 +48,7 @@ class MainMenu(Menu):
         return [playButton, optionsButton, quitButton, createGameButton]
 
     def mainMenu(self) -> None:
-        mixer.music.load(constants.MENU_THEME)
+        mixer.music.load(MENU_THEME)
         mixer.music.play()
         self.createBackground()
         menuText = self.font.render("MAIN MENU", True, FONT_MENU_COLOR)

@@ -9,6 +9,7 @@ class LoadedImages:
         self.loadAnimatedEntitiesImages()
         self.loadObjectsImages()
         self.loadItemsImages()
+        self.loadLightsImages()
 
     def loadAnimatedEntitiesImages(self):
         self.goblinChampion = {
@@ -162,6 +163,11 @@ class LoadedImages:
         self.accorn = load("./graphics/items/accorn.png").convert_alpha()
         self.sharpRock = load("./graphics/items/sharpRock.png").convert_alpha()
         self.wood = load("./graphics/items/wood.png").convert_alpha()
+
+    def loadLightsImages(self):
+        self.smallLight = load("./graphics/lights/smallLight.png").convert_alpha()
+        self.mediumLight = load("./graphics/lights/mediumLight.png").convert_alpha()
+        self.largeLight = load("./graphics/lights/largeLight.png").convert_alpha()
 
     def loadImages(self, path: str, filename) -> list[Surface]:
         filesAmount = len(listdir(path))

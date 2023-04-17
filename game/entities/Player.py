@@ -3,7 +3,9 @@ from pygame.time import Clock
 
 from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE
 from Config import Config
+from game.LoadedImages import LoadedImages
 from game.entities.domain.Entity import Entity
+from game.lightning.Glowing import Glowing
 from game.ui.inventory.Inventory import Inventory
 from game.items.domain.Item import Item
 from game.ui.inventory.slot.SelectedItem import SelectedItem
@@ -11,19 +13,24 @@ from game.ui.Bar import Bar
 from pygame.math import Vector2
 
 
-class Player(Entity):
+class Player(Entity, Glowing):
     def __init__(self,
                  groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
                  UiSprites: pygame.sprite.Group,
-                 playerImages: dict,
+                 loadedImages: LoadedImages,
                  playerSounds: dict,
                  config: Config,
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None):
         playerData = {"speed": 6, "maxHealth": 100}
-        Entity.__init__(self, groups, obstacleSprites, playerData, playerImages, playerSounds, clock, midbottom, currHealth)
+        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, playerSounds, clock, midbottom, currHealth)
+
+        playerSize = self.rect.size
+        offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
+        Glowing.__init__(self, images.mediumLight, self.rect, offset)
+
         self.selectedItem = SelectedItem(self)
 
         inventoryPosition = Vector2(config.WINDOW_WIDTH / 2, config.WINDOW_HEIGHT - 60)

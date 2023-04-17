@@ -1,9 +1,12 @@
 import pygame
+from pygame import Surface
 from pygame.math import Vector2
-from game.spriteGroups.EntitiesGroup import EntitiesGroup
 
+from game.lightning.Glowing import Glowing
 from constants import TILE_SIZE
 from Config import Config
+from game.spriteGroups.EntitiesGroup import EntitiesGroup
+
 
 class CameraSpriteGroup(pygame.sprite.Group):
     def __init__(self, config: Config):
@@ -16,6 +19,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
+        self.sunlight: Surface | None = None
         # self.radiuses = []
 
     def customDraw(self, center):
@@ -23,15 +27,26 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset.y = center.y - self.halfWindowHeight
         self.drawTiles()
 
+        sunlightBrightness = self.sunlight.get_at((0, 0))[0]
+
         for sprite in self.entities.sprites():
-            spritePosition = sprite.rect.topleft - self.offset
-            self.displaySurface.blit(sprite.image, spritePosition)
+            self.drawSprite(sprite)
+            if isinstance(sprite, Glowing) and sunlightBrightness != 255:
+                self.drawLightning(sprite)
 
         for sprite in self.sprites():
-            spritePosition = sprite.rect.topleft - self.offset
-            self.displaySurface.blit(sprite.image, spritePosition)
+            self.drawSprite(sprite)
+            if isinstance(sprite, Glowing) and sunlightBrightness != 255:
+                self.drawLightning(sprite)
+
+        if sunlightBrightness != 255:
+            self.displaySurface.blit(self.sunlight, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
         # self.radiuses = []
+
+    def drawSprite(self, sprite):
+        spritePosition = sprite.rect.topleft - self.offset
+        self.displaySurface.blit(sprite.image, spritePosition)
 
     def drawTiles(self):
         xGap = int(self.offset.x / TILE_SIZE)
@@ -40,15 +55,18 @@ class CameraSpriteGroup(pygame.sprite.Group):
             for x in range(self.tilesOnScreenWidth):
                 if x + xGap < len(self.map) and y + yGap < len(self.map):
                     tile = self.map[y + yGap][x + xGap]
-                    spritePosition = tile.rect.topleft - self.offset
-                    self.displaySurface.blit(tile.image, spritePosition)
+                    self.drawSprite(tile)
 
-    def addRadius(self, radius, position, color):
-        self.radiuses.append({"radius": radius, "position": position, "color": color})
+    def drawLightning(self, sprite: Glowing):
+        lightPosition = sprite.calculateTopLeftPosition() - self.offset
+        self.sunlight.blit(sprite.lightImage, lightPosition)
 
-    def drawRadius(self, radius, position, color):
-        circleSurface = pygame.Surface((radius*2, radius*2))
-        circleSurface.set_colorkey((0,0,0))
-        circleSurface.set_alpha(80)
-        pygame.draw.circle(circleSurface, color, (radius, radius), radius)
-        self.displaySurface.blit(circleSurface, (position[0] - radius - self.offset.x, position[1] - radius - self.offset.y))
+    # def addRadius(self, radius, position, color):
+    #     self.radiuses.append({"radius": radius, "position": position, "color": color})
+
+    # def drawRadius(self, radius, position, color):
+    #     circleSurface = pygame.Surface((radius * 2, radius * 2))
+    #     circleSurface.set_colorkey((0, 0, 0))
+    #     circleSurface.set_alpha(80)
+    #     pygame.draw.circle(circleSurface, color, (radius, radius), radius)
+    #     self.displaySurface.blit(circleSurface, (position[0] - radius - self.offset.x, position[1] - radius - self.offset.y))

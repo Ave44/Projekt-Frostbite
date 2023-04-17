@@ -3,6 +3,7 @@ import unittest
 from mock.mock import MagicMock
 from pygame.math import Vector2
 
+from Config import Config
 from game.entities.Player import Player
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.Slot import Slot
@@ -14,7 +15,8 @@ from game.ui.inventory.slot.SelectedItem import SelectedItem
 class InventoryTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        visibleSprites = CameraSpriteGroup()
+        config = Config()
+        visibleSprites = CameraSpriteGroup(config)
         self.playerPos = (34, 15)
         self.emptyInventory = Inventory(visibleSprites, 1, 2, Vector2(0, 0))
         self.fullInventory = Inventory(visibleSprites, 0, 0, Vector2(0, 0))

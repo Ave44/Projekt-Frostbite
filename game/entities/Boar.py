@@ -20,7 +20,7 @@ class Boar(AggressiveMob):
             "sightRange": 100,
             "attackRange": 50
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.boar, loadedSounds, entityData, clock, 700, 500, 1000, 2000, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.boar, loadedSounds.boar, entityData, clock, 700, 500, 1000, 2000, midbottom, currHealth)
         self.loadedImages = loadedImages
 
     def afterAttackAction(self):

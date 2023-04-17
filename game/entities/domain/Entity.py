@@ -1,18 +1,17 @@
 from abc import abstractmethod, ABC
 
-import pygame.mixer
 from pygame import Vector2, Surface
 from pygame.sprite import Sprite
 from pygame.time import Clock
 
 from game.entities.domain.State import State
 from game.LoadedSounds import LoadedSounds
-
+from game.LoadedImages import LoadedImages
 
 class Entity(Sprite, ABC):
     from game.entities.effects.Effect import Effect
 
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict, entitySounds: dict,
+    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: LoadedImages, entitySounds: LoadedSounds,
                  clock: Clock, midbottom: Vector2, currHealth: int = None):
         from game.entities.effects.Effect import Effect
 

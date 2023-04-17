@@ -7,6 +7,8 @@ from game.entities.domain.PassiveMob import PassiveMob
 from game.items.SmallMeat import SmallMeat
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
+from game.LoadedSounds import LoadedSounds
+from game.LoadedImages import LoadedImages
 
 
 class Rabbit(PassiveMob):
@@ -17,7 +19,7 @@ class Rabbit(PassiveMob):
             "speed": 2,
             "maxHealth": 5
         }
-        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, loadedSounds, clock, entityData, 200, 2000, 500, 1500, midbottom, currHealth)
+        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, loadedSounds.rabbit, clock, entityData, 200, 2000, 500, 1500, midbottom, currHealth)
         self.loadedImages = loadedImages
         self.home = home
         self.isRunningHome = False

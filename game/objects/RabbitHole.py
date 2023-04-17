@@ -8,6 +8,8 @@ from game.items.domain.ToolType import ToolType
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
+from game.LoadedSounds import LoadedSounds
+from game.LoadedImages import LoadedImages
 
 
 class RabbitHole(Object):
@@ -28,7 +30,7 @@ class RabbitHole(Object):
 
     def spawnRabbit(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds.rabbit, self.clock, pos, self)
+        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos, self)
         self.rabbits.append(newRabbit)
         self.daysFromRabbitsChange = 0
 

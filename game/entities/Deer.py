@@ -8,6 +8,8 @@ from game.items.DeerAntlers import DeerAntlers
 from game.items.Leather import Leather
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
+from game.LoadedSounds import LoadedSounds
+from game.LoadedImages import LoadedImages
 
 
 class Deer(PassiveMob):
@@ -17,7 +19,7 @@ class Deer(PassiveMob):
             "speed": 3,
             "maxHealth": 15
         }
-        super().__init__(visibleSprites, obstacleSprites, loadedImages.deer, loadedSounds, clock, entityData, 200, 4000, 1000, 2000, midbottom, currHealth)
+        super().__init__(visibleSprites, obstacleSprites, loadedImages.deer, loadedSounds.deer, clock, entityData, 200, 4000, 1000, 2000, midbottom, currHealth)
         self.loadedImages = loadedImages
 
     def drop(self) -> None:

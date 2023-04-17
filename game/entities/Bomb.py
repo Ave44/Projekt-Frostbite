@@ -4,11 +4,12 @@ from pygame.time import Clock
 from game.entities.domain.AggressiveMob import AggressiveMob
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
-
+from game.LoadedSounds import LoadedSounds
+from game.LoadedImages import LoadedImages
 
 class Bomb(AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: dict, loadedSounds: dict, midbottom: Vector2, clock: Clock, currHealth: int = None):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock, currHealth: int = None):
         entityData = {
             "speed": 3,
             "maxHealth": 60,

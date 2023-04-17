@@ -68,9 +68,9 @@ class Game:
                     continue
                 break
 
-        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds.deer, self.clock, self.player.rect.midbottom)
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds.rabbit, self.clock, self.player.rect.midbottom)
-        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds.boar, self.clock, self.player.rect.midbottom)
+        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
         self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)

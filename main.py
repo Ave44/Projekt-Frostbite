@@ -1,7 +1,6 @@
 import pygame
 from pygame import mixer
 
-import constants
 from constants import CAPTION, ICON
 from Config import Config
 

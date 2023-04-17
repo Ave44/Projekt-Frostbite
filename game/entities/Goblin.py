@@ -1,17 +1,18 @@
 from pygame import Vector2
 from pygame.time import Clock
+
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
-from game.entities.domain.AnimatedEntity import AnimatedEntity
-
 from game.entities.domain.AggressiveMob import AggressiveMob
 from game.items.BigMeat import BigMeat
 from game.items.GoblinFang import GoblinFang
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
+from game.entities.domain.Entity import Entity
+from game.objects.domain.Object import Object
 
 
-class Goblin(AggressiveMob, AnimatedEntity):
+class Goblin(AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2,
                  currHealth: int = None):
@@ -27,7 +28,8 @@ class Goblin(AggressiveMob, AnimatedEntity):
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
 
-    def afterAttackAction(self):
+    def attack(self, target: Entity | Object):
+        AggressiveMob.attack(self, target)
         self.playSound(self.soundAttack)
 
     def drop(self) -> None:

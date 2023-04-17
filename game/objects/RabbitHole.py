@@ -16,10 +16,10 @@ class RabbitHole(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
         image = loadedImages.rabbitHole
-        super().__init__(visibleGroup, midBottom, 50, ToolType.SHOVEL, image)
+        Object.__init__(self, visibleGroup, midBottom, 50, ToolType.SHOVEL, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
-        self.rabbits = []
+        self.rabbits: list[Rabbit] = []
         self.daysFromRabbitsChange = 0
         self.obstacleSprites = obstacleSprites
         self.clock = clock

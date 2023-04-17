@@ -40,7 +40,6 @@ class AggressiveMob(Mob):
         self.destinationPosition = Vector2(target.rect.midbottom)
         self.move()
 
-    @abstractmethod
     def afterAttackAction(self):
         pass
 

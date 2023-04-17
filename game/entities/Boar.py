@@ -23,9 +23,6 @@ class Boar(AggressiveMob):
         AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.boar, loadedSounds.boar, entityData, clock, 700, 500, 1000, 2000, midbottom, currHealth)
         self.loadedImages = loadedImages
 
-    def afterAttackAction(self):
-        pass
-
     def drop(self) -> None:
         BigMeat(self.visibleSprites, self.rect.center, self.loadedImages)
         BoarFang(self.visibleSprites, self.rect.center, self.loadedImages)

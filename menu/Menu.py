@@ -4,7 +4,7 @@ import pygame
 from pygame import Surface
 
 from constants import BUTTON_FONT
-from menu.general import Button
+from menu.general.Button import Button
 
 
 class Menu:

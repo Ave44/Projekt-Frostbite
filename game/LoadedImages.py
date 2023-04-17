@@ -2,6 +2,7 @@ from pygame.image import load
 from pygame import Surface
 from os import listdir
 
+
 class LoadedImages:
     def __init__(self):
         self.loadEntitiesImages()
@@ -26,6 +27,7 @@ class LoadedImages:
             "image_left_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionLeftHeal", "goblinChampionLeftHeal"),
             "image_right_heal": self.loadImages("./graphics/entities/goblinChampion/goblinChampionRightHeal", "goblinChampionRightHeal"),
         }
+
     def loadEntitiesImages(self):
         self.player = {
             "image_up": load("./graphics/entities/player/player_up.png").convert_alpha(),
@@ -128,7 +130,6 @@ class LoadedImages:
             "image_left_damage": load("./graphics/entities/goblin/goblin_left_damage.png").convert_alpha(),
             "image_right_damage": load("./graphics/entities/goblin/goblin_right_damage.png").convert_alpha()
         }
-
 
     def loadObjectsImages(self):
         self.treeSapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]

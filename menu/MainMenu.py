@@ -40,7 +40,7 @@ class MainMenu(Menu):
         optionsButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.625 * self.config.WINDOW_HEIGHT),
                                textInput="OPTIONS",
                                font=self.menuOptionFont,
-                               action=self.optionsMenu.options)
+                               action=self.optionsMenu.refreshMenu)
         quitButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.764 * self.config.WINDOW_HEIGHT),
                             textInput="QUIT",
                             font=self.menuOptionFont,

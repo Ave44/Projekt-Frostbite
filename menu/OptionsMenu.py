@@ -1,5 +1,5 @@
 import pygame
-from pygame import mixer
+from pygame import mixer, Surface
 
 from Config import Config
 from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR
@@ -8,7 +8,7 @@ from menu.general.Button import Button
 
 
 class OptionsMenu(Menu):
-    def __init__(self, screen, backAction, config: Config):
+    def __init__(self, screen: Surface, backAction, config: Config):
         Menu.__init__(self, screen)
         self.backAction = backAction
         self.config = config
@@ -26,7 +26,7 @@ class OptionsMenu(Menu):
         else:
             self.resolutionsIndex += 1
             self.updateResolution()
-            self.options()
+            self.refreshMenu()
 
     def decrementResolution(self) -> None:
         if self.resolutionsIndex == 0:
@@ -34,7 +34,7 @@ class OptionsMenu(Menu):
         else:
             self.resolutionsIndex -= 1
             self.updateResolution()
-            self.options()
+            self.refreshMenu()
 
     def incrementVolume(self) -> None:
         if self.volumeIndex == 4:
@@ -42,7 +42,7 @@ class OptionsMenu(Menu):
         else:
             self.volumeIndex += 1
             self.updateMusicVolume()
-            self.options()
+            self.refreshMenu()
 
     def decrementVolume(self) -> None:
         if self.volumeIndex == 0:
@@ -50,7 +50,7 @@ class OptionsMenu(Menu):
         else:
             self.volumeIndex -= 1
             self.updateMusicVolume()
-            self.options()
+            self.refreshMenu()
 
     def createButtons(self) -> list[Button]:
         backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT),
@@ -81,7 +81,7 @@ class OptionsMenu(Menu):
         return [backButton, resolutionButtonIncrement, resolutionButtonDecrement, volumeButtonIncrement,
                 volumeButtonDecrement]
 
-    def options(self) -> None:
+    def refreshMenu(self) -> None:
         self.createBackground()
         menuText = self.font.render("OPTIONS", True, FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
@@ -110,8 +110,8 @@ class OptionsMenu(Menu):
 
     def updateScreen(self) -> None:
         screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
-        resized_screen = pygame.transform.scale(screen, (self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
-        self.screen.blit(resized_screen, (0, 0))
+        resizedScreen = pygame.transform.scale(screen, (self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
+        self.screen.blit(resizedScreen, (0, 0))
 
     def updateMusicVolume(self) -> None:
         self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2

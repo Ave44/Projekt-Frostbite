@@ -1,13 +1,14 @@
 import sys
 
 import pygame
+from pygame import Surface
 
 from constants import BUTTON_FONT
 from menu.general import Button
 
 
 class Menu:
-    def __init__(self, screen):
+    def __init__(self, screen: Surface):
         self.screen = screen
         self.font = pygame.font.Font(BUTTON_FONT, 100)
         self.menuOptionFont = pygame.font.Font(BUTTON_FONT, 50)

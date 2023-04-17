@@ -1,12 +1,9 @@
-from abc import ABC
 from pygame import Vector2, Surface
 from pygame.time import Clock
 from game.entities.domain.Entity import Entity
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
-from game.LoadedSounds import LoadedSounds
-from game.LoadedImages import LoadedImages
-class AnimatedEntity(Entity,ABC):
+class AnimatedEntity(Entity):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: dict, loadedSounds: dict, clock: Clock, entityData, sightRange: int, moveEveryMs: int,
                  minMoveMs: int, maxMoveMs: int, midbottom: Vector2, currHealth: int = None):

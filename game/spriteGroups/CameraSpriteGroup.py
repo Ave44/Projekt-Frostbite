@@ -20,6 +20,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.map = []
         self.entities = EntitiesGroup()
         self.sunlight: Surface | None = None
+        self.weather: Surface | None = None
         # self.radiuses = []
 
     def customDraw(self, center):
@@ -38,6 +39,9 @@ class CameraSpriteGroup(pygame.sprite.Group):
             self.drawSprite(sprite)
             if isinstance(sprite, Glowing) and sunlightBrightness != 255:
                 self.drawLightning(sprite)
+
+        if self.weather:
+            self.displaySurface.blit(self.weather, (0, 0))
 
         if sunlightBrightness != 255:
             self.displaySurface.blit(self.sunlight, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)

@@ -150,6 +150,14 @@ class LoadedImages:
         self.mediumLight = load("./graphics/lights/mediumLight.png").convert_alpha()
         self.largeLight = load("./graphics/lights/largeLight.png").convert_alpha()
 
+    def loadWeatherImages(self):
+        self.rain = [
+            load("./graphics/weathers/rain/rain_drops-01.png").convert_alpha(),
+            load("./graphics/weathers/rain/rain_drops-02.png").convert_alpha(),
+            load("./graphics/weathers/rain/rain_drops-03.png").convert_alpha(),
+            load("./graphics/weathers/rain/rain_drops-04.png").convert_alpha()
+        ]
+
     def loadImages(self, path: str, filename) -> list[Surface]:
         filesAmount = len(listdir(path))
         imagesList = []

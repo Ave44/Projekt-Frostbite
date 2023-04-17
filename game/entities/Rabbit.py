@@ -48,8 +48,8 @@ class Rabbit(PassiveMob):
         super().getDamage(amount)
 
     def die(self):
-        if self.home:
-            self.home.rabbits.remove(self)
+        # if self.home:
+            # self.home.rabbits.remove(self)
         super().die()
 
     def localUpdate(self):

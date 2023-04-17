@@ -32,7 +32,9 @@ from game.objects.trees.SmallTree import SmallTree
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
+from game.spriteGroups.WeatherGroup import WeatherGroup
 from game.tiles.Tile import Tile
+from game.weathers.WeatherController import WeatherController
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -58,6 +60,8 @@ class Game:
                              config,
                              self.clock,
                              Vector2(0, 0))
+        self.weatherGroup = WeatherGroup(Vector2(self.player.rect.center))
+        self.weather = WeatherController(self.loadedImages, self.clock, config, self.weatherGroup)
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
@@ -172,6 +176,8 @@ class Game:
             self.visibleSprites.update()
             self.handleTick()
             self.visibleSprites.customDraw(Vector2(self.player.rect.center))
+            self.weather.update()
+            self.weatherGroup.customDraw(Vector2(self.player.rect.center))
 
             self.UiSprites.customDraw()
 

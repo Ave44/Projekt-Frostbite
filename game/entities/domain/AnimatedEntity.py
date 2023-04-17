@@ -4,8 +4,6 @@ from pygame.time import Clock
 from game.entities.domain.Entity import Entity
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
-from game.LoadedSounds import LoadedSounds
-from game.LoadedImages import LoadedImages
 class AnimatedEntity(Entity,ABC):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: dict, loadedSounds: dict, clock: Clock, entityData, sightRange: int, moveEveryMs: int,
@@ -35,14 +33,3 @@ class AnimatedEntity(Entity,ABC):
         self.imageDown = newImageDown
         self.imageLeft = newImageLeft
         self.imageRight = newImageRight
-    def nextFrame(self):
-        self.currFrame += 1
-        self.timeOnFrame = 0
-        if self.currFrame == self.lastFrame:
-            self.currFrame = 0
-        self.image = self.images[self.currFrame]
-
-    def animationUpdate(self):
-        self.timeOnFrame += self.clock.get_time()
-        if self.timeOnFrame >= self.timeMsBetweenFrames:
-            self.nextFrame()

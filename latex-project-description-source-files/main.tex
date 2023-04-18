@@ -1,0 +1,122 @@
+\documentclass{article}
+
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{autobreak}
+\usepackage{graphicx}
+
+\title{Praca Licencjacka - Projekt Frostbite}
+\author{Paweł Olszewski, Mateusz Maćkowiak, Kacper Kruger, Maksymilian Keller}
+\date{Styczeń 2022 - Czerwiec 2023}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\section{Opis problemu}
+\subsection{Cel projektu}
+Celem projektu jest stworzenie oryginalnej gry survival z widokiem izometrycznym. Dzięki niej będzie możliwe zbadanie możliwości zaaplikowania algorytmów pathfindingu w losowowo-wygenerowanym labiryncie na kształt którego ma wpływ użytkownik programu. Sprawdzenie potencjału wykorzystania proceduralnych szumów (ang. Procedural Noise) do usprawnienia procesu tworzenia świata przedstawionego w grze. Może to doprowadzić do rozwoju dziedziny zajmującej się symulacjami komputerowymi. Gracz ma za zadanie przetrwać w nieprzyjaznym świecie, zbierająć bogactwo z przedmiotów do zebrania w grze, przy losowo wygenerowanej mapie, za pomocą wcześniej przedstawionych środków. Cała rozgrywka opiera się na poruszaniu się postacią tak, aby mogła przeżyć w trudnych warunkach. Trzeba zadbać o jej jedzenie i zdrowie. Planować swoje akcje na przyszłość, np. zebrać odpowiednią ilość pożywienia na noc, odpowiednią ilość opału aby oświetlić swoje otoczenie w ciemnych lokalizacjach, a także unikać niebezpiecznych miejsc, nie mając odpowiedniego ekwipunku, żeby pokonać znajdujących się w niej przeciwników. Gra ma przyciągnąć jak największą ilość użytkowników. Dzięki temu powstanie wiele różnych rozgrywek, na podstawie których będzie można wyciągać w przyszłości więcej informacji na temat efektywności wykorzystanych algorytmów i potencjału projektu do zarobku komercyjnego.
+\newpage
+\subsection{Porównanie do obecnych na rynku gier typu survival z widokiem izometrycznym}
+\subsubsection{Don't Starve}
+Producent	Klei Entertainment\\
+Kompozytor	Vincent de Vera, Jason Garner\\
+Wersja	All's Well that Maxwell / 22 października 2013\\
+Data wydania	Windows, Linux, macOS: 23 kwietnia 2013 PlayStation 4: 7 stycznia 2014 Xbox One: 26 sierpnia 2015\\
+- \textbf{Wspólne Własności} \\
+- Widok z rzutu izometrycznego\\
+- Wymógi zaspokojenia podstawowych potrzeb postaci, np. Wskaźnika Głodu\\
+- Grafika 2D\\
+- Zbieranie przedmiotów, ekwipunek\\
+- Gra typu survival\\
+- Losowo Wygenerowany Świat\\
+- Przeróżne Biomy\\
+- Przeróżni Przeciwnicy\\
+- Cykl dnia i nocy\\
+- \textbf{Różne Własności} \\
+- Zawartość pixel art'u w grze\\
+\subsubsection{Terraria}
+Producent	Re-Logic\\
+Wydawca	Re-Logic 505 Games Spike Chunsoft (Japonia)\\
+Projektant	Andrew Spinks\\
+Wersja	1.4.4.9\\
+- \textbf{Wspólne Własności} \\
+- Grafika 2D\\
+- Zbieranie przedmiotów, ekwipunek\\
+- Gra typu survival\\
+- Przeróżne Biomy\\
+- Przeróżni Przeciwnicy\\
+- Losowo Wygenerowany Świat\\
+- Zawartość pixel art'u w grze\\
+- Cykl dnia i nocy\\
+- \textbf{Różne Własności} \\
+- Widok z rzutu izometrycznego\\
+- Wymógi zaspokojenia podstawowych potrzeb postaci, np. Wskaźnika Głodu\\
+\newpage
+\subsection{Potencjalne przyszłe zastosowania}
+Każda osoba, którą gra wciągnie najprawdopodobniej wspomni o niej koleżance, koledze, znajomemu, a ci następnym. Dzięki przyciągnięciu jak największej ilości graczy i pozytywnym jej odebraniu, gra nabeira na popularności, którą można spieniężyć.
+\subsubsection{Reklamy}
+Poszukanie potencjalnych reklamodawców, którzy pragnęliby zwiększyć popularność własnych produktów. Każda impresja wywołana reklamą u gracza, posiadałaby swój koszt.
+\subsubsection{Płatność za dostęp do gry}
+Aby gracz mógł zagrać w pełną wersję gry, powinien zapłacić uprzednio jej cenę.
+\subsubsection{Część pakietu gier dostępnego w przypadku zapłacenia subskrypcji}
+Wiele sklepów oferuje miesięczną subskrypcję za dostęp do gry. Zawarcie umowy z jednym z takich klientów umożliwiłoby dołączenie gry do jednego z takich pakietów.
+\subsubsection{Kod jako podstawa innych gier typu survival}
+Dzięki kodowi stworzonej gry, zostanie ułatwione tworzenie podobnych gier typu survival o innej tematyce przy zachowaniu istniejących mechanik. Na przykład, symulatora astronauty próbójącego przeżyć w kosmosie. Pomysłów może być wiele.
+\newpage
+\subsection{Źródła}
+\href{http://physbam.stanford.edu/cs448x/old/Procedural_Noise_FAQ.html}{Proceduralne Szumy (ang. Procedural Noise) - Strona Internetowa Uczelni Stanford}
+\begin{verbatim}
+    http://physbam.stanford.edu/cs448x/old/Procedural_Noise_FAQ.html
+\end{verbatim}\\
+\href{https://pl.wikipedia.org/wiki/Don%E2%80%99t_Starve}{Gra "Don't Starve Together" - Wikipedia}\\
+\begin{verbatim}
+    https://pl.wikipedia.org/wiki/Don%E2%80%99t_Starve
+\end{verbatim}\\
+\href{https://store.steampowered.com/app/322330/Dont_Starve_Together/}{Gra "Don't Starve Together" - Strona Sklepu "Steam"}\\
+\begin{verbatim}
+    https://store.steampowered.com/app/322330/Dont_Starve_Together/
+\end{verbatim}\\
+\href{https://pl.wikipedia.org/wiki/Terraria}{Gra "Terraria" - Wikipedia}\\
+\begin{verbatim}
+    https://pl.wikipedia.org/wiki/Terraria
+\end{verbatim}\\
+\href{https://store.steampowered.com/app/105600/Terraria/}{Gra "Terraria" - Strona Sklepu "Steam"}\\
+\begin{verbatim}
+    https://store.steampowered.com/app/105600/Terraria/
+\end{verbatim}\\
+\newpage
+\section{Projekt i analiza}
+%Póki co gra nie jest jeszcze dokończona, dlatego w tej sekcji nie ma diagramów. Ale jest jakiś zarys. Ten zapis zostanie usunięty w przyszłych wersjach dokumentu.
+\subsection{Aktorzy i Przypadki użycia}
+%Gracz
+\subsection{Wymagania funkcjonalne i niefunkcjonalne}
+\subsection{Diagram klas}
+\subsection{Diagram modelu danych}
+\subsection{Projekt interfejsu użytkownika}
+%Tu będą obrazki gotowego interfejsu. I opis obrazków.
+\includegraphics[scale=0.5]{UIMainMenu.png}
+\section{Implementacja}
+\subsection{Architektura rozwiązania}
+\subsection{Użyte wzorce projektowe}
+%Singleton
+\subsection{Diagramy uwzględniające architekturę całości}
+\subsection{Użyte technologie}
+%package'e, biblioteki itp.
+\section{Testy}
+\subsection{Testy Manualne}
+\subsection{Testy Jednostkowe}
+\subsection{Testy Integracyjne}
+\subsection{Testy Wydajnościowe}
+\subsection{Raport}
+\section{Podział prac w projekcie}
+\subsection{Paweł Olszewski}
+\subsection{Mateusz Maćkowiak}
+\subsection{Kacper Kruger}
+\subsection{Maksymilian Keller}
+\section{Bibliografia}
+\end{document}

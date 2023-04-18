@@ -10,7 +10,7 @@ from game.objects.domain.AnimatedObject import AnimatedObject
 
 class Weather(ABC, AnimatedObject):
 
-    def __init__(self, images: list[Surface], clock: Clock, config: Config, timeBetweenFramesMS):
+    def __init__(self, images: list[Surface], clock: Clock, config: Config, timeBetweenFramesMS: int):
         self.config = config
         scaledImages = self.scaleImagesToFitWindow(images)
         weatherImages = self.expandImages(scaledImages)

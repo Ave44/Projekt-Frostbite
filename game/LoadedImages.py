@@ -8,6 +8,7 @@ class LoadedImages:
         self.loadObjectsImages()
         self.loadItemsImages()
         self.loadLightsImages()
+        self.loadWeatherImages()
         
     def loadEntitiesImages(self):
         self.player = {

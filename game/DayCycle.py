@@ -3,7 +3,7 @@ from constants import ATUMN_COLORS, WINTER_COLORS, SPRING_COLORS, SUMMER_COLORS
 from pygame.time import Clock
 from pygame import Surface, SRCALPHA
 
-from game.DayNightClock import DayNightClock
+from game.ui.DayNightClock import DayNightClock
 from game.Season import Season
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup

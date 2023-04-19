@@ -6,7 +6,7 @@ from Config import Config
 from constants import SLOT_SIZE
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
-from game.DayNightClock import DayNightClock
+from game.ui.DayNightClock import DayNightClock
 
 
 class UiSpriteGroup(pygame.sprite.Group):

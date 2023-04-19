@@ -8,9 +8,9 @@ from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, SHADOW, BORDER_SIZE, 
 
 
 class DayNightClock():
-    def __init__(self, dayPhases: list[tuple[float, Color]], daySegments: int,
+    def __init__(self, dayLengthMs: int, daySegments: int,
                  currentTime: int, currentDay: int, size: int):
-        self.dayLengthMs = sum(list(map(lambda x: x[0], dayPhases)))
+        self.dayLengthMs = dayLengthMs
         self.currentDay = currentDay
         self.currentTime = currentTime
         self.radius = size / 2
@@ -21,20 +21,22 @@ class DayNightClock():
         self.backgroundOutline = Surface(Vector2(size, size), SRCALPHA)
         self.createBackgroundOutline(daySegments)
         self.drawCircleCutout(self.background, 0, 360, 0.1, 0, self.radius / 2 - BORDER_SIZE, SHADOW)
-        self.updateBackground(dayPhases)
 
         self.hand = Surface(Vector2(size, size), SRCALPHA)
         pygame.draw.line(self.hand, CLOCK_OUTLINE,
                          (self.center.x, self.center.y - self.radius),  
                          (self.center.x, self.center.y - self.radius / 2), 4)
 
-    def updateBackground(self, newDayPhases: list[tuple[float, Color]]):
-        angleStart = 0
-        for newDayPhase in newDayPhases:
-            arc = newDayPhase[0] / self.dayLengthMs * 360
-            angleEnd = angleStart + arc
-            self.drawCircleCutout(self.background, angleStart, angleEnd, 0.02, self.radius / 2, self.radius, newDayPhase[1])
-            angleStart = angleEnd
+    def updateBackground(self, dayPhases: list[tuple[float, Color]]):
+        for dayPhaseIndex in range(len(dayPhases)):
+            angleStart = dayPhases[dayPhaseIndex]['start'] / self.dayLengthMs * 360
+            angleEnd = dayPhases[(dayPhaseIndex + 1) % len(dayPhases)]['start'] / self.dayLengthMs * 360
+            color = dayPhases[dayPhaseIndex]['color']
+            if angleStart > angleEnd:
+                self.drawCircleCutout(self.background, angleStart, 360, 0.02, self.radius / 2, self.radius, color)
+                self.drawCircleCutout(self.background, 0, angleEnd, 0.02, self.radius / 2, self.radius, color)
+            else:
+                self.drawCircleCutout(self.background, angleStart, angleEnd, 0.02, self.radius / 2, self.radius, color)
 
         self.background.blit(self.backgroundOutline, (0, 0))
 

@@ -1,5 +1,5 @@
 from Config import Config
-from constants import DAWN_COLOR, DAY_COLOR, DUSK_COLOR, NIGHT_COLOR
+from constants import ATUMN_COLORS, WINTER_COLORS, SPRING_COLORS, SUMMER_COLORS
 from pygame.time import Clock
 from pygame import Surface, SRCALPHA
 
@@ -21,31 +21,20 @@ class DayCycle:
         self.daySegments = 24
         self.daySegmentLengthMs = dayLengthMs / self.daySegments
 
-        self.nightMask = Surface((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), SRCALPHA)
-        self.nightMask.fill((255, 255, 255))
+        atumn = Season([22, 20], [7, 9], 4, 4, 20, 20, ATUMN_COLORS)
+        winter = Season([20, 18], [9, 11], 5, 5, 20, 10, WINTER_COLORS)
+        spring = Season([20, 22], [9, 7], 4, 4, 20, 20, SPRING_COLORS)
+        summer = Season([22, 24], [7, 5], 3, 3, 20, 10, SUMMER_COLORS)
+        self.seasons = [atumn, winter, spring, summer]
+        self.yearLength = sum(season.length for season in self.seasons)
 
-        self.yearLength = 40
-        self.atumn = Season([5, 3], [8, 6], [18, 20], [21, 23], 20)
-
-        self.dawnStart = 6 * self.daySegmentLengthMs
-        self.dayStart = 8 * self.daySegmentLengthMs
-        self.duskStart = 20 * self.daySegmentLengthMs
-        self.nightStart = 22 * self.daySegmentLengthMs
-
-        self.dawnLength = self.dayStart - self.dawnStart
-        self.duskLength = self.nightStart - self.duskStart
-
-        visibleSprites.sunlight = self.nightMask
-
-        dayPhases = [
-            (self.dawnStart, NIGHT_COLOR),
-            (self.dawnLength, DAWN_COLOR),
-            (self.duskStart - self.dayStart, DAY_COLOR),
-            (self.duskLength, DUSK_COLOR),
-            (dayLengthMs - self.nightStart, NIGHT_COLOR)
-        ]
-        self.dayCycleClock = DayNightClock(dayPhases, self.daySegments, self.currentTimeMS, currentDay, 201)
+        self.dayCycleClock = DayNightClock(self.dayLengthMs, self.daySegments, self.currentTimeMS, currentDay, 201)
         uiSprites.setClock(self.dayCycleClock)
+        self.setDay(currentDay)
+
+        self.nightMask = Surface((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), SRCALPHA)
+        self.updateNightMask()
+        visibleSprites.nightMask = self.nightMask
 
     def updateDayCycle(self):
         deltaTime = self.clock.get_time()
@@ -54,12 +43,11 @@ class DayCycle:
             self.currentTimeMS = 0
             self.setDay(self.currentDay + 1)
 
-        brightness = self.calculateBrightness()
-        self.nightMask.fill((brightness, brightness, brightness))
+        self.updateNightMask()
         self.dayCycleClock.update(self.currentTimeMS)
 
 
-    def calculateBrightness(self) -> int:
+    def updateNightMask(self) -> int:
         if self.currentTimeMS < self.dawnStart:
             brightness = 0
         elif self.currentTimeMS < self.dayStart:
@@ -70,37 +58,28 @@ class DayCycle:
             brightness = 255 - (self.currentTimeMS - self.duskStart) / self.duskLength * 255
         else:
             brightness = 0
-        return brightness
+
+        self.nightMask.fill((brightness, brightness, brightness))
     
     def setDay(self, day: int):
         self.currentDay = day
         self.dayCycleClock.currentDay = day
-        yearDay = self.currentDay % self.yearLength
-        seasonDay = yearDay % self.atumn.length
 
-        dayPhases = self.atumn.getDayPhases(seasonDay)
+        seasonDay = self.currentDay % self.yearLength
+        for season in self.seasons:
+            seasonEnd = season.length
+            if seasonEnd <= seasonDay:
+                seasonDay -= seasonEnd
+                continue
+            dayPhases = season.getDayPhases(seasonDay, self.daySegmentLengthMs)
+            break
 
-        self.dawnStart = dayPhases[0] * self.daySegmentLengthMs
-        self.dayStart = dayPhases[1] * self.daySegmentLengthMs
-        self.duskStart = dayPhases[2] * self.daySegmentLengthMs
-        self.nightStart = dayPhases[3] * self.daySegmentLengthMs
-
-        self.changeDayPhases(1)
-
-    def changeDayPhases(self, newDayPhases: list[int]):
-        # self.dawnStart = newDayPhases[0] * self.daySegmentLengthMs
-        # self.dayStart = newDayPhases[1] * self.daySegmentLengthMs
-        # self.duskStart = newDayPhases[2] * self.daySegmentLengthMs
-        # self.nightStart = newDayPhases[3] * self.daySegmentLengthMs
+        self.dawnStart = dayPhases[0]['start']
+        self.dayStart = dayPhases[1]['start']
+        self.duskStart = dayPhases[2]['start']
+        self.nightStart = dayPhases[3]['start']
 
         self.dawnLength = self.dayStart - self.dawnStart
         self.duskLength = self.nightStart - self.duskStart
 
-        dayPhases = [
-            (self.dawnStart, NIGHT_COLOR),
-            (self.dawnLength, DAWN_COLOR),
-            (self.duskStart - self.dayStart, DAY_COLOR),
-            (self.duskLength, DUSK_COLOR),
-            (self.dayLengthMs - self.nightStart, NIGHT_COLOR)
-        ]
         self.dayCycleClock.updateBackground(dayPhases)

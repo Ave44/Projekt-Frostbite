@@ -19,7 +19,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
-        self.sunlight: Surface | None = None
+        self.nightMask: Surface | None = None
         # self.radiuses = []
 
     def customDraw(self, center):
@@ -27,20 +27,20 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset.y = center.y - self.halfWindowHeight
         self.drawTiles()
 
-        sunlightBrightness = self.sunlight.get_at((0, 0))[0]
+        nightMaskBrightness = self.nightMask.get_at((0, 0))[0]
 
         for sprite in self.entities.sprites():
             self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and sunlightBrightness != 255:
+            if isinstance(sprite, Glowing) and nightMaskBrightness != 255:
                 self.drawLightning(sprite)
 
         for sprite in self.sprites():
             self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and sunlightBrightness != 255:
+            if isinstance(sprite, Glowing) and nightMaskBrightness != 255:
                 self.drawLightning(sprite)
 
-        if sunlightBrightness != 255:
-            self.displaySurface.blit(self.sunlight, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        if nightMaskBrightness != 255:
+            self.displaySurface.blit(self.nightMask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
         # self.radiuses = []
 
@@ -59,7 +59,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
     def drawLightning(self, sprite: Glowing):
         lightPosition = sprite.calculateTopLeftPosition() - self.offset
-        self.sunlight.blit(sprite.lightImage, lightPosition)
+        self.nightMask.blit(sprite.lightImage, lightPosition)
 
     # def addRadius(self, radius, position, color):
     #     self.radiuses.append({"radius": radius, "position": position, "color": color})

@@ -1,6 +1,7 @@
 from pygame import Vector2
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
+from game.LoadedSounds import LoadedSounds
 
 from game.entities.domain.AggressiveMob import AggressiveMob
 from game.items.BigMeat import BigMeat
@@ -11,7 +12,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Boar(AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, clock: Clock, midbottom: Vector2, currHealth: int = None):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2, currHealth: int = None):
         entityData = {
             "speed": 2,
             "maxHealth": 30,
@@ -19,11 +20,8 @@ class Boar(AggressiveMob):
             "sightRange": 100,
             "attackRange": 50
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.boar, entityData, clock, 700, 500, 1000, 2000, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.boar, loadedSounds.boar, entityData, clock, 700, 500, 1000, 2000, midbottom, currHealth)
         self.loadedImages = loadedImages
-
-    def afterAttackAction(self):
-        pass
 
     def drop(self) -> None:
         BigMeat(self.visibleSprites, self.rect.center, self.loadedImages)

@@ -14,10 +14,11 @@ class AggressiveMob(Mob):
     def __init__(self,
                  visibleSprites: CameraSpriteGroup,
                  obstacleSprites: ObstacleSprites, loadedImages: dict,
+                 loadedSounds: dict,
                  enemyData, clock: Clock, moveEveryMs: int,
                  minMoveTimeMs: int, maxMoveTimeMs: int, attackCooldownMs: int,
                  midbottom: Vector2, currHealth: int = None):
-        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, clock, enemyData,
+        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, clock, enemyData,
                      enemyData["sightRange"], moveEveryMs, minMoveTimeMs, maxMoveTimeMs, midbottom, currHealth)
         self.attackRange = enemyData["attackRange"]
         self.damage = enemyData["damage"]
@@ -39,7 +40,6 @@ class AggressiveMob(Mob):
         self.destinationPosition = Vector2(target.rect.midbottom)
         self.move()
 
-    @abstractmethod
     def afterAttackAction(self):
         pass
 

@@ -6,9 +6,10 @@ from pygame.math import Vector2
 from pygame.time import Clock
 
 from Config import Config
-from constants import TILE_SIZE, HAPPY_THEME
+from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR, BUTTON_FONT
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
+from game.LoadedSounds import LoadedSounds
 from game.entities.Boar import Boar
 from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
@@ -39,6 +40,8 @@ from gameInitialization.GenerateMap import generateMap
 
 class Game:
     def __init__(self, screen, config: Config, saveData):
+        self.config = config
+        self.font = pygame.font.Font(BUTTON_FONT, 100)
         self.screen = screen
         self.clock = Clock()
 
@@ -50,12 +53,14 @@ class Game:
         self.tick = 0
 
         self.loadedImages = LoadedImages()
+        self.loadedSounds = LoadedSounds()
         self.map = self.createMap(100)
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
                              self.UiSprites,
                              self.loadedImages,
+                             self.loadedSounds,
                              config,
                              self.clock,
                              Vector2(0, 0))
@@ -75,14 +80,11 @@ class Game:
                     continue
                 break
 
-        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
-
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
-        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.clock, self.player.rect.midbottom)
-        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.player.rect.midbottom,
-                                 self.clock)
-        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages,
-                                       self.player.rect.midbottom, self.clock)
+        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
+        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
+        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         unknownItem = Item(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
@@ -90,9 +92,16 @@ class Game:
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
-# later will be replaced with LoadGame(savefile) class
+    def generateMapLoadingScreen(self, information: str) -> None:
+        self.screen.fill((0, 0, 0))
+        infoText = self.font.render(information, True, FONT_MENU_COLOR)
+        infoRect = infoText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.5 * self.config.WINDOW_HEIGHT))
+        self.screen.blit(infoText, infoRect)
+        pygame.display.flip()
+
+    # later will be replaced with LoadGame(savefile) class
     def createMap(self, mapSize):
-        map, objects = generateMap(mapSize, print)
+        map, objects = generateMap(mapSize, self.generateMapLoadingScreen)
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
@@ -161,7 +170,7 @@ class Game:
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
         position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
-        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, position, self.clock)
+        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb,self.loadedSounds.bomb, position, self.clock)
 
 
     def changeMusicTheme(self, theme):

@@ -1,21 +1,25 @@
 from pygame import Vector2
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
+from game.LoadedSounds import LoadedSounds
 
 from game.entities.domain.PassiveMob import PassiveMob
 from game.items.SmallMeat import SmallMeat
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
+from game.LoadedSounds import LoadedSounds
+from game.LoadedImages import LoadedImages
+
 
 class Rabbit(PassiveMob):
 
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, clock: Clock, midbottom: Vector2, home = None, currHealth: int = None):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2, home=None, currHealth: int = None):
         entityData = {
             "speed": 2,
             "maxHealth": 5
         }
-        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, clock, entityData, 200, 2000, 500, 1500, midbottom, currHealth)
+        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, loadedSounds.rabbit, clock, entityData, 200, 2000, 500, 1500, midbottom, currHealth)
         self.loadedImages = loadedImages
         self.home = home
         self.isRunningHome = False
@@ -48,8 +52,9 @@ class Rabbit(PassiveMob):
         super().getDamage(amount)
 
     def die(self):
-        # if self.home:
-            # self.home.rabbits.remove(self)
+        if self.home:
+            if self in self.home.rabbits:
+                self.home.rabbits.remove(self)
         super().die()
 
     def localUpdate(self):

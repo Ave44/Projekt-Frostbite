@@ -34,6 +34,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.tiles.Tile import Tile
+from game.weathers.WeatherController import WeatherController
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -63,6 +64,10 @@ class Game:
                              config,
                              self.clock,
                              Vector2(0, 0))
+
+        self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
+        self.visibleSprites.weatherController = self.weatherController
+
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
@@ -180,7 +185,9 @@ class Game:
             self.dayCycle.updateDayCycle()
             self.visibleSprites.update()
             self.handleTick()
-            self.visibleSprites.customDraw(Vector2(self.player.rect.center))
+            playerCenter = Vector2(self.player.rect.center)
+            self.weatherController.update(playerCenter)
+            self.visibleSprites.customDraw(playerCenter)
 
             self.UiSprites.customDraw()
 

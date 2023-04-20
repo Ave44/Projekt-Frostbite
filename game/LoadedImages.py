@@ -9,7 +9,8 @@ class LoadedImages:
         self.loadObjectsImages()
         self.loadItemsImages()
         self.loadLightsImages()
-
+        self.loadWeatherImages()
+        
     def loadEntitiesImages(self):
         self.player = self.loadEntityImages("./graphics/entities/player", "player")
         self.rabbit = self.loadEntityImages("./graphics/entities/rabbit", "rabbit")
@@ -54,6 +55,10 @@ class LoadedImages:
         self.smallLight = load("./graphics/lights/smallLight.png").convert_alpha()
         self.mediumLight = load("./graphics/lights/mediumLight.png").convert_alpha()
         self.largeLight = load("./graphics/lights/largeLight.png").convert_alpha()
+
+    def loadWeatherImages(self):
+        self.rain = self.loadImages("./graphics/weathers/rain", "rain_drops")
+
 
     def loadImages(self, path: str, filename: str) -> list[Surface]:
         filesAmount = len(listdir(path))

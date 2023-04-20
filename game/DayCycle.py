@@ -16,7 +16,7 @@ class DayCycle:
 
         self.clock = clock
         self.currentDay = currentDay
-        self.currentTimeMS = currentTimeMs
+        self.currentTimeMs = currentTimeMs
         self.dayLengthMs = dayLengthMs
         self.daySegments = 24
         self.daySegmentLengthMs = dayLengthMs / self.daySegments
@@ -28,7 +28,7 @@ class DayCycle:
         self.seasons = [atumn, winter, spring, summer]
         self.yearLength = sum(season.length for season in self.seasons)
 
-        self.dayCycleClock = DayNightClock(self.dayLengthMs, self.daySegments, self.currentTimeMS, currentDay, 201)
+        self.dayCycleClock = DayNightClock(self.dayLengthMs, self.daySegments, self.currentTimeMs, currentDay, 201)
         uiSprites.setClock(self.dayCycleClock)
         self.setDay(currentDay)
 
@@ -38,24 +38,24 @@ class DayCycle:
 
     def updateDayCycle(self):
         deltaTime = self.clock.get_time()
-        self.currentTimeMS = self.currentTimeMS + deltaTime
-        if self.currentTimeMS >= self.dayLengthMs:
-            self.currentTimeMS = 0
+        self.currentTimeMs = self.currentTimeMs + deltaTime
+        if self.currentTimeMs >= self.dayLengthMs:
+            self.currentTimeMs = 0
             self.setDay(self.currentDay + 1)
 
         self.updateNightMask()
-        self.dayCycleClock.update(self.currentTimeMS)
+        self.dayCycleClock.update(self.currentTimeMs)
 
 
     def updateNightMask(self) -> int:
-        if self.currentTimeMS < self.dawnStart:
+        if self.currentTimeMs < self.dawnStart:
             brightness = 0
-        elif self.currentTimeMS < self.dayStart:
-            brightness = (self.currentTimeMS - self.dawnStart) / self.dawnLength * 255
-        elif self.currentTimeMS < self.duskStart:
+        elif self.currentTimeMs < self.dayStart:
+            brightness = (self.currentTimeMs - self.dawnStart) / self.dawnLength * 255
+        elif self.currentTimeMs < self.duskStart:
             brightness = 255
-        elif self.currentTimeMS < self.nightStart:
-            brightness = 255 - (self.currentTimeMS - self.duskStart) / self.duskLength * 255
+        elif self.currentTimeMs < self.nightStart:
+            brightness = 255 - (self.currentTimeMs - self.duskStart) / self.duskLength * 255
         else:
             brightness = 0
 

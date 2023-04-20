@@ -40,7 +40,7 @@ class WeatherController:
 
 
     def changeWeather(self):
-        if random() < 0.25:
+        if random() < 1:
             self.weather = Rain(self.loadedImages, self.clock, self.config)
         else:
             self.weather = None

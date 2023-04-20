@@ -60,8 +60,8 @@ class Game:
                              self.clock,
                              Vector2(0, 0))
 
-        weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
-        self.visibleSprites.weatherController = weatherController
+        self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
+        self.visibleSprites.weatherController = self.weatherController
 
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
@@ -176,7 +176,9 @@ class Game:
             self.dayCycle.updateDayCycle()
             self.visibleSprites.update()
             self.handleTick()
-            self.visibleSprites.customDraw(Vector2(self.player.rect.center))
+            playerCenter = Vector2(self.player.rect.center)
+            self.weatherController.update(playerCenter)
+            self.visibleSprites.customDraw(playerCenter)
 
             self.UiSprites.customDraw()
 

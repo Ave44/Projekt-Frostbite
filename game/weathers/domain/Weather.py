@@ -17,25 +17,31 @@ class Weather(ABC, AnimatedObject):
         AnimatedObject.__init__(self, weatherImages, clock, timeBetweenFramesMs)
 
     def scaleImagesToFitWindow(self, images: list[Surface]) -> list[Surface]:
-        return list(map(lambda i: self.scaleImage(i), images))
+        return list(map(lambda i: self.scaleImageToFitWindow(i), images))
 
-    def scaleImage(self, image: Surface):
-        scaledImage = Surface((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), SRCALPHA)
+    def scaleImageToFitWindow(self, image: Surface):
 
         imageWidth = image.get_width()
         imageHeight = image.get_height()
-        for x in range(0, ceil(self.config.WINDOW_WIDTH / imageWidth)):
+        numberOfImagesToCoverScreenWidth = ceil(self.config.WINDOW_WIDTH / imageWidth)
+        numberOfImagesToCoverScreenHeight = ceil(self.config.WINDOW_HEIGHT / imageHeight)
+        scaledImage = Surface((imageWidth * numberOfImagesToCoverScreenWidth, imageHeight * numberOfImagesToCoverScreenHeight), SRCALPHA)
+
+        for x in range(0, numberOfImagesToCoverScreenWidth):
             xWidth = x * imageWidth
-            for y in range(0, ceil(self.config.WINDOW_HEIGHT / imageHeight)):
+            for y in range(0, numberOfImagesToCoverScreenHeight):
                 scaledImage.blit(image, (xWidth, y * imageHeight))
         return scaledImage
 
-    def expandImages(self, images: list[Surface]) -> list[Surface]:
+    @staticmethod
+    def expandImages(images: list[Surface]) -> list[Surface]:
         bgImages = []
         for image in images:
-            bgImage = Surface((self.config.WINDOW_WIDTH * 2, self.config.WINDOW_HEIGHT * 2), SRCALPHA)
+            imageWidth = image.get_width()
+            imageHeight = image.get_height()
+            bgImage = Surface((imageWidth * 2, imageHeight * 2), SRCALPHA)
             for x in range(0, 2):
                 for y in range(0, 2):
-                    bgImage.blit(image, (x * self.config.WINDOW_WIDTH, y * self.config.WINDOW_HEIGHT))
+                    bgImage.blit(image, (x * imageWidth, y * imageHeight))
             bgImages.append(bgImage)
         return bgImages

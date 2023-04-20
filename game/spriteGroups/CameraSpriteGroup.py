@@ -43,7 +43,6 @@ class CameraSpriteGroup(pygame.sprite.Group):
                 self.drawLightning(sprite)
 
         if self.weatherController:
-            self.weatherController.update(center)
             self.weatherController.draw(self.displaySurface)
 
         if sunlightBrightness != 255:

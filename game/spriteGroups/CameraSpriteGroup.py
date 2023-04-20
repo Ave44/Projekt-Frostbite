@@ -6,6 +6,7 @@ from game.lightning.Glowing import Glowing
 from constants import TILE_SIZE
 from Config import Config
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
+from game.weathers.WeatherController import WeatherController
 
 
 class CameraSpriteGroup(pygame.sprite.Group):
@@ -21,8 +22,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.entities = EntitiesGroup()
         self.sunlight: Surface | None = None
 
-        self.weather: Surface | None = None
-        self.weatherOffset: Vector2 = Vector2(0, 0)
+        self.weatherController: WeatherController | None = None
         # self.radiuses = []
 
     def customDraw(self, center):
@@ -42,8 +42,9 @@ class CameraSpriteGroup(pygame.sprite.Group):
             if isinstance(sprite, Glowing) and sunlightBrightness != 255:
                 self.drawLightning(sprite)
 
-        if self.weather:
-            self.displaySurface.blit(self.weather, self.weatherOffset)
+        if self.weatherController:
+            self.weatherController.update(center)
+            self.weatherController.draw(self.displaySurface)
 
         if sunlightBrightness != 255:
             self.displaySurface.blit(self.sunlight, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)

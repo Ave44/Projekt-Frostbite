@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 from pygame import Surface
 from pygame.time import Clock
 import random

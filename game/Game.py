@@ -1,7 +1,7 @@
 import random
 
 import pygame
-from pygame import mixer
+from pygame import mixer, Surface
 from pygame.math import Vector2
 from pygame.time import Clock
 
@@ -33,7 +33,7 @@ from gameInitialization.GenerateMap import generateMap
 
 
 class Game:
-    def __init__(self, screen, config: Config, saveData):
+    def __init__(self, screen: Surface, config: Config, saveData):
         self.config = config
         self.font = pygame.font.Font(BUTTON_FONT, 100)
         self.screen = screen

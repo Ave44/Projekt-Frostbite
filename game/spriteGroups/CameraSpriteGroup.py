@@ -1,5 +1,6 @@
 import pygame
 from pygame import Surface
+from pygame.sprite import Sprite
 from pygame.math import Vector2
 
 from game.lightning.Glowing import Glowing
@@ -22,7 +23,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.nightMask: Surface | None = None
         # self.radiuses = []
 
-    def customDraw(self, center):
+    def customDraw(self, center: Vector2):
         self.offset.x = center.x - self.halfWindowWidth
         self.offset.y = center.y - self.halfWindowHeight
         self.drawTiles()
@@ -44,7 +45,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
         # self.radiuses = []
 
-    def drawSprite(self, sprite):
+    def drawSprite(self, sprite: Sprite):
         spritePosition = sprite.rect.topleft - self.offset
         self.displaySurface.blit(sprite.image, spritePosition)
 

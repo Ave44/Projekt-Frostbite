@@ -4,6 +4,7 @@ from pygame.time import Clock
 from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE
 from Config import Config
 from game.LoadedImages import LoadedImages
+from game.LoadedSounds import LoadedSounds
 from game.entities.domain.Entity import Entity
 from game.lightning.Glowing import Glowing
 from game.ui.inventory.Inventory import Inventory
@@ -18,17 +19,18 @@ class Player(Entity, Glowing):
                  groups: pygame.sprite.Group,
                  obstacleSprites: pygame.sprite.Group,
                  UiSprites: pygame.sprite.Group,
-                 images: LoadedImages,
+                 loadedImages: LoadedImages,
+                 loadedSounds: LoadedSounds,
                  config: Config,
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None):
         playerData = {"speed": 6, "maxHealth": 100}
-        Entity.__init__(self, groups, obstacleSprites, playerData, images.player, clock, midbottom, currHealth)
+        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
         offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
-        Glowing.__init__(self, images.mediumLight, self.rect, offset)
+        Glowing.__init__(self, loadedImages.mediumLight, self.rect, offset)
 
         self.selectedItem = SelectedItem(self)
 

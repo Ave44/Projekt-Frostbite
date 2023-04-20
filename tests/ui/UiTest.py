@@ -3,6 +3,7 @@ import unittest
 import mock
 from pygame import Vector2
 
+from Config import Config
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.ui.inventory.Inventory import Inventory
 
@@ -10,7 +11,8 @@ from game.ui.inventory.Inventory import Inventory
 class UiTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        visibleSprite = CameraSpriteGroup()
+        config = Config()
+        visibleSprite = CameraSpriteGroup(config)
         self.playerPos = (3, 56)
         self.inventory = Inventory(visibleSprite, 2, 2, Vector2())
 

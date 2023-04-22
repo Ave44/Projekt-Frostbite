@@ -2,7 +2,6 @@ from pygame import Vector2
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 
-from game.entities.domain.State import State
 from game.entities.domain.PassiveMob import PassiveMob
 from game.items.SmallMeat import SmallMeat
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -54,10 +53,9 @@ class Rabbit(PassiveMob):
         super().getDamage(amount)
 
     def die(self):
-        if self.state != State.DEAD:
-            if self.home and self:
-                self.home.rabbits.remove(self)
-            super().die()
+        if self.home and self:
+            self.home.rabbits.remove(self)
+        super().die()
 
     def localUpdate(self):
         if self.isHomeless:

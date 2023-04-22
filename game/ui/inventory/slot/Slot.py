@@ -1,3 +1,8 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game.entities.Player import Player
+    
 from pygame import Surface
 from pygame.sprite import Sprite
 from pygame.math import Vector2
@@ -15,12 +20,11 @@ class Slot(Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = topleftPosition
 
-        self.item = item
+        self.item: Item | None = item
         self.type = type
 
     def addItem(self, item: Item) -> None:
         self.item = item
-        item.Slot = self
 
     def removeItem(self) -> None:
         self.item = None
@@ -31,7 +35,7 @@ class Slot(Sprite):
         else:
             return False
         
-    def handleMouseLeftClick(self, player):
+    def handleMouseLeftClick(self, player: Player):
         selectedItem = player.selectedItem
         if self.isEmpty() and not selectedItem.isEmpty() and isinstance(selectedItem.item, self.type):
             self.addItem(selectedItem.item)
@@ -47,17 +51,25 @@ class Slot(Sprite):
             selectedItem.removeItem()
             selectedItem.addItem(slotItem)
 
-    def handleMouseRightClick(self, player):
+    def handleMouseRightClick(self, player: Player):
         if hasattr(self.item, "use"):
             self.item.use(player)
             self.item.kill()
             self.removeItem()
         elif isinstance(self.item, Tool):
-            if self.type == Tool and self.item:
-                player.inventory.addItem(self.item)
+            self.swapEquipment(Tool, player.handSlot, player)
+        elif isinstance(self.item, Armor):
+            self.swapEquipment(Armor, player.bodySlot, player)
+
+    def swapEquipment(self, type: Type, destSlot: Slot, player: Player):
+        if self.type == type and self.item:
+            player.inventory.addItem(self.item, player.selectedItem)
+            self.removeItem()
+        else:
+            if destSlot.isEmpty():
+                destSlot.addItem(self.item)
                 self.removeItem()
             else:
-                pass
-            
-        elif isinstance(self.item, Armor):
-            pass
+                slotItem = self.item
+                self.addItem(destSlot.item)
+                destSlot.addItem(slotItem)

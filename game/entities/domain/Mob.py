@@ -1,6 +1,5 @@
 import random
 from abc import ABC
-from math import sqrt
 
 from pygame import Vector2
 from pygame.time import Clock
@@ -43,16 +42,3 @@ class Mob(Entity, ABC):
         self.movingTime = 0
         self.moveTime = random.randint(minMoveTime, maxMoveTime)
         self.direction = Vector2(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
-
-    def findClosestOtherEntity(self) -> Entity | None:
-        closestEntity = None
-        closestDistance = float('inf')
-        for entity in self.visibleSprites.entities:
-            if type(self) == type(entity):
-                continue
-            distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
-                            (self.rect.bottom - entity.rect.bottom) ** 2)
-            if distance < closestDistance:
-                closestEntity = entity
-                closestDistance = distance
-        return closestEntity

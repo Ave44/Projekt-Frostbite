@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pygame.sprite import Group, Sprite
 from pygame.time import Clock
 from pygame.math import Vector2
@@ -26,6 +27,7 @@ class Player(Entity):
                  midbottom: Vector2,
                  currHealth: int = None):
         playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
+        self.handDamage = 3
         Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, clock, midbottom, currHealth)
         self.selectedItem = SelectedItem(self)
 
@@ -78,6 +80,11 @@ class Player(Entity):
 
     def drop(self) -> None:
         pass
+
+    def damage(self):
+        if self.handSlot.item:
+            return self.handSlot.item.damage
+        return self.handDamage
 
     def getDamage(self, amount: int) -> None:
         if self.bodySlot.item:

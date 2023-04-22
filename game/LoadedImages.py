@@ -139,6 +139,7 @@ class LoadedImages:
         self.leather = load("./graphics/items/leather.png").convert_alpha()
         self.smallMeat = load("./graphics/items/small_meat.png").convert_alpha()
         self.sword = load("./graphics/items/sword.png").convert_alpha()
+        self.stoneAxe = load("./graphics/items/stoneAxe.png").convert_alpha()
         self.woodenArmor = load("./graphics/items/woodenArmor.png").convert_alpha()
         self.leatherArmor = load("./graphics/items/leatherArmor.png").convert_alpha()
 

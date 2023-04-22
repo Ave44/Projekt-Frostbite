@@ -1,3 +1,7 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game.entities.Player import Player
 import shortuuid
 
 from pygame import Surface
@@ -33,7 +37,7 @@ class Item(Sprite):
         self.rect.midbottom = position
         self.show()
 
-    def onLeftClickAction(self, player):
+    def onLeftClickAction(self, player: Player):
         player.inventory.addItem(self, player.selectedItem)
 
     def show(self):

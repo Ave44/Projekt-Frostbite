@@ -1,4 +1,4 @@
-from pygame import Surface, SRCALPHA
+from pygame import Surface
 from pygame.math import Vector2
 from pygame.sprite import Sprite, Group
 from constants import BG_COLOR, SLOT_GAP, SLOT_SIZE

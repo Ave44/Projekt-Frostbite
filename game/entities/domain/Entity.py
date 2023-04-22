@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import abstractmethod, ABC
 from math import sqrt
 
@@ -96,6 +97,19 @@ class Entity(Sprite, ABC):
     def drop(self) -> None:
         pass
 
+    def findClosestOtherEntity(self) -> Entity | None:
+        closestEntity = None
+        closestDistance = float('inf')
+        for entity in self.visibleSprites.entities:
+            if type(self) == type(entity):
+                continue
+            distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
+                            (self.rect.bottom - entity.rect.bottom) ** 2)
+            if distance < closestDistance:
+                closestEntity = entity
+                closestDistance = distance
+        return closestEntity
+
     def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites.getObstacles(self.rect.center):
             if not sprite.colliderRect.colliderect(self.rect):
@@ -180,6 +194,9 @@ class Entity(Sprite, ABC):
         self.currentHealth = 0
         self.remove(*self.groups())
         self.drop()
+
+    def onLeftClickAction(self, player):
+        self.getDamage(player.damage())
 
     def heal(self, amount: int):
         if self.currentHealth != self.maxHealth:

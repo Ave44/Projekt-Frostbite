@@ -27,6 +27,7 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.domain.Item import Item
 from game.items.Sword import Sword
+from game.items.StoneAxe import StoneAxe
 from game.items.WoodenArmor import WoodenArmor
 from game.items.LeatherArmor import LeatherArmor
 from game.DayCycle import DayCycle
@@ -75,6 +76,7 @@ class Game:
         
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
+        self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
         self.player.inventory.addItem(Item(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
         self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
         self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)

@@ -6,11 +6,11 @@ from game.items.domain.Tool import Tool
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
-class Sword(Item, Tool):
+class StoneAxe(Item, Tool):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
-        name = "Sword"
-        img = loadedImages.sword
-        icon = loadedImages.sword
+        name = "StoneAxe"
+        img = loadedImages.stoneAxe
+        icon = loadedImages.stoneAxe
 
         Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
-        Tool.__init__(self, 10, 100)
+        Tool.__init__(self, 5, 100)

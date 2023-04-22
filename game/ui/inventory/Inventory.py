@@ -59,29 +59,3 @@ class Inventory(Sprite):
             emptySlot.addItem(item)
         else:
             selectedItem.addItem(item)
-
-    # def handleMouseLeftClick(self, mousePos: Vector2, selectedItem: SelectedItem):
-    #     if self.isOpen:
-    #         hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.slotList), None)
-
-    #         if hoveredSlot:
-    #             if hoveredSlot.isEmpty() and not selectedItem.isEmpty():
-    #                 hoveredSlot.addItem(selectedItem.item)
-    #                 selectedItem.removeItem()
-
-    #             elif not hoveredSlot.isEmpty() and selectedItem.isEmpty():
-    #                 selectedItem.addItem(hoveredSlot.item)
-    #                 hoveredSlot.removeItem()
-
-    #             elif not hoveredSlot.isEmpty() and not selectedItem.isEmpty():
-    #                 slotItem = hoveredSlot.item
-    #                 hoveredSlot.addItem(selectedItem.item)
-    #                 selectedItem.removeItem()
-    #                 selectedItem.addItem(slotItem)
-
-    # def handleMouseRightClick(self, mousePos: Vector2):
-    #     if self.isOpen:
-    #         hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.slotList), None)
-
-    #         if hoveredSlot:
-    #             hoveredSlot.use()

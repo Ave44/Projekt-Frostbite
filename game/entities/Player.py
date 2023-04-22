@@ -5,8 +5,11 @@ from pygame.math import Vector2
 
 from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, SLOT_GAP
 from Config import Config
+from game.LoadedImages import LoadedImages
+from game.LoadedSounds import LoadedSounds
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.entities.domain.Entity import Entity
+from game.lightning.Glowing import Glowing
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.Slot import Slot
 from game.items.domain.Tool import Tool
@@ -16,19 +19,25 @@ from game.ui.Bar import Bar
 from game.LoadedImages import LoadedImages
 
 
-class Player(Entity):
+class Player(Entity, Glowing):
     def __init__(self,
                  groups: Group,
                  obstacleSprites: Group,
                  UiSprites: UiSpriteGroup,
                  loadedImages: LoadedImages,
+                 loadedSounds: LoadedSounds,
                  config: Config,
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None):
         playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
         self.handDamage = 3
-        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, clock, midbottom, currHealth)
+        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, clock, midbottom, currHealth)
+
+        playerSize = self.rect.size
+        offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
+        Glowing.__init__(self, loadedImages.mediumLight, self.rect, offset)
+
         self.selectedItem = SelectedItem(self)
 
         inventoryPosition = Vector2(config.WINDOW_WIDTH / 2, config.WINDOW_HEIGHT - 60)

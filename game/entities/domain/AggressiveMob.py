@@ -10,9 +10,9 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class AggressiveMob(Mob):
     def __init__(self,
-                 visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites, loadedImages: dict,
-                 enemyData, clock: Clock, midbottom: Vector2, currHealth: int = None):
-        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, clock, enemyData, midbottom, currHealth)
+                 visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites, loadedImages: dict, loadedSounds: dict,
+                 enemyData: dict, clock: Clock, midbottom: Vector2, currHealth: int = None):
+        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, clock, enemyData, midbottom, currHealth)
         self.damage = enemyData["damage"]
         self.target = None
         self.attackCooldownMs = enemyData["attackCooldownMs"]

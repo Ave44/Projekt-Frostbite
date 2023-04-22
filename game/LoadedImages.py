@@ -2,116 +2,23 @@ from pygame.image import load
 from pygame import Surface
 from os import listdir
 
+
 class LoadedImages:
     def __init__(self):
         self.loadEntitiesImages()
         self.loadObjectsImages()
         self.loadItemsImages()
         self.loadUiImages()
+        self.loadLightsImages()
+        self.loadWeatherImages()
         
     def loadEntitiesImages(self):
-        self.player = {
-            "image_up": load("./graphics/entities/player/player_up.png").convert_alpha(),
-            "image_down": load("./graphics/entities/player/player_down.png").convert_alpha(),
-            "image_left": load("./graphics/entities/player/player_left.png").convert_alpha(),
-            "image_right": load("./graphics/entities/player/player_right.png").convert_alpha(),
-
-            "image_up_damage": load("./graphics/entities/player/player_up_damage.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/player/player_down_damage.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/player/player_left_damage.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/player/player_right_damage.png").convert_alpha(),
-
-            "image_up_heal": load("./graphics/entities/player/player_up_heal.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/player/player_down_heal.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/player/player_left_heal.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/player/player_right_heal.png").convert_alpha()
-        }
-
-        self.rabbit = {
-            "image_up": load("./graphics/entities/rabbit/rabbit_up.png").convert_alpha(),
-            "image_down": load("./graphics/entities/rabbit/rabbit_down.png").convert_alpha(),
-            "image_left": load("./graphics/entities/rabbit/rabbit_left.png").convert_alpha(),
-            "image_right": load("./graphics/entities/rabbit/rabbit_right.png").convert_alpha(),
-
-            "image_up_damage": load("./graphics/entities/rabbit/rabbit_up_damage.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/rabbit/rabbit_down_damage.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/rabbit/rabbit_left_damage.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/rabbit/rabbit_right_damage.png").convert_alpha(),
-
-            "image_up_heal": load("./graphics/entities/rabbit/rabbit_up_heal.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/rabbit/rabbit_down_heal.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/rabbit/rabbit_left_heal.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/rabbit/rabbit_right_heal.png").convert_alpha()
-        }
-
-        self.deer = {
-            "image_up": load("./graphics/entities/deer/deer_up.png").convert_alpha(),
-            "image_down": load("./graphics/entities/deer/deer_down.png").convert_alpha(),
-            "image_left": load("./graphics/entities/deer/deer_left.png").convert_alpha(),
-            "image_right": load("./graphics/entities/deer/deer_right.png").convert_alpha(),
-
-            "image_up_damage": load("./graphics/entities/deer/deer_up_damage.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/deer/deer_down_damage.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/deer/deer_left_damage.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/deer/deer_right_damage.png").convert_alpha(),
-
-            "image_up_heal": load("./graphics/entities/deer/deer_up_heal.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/deer/deer_down_heal.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/deer/deer_left_heal.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/deer/deer_right_heal.png").convert_alpha()
-        }
-
-        self.boar = {
-            "image_up": load("./graphics/entities/boar/boar_up.png").convert_alpha(),
-            "image_down": load("./graphics/entities/boar/boar_down.png").convert_alpha(),
-            "image_left": load("./graphics/entities/boar/boar_left.png").convert_alpha(),
-            "image_right": load("./graphics/entities/boar/boar_right.png").convert_alpha(),
-
-            "image_up_heal": load("./graphics/entities/boar/boar_up_heal.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/boar/boar_down_heal.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/boar/boar_left_heal.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/boar/boar_right_heal.png").convert_alpha(),
-
-            "image_up_damage": load("./graphics/entities/boar/boar_up_damage.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/boar/boar_down_damage.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/boar/boar_left_damage.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/boar/boar_right_damage.png").convert_alpha()
-        }
-
-        self.bomb = {
-            "image_up": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-
-            "image_up_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-
-            "image_up_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/enemy/enemy.png").convert_alpha()
-        }
-
-        self.goblin = {
-            "image_up": load("./graphics/entities/goblin/goblin_up.png").convert_alpha(),
-            "image_down": load("./graphics/entities/goblin/goblin_down.png").convert_alpha(),
-            "image_left": load("./graphics/entities/goblin/goblin_left.png").convert_alpha(),
-            "image_right": load("./graphics/entities/goblin/goblin_right.png").convert_alpha(),
-
-            "image_up_heal": load("./graphics/entities/goblin/goblin_up_heal.png").convert_alpha(),
-            "image_down_heal": load("./graphics/entities/goblin/goblin_down_heal.png").convert_alpha(),
-            "image_left_heal": load("./graphics/entities/goblin/goblin_left_heal.png").convert_alpha(),
-            "image_right_heal": load("./graphics/entities/goblin/goblin_right_heal.png").convert_alpha(),
-
-            "image_up_damage": load("./graphics/entities/goblin/goblin_up_damage.png").convert_alpha(),
-            "image_down_damage": load("./graphics/entities/goblin/goblin_down_damage.png").convert_alpha(),
-            "image_left_damage": load("./graphics/entities/goblin/goblin_left_damage.png").convert_alpha(),
-            "image_right_damage": load("./graphics/entities/goblin/goblin_right_damage.png").convert_alpha()
-        }
-
+        self.player = self.loadEntityImages("./graphics/entities/player", "player")
+        self.rabbit = self.loadEntityImages("./graphics/entities/rabbit", "rabbit")
+        self.deer = self.loadEntityImages("./graphics/entities/deer", "deer")
+        self.boar = self.loadEntityImages("./graphics/entities/boar", "boar")
+        self.bomb = self.loadEntityImages("./graphics/entities/bomb", "bomb")
+        self.goblin = self.loadEntityImages("./graphics/entities/goblin", "goblin")
 
     def loadObjectsImages(self):
         self.treeSapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]
@@ -155,10 +62,40 @@ class LoadedImages:
         self.slotBody = load("./graphics/ui/slotBody.png").convert_alpha()
         self.slotHand = load("./graphics/ui/slotHand.png").convert_alpha()
 
-    def loadImages(self, path: str, filename) -> list[Surface]:
+    def loadLightsImages(self):
+        self.smallLight = load("./graphics/lights/smallLight.png").convert_alpha()
+        self.mediumLight = load("./graphics/lights/mediumLight.png").convert_alpha()
+        self.largeLight = load("./graphics/lights/largeLight.png").convert_alpha()
+
+    def loadWeatherImages(self):
+        self.rain = self.loadImages("./graphics/weathers/rain", "rain_drops")
+
+    def loadImages(self, path: str, filename: str) -> list[Surface]:
         filesAmount = len(listdir(path))
         imagesList = []
         for index in range(filesAmount):
             image = load(f"{path}/{filename}{index + 1}.png").convert_alpha()
             imagesList.append(image)
         return imagesList
+
+    def loadEntityImages(self, path: str, filename: str) -> dict:
+        try:
+            return {
+                "image_up": load(f"{path}/{filename}_up.png").convert_alpha(),
+                "image_down": load(f"{path}/{filename}_down.png").convert_alpha(),
+                "image_left": load(f"{path}/{filename}_left.png").convert_alpha(),
+                "image_right": load(f"{path}/{filename}_right.png").convert_alpha(),
+
+                "image_up_damage": load(f"{path}/{filename}_up_damage.png").convert_alpha(),
+                "image_down_damage": load(f"{path}/{filename}_down_damage.png").convert_alpha(),
+                "image_left_damage": load(f"{path}/{filename}_left_damage.png").convert_alpha(),
+                "image_right_damage": load(f"{path}/{filename}_right_damage.png").convert_alpha(),
+
+                "image_up_heal": load(f"{path}/{filename}_up_heal.png").convert_alpha(),
+                "image_down_heal": load(f"{path}/{filename}_down_heal.png").convert_alpha(),
+                "image_left_heal": load(f"{path}/{filename}_left_heal.png").convert_alpha(),
+                "image_right_heal": load(f"{path}/{filename}_right_heal.png").convert_alpha()
+            }
+        except Exception:
+            print(f"\nMissing images at '{path}/{filename}'\n")
+            raise

@@ -6,6 +6,7 @@ from pygame.surface import Surface
 
 from typing import Type
 from game.items.domain.Tool import Tool
+from game.entities.Player import Player
 
 
 class Object(ABC, Sprite):
@@ -28,8 +29,11 @@ class Object(ABC, Sprite):
     def drop(self) -> None:
         pass
 
-    def onLeftClickAction(self, player) -> None:
-        pass
+    def onLeftClickAction(self, player: Player) -> None:
+        playerItem = player.handSlot.item
+        if isinstance(playerItem, self.toolType):
+            self.getDamage(playerItem.toolPower)
+            player.handSlot.reduceItemDurability()
 
     def canInteract(self, tool: Tool) -> bool:
         return isinstance(tool, self.toolType)

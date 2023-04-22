@@ -3,3 +3,6 @@ class Tool():
         self.toolPower = toolPower
         self.damage = damage
         self.durability = durability
+
+    def reduceDurability(self):
+        self.durability -= 1

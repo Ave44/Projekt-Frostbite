@@ -73,3 +73,8 @@ class Slot(Sprite):
                 slotItem = self.item
                 self.addItem(destSlot.item)
                 destSlot.addItem(slotItem)
+
+    def reduceItemDurability(self):
+        self.item.reduceDurability()
+        if self.item.durability <= 0:
+            self.removeItem()

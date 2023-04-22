@@ -8,7 +8,6 @@ from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.entities.domain.Entity import Entity
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.Slot import Slot
-from game.items.domain.Item import Item
 from game.items.domain.Tool import Tool
 from game.items.domain.Armor import Armor
 from game.ui.inventory.slot.SelectedItem import SelectedItem
@@ -26,7 +25,7 @@ class Player(Entity):
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None):
-        playerData = {"speed": 6, "maxHealth": 100}
+        playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
         Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, clock, midbottom, currHealth)
         self.selectedItem = SelectedItem(self)
 
@@ -75,9 +74,7 @@ class Player(Entity):
         self.stopAutowalking()
 
     def handleMouseLeftClick(self, sprite: Sprite):
-        # if isinstance(sprite, Item):
-            self.setDestination(Vector2(sprite.rect.midbottom), sprite)
-            # self.inventory.addItem(sprite, self.selectedItem)
+        self.setDestination(Vector2(sprite.rect.midbottom), sprite)
 
     def drop(self) -> None:
         pass

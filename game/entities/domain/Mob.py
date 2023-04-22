@@ -13,26 +13,20 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Mob(Entity, ABC):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: dict, clock: Clock, entityData, sightRange: int, moveEveryMs: int,
-                 minMoveMs: int, maxMoveMs: int, midbottom: Vector2, currHealth: int = None):
+                 loadedImages: dict, clock: Clock, entityData, midbottom: Vector2, currHealth: int = None):
         Entity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages, clock, midbottom, currHealth)
-        self.sightRange = sightRange
+        self.sightRange = entityData["sightRange"]
         self.isMoving = False
         self.movingTime = 0
         self.moveTime = 0
         self.timeBetweenMoves = 0
-        self.moveEveryMs = moveEveryMs
-        self.minMoveTimeMs = minMoveMs
-        self.maxMoveTimeMs = maxMoveMs
+        self.moveEveryMs = entityData["moveEveryMs"]
+        self.minMoveTimeMs = entityData["minMoveTimeMs"]
+        self.maxMoveTimeMs = entityData["maxMoveTimeMs"]
         self.visibleSprites = visibleSprites
 
-    def isInRange(self, target: Entity | Object, rangeDistance: int) -> bool:
-        distance = sqrt((self.rect.centerx - target.rect.centerx) ** 2 +
-                        (self.rect.centery - target.rect.centery) ** 2)
-        return distance <= rangeDistance
-
     def isInSightRange(self, target: Entity | Object) -> bool:
-        return self.isInRange(target, self.sightRange)
+        return self.isInRange(Vector2(target.rect.midbottom), self.sightRange)
 
     def moveRandomly(self):
         dt = self.clock.get_time()
@@ -56,8 +50,8 @@ class Mob(Entity, ABC):
         for entity in self.visibleSprites.entities:
             if type(self) == type(entity):
                 continue
-            distance = sqrt((self.rect.centerx - entity.rect.x) ** 2 +
-                            (self.rect.centery - entity.rect.y) ** 2)
+            distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
+                            (self.rect.bottom - entity.rect.bottom) ** 2)
             if distance < closestDistance:
                 closestEntity = entity
                 closestDistance = distance

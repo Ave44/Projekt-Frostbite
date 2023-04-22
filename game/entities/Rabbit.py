@@ -14,9 +14,14 @@ class Rabbit(PassiveMob):
                  loadedImages: LoadedImages, clock: Clock, midbottom: Vector2, home = None, currHealth: int = None):
         entityData = {
             "speed": 2,
-            "maxHealth": 5
+            "maxHealth": 5,
+            "actionRange": 10,
+            "sightRange": 200,
+            "moveEveryMs": 2000,
+            "minMoveTimeMs": 500,
+            "maxMoveTimeMs": 1500
         }
-        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, clock, entityData, 200, 2000, 500, 1500, midbottom, currHealth)
+        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, clock, entityData, midbottom, currHealth)
         self.loadedImages = loadedImages
         self.home = home
         self.isRunningHome = False

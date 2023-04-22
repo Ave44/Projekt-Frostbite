@@ -23,11 +23,12 @@ class Grass(Object, AnimatedObject):
         self.currGrowthTime = 0
 
     def onLeftClickAction(self, player: Player) -> None:
-        self.picked = True
-        self.currGrowthTime = 0
-        self.image = self.imagePicked
-        grass = GrassFibers(self.visibleGroup, self.rect.midbottom, self.loadedImages)
-        player.inventory.addItem(grass, player.selectedItem)
+        if not self.picked:
+            self.picked = True
+            self.currGrowthTime = 0
+            self.image = self.imagePicked
+            grass = GrassFibers(self.visibleGroup, self.rect.midbottom, self.loadedImages)
+            player.inventory.addItem(grass, player.selectedItem)
 
     def drop(self) -> None:
         GrassFibers(self.visibleGroup, self.rect.midbottom, self.loadedImages)

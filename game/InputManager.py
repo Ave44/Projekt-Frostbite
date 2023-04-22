@@ -8,6 +8,7 @@ from game.entities.Player import Player
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.ui.inventory.slot.Slot import Slot
+from game.items.domain.Item import Item
 
 
 class InputManager:
@@ -48,7 +49,8 @@ class InputManager:
                         if hoveredSlot:
                             hoveredSlot.handleMouseLeftClick(self.player)
                     elif hoveredSprite:
-                        self.player.handleMouseLeftClick(hoveredSprite)
+                        if not isinstance(hoveredSprite, Player):
+                            self.player.handleMouseLeftClick(hoveredSprite)
                     elif not self.player.selectedItem.isEmpty():   
                         mousePosInWorld = mousePos + self.visibleSprites.offset
                         self.player.selectedItem.handleMouseLeftClick(mousePosInWorld)
@@ -76,12 +78,12 @@ class InputManager:
         elif pressedKeys[pygame.K_d]:
             self.player.moveRight()
 
-    def checkIfMouseHoversOverInventory(self, mousePos) -> bool:
+    def checkIfMouseHoversOverInventory(self, mousePos: Vector2) -> bool:
         if self.UiSprites.inventory.rect.collidepoint(mousePos) or self.UiSprites.equipmentBackgroundRect.collidepoint(mousePos):
             return True
         return False
 
-    def getHoveredSprite(self, mousePos) -> Sprite:
+    def getHoveredSprite(self, mousePos: Vector2) -> Sprite:
         mousePosInWorld = mousePos + self.visibleSprites.offset
 
         for sprite in self.visibleSprites.sprites():

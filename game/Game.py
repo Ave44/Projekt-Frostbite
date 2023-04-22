@@ -39,7 +39,6 @@ from game.items.StoneAxe import StoneAxe
 from game.items.StonePickaxe import StonePickaxe
 from game.items.WoodenArmor import WoodenArmor
 from game.items.LeatherArmor import LeatherArmor
-from game.DayCycle import DayCycle
 from game.tiles.Tile import Tile
 from game.weathers.WeatherController import WeatherController
 from gameInitialization.GenerateMap import generateMap

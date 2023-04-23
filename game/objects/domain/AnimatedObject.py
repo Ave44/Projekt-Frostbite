@@ -4,20 +4,19 @@ import random
 
 class AnimatedObject:
     def __init__(self, images: list[Surface], clock: Clock, timeMsBetweenFrames: int):
+        self.numberOfImages = len(images)
         self.images = images
-        self.lastFrame = len(images)
-        self.currFrame = int(random.uniform(0, self.lastFrame))
+        self.currFrameIndex = int(random.uniform(0, self.numberOfImages))
         self.timeMsBetweenFrames = timeMsBetweenFrames
-        self.timeOnFrame = random.uniform(0, timeMsBetweenFrames)
+
+        self.image = images[self.currFrameIndex]
+        self.timeOnFrame = 0
         self.clock = clock
 
     def nextFrame(self):
-        self.currFrame += 1
+        self.currFrameIndex = (self.currFrameIndex + 1) % self.numberOfImages
         self.timeOnFrame = 0
-        if self.currFrame == self.lastFrame:
-            self.currFrame = 0
-        self.image = self.images[self.currFrame]
-
+        self.image = self.images[self.currFrameIndex]
 
     def animationUpdate(self):
         self.timeOnFrame += self.clock.get_time()

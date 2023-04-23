@@ -3,8 +3,8 @@ from pygame.sprite import Group
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 
-from game.items.domain.Item import Item
-from game.items.domain.ToolType import ToolType
+from game.items.Wood import Wood
+from game.items.domain.Axe import Axe
 from game.objects.domain.CollisionObject import CollisionObject
 from game.objects.domain.Flammable import Flammable
 from game.objects.trees.BurntTree import BurntTree
@@ -19,8 +19,8 @@ class SmallTree(CollisionObject, Flammable):
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 5,
-                                 ToolType.AXE, image, colliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
+                                 midBottom, 5, Axe, image, colliderRect)
         Flammable.__init__(self, clock)
 
         self.age = ageMs
@@ -31,7 +31,7 @@ class SmallTree(CollisionObject, Flammable):
         print("interacted with small trees")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        Item(self.visibleGroup, self.rect.center)  # in the future there will be a real implementation
+        Wood(self.visibleGroup, self.rect.center, self.loadedImages)
 
     def burn(self):
         self.remove(*self.groups())

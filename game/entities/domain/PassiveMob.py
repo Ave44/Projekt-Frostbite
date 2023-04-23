@@ -1,4 +1,5 @@
 from abc import ABC
+from random import random
 
 from pygame import Vector2
 
@@ -8,8 +9,11 @@ from game.entities.domain.Mob import Mob
 
 class PassiveMob(Mob, ABC):
     def runAway(self, fromEntity: Entity):
-        xOffset = -fromEntity.rect.x + self.rect.centerx
-        yOffset = -fromEntity.rect.y + self.rect.bottom
+        xOffset = self.rect.centerx - fromEntity.rect.centerx
+        yOffset = self.rect.bottom - fromEntity.rect.bottom
+        if xOffset == 0 and yOffset == 0:
+            xOffset = random()
+            yOffset = random()
         self.direction = Vector2(xOffset, yOffset)
         self.move()
 

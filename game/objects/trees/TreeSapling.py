@@ -4,7 +4,7 @@ from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 
 from game.items.domain.Item import Item
-from game.items.domain.ToolType import ToolType
+from game.items.domain.Shovel import Shovel
 from game.objects.domain.CollisionObject import CollisionObject
 from game.objects.trees.SmallTree import SmallTree
 
@@ -18,7 +18,8 @@ class TreeSapling(CollisionObject):
         image = loadedImages.treeSapling[0]
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
-        super().__init__(visibleGroup, obstaclesGroup, midBottom, 1, ToolType.HAND, image, colliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
+                         midBottom, 1, Shovel, image, colliderRect)
 
         self.clock = clock
         self.age = 0

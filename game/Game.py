@@ -28,7 +28,14 @@ from game.objects.trees.SmallTree import SmallTree
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
+from game.items.domain.Item import Item
+from game.items.Sword import Sword
+from game.items.StoneAxe import StoneAxe
+from game.items.StonePickaxe import StonePickaxe
+from game.items.WoodenArmor import WoodenArmor
+from game.items.LeatherArmor import LeatherArmor
 from game.tiles.Tile import Tile
+from game.weathers.WeatherController import WeatherController
 from gameInitialization.GenerateMap import generateMap
 
 
@@ -59,6 +66,10 @@ class Game:
                              self.clock,
                              Vector2(0, 0))
 
+        self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
+        self.visibleSprites.weatherController = self.weatherController
+
+
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
                 for x in range(len(self.map)):
@@ -77,9 +88,12 @@ class Game:
         self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
 
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
-        unknownItem = Item(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
-        self.player.inventory.addItem(unknownItem, self.player.selectedItem)
+        self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(Item(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
@@ -167,7 +181,9 @@ class Game:
             self.dayCycle.updateDayCycle()
             self.visibleSprites.update()
             self.handleTick()
-            self.visibleSprites.customDraw(Vector2(self.player.rect.center))
+            playerCenter = Vector2(self.player.rect.center)
+            self.weatherController.update(playerCenter)
+            self.visibleSprites.customDraw(playerCenter)
 
             self.UiSprites.customDraw()
 

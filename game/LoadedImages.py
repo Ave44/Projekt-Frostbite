@@ -8,8 +8,10 @@ class LoadedImages:
         self.loadEntitiesImages()
         self.loadObjectsImages()
         self.loadItemsImages()
+        self.loadUiImages()
         self.loadLightsImages()
-
+        self.loadWeatherImages()
+        
     def loadEntitiesImages(self):
         self.player = self.loadEntityImages("./graphics/entities/player", "player")
         self.rabbit = self.loadEntityImages("./graphics/entities/rabbit", "rabbit")
@@ -27,6 +29,7 @@ class LoadedImages:
         self.burntTree = load("./graphics/objects/trees/burntTree.png").convert_alpha()
 
         self.grass = self.loadImages("./graphics/objects/grass", "grass")
+        self.grassPicked = load("./graphics/objects/grassPicked.png").convert_alpha()
 
         self.rock = load("./graphics/objects/rock.png").convert_alpha()
 
@@ -43,6 +46,10 @@ class LoadedImages:
         self.leather = load("./graphics/items/leather.png").convert_alpha()
         self.smallMeat = load("./graphics/items/small_meat.png").convert_alpha()
         self.sword = load("./graphics/items/sword.png").convert_alpha()
+        self.stoneAxe = load("./graphics/items/stoneAxe.png").convert_alpha()
+        self.stonePickaxe = load("./graphics/items/stonePickaxe.png").convert_alpha()
+        self.woodenArmor = load("./graphics/items/woodenArmor.png").convert_alpha()
+        self.leatherArmor = load("./graphics/items/leatherArmor.png").convert_alpha()
 
         self.pebble = load("./graphics/items/pebble.png").convert_alpha()
         self.grassFibers = load("./graphics/items/grassFibers.png").convert_alpha()
@@ -50,10 +57,18 @@ class LoadedImages:
         self.sharpRock = load("./graphics/items/sharpRock.png").convert_alpha()
         self.wood = load("./graphics/items/wood.png").convert_alpha()
 
+    def loadUiImages(self):
+        self.slot = load("./graphics/ui/slot.png").convert_alpha()
+        self.slotBody = load("./graphics/ui/slotBody.png").convert_alpha()
+        self.slotHand = load("./graphics/ui/slotHand.png").convert_alpha()
+
     def loadLightsImages(self):
         self.smallLight = load("./graphics/lights/smallLight.png").convert_alpha()
         self.mediumLight = load("./graphics/lights/mediumLight.png").convert_alpha()
         self.largeLight = load("./graphics/lights/largeLight.png").convert_alpha()
+
+    def loadWeatherImages(self):
+        self.rain = self.loadImages("./graphics/weathers/rain", "rain_drops")
 
     def loadImages(self, path: str, filename: str) -> list[Surface]:
         filesAmount = len(listdir(path))

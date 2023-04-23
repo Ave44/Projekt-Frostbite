@@ -1,6 +1,5 @@
 import random
 from abc import ABC
-from math import sqrt
 
 from pygame import Vector2
 from pygame.time import Clock
@@ -13,26 +12,20 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Mob(Entity, ABC):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: dict, loadedSounds: dict, clock: Clock, entityData, sightRange: int, moveEveryMs: int,
-                 minMoveMs: int, maxMoveMs: int, midbottom: Vector2, currHealth: int = None):
+                 loadedImages: dict, loadedSounds: dict, clock: Clock, entityData, midbottom: Vector2, currHealth: int = None):
         Entity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages, loadedSounds, clock, midbottom, currHealth)
-        self.sightRange = sightRange
+        self.sightRange = entityData["sightRange"]
         self.isMoving = False
         self.movingTime = 0
         self.moveTime = 0
         self.timeBetweenMoves = 0
-        self.moveEveryMs = moveEveryMs
-        self.minMoveTimeMs = minMoveMs
-        self.maxMoveTimeMs = maxMoveMs
+        self.moveEveryMs = entityData["moveEveryMs"]
+        self.minMoveTimeMs = entityData["minMoveTimeMs"]
+        self.maxMoveTimeMs = entityData["maxMoveTimeMs"]
         self.visibleSprites = visibleSprites
 
-    def isInRange(self, target: Entity | Object, rangeDistance: int) -> bool:
-        distance = sqrt((self.rect.centerx - target.rect.centerx) ** 2 +
-                        (self.rect.centery - target.rect.centery) ** 2)
-        return distance <= rangeDistance
-
     def isInSightRange(self, target: Entity | Object) -> bool:
-        return self.isInRange(target, self.sightRange)
+        return self.isInRange(Vector2(target.rect.midbottom), self.sightRange)
 
     def moveRandomly(self):
         dt = self.clock.get_time()
@@ -49,16 +42,3 @@ class Mob(Entity, ABC):
         self.movingTime = 0
         self.moveTime = random.randint(minMoveTime, maxMoveTime)
         self.direction = Vector2(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
-
-    def findClosestOtherEntity(self) -> Entity | None:
-        closestEntity = None
-        closestDistance = float('inf')
-        for entity in self.visibleSprites.entities:
-            if type(self) == type(entity):
-                continue
-            distance = sqrt((self.rect.centerx - entity.rect.x) ** 2 +
-                            (self.rect.centery - entity.rect.y) ** 2)
-            if distance < closestDistance:
-                closestEntity = entity
-                closestDistance = distance
-        return closestEntity

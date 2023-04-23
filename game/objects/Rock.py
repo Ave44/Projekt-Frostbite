@@ -3,8 +3,9 @@ from pygame.math import Vector2
 from pygame.sprite import Group
 from game.LoadedImages import LoadedImages
 
-from game.items.Sword import Sword
-from game.items.domain.ToolType import ToolType
+from game.items.Pebble import Pebble
+from game.items.SharpRock import SharpRock
+from game.items.domain.Pickaxe import Pickaxe
 from game.objects.domain.CollisionObject import CollisionObject
 
 
@@ -15,12 +16,14 @@ class Rock(CollisionObject):
         colliderRect = Rect((0, 0), (10, 10))
         colliderRect.midbottom = midBottom
 
-        super().__init__(visibleGroup, obstaclesGroup,
-                         midBottom, 40, ToolType.PICKAXE, image, colliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,midBottom, 10, Pickaxe, image, colliderRect)
 
     def interact(self) -> None:
         # do something
         pass
 
     def drop(self) -> None:
-        Sword(self.visibleGroup, self.rect.center)
+        Pebble(self.visibleGroup, self.rect.center, self.loadedImages)
+        Pebble(self.visibleGroup, self.rect.center, self.loadedImages)
+        SharpRock(self.visibleGroup, self.rect.center, self.loadedImages)
+

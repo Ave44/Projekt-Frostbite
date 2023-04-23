@@ -1,6 +1,8 @@
+from __future__ import annotations
 from abc import abstractmethod, ABC
+from math import sqrt
 
-from pygame import Vector2, Surface
+from pygame import Vector2, Surface, Rect
 from pygame.sprite import Sprite
 from pygame.time import Clock
 
@@ -9,7 +11,7 @@ from game.entities.domain.State import State
 class Entity(Sprite, ABC):
     from game.entities.effects.Effect import Effect
 
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict, entitySounds: dict,
+    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict[Surface], entitySounds: dict,
                  clock: Clock, midbottom: Vector2, currHealth: int = None):
         from game.entities.effects.Effect import Effect
 
@@ -41,12 +43,13 @@ class Entity(Sprite, ABC):
         self.imageLeft = self.imageLeftNormal
         self.imageRight = self.imageRightNormal
 
-        self.image = self.imageDown
-        self.rect = self.image.get_rect(midbottom=midbottom)
+        self.image: Surface = self.imageDown
+        self.rect: Rect = self.image.get_rect(midbottom=midbottom)
 
         self.speed = entityData["speed"]
         self.direction = Vector2()
         self.obstacleSprites = obstacleSprites
+        self.actionRange = entityData["actionRange"]
 
         self.maxHealth = entityData["maxHealth"]
         if currHealth:
@@ -99,6 +102,19 @@ class Entity(Sprite, ABC):
     def drop(self) -> None:
         pass
 
+    def findClosestOtherEntity(self) -> Entity | None:
+        closestEntity = None
+        closestDistance = float('inf')
+        for entity in self.visibleSprites.entities:
+            if type(self) == type(entity):
+                continue
+            distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
+                            (self.rect.bottom - entity.rect.bottom) ** 2)
+            if distance < closestDistance:
+                closestEntity = entity
+                closestDistance = distance
+        return closestEntity
+
     def checkHorizontalCollision(self):  # Solution only for non-moving coliders!
         for sprite in self.obstacleSprites.getObstacles(self.rect.center):
             if not sprite.colliderRect.colliderect(self.rect):
@@ -125,8 +141,13 @@ class Entity(Sprite, ABC):
         if self.destinationPosition:
             self.moveTowards()
 
+    def isInRange(self, target: Vector2, rangeDistance: int) -> bool:
+        distance = sqrt((self.rect.centerx - target.x) ** 2 +
+                        (self.rect.bottom - target.y) ** 2)
+        return distance <= rangeDistance
+
     def moveTowards(self):
-        if Vector2(self.rect.midbottom) == self.destinationPosition:
+        if self.isInRange(self.destinationPosition, self.actionRange):
             self.destinationPosition = None
             if self.destinationTarget:
                 self.destinationTarget.onLeftClickAction(self)
@@ -166,18 +187,22 @@ class Entity(Sprite, ABC):
             self.image = self.imageUp
 
     def getDamage(self, amount: int) -> None:
-        if self.currentHealth:
-            self.timeFromLastHealthChange = 0
-            self.state = State.DAMAGED
-        if self.currentHealth <= amount:
-            self.die()
-        else:
-            self.currentHealth -= amount
+        if self.state != State.DEAD:
+            if self.currentHealth <= amount:
+                self.die()
+            else:
+                self.timeFromLastHealthChange = 0
+                self.state = State.DAMAGED
+                self.currentHealth -= amount
 
     def die(self):
+        self.state = State.DEAD
         self.currentHealth = 0
         self.remove(*self.groups())
         self.drop()
+
+    def onLeftClickAction(self, player):
+        self.getDamage(player.damage())
 
     def heal(self, amount: int):
         if self.currentHealth != self.maxHealth:

@@ -22,7 +22,7 @@ class ImageTransformer(metaclass=ImageTransformerMeta):
 
     def createHealImage(self, relativeImageInPath: str, relativeImageOutPath: str = None):
         if not relativeImageOutPath:
-            relativeImageOutPath = self._buildImageOutPath(relativeImageInPath, "Heal")
+            relativeImageOutPath = self._buildImageOutPath(relativeImageInPath, "_heal")
 
         im = imread(f"/{ROOT_PATH}/{relativeImageInPath}")
         healImage = self._transformImage(im, self._GREEN_RGBA)
@@ -30,7 +30,7 @@ class ImageTransformer(metaclass=ImageTransformerMeta):
 
     def createDamageImage(self, relativeImageInPath: str, relativeImageOutPath: str = None):
         if not relativeImageOutPath:
-            relativeImageOutPath = self._buildImageOutPath(relativeImageInPath, "Damage")
+            relativeImageOutPath = self._buildImageOutPath(relativeImageInPath, "_damage")
 
         im = imread(f"/{ROOT_PATH}/{relativeImageInPath}")
         damageImage = self._transformImage(im, self._RED_RGBA)

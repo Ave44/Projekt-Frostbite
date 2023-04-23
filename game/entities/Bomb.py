@@ -2,6 +2,8 @@ from pygame import Vector2
 from pygame.time import Clock
 
 from game.entities.domain.AggressiveMob import AggressiveMob
+from game.entities.domain.Entity import Entity
+from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.LoadedSounds import LoadedSounds
@@ -15,11 +17,16 @@ class Bomb(AggressiveMob):
             "maxHealth": 60,
             "damage": 20,
             "sightRange": 400,
-            "attackRange": 20
+            "actionRange": 20,
+            "moveEveryMs": 4000,
+            "minMoveTimeMs": 1000,
+            "maxMoveTimeMs": 2000,
+            "attackCooldownMs": 0
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, entityData, clock, 200, 300, 500, 0, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, entityData, clock, midbottom, currHealth)
 
-    def afterAttackAction(self):
+    def attack(self, target: Entity | Object):
+        AggressiveMob.attack(self, target)
         self.die()
 
     def drop(self) -> None:

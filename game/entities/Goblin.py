@@ -21,10 +21,13 @@ class Goblin(AggressiveMob):
             "maxHealth": 50,
             "damage": 10,
             "sightRange": 150,
-            "attackRange": 50
+            "actionRange": 50,
+            "moveEveryMs": 700,
+            "minMoveTimeMs": 500,
+            "maxMoveTimeMs": 1000,
+            "attackCooldownMs": 2000
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, entityData, clock, 700, 500,
-                               1000, 2000, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, entityData, clock, midbottom, currHealth)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
 

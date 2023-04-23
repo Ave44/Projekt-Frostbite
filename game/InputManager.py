@@ -79,9 +79,7 @@ class InputManager:
             self.player.moveRight()
 
     def checkIfMouseHoversOverInventory(self, mousePos: Vector2) -> bool:
-        if self.UiSprites.inventory.rect.collidepoint(mousePos) or self.UiSprites.equipmentBackgroundRect.collidepoint(mousePos):
-            return True
-        return False
+        return self.UiSprites.inventory.rect.collidepoint(mousePos) or self.UiSprites.equipmentBackgroundRect.collidepoint(mousePos)
 
     def getHoveredSprite(self, mousePos: Vector2) -> Sprite:
         mousePosInWorld = mousePos + self.visibleSprites.offset

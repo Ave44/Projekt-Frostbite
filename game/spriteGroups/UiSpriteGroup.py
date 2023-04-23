@@ -2,15 +2,18 @@ import pygame
 from pygame.math import Vector2
 from pygame import Surface, Rect
 
+from Config import Config
 from constants import SLOT_SIZE, BG_COLOR, SLOT_GAP
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 from game.ui.inventory.slot.Slot import Slot
+from game.ui.DayNightClock import DayNightClock
 
 
 class UiSpriteGroup(pygame.sprite.Group):
-    def __init__(self):
+    def __init__(self, config: Config):
         super().__init__()
+        self.config = config
         self.displaySurface = pygame.display.get_surface()
         self.inventory = Inventory
         self.selectedItem = SelectedItem
@@ -18,6 +21,8 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.bodySlot = Slot
         self.equipmentBackground = Surface
         self.equipmentBackgroundRect = Rect
+        self.clock = DayNightClock
+        self.clockRect = Rect
         self.player = None
 
     def customDraw(self):
@@ -43,6 +48,12 @@ class UiSpriteGroup(pygame.sprite.Group):
             self.displaySurface.blit(self.selectedItem.item.icon, displayPos)
 
         self.player.healthBar.draw(self.displaySurface)
+
+        self.clock.draw(self.displaySurface, self.clockRect)
+
+    def setClock(self, clock: DayNightClock):
+        self.clock = clock
+        self.clockRect = Rect(self.config.WINDOW_WIDTH - self.clock.radius * 2 - 10, 10, clock.radius * 2, clock.radius * 2)
 
     def setEquipmentSlots(self, handSlot, bodySlot):
         self.handSlot = handSlot

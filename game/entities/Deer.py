@@ -17,9 +17,14 @@ class Deer(PassiveMob):
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2, currHealth: int = None):
         entityData = {
             "speed": 3,
-            "maxHealth": 15
+            "maxHealth": 15,
+            "actionRange": 20,
+            "sightRange": 200,
+            "moveEveryMs": 4000,
+            "minMoveTimeMs": 1000,
+            "maxMoveTimeMs": 2000
         }
-        super().__init__(visibleSprites, obstacleSprites, loadedImages.deer, loadedSounds.deer, clock, entityData, 200, 4000, 1000, 2000, midbottom, currHealth)
+        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.deer, loadedSounds.deer, clock, entityData, midbottom, currHealth)
         self.loadedImages = loadedImages
 
     def drop(self) -> None:

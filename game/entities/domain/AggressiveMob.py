@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 from pygame.math import Vector2
 from pygame.time import Clock
 
@@ -12,44 +10,34 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class AggressiveMob(Mob):
     def __init__(self,
-                 visibleSprites: CameraSpriteGroup,
-                 obstacleSprites: ObstacleSprites, loadedImages: dict,
-                 loadedSounds: dict,
-                 enemyData, clock: Clock, moveEveryMs: int,
-                 minMoveTimeMs: int, maxMoveTimeMs: int, attackCooldownMs: int,
-                 midbottom: Vector2, currHealth: int = None):
-        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, clock, enemyData,
-                     enemyData["sightRange"], moveEveryMs, minMoveTimeMs, maxMoveTimeMs, midbottom, currHealth)
-        self.attackRange = enemyData["attackRange"]
+                 visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites, loadedImages: dict, loadedSounds: dict,
+                 enemyData: dict, clock: Clock, midbottom: Vector2, currHealth: int = None):
+        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, clock, enemyData, midbottom, currHealth)
         self.damage = enemyData["damage"]
         self.target = None
-        self.attackCooldownMs = attackCooldownMs
+        self.attackCooldownMs = enemyData["attackCooldownMs"]
         self.timeFromLastAttack = 0
 
     def isInAttackRange(self, target: Entity | Object) -> bool:
-        return self.isInRange(target, self.attackRange)
+        return self.isInRange(Vector2(target.rect.midbottom), self.actionRange)
 
     def attack(self, target: Entity | Object):
         target.getDamage(self.damage)
         if target.currentHealth == 0:
             self.target = None
             self.destinationPosition = None
-        self.afterAttackAction()
 
     def moveTo(self, target: Entity | Object):
         self.destinationPosition = Vector2(target.rect.midbottom)
         self.move()
 
-    def afterAttackAction(self):
-        pass
-
     def moveToOrAttack(self, target: Entity | Object):
-        if self.isInAttackRange(target) and self.timeFromLastAttack >= self.attackCooldownMs:
-            self.attack(target)
-            self.timeFromLastAttack = 0
+        if self.isInAttackRange(target):
+            if self.timeFromLastAttack >= self.attackCooldownMs:
+                self.attack(target)
+                self.timeFromLastAttack = 0
         else:
             self.moveTo(target)
-            self.timeFromLastAttack += self.clock.get_time()
 
     def localUpdate(self):
         if not self.target:
@@ -57,9 +45,9 @@ class AggressiveMob(Mob):
             if closestEntity and self.isInSightRange(closestEntity):
                 self.target = closestEntity
                 self.moveToOrAttack(self.target)
-                return
-            self.moveRandomly()
-            self.timeFromLastAttack += self.clock.get_time()
+            else:
+                self.moveRandomly()
+                self.timeFromLastAttack += self.clock.get_time()
             return
 
         if not self.isInSightRange(self.target):
@@ -69,3 +57,4 @@ class AggressiveMob(Mob):
             return
 
         self.moveToOrAttack(self.target)
+        self.timeFromLastAttack += self.clock.get_time()

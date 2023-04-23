@@ -4,7 +4,7 @@ from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
 
 from game.entities.Rabbit import Rabbit
-from game.items.domain.ToolType import ToolType
+from game.items.domain.Shovel import Shovel
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
@@ -16,7 +16,7 @@ class RabbitHole(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
         image = loadedImages.rabbitHole
-        Object.__init__(self, visibleGroup, midBottom, 50, ToolType.SHOVEL, image)
+        Object.__init__(self, visibleGroup, midBottom, 50, Shovel, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.rabbits: list[Rabbit] = []

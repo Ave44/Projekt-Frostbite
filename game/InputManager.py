@@ -7,6 +7,8 @@ from pygame.math import Vector2
 from game.entities.Player import Player
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
+from game.ui.inventory.slot.Slot import Slot
+from game.items.domain.Item import Item
 
 
 class InputManager:
@@ -43,9 +45,12 @@ class InputManager:
 
                 if event.button == 1:
                     if mouseHoversOverInventory:
-                        self.player.inventory.handleMouseLeftClick(mousePos, self.player.selectedItem)
+                        hoveredSlot = self.getHoveredSlotSprite(mousePos)
+                        if hoveredSlot:
+                            hoveredSlot.handleMouseLeftClick(self.player)
                     elif hoveredSprite:
-                        self.player.handleMouseLeftClick(hoveredSprite)
+                        if not isinstance(hoveredSprite, Player):
+                            self.player.handleMouseLeftClick(hoveredSprite)
                     elif not self.player.selectedItem.isEmpty():   
                         mousePosInWorld = mousePos + self.visibleSprites.offset
                         self.player.selectedItem.handleMouseLeftClick(mousePosInWorld)
@@ -55,7 +60,9 @@ class InputManager:
 
                 if event.button == 3:
                     if mouseHoversOverInventory:
-                        self.player.inventory.handleMouseRightClick(mousePos)
+                        hoveredSlot = self.getHoveredSlotSprite(mousePos)
+                        if hoveredSlot:
+                            hoveredSlot.handleMouseRightClick(self.player)
                     elif not self.player.selectedItem.isEmpty():
                         self.player.selectedItem.handleMouseRightClick(mousePos)
 
@@ -71,15 +78,28 @@ class InputManager:
         elif pressedKeys[pygame.K_d]:
             self.player.moveRight()
 
-    def checkIfMouseHoversOverInventory(self, mousePos) -> bool:
-        if self.UiSprites.inventory.rect.collidepoint(mousePos):
-            return True
-        return False
+    def checkIfMouseHoversOverInventory(self, mousePos: Vector2) -> bool:
+        return self.UiSprites.inventory.rect.collidepoint(mousePos) or self.UiSprites.equipmentBackgroundRect.collidepoint(mousePos)
 
-    def getHoveredSprite(self, mousePos) -> Sprite:
+    def getHoveredSprite(self, mousePos: Vector2) -> Sprite:
         mousePosInWorld = mousePos + self.visibleSprites.offset
 
         for sprite in self.visibleSprites.sprites():
             if sprite.rect.collidepoint(mousePosInWorld):
-                return sprite
+                spriteMask = pygame.mask.from_surface(sprite.image)
+                mousePositionAtMaskX = mousePosInWorld.x - sprite.rect.x
+                mousePositionAtMaskY = mousePosInWorld.y - sprite.rect.y
+                mousePositionAtMask = (mousePositionAtMaskX, mousePositionAtMaskY)
+                if spriteMask.get_at(mousePositionAtMask):
+                    return sprite
         return None
+
+    def getHoveredSlotSprite(self, mousePos) -> Slot:
+        if self.player.handSlot.rect.collidepoint(mousePos):
+            return self.player.handSlot
+        elif self.player.bodySlot.rect.collidepoint(mousePos):
+            return self.player.bodySlot
+        else:
+            hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.player.inventory.slotList), None)
+            return hoveredSlot
+  

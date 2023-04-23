@@ -4,7 +4,7 @@ from pygame.sprite import Group
 from game.LoadedImages import LoadedImages
 
 from game.items.domain.Item import Item
-from game.items.domain.ToolType import ToolType
+from game.items.domain.Axe import Axe
 from game.objects.domain.CollisionObject import CollisionObject
 
 
@@ -14,8 +14,8 @@ class BurntTree(CollisionObject):
         image = loadedImages.burntTree
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
-        super().__init__(visibleGroup, obstaclesGroup,
-                         midBottom, 1, ToolType.AXE, image, colliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
+                                 midBottom, 1, Axe, image, colliderRect)
 
     def interact(self) -> None:
         print("interacted with burnt trees")  # in the future there will be a real implementation

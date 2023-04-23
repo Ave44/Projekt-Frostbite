@@ -33,6 +33,12 @@ from game.objects.trees.SmallTree import SmallTree
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
+from game.items.domain.Item import Item
+from game.items.Sword import Sword
+from game.items.StoneAxe import StoneAxe
+from game.items.StonePickaxe import StonePickaxe
+from game.items.WoodenArmor import WoodenArmor
+from game.items.LeatherArmor import LeatherArmor
 from game.tiles.Tile import Tile
 from game.weathers.WeatherController import WeatherController
 from gameInitialization.GenerateMap import generateMap
@@ -85,10 +91,14 @@ class Game:
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
         self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
+        
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
-        unknownItem = Item(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
-        self.player.inventory.addItem(unknownItem, self.player.selectedItem)
+        self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(Item(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 

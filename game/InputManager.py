@@ -97,9 +97,9 @@ class InputManager:
     def getHoveredSlotSprite(self, mousePos) -> Slot:
         if self.player.handSlot.rect.collidepoint(mousePos):
             return self.player.handSlot
-        if self.player.bodySlot.rect.collidepoint(mousePos):
+        elif self.player.bodySlot.rect.collidepoint(mousePos):
             return self.player.bodySlot
-        
-        hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.player.inventory.slotList), None)
-        return hoveredSlot
+        else:
+            hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.player.inventory.slotList), None)
+            return hoveredSlot
   

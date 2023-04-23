@@ -142,12 +142,12 @@ class Game:
         self.tick = self.tick + 1
         if self.tick == 1000:
             self.spawnBomb()
-            # self.rabbitHole.onNewDay()
+            self.rabbitHole.onNewDay()
             self.goblinHideout.onNewDay()
         if self.tick == 2000:
             self.tick = 0
             self.spawnBomb()
-            # self.rabbitHole.onEvening()
+            self.rabbitHole.onEvening()
             self.player.heal(20)
 
     def spawnBomb(self):

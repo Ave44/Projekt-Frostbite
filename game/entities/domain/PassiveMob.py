@@ -4,11 +4,12 @@ from random import random
 from pygame import Vector2
 
 from game.entities.domain.Entity import Entity
+from game.animated_entities.domain.AnimatedEntity import AnimatedEntity
 from game.entities.domain.Mob import Mob
 
 
 class PassiveMob(Mob, ABC):
-    def runAway(self, fromEntity: Entity):
+    def runAway(self, fromEntity: Entity | AnimatedEntity):
         xOffset = self.rect.centerx - fromEntity.rect.centerx
         yOffset = self.rect.bottom - fromEntity.rect.bottom
         if xOffset == 0 and yOffset == 0:

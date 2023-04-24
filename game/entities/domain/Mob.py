@@ -4,6 +4,7 @@ from abc import ABC
 from pygame import Vector2
 from pygame.time import Clock
 
+from game.animated_entities.domain.AnimatedEntity import AnimatedEntity
 from game.entities.domain.Entity import Entity
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -24,7 +25,7 @@ class Mob(Entity, ABC):
         self.maxMoveTimeMs = entityData["maxMoveTimeMs"]
         self.visibleSprites = visibleSprites
 
-    def isInSightRange(self, target: Entity | Object) -> bool:
+    def isInSightRange(self, target: Entity | AnimatedEntity | Object) -> bool:
         return self.isInRange(Vector2(target.rect.midbottom), self.sightRange)
 
     def moveRandomly(self):

@@ -16,7 +16,6 @@ from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
 from game.entities.Player import Player
 from game.entities.Rabbit import Rabbit
-from game.animated_entities.GoblinChampion import GoblinChampion
 from game.items.Sword import Sword
 from game.items.domain.Item import Item
 from game.objects.GoblinHideout import GoblinHideout
@@ -82,7 +81,6 @@ class Game:
                     continue
                 break
 
-        GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)

@@ -1,7 +1,6 @@
 from pygame.math import Vector2
 from pygame.time import Clock
 
-from game.animated_entities.domain.AnimatedEntity import AnimatedEntity
 from game.entities.domain.Entity import Entity
 from game.entities.domain.Mob import Mob
 from game.objects.domain.Object import Object
@@ -22,17 +21,17 @@ class AggressiveMob(Mob):
     def isInAttackRange(self, target: Entity | Object) -> bool:
         return self.isInRange(Vector2(target.rect.midbottom), self.actionRange)
 
-    def attack(self, target: Entity | AnimatedEntity | Object):
+    def attack(self, target: Entity | Object):
         target.getDamage(self.damage)
         if target.currentHealth == 0:
             self.target = None
             self.destinationPosition = None
 
-    def moveTo(self, target: Entity | AnimatedEntity | Object):
+    def moveTo(self, target: Entity | Object):
         self.destinationPosition = Vector2(target.rect.midbottom)
         self.move()
 
-    def moveToOrAttack(self, target: Entity | AnimatedEntity | Object):
+    def moveToOrAttack(self, target: Entity | Object):
         if self.isInAttackRange(target):
             if self.timeFromLastAttack >= self.attackCooldownMs:
                 self.attack(target)

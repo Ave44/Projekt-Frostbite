@@ -19,6 +19,7 @@ from game.entities.Rabbit import Rabbit
 from game.items.Sword import Sword
 from game.items.domain.Item import Item
 from game.objects.GoblinHideout import GoblinHideout
+
 from game.objects.Grass import Grass
 from game.objects.RabbitHole import RabbitHole
 from game.objects.Rock import Rock
@@ -55,7 +56,7 @@ class Game:
         self.loadedImages = LoadedImages()
         self.loadedSounds = LoadedSounds()
         self.map = self.createMap(100)
-        self.dayCycle = DayCycle(1, 1, 2*64*1000, self.clock, config, self.UiSprites, self.visibleSprites)
+        self.dayCycle = DayCycle(1, 60000, 2 * 64 * 1000, self.clock, config, self.UiSprites, self.visibleSprites)
 
         self.player = Player(self.visibleSprites,
                              self.obstacleSprites,
@@ -68,7 +69,6 @@ class Game:
 
         self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
-
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
@@ -92,8 +92,8 @@ class Game:
         self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
         self.player.inventory.addItem(StonePickaxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
         self.player.inventory.addItem(Item(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0,0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
@@ -168,7 +168,7 @@ class Game:
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
         position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
-        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb,self.loadedSounds.bomb, position, self.clock)
+        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, self.loadedSounds.bomb, position, self.clock)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)

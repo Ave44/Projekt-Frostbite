@@ -18,6 +18,7 @@ from game.objects.Grass import Grass
 
 from Config import TILE_SIZE
 
+
 class Store:
     def __init__(self, savefileData, savefileName) -> None:
         self.savefileName = savefileName
@@ -39,13 +40,13 @@ class Store:
 
     def saveToFilesave(self):
         data = {'map': self.map}
-        
+
         data['player'] = {'position': self.player.rect.midBottom, 'currentHealth': self.player.currentHealth}
 
         data['trees'] = self.trees.map(lambda tree: {'midBottom': tree.rect.midbottom, 'age': tree.age, 'growthStage': tree.growthStage})
         data['rocks'] = self.rocks.map(lambda rock: {'midBottom': rock.rect.midbottom})
         data['grasses'] = self.grasses.map(lambda grass: {'midBottom': grass.rect.midbottom})
-        
+
         fileSave = open(f'./savefiles/{self.savefileName}')
         json.dump(data, f'./savefiles/{self.savefileName}')
         fileSave.close()

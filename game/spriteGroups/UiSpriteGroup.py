@@ -58,7 +58,7 @@ class UiSpriteGroup(pygame.sprite.Group):
     def setEquipmentSlots(self, handSlot, bodySlot):
         self.handSlot = handSlot
         self.bodySlot = bodySlot
-        equipmentBackgroundSize = (SLOT_SIZE + SLOT_GAP * 3,  SLOT_SIZE * 2 + SLOT_GAP * 3)
+        equipmentBackgroundSize = (SLOT_SIZE + SLOT_GAP * 3, SLOT_SIZE * 2 + SLOT_GAP * 3)
         self.equipmentBackground = Surface(equipmentBackgroundSize)
         self.equipmentBackground.fill(BG_COLOR)
         self.equipmentBackgroundRect = Rect((self.inventory.rect.topright), equipmentBackgroundSize)

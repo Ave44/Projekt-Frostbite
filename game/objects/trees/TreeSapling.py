@@ -19,7 +19,7 @@ class TreeSapling(CollisionObject):
         colliderRect = Rect((0, 0), (5, 5))
         colliderRect.midbottom = midBottom
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
-                                 midBottom, 1, Shovel, image, colliderRect)
+                         midBottom, 1, Shovel, image, colliderRect)
 
         self.clock = clock
         self.age = 0

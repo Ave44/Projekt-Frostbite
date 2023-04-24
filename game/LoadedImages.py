@@ -6,13 +6,12 @@ from os import listdir
 class LoadedImages:
     def __init__(self):
         self.loadEntitiesImages()
-        self.loadAnimatedEntitiesImages()
         self.loadObjectsImages()
         self.loadItemsImages()
         self.loadUiImages()
         self.loadLightsImages()
         self.loadWeatherImages()
-
+        
     def loadEntitiesImages(self):
         self.player = self.loadEntityImages("./graphics/entities/player", "player")
         self.rabbit = self.loadEntityImages("./graphics/entities/rabbit", "rabbit")
@@ -20,9 +19,6 @@ class LoadedImages:
         self.boar = self.loadEntityImages("./graphics/entities/boar", "boar")
         self.bomb = self.loadEntityImages("./graphics/entities/bomb", "bomb")
         self.goblin = self.loadEntityImages("./graphics/entities/goblin", "goblin")
-
-    def loadAnimatedEntitiesImages(self):
-        self.goblinchampion = self.loadAnimatedEntityImages("./graphics/animated_entities/goblinchampion", "goblinchampion")
 
     def loadObjectsImages(self):
         self.treeSapling = [load("./graphics/objects/trees/sapling.png").convert_alpha()]
@@ -99,31 +95,6 @@ class LoadedImages:
                 "image_down_heal": load(f"{path}/{filename}_down_heal.png").convert_alpha(),
                 "image_left_heal": load(f"{path}/{filename}_left_heal.png").convert_alpha(),
                 "image_right_heal": load(f"{path}/{filename}_right_heal.png").convert_alpha()
-            }
-        except Exception:
-            print(f"\nMissing images at '{path}/{filename}'\n")
-            raise
-
-    def loadAnimatedEntityImages(self, path: str, filename: str) -> dict:
-        try:
-            return {
-                "image_idle": self.loadImages(f"{path}/{filename}_idle", ""),
-                "image_up": self.loadImages(f"{path}/{filename}_up", ""),
-                "image_down": self.loadImages(f"{path}/{filename}_down", ""),
-                "image_left": self.loadImages(f"{path}/{filename}_left", ""),
-                "image_right": self.loadImages(f"{path}/{filename}_right", ""),
-
-                "image_idle_damage": self.loadImages(f"{path}/{filename}_idle_damage", ""),
-                "image_up_damage": self.loadImages(f"{path}/{filename}_up_damage", ""),
-                "image_down_damage": self.loadImages(f"{path}/{filename}_down_damage", ""),
-                "image_left_damage": self.loadImages(f"{path}/{filename}_left_damage", ""),
-                "image_right_damage": self.loadImages(f"{path}/{filename}_right_damage", ""),
-
-                "image_idle_heal": self.loadImages(f"{path}/{filename}_idle_heal", ""),
-                "image_up_heal": self.loadImages(f"{path}/{filename}_up_heal", ""),
-                "image_down_heal": self.loadImages(f"{path}/{filename}_down_heal", ""),
-                "image_left_heal": self.loadImages(f"{path}/{filename}_left_heal", ""),
-                "image_right_heal": self.loadImages(f"{path}/{filename}_right_heal", ""),
             }
         except Exception:
             print(f"\nMissing images at '{path}/{filename}'\n")

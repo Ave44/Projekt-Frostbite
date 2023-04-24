@@ -1,6 +1,5 @@
 from abc import ABC
 
-
 class Armor(ABC):
     def __init__(self, protectionFlat: int = 0, gainedDamageModifier: float = 1):
         self.protectionFlat = protectionFlat

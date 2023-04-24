@@ -1,5 +1,5 @@
 from Config import Config
-from constants import AUTUMN_COLORS, WINTER_COLORS, SPRING_COLORS, SUMMER_COLORS
+from constants import ATUMN_COLORS, WINTER_COLORS, SPRING_COLORS, SUMMER_COLORS
 from pygame.time import Clock
 from pygame import Surface, SRCALPHA
 
@@ -21,11 +21,11 @@ class DayCycle:
         self.daySegments = 24
         self.daySegmentLengthMs = dayLengthMs / self.daySegments
 
-        autumn = Season([22, 20], [7, 9], 4, 4, 20, 20, AUTUMN_COLORS)
+        atumn = Season([22, 20], [7, 9], 4, 4, 20, 20, ATUMN_COLORS)
         winter = Season([20, 18], [9, 11], 5, 5, 20, 10, WINTER_COLORS)
         spring = Season([20, 22], [9, 7], 4, 4, 20, 20, SPRING_COLORS)
         summer = Season([22, 24], [7, 5], 3, 3, 20, 10, SUMMER_COLORS)
-        self.seasons = [autumn, winter, spring, summer]
+        self.seasons = [atumn, winter, spring, summer]
         self.yearLength = sum(season.length for season in self.seasons)
 
         self.dayCycleClock = DayNightClock(self.dayLengthMs, self.daySegments, self.currentTimeMs, currentDay, 201)
@@ -46,6 +46,7 @@ class DayCycle:
         self.updateNightMask()
         self.dayCycleClock.update(self.currentTimeMs)
 
+
     def updateNightMask(self) -> int:
         if self.currentTimeMs < self.dawnStart:
             brightness = 0
@@ -59,7 +60,7 @@ class DayCycle:
             brightness = 0
 
         self.nightMask.fill((brightness, brightness, brightness))
-
+    
     def setDay(self, day: int):
         self.currentDay = day
         self.dayCycleClock.currentDay = day

@@ -2,7 +2,6 @@ from pygame import Color
 
 from math import floor, ceil
 
-
 class Season():
     def __init__(self, nightStart: list[int, int], nightLength: list[int, int],
                  dawnLength: int, duskLength: int, seasonLength: int, peakDay: int,
@@ -28,7 +27,7 @@ class Season():
             growthModifier = seasonDay / self.peakDay
         else:
             growthModifier = 2 - seasonDay / self.peakDay
-
+        
         nightStart = self.customRound(self.nightStartDefault - self.nightStartDiff * growthModifier, self.nightStartDiff)
         nightLength = self.customRound(self.nightLengthDefault - self.nightLengthDiff * growthModifier, self.nightLengthDiff)
 

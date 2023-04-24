@@ -9,7 +9,6 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.LoadedSounds import LoadedSounds
 from game.LoadedImages import LoadedImages
 
-
 class Bomb(AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock, currHealth: int = None):

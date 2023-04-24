@@ -24,7 +24,7 @@ class ObstacleSprites(pygame.sprite.Group):
                     if tile:
                         tiles.append(tile)
         return tiles
-
+    
     def getObstacles(self, center):
         sprites = self.sprites()
         tiles = self.getNearbyTiles(center)

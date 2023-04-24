@@ -1,6 +1,5 @@
 from pygame.mixer import Sound
 
-
 class LoadedSounds:
     def __init__(self):
         self.loadEntitiesSounds()

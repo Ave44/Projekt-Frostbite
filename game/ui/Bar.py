@@ -33,7 +33,7 @@ class Bar(Sprite):
         self.center = center
         self.bgSurface = Surface([barLength, barHeight])
         self.bgSurface.fill(BG_COLOR)
-        self.bgRect = Rect(center.x - barLength / 2, center.y - barHeight / 2, barLength, barHeight)
+        self.bgRect = Rect(center.x - barLength/2, center.y - barHeight/2, barLength, barHeight)
 
         self.borderSurface = Surface([barLength + BORDER_SIZE * 2, barHeight + BORDER_SIZE * 2])
         self.borderSurface.fill(BORDER_COLOR)

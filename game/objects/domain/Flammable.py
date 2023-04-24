@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from pygame.time import Clock
 
-
 class Flammable(ABC):
     def __init__(self, clock: Clock, isOnFire: bool = False,
                  timeToBurnMs: int = 0, timeOnFireMs: int = 0):

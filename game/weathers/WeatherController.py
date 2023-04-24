@@ -38,6 +38,7 @@ class WeatherController:
 
             self.playerPos = newPlayerPos
 
+
     def changeWeather(self):
         if random() < 0.25:
             self.weather = Rain(self.loadedImages, self.clock, self.config)

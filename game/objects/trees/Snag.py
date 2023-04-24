@@ -12,7 +12,7 @@ from game.objects.trees.BurntTree import BurntTree
 
 class Snag(CollisionObject, Flammable):
 
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
+    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, 
                  loadedImages: LoadedImages, clock: Clock, age: int = 0):
         self.loadedImages = loadedImages
         image = loadedImages.snag[0]

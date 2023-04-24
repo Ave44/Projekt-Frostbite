@@ -99,7 +99,7 @@ class Player(Entity, Glowing):
         if self.bodySlot.item:
             amount = self.bodySlot.item.reduceDamage(amount)
         Entity.getDamage(self, amount)
-
+        
     def die(self):
         self.currentHealth = 0
         self.healthBar.update(self.currentHealth)

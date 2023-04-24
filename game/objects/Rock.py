@@ -16,7 +16,7 @@ class Rock(CollisionObject):
         colliderRect = Rect((0, 0), (10, 10))
         colliderRect.midbottom = midBottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,midBottom, 10, Pickaxe, image, colliderRect)
+        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 10, Pickaxe, image, colliderRect)
 
     def interact(self) -> None:
         # do something
@@ -26,4 +26,3 @@ class Rock(CollisionObject):
         Pebble(self.visibleGroup, self.rect.center, self.loadedImages)
         Pebble(self.visibleGroup, self.rect.center, self.loadedImages)
         SharpRock(self.visibleGroup, self.rect.center, self.loadedImages)
-

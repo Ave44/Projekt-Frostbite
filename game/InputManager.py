@@ -51,7 +51,7 @@ class InputManager:
                     elif hoveredSprite:
                         if not isinstance(hoveredSprite, Player):
                             self.player.handleMouseLeftClick(hoveredSprite)
-                    elif not self.player.selectedItem.isEmpty():   
+                    elif not self.player.selectedItem.isEmpty():
                         mousePosInWorld = mousePos + self.visibleSprites.offset
                         self.player.selectedItem.handleMouseLeftClick(mousePosInWorld)
                     else:
@@ -102,4 +102,3 @@ class InputManager:
         else:
             hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.player.inventory.slotList), None)
             return hoveredSlot
-  

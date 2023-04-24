@@ -2,6 +2,7 @@ from pygame import Surface
 from pygame.time import Clock
 import random
 
+
 class AnimatedObject:
     def __init__(self, images: list[Surface], clock: Clock, timeMsBetweenFrames: int):
         self.numberOfImages = len(images)

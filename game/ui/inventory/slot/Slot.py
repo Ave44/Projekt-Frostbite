@@ -1,8 +1,9 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from game.entities.Player import Player
-    
+
 from pygame import Surface
 from pygame.sprite import Sprite
 from pygame.math import Vector2
@@ -34,7 +35,7 @@ class Slot(Sprite):
             return True
         else:
             return False
-        
+
     def handleMouseLeftClick(self, player: Player):
         selectedItem = player.selectedItem
         if self.isEmpty() and not selectedItem.isEmpty() and isinstance(selectedItem.item, self.type):

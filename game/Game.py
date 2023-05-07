@@ -6,7 +6,7 @@ from pygame.math import Vector2
 from pygame.time import Clock
 
 from Config import Config
-from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR, BUTTON_FONT
+from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR, PIXEL_FONT
 from game.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
@@ -43,7 +43,7 @@ from gameInitialization.GenerateMap import generateMap
 class Game:
     def __init__(self, screen: Surface, config: Config, saveData):
         self.config = config
-        self.font = pygame.font.Font(BUTTON_FONT, 100)
+        self.font = pygame.font.Font(PIXEL_FONT, 100)
         self.screen = screen
         self.clock = Clock()
 

@@ -1,5 +1,8 @@
 from math import ceil
-from constants import TILE_SIZE
+
+import pygame
+
+from constants import TILE_SIZE, PIXEL_FONT
 
 
 class Config:
@@ -12,3 +15,7 @@ class Config:
         # MUSIC
         self.MUSIC_VOLUME = 0
         self.SOUNDS_VOLUME = 0
+
+        # FONTS
+        self.PIXEL_FONT = pygame.font.Font(PIXEL_FONT, 100)
+        self.PIXEL_FONT_SMALL = pygame.font.Font(PIXEL_FONT, 50)

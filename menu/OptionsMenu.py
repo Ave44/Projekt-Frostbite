@@ -55,27 +55,27 @@ class OptionsMenu(Menu):
     def createButtons(self) -> list[Button]:
         backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT),
                             textInput="BACK",
-                            font=self.menuOptionFont,
+                            font=self.config.PIXEL_FONT_SMALL,
                             action=self.backAction)
 
         resolutionButtonIncrement = Button(pos=(0.938 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                                            textInput="=>",
-                                           font=self.menuOptionFont,
+                                           font=self.config.PIXEL_FONT_SMALL,
                                            action=self.incrementResolution)
 
         resolutionButtonDecrement = Button(pos=(0.063 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                                            textInput="<=",
-                                           font=self.menuOptionFont,
+                                           font=self.config.PIXEL_FONT_SMALL,
                                            action=self.decrementResolution)
 
         volumeButtonIncrement = Button(pos=(0.938 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                        textInput="=>",
-                                       font=self.menuOptionFont,
+                                       font=self.config.PIXEL_FONT_SMALL,
                                        action=self.incrementVolume)
 
         volumeButtonDecrement = Button(pos=(0.063 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                        textInput="<=",
-                                       font=self.menuOptionFont,
+                                       font=self.config.PIXEL_FONT_SMALL,
                                        action=self.decrementVolume)
 
         return [backButton, resolutionButtonIncrement, resolutionButtonDecrement, volumeButtonIncrement,
@@ -83,14 +83,14 @@ class OptionsMenu(Menu):
 
     def refreshMenu(self) -> None:
         self.createBackground()
-        menuText = self.font.render("OPTIONS", True, FONT_MENU_COLOR)
+        menuText = self.config.PIXEL_FONT.render("OPTIONS", True, FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
 
-        volumeText = self.menuOptionFont.render("VOLUME: " + self.volume[self.volumeIndex], True,
+        volumeText = self.config.PIXEL_FONT_SMALL.render("VOLUME: " + self.volume[self.volumeIndex], True,
                                                 BASE_BUTTON_COLOR)
         volumeRect = menuText.get_rect(center=(0.563 * self.config.WINDOW_WIDTH, 0.52 * self.config.WINDOW_HEIGHT))
 
-        resolutionText = self.menuOptionFont.render(
+        resolutionText = self.config.PIXEL_FONT_SMALL.render(
             "HUD: " + self.resolutions[self.resolutionsIndex], True, BASE_BUTTON_COLOR)
         resolutionRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.37 * self.config.WINDOW_HEIGHT))
 

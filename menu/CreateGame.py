@@ -44,44 +44,44 @@ class CreateGame(Menu):
     def createButtons(self) -> list[Button]:
         mapSizeButtonIncrement = Button(pos=(0.938 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                                         textInput="=>",
-                                        font=self.menuOptionFont,
+                                        font=self.config.PIXEL_FONT_SMALL,
                                         action=self.incrementMapSize)
 
         mapSizeButtonDecrement = Button(pos=(0.063 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                                         textInput="<=",
-                                        font=self.menuOptionFont,
+                                        font=self.config.PIXEL_FONT_SMALL,
                                         action=self.decrementMapSize)
 
         objectsQuantityButtonIncrement = Button(pos=(0.938 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                                 textInput="=>",
-                                                font=self.menuOptionFont,
+                                                font=self.config.PIXEL_FONT_SMALL,
                                                 action=self.incrementObjectsQuantity)
 
         objectsQuantityButtonDecrement = Button(pos=(0.063 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                                 textInput="<=",
-                                                font=self.menuOptionFont,
+                                                font=self.config.PIXEL_FONT_SMALL,
                                                 action=self.decrementObjectsQuantity)
 
         createGameButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.625 * self.config.WINDOW_HEIGHT),
                                   textInput="CREATE GAME",
-                                  font=self.menuOptionFont,
+                                  font=self.config.PIXEL_FONT_SMALL,
                                   action=self.createGame)
 
         backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT),
                             textInput="BACK",
-                            font=self.menuOptionFont,
+                            font=self.config.PIXEL_FONT_SMALL,
                             action=self.backAction)
         return [backButton, createGameButton, mapSizeButtonDecrement, mapSizeButtonIncrement,
                 mapSizeButtonDecrement, objectsQuantityButtonIncrement, objectsQuantityButtonDecrement]
 
     def initiateCreateGame(self) -> None:
         self.createBackground()
-        menuText = self.font.render("CREATE GAME", True, FONT_MENU_COLOR)
+        menuText = self.config.PIXEL_FONT.render("CREATE GAME", True, FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
-        mapSizeText = self.menuOptionFont.render("MAP SIZE: " + self.mapSizes[self.mapSizesIndex], True,
+        mapSizeText = self.config.PIXEL_FONT_SMALL.render("MAP SIZE: " + self.mapSizes[self.mapSizesIndex], True,
                                                  BASE_BUTTON_COLOR)
         mapSizeRect = menuText.get_rect(center=(0.65 * self.config.WINDOW_WIDTH, 0.37 * self.config.WINDOW_HEIGHT))
-        objectsQuantityText = self.menuOptionFont.render(
+        objectsQuantityText = self.config.PIXEL_FONT_SMALL.render(
             "OBJECTS QUANTITY: " + self.objectsQuantity[self.objectsQuantityIndex], True, BASE_BUTTON_COLOR)
         objectsQuantityRect = menuText.get_rect(center=(0.563 * self.config.WINDOW_WIDTH, 0.52 * self.config.WINDOW_HEIGHT))
 

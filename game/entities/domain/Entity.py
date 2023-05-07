@@ -145,12 +145,6 @@ class Entity(Sprite, ABC):
         for sprite in self.obstacleSprites.getObstacles(newRect.center):
             if sprite.colliderRect.colliderect(newRect):
                 isCollision = True
-
-                # import random
-                # import pygame.draw
-                # sprite.image.fill((random.uniform(0,255),random.uniform(0,255),random.uniform(0,255)))
-                # pygame.draw.rect(sprite.image, (random.uniform(0,255),random.uniform(0,255),random.uniform(0,255)), sprite.colliderRect)
-
                 if sprite.colliderRect.colliderect(horizontalChange):
                     collisions['horizontal'] = sprite.colliderRect  
                 elif sprite.colliderRect.colliderect(verticalChange):
@@ -169,7 +163,6 @@ class Entity(Sprite, ABC):
                 self.midDestinationPosition.y = horizontallyColidingRect.top
             else:
                 self.midDestinationPosition.y = horizontallyColidingRect.bottom + self.colliderRect.height
-            print("h", self.colliderRect.midbottom, self.destinationPosition, self.midDestinationPosition, self.direction)
         if verticallyColidingRect:
             leftDistanceToDestination = abs(verticallyColidingRect.left - self.destinationPosition.x)
             rightDistanceToDestination = abs(verticallyColidingRect.right - self.destinationPosition.x)
@@ -177,15 +170,8 @@ class Entity(Sprite, ABC):
                 self.midDestinationPosition.x = verticallyColidingRect.left - ceil(self.colliderRect.width / 2)
             else:
                 self.midDestinationPosition.x = verticallyColidingRect.right + ceil(self.colliderRect.width / 2)
-            print("v", self.colliderRect.midbottom, self.destinationPosition, self.midDestinationPosition, self.direction)
 
     def setDestination(self, position: Vector2, target: Sprite | None = None):
-        # destRect = Rect(position.x, position.y, self.colliderRect.width, self.colliderRect.height)
-        # isCollision, colidingSprites = self.checkForCollision(self.colliderRect, destRect)
-        # if isCollision:
-        #     self.handleCollision(colidingSprites['vertical'], colidingSprites['horizontal'])
-        #     self.setDestination(self.midDestinationPosition)
-        # else:
             self.destinationTarget = target
             self.destinationPosition = position
             self.midDestinationPosition = None
@@ -221,19 +207,17 @@ class Entity(Sprite, ABC):
                 newDirection = newDirection.normalize()
 
             self.direction.xy = newDirection
+            self.adjustImageToDirection()
 
         newRect = Rect(self.colliderRect.x + round(self.direction.x * self.speed),
-                          self.colliderRect.y + round(self.direction.y * self.speed),
-                          self.colliderRect.width, self.colliderRect.height)
+                       self.colliderRect.y + round(self.direction.y * self.speed),
+                       self.colliderRect.width, self.colliderRect.height)
 
         isCollision, colidingSprites = self.checkForCollision(self.colliderRect, newRect)
         if isCollision:
             self.handleCollision(colidingSprites['vertical'], colidingSprites['horizontal'])
-
         else:
             self.colliderRect.midbottom = newRect.midbottom
-            self.adjustImageToDirection()
-                
 
     def move(self):
         if self.destinationPosition:
@@ -247,8 +231,7 @@ class Entity(Sprite, ABC):
             self.adjustRect()
 
         elif self.direction != Vector2(0, 0):
-            if self.direction.x != 0 or self.direction.y != 0:
-                self.direction = self.direction.normalize()
+            self.direction = self.direction.normalize()
 
             self.colliderRect.x += round(self.direction.x * self.speed)
             self.checkHorizontalCollision()
@@ -258,7 +241,7 @@ class Entity(Sprite, ABC):
 
             self.adjustImageToDirection()
             self.adjustRect()
-            self.direction = Vector2(0, 0)
+            # self.direction = Vector2(0, 0)
 
     def adjustImageToDirection(self):
         if abs(self.direction.x) > abs(self.direction.y):

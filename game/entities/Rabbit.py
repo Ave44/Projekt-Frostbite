@@ -1,4 +1,4 @@
-from pygame import Vector2
+from pygame import Vector2, Rect
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
@@ -24,7 +24,8 @@ class Rabbit(PassiveMob):
             "minMoveTimeMs": 500,
             "maxMoveTimeMs": 1500
         }
-        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, loadedSounds.rabbit, clock, entityData, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (10, 10))
+        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.rabbit, loadedSounds.rabbit, colliderRect, clock, entityData, midbottom, currHealth)
         self.loadedImages = loadedImages
         self.home = home
         self.isRunningHome = False

@@ -1,4 +1,4 @@
-from pygame import Vector2
+from pygame import Vector2, Rect
 from pygame.time import Clock
 
 from game.entities.domain.AggressiveMob import AggressiveMob
@@ -24,7 +24,8 @@ class Bomb(AggressiveMob):
             "maxMoveTimeMs": 2000,
             "attackCooldownMs": 0
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, entityData, clock, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (20, 20))
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, colliderRect, entityData, clock, midbottom, currHealth)
 
     def attack(self, target: Entity | Object):
         AggressiveMob.attack(self, target)

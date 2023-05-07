@@ -36,6 +36,9 @@ class InputManager:
                 if event.key == pygame.K_p:
                     self.player.heal(20)
 
+                if event.key == pygame.K_h:
+                    self.visibleSprites.toggleShowHitboxes()
+
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()

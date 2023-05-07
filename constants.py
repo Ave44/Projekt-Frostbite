@@ -59,6 +59,6 @@ HAPPY_THEME = 'music/custom/happy-theme.mp3'
 MENU_THEME = 'music/custom/menu_theme.mp3'
 
 # FONTS
-FONT = "graphics/fonts/RobotoMono-Regular.ttf"
 FONT_SIZE = 24
+NORMAL_FONT = "graphics/fonts/RobotoMono-Regular.ttf"
 PIXEL_FONT = "graphics/fonts/pixel-font.ttf"

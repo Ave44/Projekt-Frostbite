@@ -5,6 +5,7 @@ from Config import Config
 from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR
 from menu.Menu import Menu
 from menu.general.Button import Button
+from pygame._sdl2.video import Window
 
 
 class OptionsMenu(Menu):
@@ -109,9 +110,12 @@ class OptionsMenu(Menu):
             self.updateScreen()
 
     def updateScreen(self) -> None:
-        screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
-        resizedScreen = pygame.transform.scale(screen, (self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
-        self.screen.blit(resizedScreen, (0, 0))
+        if self.resolutionsIndex == 1:
+            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.FULLSCREEN)
+        else:
+            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
+            window = Window.from_display_module()
+            window.position = (400, 200)
 
     def updateMusicVolume(self) -> None:
         self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2

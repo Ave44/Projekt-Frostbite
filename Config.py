@@ -1,6 +1,5 @@
 from math import ceil
 
-import pygame
 from pygame.font import Font
 
 from constants import TILE_SIZE, PIXEL_FONT
@@ -8,7 +7,6 @@ from constants import TILE_SIZE, PIXEL_FONT
 
 class Config:
     def __init__(self) -> None:
-        self.FONT = PIXEL_FONT
         self.WINDOW_WIDTH = 1920
         self.WINDOW_HEIGHT = 1080
         self.TILES_ON_SCREEN_WIDTH = ceil(self.WINDOW_WIDTH / TILE_SIZE + 1)
@@ -18,9 +16,11 @@ class Config:
         self.MUSIC_VOLUME = 0
         self.SOUNDS_VOLUME = 0
 
-        # FONTS
+        # FONT
+        self.FONT = PIXEL_FONT
+
     def font(self) -> Font:
-        return pygame.font.Font(self.FONT, 100)
+        return Font(self.FONT, 100)
 
     def fontSmall(self) -> Font:
-        return pygame.font.Font(self.FONT, 50)
+        return Font(self.FONT, 50)

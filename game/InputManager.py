@@ -60,7 +60,6 @@ class InputManager:
                         self.player.selectedItem.handleMouseLeftClick(mousePosInWorld)
                     else:
                         mousePosInWorld = mousePos + self.visibleSprites.offset
-                        print("INPUT", mousePosInWorld, self.player.rect.midbottom)
                         self.player.setDestination(mousePosInWorld)
 
                 if event.button == 3:

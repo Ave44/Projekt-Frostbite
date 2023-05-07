@@ -87,7 +87,7 @@ class Game:
         Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
-        # self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
+        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
 
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
@@ -182,7 +182,7 @@ class Game:
             self.inputManager.handleInput()
             self.dayCycle.updateDayCycle()
             self.visibleSprites.update()
-            # self.handleTick()
+            self.handleTick()
             playerCenter = Vector2(self.player.rect.center)
             self.weatherController.update(playerCenter)
             self.visibleSprites.customDraw(playerCenter)

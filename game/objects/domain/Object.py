@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.entities.Player import Player
+    
 from abc import ABC, abstractmethod
 
 from pygame.math import Vector2
@@ -6,7 +12,6 @@ from pygame.surface import Surface
 
 from typing import Type
 from game.items.domain.Tool import Tool
-from game.entities.Player import Player
 
 
 class Object(ABC, Sprite):

@@ -7,6 +7,7 @@ from pygame.sprite import Sprite
 from pygame.time import Clock
 
 from game.entities.domain.State import State
+from game.objects.domain.CollisionObject import CollisionObject
 
 class Entity(Sprite, ABC):
     from game.entities.effects.Effect import Effect
@@ -175,36 +176,60 @@ class Entity(Sprite, ABC):
             self.destinationTarget = target
             self.destinationPosition = position
             self.midDestinationPosition = None
+            self.direction = Vector2(0, 0)
 
     def isInRange(self, target: Vector2, rangeDistance: int) -> bool:
         distance = sqrt((self.colliderRect.centerx - target.x) ** 2 +
                         (self.colliderRect.bottom - target.y) ** 2)
         return distance <= rangeDistance
-
+    
     def checkIfRachedDestination(self) -> bool:
-        if self.isInRange(self.destinationPosition, self.actionRange):
-            if self.destinationTarget:
-                self.destinationPosition = None
-                if self.destinationTarget:
-                    self.destinationTarget.onLeftClickAction(self)
-                    self.destinationTarget = None
-                return True
-            elif self.colliderRect.midbottom == self.destinationPosition:
-                self.destinationPosition = None
-                return True
-
+        if self.destinationTarget:
+            if isinstance(self.destinationTarget, CollisionObject):
+                return self.checkIfReachedCollisionObject(self.destinationTarget)
+            return self.checkIfReachedNonCollisionTarget()
+        return self.checkIfReachedDestinationPosition()
+    
+    def checkIfReachedCollisionObject(self, collisionObject: CollisionObject) -> bool:
+        if (abs(self.colliderRect.left - collisionObject.colliderRect.right) > self.actionRange
+            and abs(self.colliderRect.right - collisionObject.colliderRect.left) > self.actionRange):
+            return False
+        if (abs(self.colliderRect.top - collisionObject.colliderRect.bottom) > self.actionRange
+            and abs(self.colliderRect.bottom - collisionObject.colliderRect.top) > self.actionRange):
+            return False
+        
+        self.direction = Vector2(self.destinationTarget.colliderRect.centerx - self.colliderRect.centerx, self.destinationTarget.colliderRect.bottom - self.colliderRect.bottom)
+        self.adjustImageToDirection()
+        collisionObject.onLeftClickAction(self)
+        self.setDestination(None)
+        return True
+    
+    def checkIfReachedNonCollisionTarget(self):
+        if not self.isInRange(self.destinationPosition, self.actionRange):
+            return False
+        self.direction = Vector2(self.destinationTarget.rect.centerx - self.colliderRect.centerx, self.destinationTarget.rect.bottom - self.colliderRect.bottom)
+        self.adjustImageToDirection()
+        self.destinationTarget.onLeftClickAction(self)
+        self.setDestination(None)
+        return True
+    
+    def checkIfReachedDestinationPosition(self):
+        if self.colliderRect.midbottom == self.destinationPosition:
+            self.setDestination(None)
+            return True
         return False
 
     def moveToPosition(self, position: Vector2):
         xOffset = position.x - self.colliderRect.centerx
         yOffset = position.y - self.colliderRect.bottom
         if abs(xOffset) <= self.speed and abs(yOffset) <= self.speed:
+            self.direction = Vector2(xOffset, yOffset)
+            self.adjustImageToDirection()
             self.colliderRect.midbottom = position
             self.direction = Vector2(0, 0)
         else:
             newDirection = Vector2(xOffset, yOffset)
-            if newDirection.x != 0 or newDirection.y != 0:
-                newDirection = newDirection.normalize()
+            newDirection = newDirection.normalize()
 
             self.direction.xy = newDirection
             self.adjustImageToDirection()
@@ -225,23 +250,24 @@ class Entity(Sprite, ABC):
                 self.moveToPosition(self.midDestinationPosition)
                 if self.colliderRect.midbottom == self.midDestinationPosition:
                     self.midDestinationPosition = None
-            else:
+            elif not self.checkIfRachedDestination():
                 self.moveToPosition(self.destinationPosition)
-                self.checkIfRachedDestination()
             self.adjustRect()
 
         elif self.direction != Vector2(0, 0):
-            self.direction = self.direction.normalize()
+            self.moveInDirection()
 
-            self.colliderRect.x += round(self.direction.x * self.speed)
-            self.checkHorizontalCollision()
+    def moveInDirection(self):
+        self.direction = self.direction.normalize()
 
-            self.colliderRect.y += round(self.direction.y * self.speed)
-            self.checkVerticalCollision()
+        self.colliderRect.x += round(self.direction.x * self.speed)
+        self.checkHorizontalCollision()
 
-            self.adjustImageToDirection()
-            self.adjustRect()
-            # self.direction = Vector2(0, 0)
+        self.colliderRect.y += round(self.direction.y * self.speed)
+        self.checkVerticalCollision()
+
+        self.adjustImageToDirection()
+        self.adjustRect()
 
     def adjustImageToDirection(self):
         if abs(self.direction.x) > abs(self.direction.y):

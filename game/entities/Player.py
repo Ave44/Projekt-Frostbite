@@ -60,10 +60,13 @@ class Player(Entity, Glowing):
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200,
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
 
-    def adjustDirection(self):
-        if self.destinationPosition:
-            self.moveTowards()
-        else:
+    def moveInDirection(self):
+        Entity.moveInDirection(self)
+        self.direction.xy = [0, 0]
+
+    def adjustRect(self):
+        self.rect.midbottom = self.colliderRect.midbottom
+        if not self.destinationPosition:
             self.direction.xy = [0, 0]
 
     def stopAutowalking(self):

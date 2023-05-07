@@ -16,6 +16,7 @@ class InputManager:
         self.player = player
         self.UiSprites = UiSprites
         self.visibleSprites = visibleSprites
+        pygame.event.clear()
 
     def handleInput(self) -> None:
         mousePos = Vector2(pygame.mouse.get_pos())
@@ -56,7 +57,8 @@ class InputManager:
                         self.player.selectedItem.handleMouseLeftClick(mousePosInWorld)
                     else:
                         mousePosInWorld = mousePos + self.visibleSprites.offset
-                        self.player.destinationPosition = mousePosInWorld
+                        print("INPUT", mousePosInWorld, self.player.rect.midbottom)
+                        self.player.setDestination(mousePosInWorld)
 
                 if event.button == 3:
                     if mouseHoversOverInventory:

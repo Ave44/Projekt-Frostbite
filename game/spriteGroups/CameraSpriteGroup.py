@@ -33,21 +33,21 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
         nightMaskBrightness = self.nightMask.get_at((0, 0))[0]
 
-        for sprite in self.entities.sprites():
-            self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and nightMaskBrightness != 255:
-                self.drawLightning(sprite)
-
         for sprite in self.sprites():
             self.drawSprite(sprite)
             if isinstance(sprite, Glowing) and nightMaskBrightness != 255:
                 self.drawLightning(sprite)
+            if hasattr(sprite, 'colliderRect'):
+                rectPosition = sprite.colliderRect.topleft - self.offset #+ sprite.colliderRect.topleft
+                colIm = Surface((sprite.colliderRect.width, sprite.colliderRect.height))
+                colIm.fill((255,0,0))
+                self.displaySurface.blit(colIm, rectPosition)
 
         if self.weatherController:
             self.weatherController.draw(self.displaySurface)
 
-        if nightMaskBrightness != 255:
-            self.displaySurface.blit(self.nightMask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        # if nightMaskBrightness != 255:
+        #     self.displaySurface.blit(self.nightMask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
         # self.radiuses = []
 

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pygame import Rect
 from pygame.sprite import Group, Sprite
 from pygame.time import Clock
 from pygame.math import Vector2
@@ -32,7 +33,8 @@ class Player(Entity, Glowing):
                  currHealth: int = None):
         playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
         self.handDamage = 3
-        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, clock, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (20, 20))
+        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
         offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
@@ -66,6 +68,7 @@ class Player(Entity, Glowing):
 
     def stopAutowalking(self):
         self.destinationPosition = None
+        self.midDestinationPosition = None
         self.destinationTarget = None
 
     def moveUp(self):

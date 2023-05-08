@@ -3,7 +3,7 @@ from pygame.sprite import Group, Sprite
 from pygame.time import Clock
 from pygame.math import Vector2
 
-from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, SLOT_GAP
+from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE, SLOT_GAP
 from Config import Config
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
@@ -29,9 +29,15 @@ class Player(Entity, Glowing):
                  config: Config,
                  clock: Clock,
                  midbottom: Vector2,
-                 currHealth: int = None):
+                 currHealth: int = None,
+                 currHunger: int = None,
+                 hungerDecreasePerSecond: int = None):
         playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
+        self.currentHunger = currHunger
+        self.hungerDecreaseSpeedPerSecond = hungerDecreasePerSecond
+        self.maxHunger = 100
         self.handDamage = 3
+        self.isHungry = False
         Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
@@ -57,6 +63,8 @@ class Player(Entity, Glowing):
 
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200,
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
+        self.hungerBar = Bar(Vector2(115, 90), self.maxHealth, self.currentHealth, 20, 200,
+                             HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
 
     def adjustDirection(self):
         if self.destinationPosition:
@@ -100,13 +108,28 @@ class Player(Entity, Glowing):
             amount = self.bodySlot.item.reduceDamage(amount)
         Entity.getDamage(self, amount)
 
-    def die(self):
+    def die(self, deathMessage: str = "Game Over"):
         self.currentHealth = 0
         self.healthBar.update(self.currentHealth)
         self.remove(*self.groups())
         self.drop()
-        print("Game Over")
+        print(deathMessage)
+
+    def manageHunger(self):
+        timeInSeconds = self.clock.get_time() / 1000
+        if self.currentHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds > 0:
+            self.currentHunger = self.currentHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds
+        else:
+            self.currentHunger = 0
+            self.isHungry = True
+        if self.isHungry:
+            if self.currentHealth - self.hungerDecreaseSpeedPerSecond * timeInSeconds > 0:
+                self.currentHealth = self.currentHealth - self.hungerDecreaseSpeedPerSecond * timeInSeconds
+            else:
+                self.die("Game Over: You Died Of Hunger")
 
     def localUpdate(self):
-        self.move()
+        self.manageHunger()
         self.healthBar.update(self.currentHealth)
+        self.hungerBar.update(self.currentHunger)
+        self.move()

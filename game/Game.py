@@ -6,7 +6,7 @@ from pygame.math import Vector2
 from pygame.time import Clock
 
 from Config import Config
-from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR, BUTTON_FONT
+from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR
 from game.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
@@ -43,7 +43,6 @@ from gameInitialization.GenerateMap import generateMap
 class Game:
     def __init__(self, screen: Surface, config: Config, saveData):
         self.config = config
-        self.font = pygame.font.Font(BUTTON_FONT, 100)
         self.screen = screen
         self.clock = Clock()
 
@@ -99,7 +98,7 @@ class Game:
 
     def generateMapLoadingScreen(self, information: str) -> None:
         self.screen.fill((0, 0, 0))
-        infoText = self.font.render(information, True, FONT_MENU_COLOR)
+        infoText = self.config.fontBig.render(information, True, FONT_MENU_COLOR)
         infoRect = infoText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.5 * self.config.WINDOW_HEIGHT))
         self.screen.blit(infoText, infoRect)
         pygame.display.flip()
@@ -148,8 +147,7 @@ class Game:
             Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages, self.clock)
 
     def debug(self, text):
-        font = pygame.font.SysFont(None, 24)
-        img = font.render(text, True, (255, 255, 255))
+        img = self.config.fontTiny.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
 
     def handleTick(self):

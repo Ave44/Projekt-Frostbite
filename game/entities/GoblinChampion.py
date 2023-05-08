@@ -14,12 +14,12 @@ from game.entities.domain.AnimatedEntity import AnimatedEntity
 from game.objects.domain.Object import Object
 
 
-class GoblinChampion(AggressiveMob, AnimatedEntity):
+class GoblinChampion(AnimatedEntity,AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2,
                  currHealth: int = None):
         entityData = {
-            "speed": 3,
+            "speed": 1,
             "maxHealth": 100,
             "damage": 20,
             "sightRange": 150,
@@ -30,6 +30,8 @@ class GoblinChampion(AggressiveMob, AnimatedEntity):
             "attackCooldownMs": 2000
         }
         AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, entityData, clock, midbottom, currHealth)
+        AnimatedEntity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages.goblinchampion, loadedSounds.goblin, clock, midbottom, currHealth)
+
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
 

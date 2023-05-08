@@ -87,7 +87,7 @@ class Game:
         Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
         self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
-        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
+        #self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
 
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
@@ -159,7 +159,7 @@ class Game:
         if self.tick == 1000:
             self.spawnBomb()
             self.rabbitHole.onNewDay()
-            self.goblinHideout.onNewDay()
+#            self.goblinHideout.onNewDay()
         if self.tick == 2000:
             self.tick = 0
             self.spawnBomb()

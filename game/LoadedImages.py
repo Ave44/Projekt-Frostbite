@@ -107,23 +107,23 @@ class LoadedImages:
     def loadAnimatedEntityImages(self, path: str, filename: str) -> dict:
         try:
             return {
-                "image_idle": self.loadImages(f"{path}/{filename}_idle", ""),
-                "image_up": self.loadImages(f"{path}/{filename}_up", ""),
-                "image_down": self.loadImages(f"{path}/{filename}_down", ""),
-                "image_left": self.loadImages(f"{path}/{filename}_left", ""),
-                "image_right": self.loadImages(f"{path}/{filename}_right", ""),
+                "images_idle": self.loadImages(f"{path}/{filename}_idle", ""),
+                "images_up": self.loadImages(f"{path}/{filename}_up", ""),
+                "images_down": self.loadImages(f"{path}/{filename}_down", ""),
+                "images_left": self.loadImages(f"{path}/{filename}_left", ""),
+                "images_right": self.loadImages(f"{path}/{filename}_right", ""),
 
-                "image_idle_damage": self.loadImages(f"{path}/{filename}_idle_damage", ""),
-                "image_up_damage": self.loadImages(f"{path}/{filename}_up_damage", ""),
-                "image_down_damage": self.loadImages(f"{path}/{filename}_down_damage", ""),
-                "image_left_damage": self.loadImages(f"{path}/{filename}_left_damage", ""),
-                "image_right_damage": self.loadImages(f"{path}/{filename}_right_damage", ""),
+                "images_idle_damage": self.loadImages(f"{path}/{filename}_idle_damage", ""),
+                "images_up_damage": self.loadImages(f"{path}/{filename}_up_damage", ""),
+                "images_down_damage": self.loadImages(f"{path}/{filename}_down_damage", ""),
+                "images_left_damage": self.loadImages(f"{path}/{filename}_left_damage", ""),
+                "images_right_damage": self.loadImages(f"{path}/{filename}_right_damage", ""),
 
-                "image_idle_heal": self.loadImages(f"{path}/{filename}_idle_heal", ""),
-                "image_up_heal": self.loadImages(f"{path}/{filename}_up_heal", ""),
-                "image_down_heal": self.loadImages(f"{path}/{filename}_down_heal", ""),
-                "image_left_heal": self.loadImages(f"{path}/{filename}_left_heal", ""),
-                "image_right_heal": self.loadImages(f"{path}/{filename}_right_heal", ""),
+                "images_idle_heal": self.loadImages(f"{path}/{filename}_idle_heal", ""),
+                "images_up_heal": self.loadImages(f"{path}/{filename}_up_heal", ""),
+                "images_down_heal": self.loadImages(f"{path}/{filename}_down_heal", ""),
+                "images_left_heal": self.loadImages(f"{path}/{filename}_left_heal", ""),
+                "images_right_heal": self.loadImages(f"{path}/{filename}_right_heal", ""),
             }
         except Exception:
             print(f"\nMissing images at '{path}/{filename}'\n")

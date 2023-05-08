@@ -1,4 +1,4 @@
-from pygame import Vector2
+from pygame import Vector2, Rect
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
@@ -24,7 +24,8 @@ class Boar(AggressiveMob):
             "maxMoveTimeMs": 1000,
             "attackCooldownMs": 2000
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.boar, loadedSounds.boar, entityData, clock, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (20, 20))
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.boar, loadedSounds.boar, colliderRect, entityData, clock, midbottom, currHealth)
         self.loadedImages = loadedImages
 
     def drop(self) -> None:

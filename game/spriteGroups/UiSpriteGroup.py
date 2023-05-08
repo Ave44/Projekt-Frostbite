@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.entities.Player import Player
+
 import pygame
 from pygame.math import Vector2
 from pygame import Surface, Rect
@@ -8,10 +14,12 @@ from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 from game.ui.inventory.slot.Slot import Slot
 from game.ui.DayNightClock import DayNightClock
+from game.LoadedImages import LoadedImages
+from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class UiSpriteGroup(pygame.sprite.Group):
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, cameraSpriteGroup: CameraSpriteGroup, loadedImages: LoadedImages):
         super().__init__()
         self.config = config
         self.displaySurface = pygame.display.get_surface()
@@ -23,10 +31,21 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.equipmentBackgroundRect = Rect
         self.clock = DayNightClock
         self.clockRect = Rect
-        self.player = None
+        self.player: Player | None = None
+        self.cameraSpriteGroup = cameraSpriteGroup
+        self.pointer = loadedImages.pointer
+        self.pointerOffset = Vector2(self.pointer.get_width() // 2, self.pointer.get_height() // 2, )
 
     def customDraw(self):
         if self.inventory.isOpen:
+            if self.player.destinationPosition:
+                pointerPosition = self.player.destinationPosition - self.cameraSpriteGroup.offset - self.pointerOffset
+                self.displaySurface.blit(self.pointer, pointerPosition)
+
+            if self.player.midDestinationPosition:
+                pointerPosition = self.player.midDestinationPosition - self.cameraSpriteGroup.offset
+                self.displaySurface.blit(self.pointer, pointerPosition)
+
             self.displaySurface.blit(self.inventory.image, self.inventory.rect)
             for slot in self.inventory.slotList:
                 self.displaySurface.blit(slot.image, slot.rect)

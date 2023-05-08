@@ -16,7 +16,7 @@ class Snag(CollisionObject, Flammable):
                  loadedImages: LoadedImages, clock: Clock, age: int = 0):
         self.loadedImages = loadedImages
         image = loadedImages.snag[0]
-        colliderRect = Rect((0, 0), (5, 5))
+        colliderRect = Rect((0, 0), (20, 20))
         colliderRect.midbottom = midBottom
 
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup,

@@ -3,15 +3,12 @@ import sys
 import pygame
 from pygame import Surface
 
-from constants import BUTTON_FONT
 from menu.general.Button import Button
 
 
 class Menu:
     def __init__(self, screen: Surface):
         self.screen = screen
-        self.font = pygame.font.Font(BUTTON_FONT, 100)
-        self.menuOptionFont = pygame.font.Font(BUTTON_FONT, 50)
 
     def createBackground(self) -> None:
         # TODO: This is suboptimal. If possible replace this loop with a full background image intended for menu.

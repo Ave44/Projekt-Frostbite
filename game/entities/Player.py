@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pygame import Rect
 from pygame.sprite import Group, Sprite
 from pygame.time import Clock
 from pygame.math import Vector2
@@ -37,8 +38,10 @@ class Player(Entity, Glowing):
         self.hungerDecreaseSpeedPerSecond = hungerDecreasePerSecond
         self.maxHunger = 100
         self.handDamage = 3
+
         self.isHungry = False
-        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, clock, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (20, 20))
+        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
         offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
@@ -66,14 +69,18 @@ class Player(Entity, Glowing):
         self.hungerBar = Bar(Vector2(115, 90), self.maxHealth, self.currentHealth, 20, 200,
                              HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
 
-    def adjustDirection(self):
-        if self.destinationPosition:
-            self.moveTowards()
-        else:
+    def moveInDirection(self):
+        Entity.moveInDirection(self)
+        self.direction.xy = [0, 0]
+
+    def adjustRect(self):
+        self.rect.midbottom = self.colliderRect.midbottom
+        if not self.destinationPosition:
             self.direction.xy = [0, 0]
 
     def stopAutowalking(self):
         self.destinationPosition = None
+        self.midDestinationPosition = None
         self.destinationTarget = None
 
     def moveUp(self):

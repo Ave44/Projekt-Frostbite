@@ -1,4 +1,4 @@
-from pygame import Vector2
+from pygame import Vector2, Rect
 from pygame.time import Clock
 from math import sqrt
 
@@ -28,7 +28,8 @@ class Goblin(AggressiveMob):
             "maxMoveTimeMs": 1000,
             "attackCooldownMs": 2000
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, entityData, clock, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (10, 10))
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, colliderRect, entityData, clock, midbottom, currHealth)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
 

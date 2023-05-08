@@ -33,6 +33,7 @@ FONT_MENU_COLOR = "#b68f40"
 CLOCK_OUTLINE = Color(0, 0, 0)
 CLOCK_OUTLINE_SHADOW = Color(0, 0, 0, 64)
 SHADOW = Color(0, 0, 0, 160)
+COLLIDER_COLOR = Color(255,0,0)
 
 AUTUMN_DAWN_COLOR = Color(205, 131, 122)
 AUTUMN_DAY_COLOR = Color(254, 212, 86)
@@ -63,6 +64,9 @@ HAPPY_THEME = 'music/custom/happy-theme.mp3'
 MENU_THEME = 'music/custom/menu_theme.mp3'
 
 # FONTS
-FONT = "graphics/fonts/font.ttf"
+FONT_SIZE_TINY = 16
 FONT_SIZE = 24
-BUTTON_FONT = "graphics/fonts/font.ttf"
+FONT_SIZE_BIG = 50
+FONT_SIZE_HUGE = 100
+NORMAL_FONT = "graphics/fonts/RobotoMono-Regular.ttf"
+PIXEL_FONT = "graphics/fonts/pixel-font.ttf"

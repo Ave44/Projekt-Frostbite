@@ -65,6 +65,7 @@ class LoadedImages:
         self.slot = load("./graphics/ui/slot.png").convert_alpha()
         self.slotBody = load("./graphics/ui/slotBody.png").convert_alpha()
         self.slotHand = load("./graphics/ui/slotHand.png").convert_alpha()
+        self.pointer = load("./graphics/ui/pointer.png").convert_alpha()
 
     def loadLightsImages(self):
         self.smallLight = load("./graphics/lights/smallLight.png").convert_alpha()

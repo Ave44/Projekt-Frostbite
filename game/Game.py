@@ -46,14 +46,15 @@ class Game:
         self.screen = screen
         self.clock = Clock()
 
+        self.loadedImages = LoadedImages()
+        self.loadedSounds = LoadedSounds()
+
         self.visibleSprites = CameraSpriteGroup(config)
         self.obstacleSprites = ObstacleSprites(config)
-        self.UiSprites = UiSpriteGroup(config)
+        self.UiSprites = UiSpriteGroup(config, self.visibleSprites, self.loadedImages)
 
         self.tick = 0
 
-        self.loadedImages = LoadedImages()
-        self.loadedSounds = LoadedSounds()
         self.map = self.createMap(100)
         self.dayCycle = DayCycle(1, 60000, 2 * 64 * 1000, self.clock, config, self.UiSprites, self.visibleSprites)
 
@@ -75,6 +76,7 @@ class Game:
                     if self.map[y][x]['walkable']:
                         self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
                         self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
+                        self.player.colliderRect.midbottom = self.player.rect.midbottom
                         break
                 else:
                     continue

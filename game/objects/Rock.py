@@ -13,7 +13,7 @@ class Rock(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, loadedImages: LoadedImages):
         self.loadedImages = loadedImages
         image = loadedImages.rock
-        colliderRect = Rect((0, 0), (10, 10))
+        colliderRect = Rect((0, 0), (30, 15))
         colliderRect.midbottom = midBottom
 
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 10, Pickaxe, image, colliderRect)

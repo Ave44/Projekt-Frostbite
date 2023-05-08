@@ -31,19 +31,19 @@ class MainMenu(Menu):
     def createButtons(self) -> list[Button]:
         playButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                             textInput="PLAY",
-                            font=self.config.fontSmall(),
+                            font=self.config.fontBig,
                             action=self.playGame)
         createGameButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                   textInput="CREATE GAME",
-                                  font=self.config.fontSmall(),
+                                  font=self.config.fontBig,
                                   action=self.createGameMenu.initiateCreateGame)
         optionsButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.625 * self.config.WINDOW_HEIGHT),
                                textInput="OPTIONS",
-                               font=self.config.fontSmall(),
+                               font=self.config.fontBig,
                                action=self.optionsMenu.refreshMenu)
         quitButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.764 * self.config.WINDOW_HEIGHT),
                             textInput="QUIT",
-                            font=self.config.fontSmall(),
+                            font=self.config.fontBig,
                             action=self.quitGame)
         return [playButton, optionsButton, quitButton, createGameButton]
 
@@ -51,7 +51,7 @@ class MainMenu(Menu):
         mixer.music.load(MENU_THEME)
         mixer.music.play()
         self.createBackground()
-        menuText = self.config.font().render("MAIN MENU", True, FONT_MENU_COLOR)
+        menuText = self.config.fontHuge.render("MAIN MENU", True, FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
         menuButtons = self.createButtons()
 

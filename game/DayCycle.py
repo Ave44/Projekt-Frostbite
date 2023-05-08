@@ -28,7 +28,7 @@ class DayCycle:
         self.seasons = [autumn, winter, spring, summer]
         self.yearLength = sum(season.length for season in self.seasons)
 
-        self.dayCycleClock = DayNightClock(self.dayLengthMs, self.daySegments, self.currentTimeMs, currentDay, 201)
+        self.dayCycleClock = DayNightClock(self.dayLengthMs, self.daySegments, self.currentTimeMs, currentDay, 201, config.font)
         uiSprites.setClock(self.dayCycleClock)
         self.setDay(currentDay)
 

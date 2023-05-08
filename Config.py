@@ -2,7 +2,7 @@ from math import ceil
 
 from pygame.font import Font
 
-from constants import TILE_SIZE, PIXEL_FONT
+from constants import TILE_SIZE, PIXEL_FONT, FONT_SIZE, FONT_SIZE_BIG, FONT_SIZE_HUGE, FONT_SIZE_TINY
 
 
 class Config:
@@ -19,8 +19,13 @@ class Config:
         # FONT
         self.FONT = PIXEL_FONT
 
-    def font(self) -> Font:
-        return Font(self.FONT, 100)
+        self.fontTiny = Font(PIXEL_FONT, FONT_SIZE_TINY)
+        self.font = Font(PIXEL_FONT, FONT_SIZE)
+        self.fontBig = Font(PIXEL_FONT, FONT_SIZE_BIG)
+        self.fontHuge = Font(PIXEL_FONT, FONT_SIZE_HUGE)
 
-    def fontSmall(self) -> Font:
-        return Font(self.FONT, 50)
+    def setFont(self, fontPath: str):
+        self.fontTiny = Font(fontPath, FONT_SIZE_TINY)
+        self.font = Font(fontPath, FONT_SIZE)
+        self.fontBig = Font(fontPath, FONT_SIZE_BIG)
+        self.fontHuge = Font(fontPath, FONT_SIZE_HUGE)

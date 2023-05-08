@@ -74,37 +74,37 @@ class OptionsMenu(Menu):
     def createButtons(self) -> list[Button]:
         backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT),
                             textInput="BACK",
-                            font=self.config.fontSmall(),
+                            font=self.config.fontBig,
                             action=self.backAction)
 
         resolutionButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                                            textInput="=>",
-                                           font=self.config.fontSmall(),
+                                           font=self.config.fontBig,
                                            action=self.incrementResolution)
 
         resolutionButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                                            textInput="<=",
-                                           font=self.config.fontSmall(),
+                                           font=self.config.fontBig,
                                            action=self.decrementResolution)
 
         volumeButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                        textInput="=>",
-                                       font=self.config.fontSmall(),
+                                       font=self.config.fontBig,
                                        action=self.incrementVolume)
 
         volumeButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
                                        textInput="<=",
-                                       font=self.config.fontSmall(),
+                                       font=self.config.fontBig,
                                        action=self.decrementVolume)
 
         fontButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.627 * self.config.WINDOW_HEIGHT),
                                        textInput="=>",
-                                       font=self.config.fontSmall(),
+                                       font=self.config.fontBig,
                                        action=self.incrementFont)
 
         fontButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.627 * self.config.WINDOW_HEIGHT),
                                        textInput="<=",
-                                       font=self.config.fontSmall(),
+                                       font=self.config.fontBig,
                                        action=self.decrementFont)
 
         return [backButton, resolutionButtonIncrement, resolutionButtonDecrement, volumeButtonIncrement,
@@ -112,18 +112,18 @@ class OptionsMenu(Menu):
 
     def refreshMenu(self) -> None:
         self.createBackground()
-        menuText = self.config.font().render("OPTIONS", True, FONT_MENU_COLOR)
+        menuText = self.config.fontHuge.render("OPTIONS", True, FONT_MENU_COLOR)
         menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
 
-        volumeText = self.config.fontSmall().render("VOLUME: " + self.volume[self.volumeIndex], True,
+        volumeText = self.config.fontBig.render("VOLUME: " + self.volume[self.volumeIndex], True,
                                                 BASE_BUTTON_COLOR)
         volumeRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.52 * self.config.WINDOW_HEIGHT))
 
-        resolutionText = self.config.fontSmall().render(
+        resolutionText = self.config.fontBig.render(
             "HUD: " + self.resolutions[self.resolutionsIndex], True, BASE_BUTTON_COLOR)
         resolutionRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.37 * self.config.WINDOW_HEIGHT))
 
-        fontText = self.config.fontSmall().render(
+        fontText = self.config.fontBig.render(
             "FONT: " + self.fonts[self.fontIndex], True, BASE_BUTTON_COLOR)
         fontRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.65 * self.config.WINDOW_HEIGHT))
 
@@ -155,6 +155,6 @@ class OptionsMenu(Menu):
 
     def updateFont(self) -> None:
         if self.fontIndex == 1:
-            self.config.FONT = NORMAL_FONT
+            self.config.setFont(NORMAL_FONT)
         else:
-            self.config.FONT = PIXEL_FONT
+            self.config.setFont(PIXEL_FONT)

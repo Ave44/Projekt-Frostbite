@@ -42,3 +42,7 @@ class GoblinChampion(AnimatedEntity, Goblin):
     def drop(self) -> None:
         BigMeat(self.visibleSprites, self.rect.center, self.loadedImages)
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
+
+    def update(self) -> None:
+        AggressiveMob.update(self)
+        AnimatedEntity.update(self)

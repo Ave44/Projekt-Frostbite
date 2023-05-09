@@ -43,8 +43,6 @@ class AnimatedEntity(ABC):
 
         self.image: Surface = self.imageIdle[0]
 
-        self.direction = Vector2()
-        self._state = State.NORMAL
         self.clock = clock
 
     def state(self, newState: State) -> None:
@@ -88,17 +86,18 @@ class AnimatedEntity(ABC):
         self.imageRight = newImageRight
 
     def adjustImageToDirection(self):
-        if self.direction.x > 0:
-            self.image = self.imageRight[self.currentImageFrame % len(self.imageRight)]
-        elif self.direction.x < 0:
-            self.image = self.imageLeft[self.currentImageFrame % len(self.imageLeft)]
 
-        if self.direction.y > 0:
-            self.image = self.imageDown[self.currentImageFrame % len(self.imageDown)]
-        elif self.direction.y < 0:
-            self.image = self.imageUp[self.currentImageFrame % len(self.imageUp)]
-
-        if self.direction.y == 0 and self.direction.x == 0:
+        if abs(self.direction.x) > abs(self.direction.y):
+            if self.direction.x > 0:
+                self.image = self.imageRight[self.currentImageFrame % len(self.imageRight)]
+            else:
+                self.image = self.imageLeft[self.currentImageFrame % len(self.imageLeft)]
+        else:
+            if self.direction.y > 0:
+                self.image = self.imageDown[self.currentImageFrame % len(self.imageDown)]
+            else:
+                self.image = self.imageUp[self.currentImageFrame % len(self.imageUp)]
+        if self.direction.x == 0 and self.direction.y == 0:
             self.image = self.imageIdle[self.currentImageFrame % len(self.imageIdle)]
 
     def nextFrame(self):
@@ -117,11 +116,3 @@ class AnimatedEntity(ABC):
         if self.timeOnFrame >= self.timeMsBetweenFrames:
             self.timeOnFrame = 0
             self.currentImageFrame += 1
-
-        timeFromLastTick = self.clock.get_time()
-
-        if self.timeFromLastHealthChange >= 250:
-            self.state = State.NORMAL
-            self.currentImageFrame += 1
-        else:
-            self.timeFromLastHealthChange += timeFromLastTick

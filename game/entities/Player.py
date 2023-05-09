@@ -121,7 +121,7 @@ class Player(Entity, Glowing):
         self.drop()
         print(deathMessage)
 
-    def manageHunger(self):
+    def updateHunger(self):
         timeInSeconds = self.clock.get_time() / 1000
         if self.currentHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds > 0:
             self.currentHunger = self.currentHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds
@@ -141,7 +141,7 @@ class Player(Entity, Glowing):
             self.currentHunger = self.maxHunger
 
     def localUpdate(self):
-        self.manageHunger()
+        self.updateHunger()
         self.healthBar.update(self.currentHealth)
         self.hungerBar.update(self.currentHunger)
         self.move()

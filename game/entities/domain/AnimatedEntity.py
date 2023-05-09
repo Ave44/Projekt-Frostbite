@@ -119,12 +119,9 @@ class AnimatedEntity(ABC):
             self.currentImageFrame += 1
 
         timeFromLastTick = self.clock.get_time()
-        for effect in self.activeEffects:
-            effect.execute()
 
-        if self.state != State.NORMAL:
-            if self.timeFromLastHealthChange >= 250:
-                self.state = State.NORMAL
-                self.currentImageFrame += 1
-            else:
-                self.timeFromLastHealthChange += timeFromLastTick
+        if self.timeFromLastHealthChange >= 250:
+            self.state = State.NORMAL
+            self.currentImageFrame += 1
+        else:
+            self.timeFromLastHealthChange += timeFromLastTick

@@ -1,6 +1,5 @@
 from game.entities.domain.Entity import Entity
-from abc import abstractmethod, ABC
-from math import sqrt
+from abc import ABC
 
 from pygame import Vector2, Surface, Rect
 from pygame.sprite import Sprite
@@ -9,8 +8,8 @@ from pygame.time import Clock
 from game.entities.domain.State import State
 
 
-class AnimatedEntity(Entity, ABC):
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict[Surface], entitySounds: dict,
+class AnimatedEntity(ABC):
+    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict[Surface],
                  clock: Clock, midbottom: Vector2, currHealth: int = None):
         from game.entities.effects.Effect import Effect
 
@@ -18,12 +17,6 @@ class AnimatedEntity(Entity, ABC):
         spriteGroup.entities.add(self)
 
         self.timeOnFrame = 0
-
-        self.soundIdle = entitySounds["idle"]
-        self.soundMovement = entitySounds["movement"]
-        self.soundAttack = entitySounds["attack"]
-        self.soundDamaged = entitySounds["damaged"]
-
         self.timeMsBetweenFrames = 100
         self.currentImageFrame = 0
 
@@ -52,14 +45,8 @@ class AnimatedEntity(Entity, ABC):
         self.imageRight = self.imageRightNormal
 
         self.image: Surface = self.imageIdle[0]
-        self.rect: Rect = self.image.get_rect(midbottom=midbottom)
 
-        self.speed = entityData["speed"]
         self.direction = Vector2()
-        self.obstacleSprites = obstacleSprites
-        self.actionRange = entityData["actionRange"]
-
-        self.maxHealth = entityData["maxHealth"]
         if currHealth:
             self.currentHealth = currHealth
         else:
@@ -69,8 +56,6 @@ class AnimatedEntity(Entity, ABC):
 
         self.destinationPosition = None
         self.destinationTarget = None
-
-        self.activeEffects: list[Effect] = []
         self.clock = clock
 
     def state(self, newState: State) -> None:

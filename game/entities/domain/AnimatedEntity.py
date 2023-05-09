@@ -9,8 +9,7 @@ from game.entities.domain.State import State
 
 
 class AnimatedEntity(ABC):
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict[Surface],
-                 clock: Clock, midbottom: Vector2, currHealth: int = None):
+    def __init__(self, spriteGroup, entityImages: dict[Surface],clock: Clock):
         from game.entities.effects.Effect import Effect
 
         Sprite.__init__(self, spriteGroup)
@@ -47,11 +46,6 @@ class AnimatedEntity(ABC):
         self.image: Surface = self.imageIdle[0]
 
         self.direction = Vector2()
-        if currHealth:
-            self.currentHealth = currHealth
-        else:
-            self.currentHealth = self.maxHealth
-        self.timeFromLastHealthChange = 0
         self._state = State.NORMAL
 
         self.destinationPosition = None

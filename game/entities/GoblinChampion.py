@@ -31,7 +31,7 @@ class GoblinChampion(AnimatedEntity, Goblin):
         }
         colliderRect = Rect((0, 0), (10, 10))
         AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, colliderRect, entityData, clock, midbottom, currHealth)
-        AnimatedEntity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages.goblinchampion, clock, midbottom, currHealth)
+        AnimatedEntity.__init__(self, visibleSprites, loadedImages.goblinchampion, clock)
 
         self.loadedImages = loadedImages
 

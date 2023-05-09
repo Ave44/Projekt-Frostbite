@@ -1,5 +1,4 @@
 import random
-import time
 
 import pygame
 from pygame import mixer, Surface

@@ -1,4 +1,4 @@
-from pygame import Vector2
+from pygame import Vector2, Rect
 from pygame.time import Clock
 from math import sqrt
 
@@ -14,7 +14,7 @@ from game.entities.domain.AnimatedEntity import AnimatedEntity
 from game.objects.domain.Object import Object
 
 
-class GoblinChampion(AnimatedEntity,AggressiveMob):
+class GoblinChampion(AnimatedEntity, AggressiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2,
                  currHealth: int = None):
@@ -29,7 +29,8 @@ class GoblinChampion(AnimatedEntity,AggressiveMob):
             "maxMoveTimeMs": 1000,
             "attackCooldownMs": 2000
         }
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, entityData, clock, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (10, 10))
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, colliderRect, entityData, clock, midbottom, currHealth)
         AnimatedEntity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages.goblinchampion, loadedSounds.goblin, clock, midbottom, currHealth)
 
         self.loadedImages = loadedImages

@@ -100,16 +100,6 @@ class AnimatedEntity(ABC):
         if self.direction.x == 0 and self.direction.y == 0:
             self.image = self.imageIdle[self.currentImageFrame % len(self.imageIdle)]
 
-    def nextFrame(self):
-        self.currFrameIndex = (self.currFrameIndex + 1) % self.numberOfImages
-        self.timeOnFrame = 0
-        self.image = self.images[self.currFrameIndex]
-
-    def animationUpdate(self):
-        self.timeOnFrame += self.clock.get_time()
-        if self.timeOnFrame >= self.timeMsBetweenFrames:
-            self.nextFrame()
-
     def update(self) -> None:
         self.localUpdate()
         self.timeOnFrame += self.clock.get_time()

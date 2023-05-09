@@ -34,7 +34,6 @@ class GoblinChampion(AnimatedEntity, Goblin):
         AnimatedEntity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages.goblinchampion, loadedSounds.goblin, clock, midbottom, currHealth)
 
         self.loadedImages = loadedImages
-        self.loadedSounds = loadedSounds
 
     def attack(self, target: Entity | Object):
         AggressiveMob.attack(self, target)

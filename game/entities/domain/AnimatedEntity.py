@@ -9,9 +9,7 @@ from game.entities.domain.State import State
 
 
 class AnimatedEntity(ABC):
-    def __init__(self, spriteGroup, entityImages: dict[Surface],clock: Clock):
-        from game.entities.effects.Effect import Effect
-
+    def __init__(self, spriteGroup, entityImages: dict[Surface], clock: Clock):
         Sprite.__init__(self, spriteGroup)
         spriteGroup.entities.add(self)
 
@@ -47,9 +45,6 @@ class AnimatedEntity(ABC):
 
         self.direction = Vector2()
         self._state = State.NORMAL
-
-        self.destinationPosition = None
-        self.destinationTarget = None
         self.clock = clock
 
     def state(self, newState: State) -> None:
@@ -91,7 +86,6 @@ class AnimatedEntity(ABC):
         self.imageDown = newImageDown
         self.imageLeft = newImageLeft
         self.imageRight = newImageRight
-
 
     def adjustImageToDirection(self):
         if self.direction.x > 0:

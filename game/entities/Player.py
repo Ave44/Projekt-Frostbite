@@ -128,6 +128,12 @@ class Player(Entity, Glowing):
             else:
                 self.die("Game Over: You Died Of Hunger")
 
+    def satiate(self, numberOfHungerToSatiate):
+        if self.currentHunger + numberOfHungerToSatiate < self.maxHunger:
+            self.currentHunger = self.currentHunger + numberOfHungerToSatiate
+        else:
+            self.currentHunger = self.maxHunger
+
     def localUpdate(self):
         self.manageHunger()
         self.healthBar.update(self.currentHealth)

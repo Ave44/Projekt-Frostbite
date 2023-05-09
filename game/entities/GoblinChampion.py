@@ -12,9 +12,10 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.entities.domain.Entity import Entity
 from game.entities.domain.AnimatedEntity import AnimatedEntity
 from game.objects.domain.Object import Object
+from game.entities.Goblin import Goblin
 
 
-class GoblinChampion(AnimatedEntity, AggressiveMob):
+class GoblinChampion(AnimatedEntity, Goblin):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2,
                  currHealth: int = None):
@@ -35,19 +36,6 @@ class GoblinChampion(AnimatedEntity, AggressiveMob):
 
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
-
-    def findClosestOtherEntity(self) -> Entity | None:
-        closestEntity = None
-        closestDistance = float('inf')
-        for entity in self.visibleSprites.entities:
-            if type(self) == type(entity) or type(entity).__name__ == "Goblin":
-                continue
-            distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
-                            (self.rect.bottom - entity.rect.bottom) ** 2)
-            if distance < closestDistance:
-                closestEntity = entity
-                closestDistance = distance
-        return closestEntity
 
     def attack(self, target: Entity | Object):
         AggressiveMob.attack(self, target)

@@ -33,19 +33,6 @@ class Goblin(AggressiveMob):
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
 
-    def findClosestOtherEntity(self) -> Entity | None:
-        closestEntity = None
-        closestDistance = float('inf')
-        for entity in self.visibleSprites.entities:
-            if type(self) == type(entity) or type(entity).__name__ == "GoblinChampion":
-                continue
-            distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
-                            (self.rect.bottom - entity.rect.bottom) ** 2)
-            if distance < closestDistance:
-                closestEntity = entity
-                closestDistance = distance
-        return closestEntity
-
     def attack(self, target: Entity | Object):
         AggressiveMob.attack(self, target)
         self.playSound(self.soundAttack)

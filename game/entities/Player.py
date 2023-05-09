@@ -31,11 +31,10 @@ class Player(Entity, Glowing):
                  clock: Clock,
                  midbottom: Vector2,
                  currHealth: int = None,
-                 currHunger: int = None,
-                 hungerDecreasePerSecond: float = None):
-        playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
+                 currHunger: float = None):
+        playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20, "hungerDecreasePerSecond": 0.1}
         self.currentHunger = currHunger
-        self.hungerDecreaseSpeedPerSecond = hungerDecreasePerSecond
+        self.hungerDecreaseSpeedPerSecond = playerData["hungerDecreasePerSecond"]
         self.maxHunger = 100
         self.handDamage = 3
 

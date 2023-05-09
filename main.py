@@ -9,7 +9,7 @@ from menu.MainMenu import MainMenu
 # Program initialization
 pygame.init()
 config = Config()
-screen = pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT))
+screen = pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption(CAPTION)
 pygame.display.set_icon(ICON)
 

@@ -1,4 +1,4 @@
-from pygame.math import Vector2
+from pygame import Vector2, Rect
 from pygame.time import Clock
 
 from game.entities.domain.Entity import Entity
@@ -11,8 +11,8 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 class AggressiveMob(Mob):
     def __init__(self,
                  visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites, loadedImages: dict, loadedSounds: dict,
-                 enemyData: dict, clock: Clock, midbottom: Vector2, currHealth: int = None):
-        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, clock, enemyData, midbottom, currHealth)
+                 colliderRect: Rect, enemyData: dict, clock: Clock, midbottom: Vector2, currHealth: int = None):
+        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, colliderRect, clock, enemyData, midbottom, currHealth)
         self.damage = enemyData["damage"]
         self.target = None
         self.attackCooldownMs = enemyData["attackCooldownMs"]

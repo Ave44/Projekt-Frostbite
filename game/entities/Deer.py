@@ -1,4 +1,4 @@
-from pygame import Vector2
+from pygame import Vector2, Rect
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
@@ -24,7 +24,8 @@ class Deer(PassiveMob):
             "minMoveTimeMs": 1000,
             "maxMoveTimeMs": 2000
         }
-        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.deer, loadedSounds.deer, clock, entityData, midbottom, currHealth)
+        colliderRect = Rect((0, 0), (20, 20))
+        PassiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.deer, loadedSounds.deer, colliderRect, clock, entityData, midbottom, currHealth)
         self.loadedImages = loadedImages
 
     def drop(self) -> None:

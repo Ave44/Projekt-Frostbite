@@ -12,7 +12,7 @@ class BurntTree(CollisionObject):
     def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, loadedImages: LoadedImages):
         self.loadedImages = loadedImages
         image = loadedImages.burntTree
-        colliderRect = Rect((0, 0), (5, 5))
+        colliderRect = Rect((0, 0), (20, 20))
         colliderRect.midbottom = midBottom
         CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
                                  midBottom, 1, Axe, image, colliderRect)

@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 from pygame.math import Vector2
 
 from game.lightning.Glowing import Glowing
-from constants import TILE_SIZE
+from constants import TILE_SIZE, COLLIDER_COLOR
 from Config import Config
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
 from game.weathers.WeatherController import WeatherController
@@ -22,9 +22,9 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.map = []
         self.entities = EntitiesGroup()
         self.nightMask: Surface | None = None
-
         self.weatherController: WeatherController | None = None
-        # self.radiuses = []
+        self.showHitboxex = False
+
 
     def customDraw(self, center: Vector2):
         self.offset.x = center.x - self.halfWindowWidth
@@ -33,23 +33,19 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
         nightMaskBrightness = self.nightMask.get_at((0, 0))[0]
 
-        for sprite in self.entities.sprites():
-            self.drawSprite(sprite)
-            if isinstance(sprite, Glowing) and nightMaskBrightness != 255:
-                self.drawLightning(sprite)
-
         for sprite in self.sprites():
             self.drawSprite(sprite)
             if isinstance(sprite, Glowing) and nightMaskBrightness != 255:
                 self.drawLightning(sprite)
+        
+        if self.showHitboxex:
+            self.drawColliders()
 
         if self.weatherController:
             self.weatherController.draw(self.displaySurface)
 
         if nightMaskBrightness != 255:
             self.displaySurface.blit(self.nightMask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-
-        # self.radiuses = []
 
     def drawSprite(self, sprite: Sprite):
         spritePosition = sprite.rect.topleft - self.offset
@@ -68,12 +64,13 @@ class CameraSpriteGroup(pygame.sprite.Group):
         lightPosition = sprite.calculateTopLeftPosition() - self.offset
         self.nightMask.blit(sprite.lightImage, lightPosition)
 
-    # def addRadius(self, radius, position, color):
-    #     self.radiuses.append({"radius": radius, "position": position, "color": color})
+    def drawColliders(self):
+        for sprite in self.sprites():
+            if hasattr(sprite, 'colliderRect'):
+                rectPosition = sprite.colliderRect.topleft - self.offset
+                colliderImage = Surface((sprite.colliderRect.width, sprite.colliderRect.height))
+                colliderImage.fill(COLLIDER_COLOR)
+                self.displaySurface.blit(colliderImage, rectPosition)
 
-    # def drawRadius(self, radius, position, color):
-    #     circleSurface = pygame.Surface((radius * 2, radius * 2))
-    #     circleSurface.set_colorkey((0, 0, 0))
-    #     circleSurface.set_alpha(80)
-    #     pygame.draw.circle(circleSurface, color, (radius, radius), radius)
-    #     self.displaySurface.blit(circleSurface, (position[0] - radius - self.offset.x, position[1] - radius - self.offset.y))
+    def toggleShowHitboxes(self):
+        self.showHitboxex = not self.showHitboxex

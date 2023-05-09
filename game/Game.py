@@ -68,7 +68,7 @@ class Game:
                              self.clock,
                              Vector2(0, 0),
                              currHunger=100,
-                             hungerDecreasePerSecond=1)
+                             hungerDecreasePerSecond=0.1)
 
         self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController

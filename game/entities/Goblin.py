@@ -1,6 +1,5 @@
 from pygame import Vector2, Rect
 from pygame.time import Clock
-from math import sqrt
 
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds

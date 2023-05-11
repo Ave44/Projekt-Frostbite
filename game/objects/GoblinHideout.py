@@ -14,13 +14,14 @@ from game.items.GoblinFang import GoblinFang
 
 class GoblinHideout(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2,
+                 clock: Clock, daysFromGoblinsChange: int = None):
         image = loadedImages.goblinHideout
         Object.__init__(self, visibleGroup, midBottom, 50, Hammer, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.goblins = []
-        self.daysFromGoblinsChange = 0
+        self.daysFromGoblinsChange = daysFromGoblinsChange if daysFromGoblinsChange else 0
         self.numberOfGoblinsToSpawn = 2
         self.obstacleSprites = obstacleSprites
         self.clock = clock
@@ -51,3 +52,6 @@ class GoblinHideout(Object):
             return
 
         self.spawnGoblins()
+
+    def getSaveData(self) -> list:
+        return [self.rect.midbottom, self.currentDurability, self.daysFromGoblinsChange]

@@ -116,3 +116,7 @@ class Player(Entity, Glowing):
     def localUpdate(self):
         self.move()
         self.healthBar.update(self.currentHealth)
+
+    # I'll need to add currentHunger after merge
+    def getSaveData(self) -> list:
+        return [self.rect.midbottom, self.currentHealth]

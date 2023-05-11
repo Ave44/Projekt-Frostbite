@@ -48,3 +48,6 @@ class Snag(CollisionObject, Flammable):
         if self.age >= self.LIFESPAN:
             self.remove(*self.groups())
             SmallTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages, self.clock)
+
+    def getSaveData(self) -> list:
+        return [self.rect.midbottom, self.currentDurability, self.age]

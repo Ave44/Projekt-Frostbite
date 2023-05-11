@@ -3,10 +3,11 @@ from pygame import Surface
 from pygame.sprite import Sprite
 from pygame.math import Vector2
 
-from game.lightning.Glowing import Glowing
 from constants import TILE_SIZE, COLLIDER_COLOR
 from Config import Config
+from game.lightning.Glowing import Glowing
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
+from game.spriteGroups.SavefileGroups import SavefileGroups
 from game.weathers.WeatherController import WeatherController
 
 
@@ -21,6 +22,7 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
+        self.savefileGroups = SavefileGroups()
         self.nightMask: Surface | None = None
         self.weatherController: WeatherController | None = None
         self.showHitboxex = False

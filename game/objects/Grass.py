@@ -11,7 +11,8 @@ from game.entities.Player import Player
 
 
 class Grass(Object, AnimatedObject):
-    def __init__(self, visibleGroup: Group, midBottom: Vector2, loadedImages: LoadedImages, clock: Clock):
+    def __init__(self, visibleGroup: Group, midBottom: Vector2, loadedImages: LoadedImages,
+                 clock: Clock, currGrowthTime: int = None):
         self.loadedImages = loadedImages
         image = loadedImages.grass[0]
         Object.__init__(self, visibleGroup, midBottom, 1, Shovel, image)
@@ -20,7 +21,7 @@ class Grass(Object, AnimatedObject):
         self.imagePicked = loadedImages.grassPicked
         self.picked = False
         self.regrowthTimeMs = 10000
-        self.currGrowthTime = 0
+        self.currGrowthTime = currGrowthTime if currGrowthTime else 0
 
     def onLeftClickAction(self, player: Player) -> None:
         if not self.picked:
@@ -43,3 +44,6 @@ class Grass(Object, AnimatedObject):
             self.grow()
         else:
             AnimatedObject.animationUpdate(self)
+
+    def getSaveData(self) -> list:
+        return [self.rect.midbottom, self.currentDurability, self.currGrowthTime]

@@ -1,15 +1,17 @@
 from pygame import Vector2
 from game.LoadedImages import LoadedImages
 
-from game.items.domain.Item import Item
 from game.items.domain.Armor import Armor
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
-class LeatherArmor(Item, Armor):
+class LeatherArmor(Armor):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
         name = "LeatherArmor"
-        img = loadedImages.leatherArmor
+        image = loadedImages.leatherArmor
         icon = loadedImages.leatherArmor
-        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
-        Armor.__init__(self, gainedDamageModifier=0.6)
+        protectionFlat = 0
+        gainedDamageModifier = 0.6
+
+        Armor.__init__(self, visibleSprites, center, loadedImages, name, image, icon,
+                       protectionFlat, gainedDamageModifier)

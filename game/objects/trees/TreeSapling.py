@@ -36,3 +36,6 @@ class TreeSapling(CollisionObject):
         if self.age >= self._LIFESPAN:
             self.remove(*self.groups())
             SmallTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages, self.clock)
+
+    def getSaveData(self) -> list:
+        return [self.rect.midbottom, self.currentDurability, self.age]

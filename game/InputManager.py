@@ -39,6 +39,9 @@ class InputManager:
                 if event.key == pygame.K_h:
                     self.visibleSprites.toggleShowHitboxes()
 
+                if event.key == pygame.K_l:
+                    self.visibleSprites.savefileGroups.saveGame("savefile1")
+
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()

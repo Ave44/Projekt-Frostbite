@@ -14,13 +14,14 @@ from game.LoadedImages import LoadedImages
 
 class RabbitHole(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2,
+                 clock: Clock, daysFromRabbitsChange: int = None):
         image = loadedImages.rabbitHole
         Object.__init__(self, visibleGroup, midBottom, 50, Shovel, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.rabbits: list[Rabbit] = []
-        self.daysFromRabbitsChange = 0
+        self.daysFromRabbitsChange = daysFromRabbitsChange if daysFromRabbitsChange else 0
         self.obstacleSprites = obstacleSprites
         self.clock = clock
 
@@ -66,3 +67,6 @@ class RabbitHole(Object):
 
     def onEvening(self):
         self.hideRabbits()
+
+    def getSaveData(self) -> list:
+        return [self.rect.midbottom, self.currentDurability, self.daysFromRabbitsChange]

@@ -18,6 +18,8 @@ class Item(Sprite):
                  name: str = None, image: Surface = None, icon: Surface = None):
         Sprite.__init__(self, visibleSprites)
         self.visibleSprites = visibleSprites
+        savefileGroup = getattr(visibleSprites.savefileGroups, type(self).__name__)
+        savefileGroup.add(self)
         self.id = shortuuid.uuid()
 
         self.name = name
@@ -46,3 +48,7 @@ class Item(Sprite):
 
     def hide(self):
         self.remove(self.visibleSprites)
+
+    def getSaveData(self) -> list:
+        return [self.rect.center, self.id]
+    

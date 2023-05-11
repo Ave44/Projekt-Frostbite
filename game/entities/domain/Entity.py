@@ -1,4 +1,11 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+    from game.spriteGroups.ObstacleSprites import ObstacleSprites
+    from game.entities.effects.Effect import Effect
+
 from abc import abstractmethod, ABC
 from math import sqrt, ceil
 
@@ -10,14 +17,14 @@ from game.entities.domain.State import State
 from game.objects.domain.CollisionObject import CollisionObject
 
 class Entity(Sprite, ABC):
-    from game.entities.effects.Effect import Effect
-
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict[Surface], entitySounds: dict,
+    def __init__(self, spriteGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
+                 entityData: dict, entityImages: dict[Surface], entitySounds: dict,
                  colliderRect: Rect, clock: Clock, midbottom: Vector2, currHealth: int = None):
-        from game.entities.effects.Effect import Effect
 
         Sprite.__init__(self, spriteGroup)
         spriteGroup.entities.add(self)
+        savefileGroup = getattr(spriteGroup.savefileGroups, type(self).__name__)
+        savefileGroup.add(self)
 
         self.soundIdle = entitySounds["idle"]
         self.soundMovement = entitySounds["movement"]
@@ -331,3 +338,6 @@ class Entity(Sprite, ABC):
                 self.state = State.NORMAL
             else:
                 self.timeFromLastHealthChange += timeFromLastTick
+
+    def getSaveData(self) -> list:
+        return [self.rect.midbottom, self.currentHealth]

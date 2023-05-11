@@ -1,4 +1,5 @@
 import json
+from os.path import isfile
 
 from pygame import mixer
 
@@ -21,9 +22,11 @@ class MainMenu(Menu):
     def playGame(self) -> None:
         # loading savefile
         # (Later will be replaced with "load all savefile names", then only selected savefile will be loaded)
-        fileSave = open("./savefiles/savefile1.json")
-        saveData = json.load(fileSave)
-        fileSave.close()
+        if isfile("./savefiles/savefile1.json"):
+            with open("./savefiles/savefile1.json") as savefile:
+                saveData = json.load(savefile)
+        else:
+            saveData = None
 
         game = Game(self.screen, self.config, saveData)
         game.play()

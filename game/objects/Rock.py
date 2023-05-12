@@ -10,19 +10,19 @@ from game.objects.domain.CollisionObject import CollisionObject
 
 
 class Rock(CollisionObject):
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2, loadedImages: LoadedImages):
+    def __init__(self, visibleSprites: Group, obstacleSprites: Group, midbottom: Vector2, loadedImages: LoadedImages, currentDurability: int = None):
         self.loadedImages = loadedImages
         image = loadedImages.rock
         colliderRect = Rect((0, 0), (30, 15))
-        colliderRect.midbottom = midBottom
+        colliderRect.midbottom = midbottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup, midBottom, 10, Pickaxe, image, colliderRect)
+        CollisionObject.__init__(self, visibleSprites, obstacleSprites, midbottom, 10, Pickaxe, image, colliderRect, currentDurability)
 
     def interact(self) -> None:
         # do something
         pass
 
     def drop(self) -> None:
-        Pebble(self.visibleGroup, self.rect.center, self.loadedImages)
-        Pebble(self.visibleGroup, self.rect.center, self.loadedImages)
-        SharpRock(self.visibleGroup, self.rect.center, self.loadedImages)
+        Pebble(self.visibleSprites, self.rect.center, self.loadedImages)
+        Pebble(self.visibleSprites, self.rect.center, self.loadedImages)
+        SharpRock(self.visibleSprites, self.rect.center, self.loadedImages)

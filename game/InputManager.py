@@ -12,10 +12,11 @@ from game.items.domain.Item import Item
 
 
 class InputManager:
-    def __init__(self, player: Player, UiSprites: UiSpriteGroup, visibleSprites: CameraSpriteGroup):
+    def __init__(self, player: Player, UiSprites: UiSpriteGroup, visibleSprites: CameraSpriteGroup, saveGame: callable):
         self.player = player
         self.UiSprites = UiSprites
         self.visibleSprites = visibleSprites
+        self.saveGame = saveGame
         pygame.event.clear()
 
     def handleInput(self) -> None:
@@ -40,7 +41,7 @@ class InputManager:
                     self.visibleSprites.toggleShowHitboxes()
 
                 if event.key == pygame.K_l:
-                    self.visibleSprites.savefileGroups.saveGame("savefile1")
+                    self.saveGame()
 
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()

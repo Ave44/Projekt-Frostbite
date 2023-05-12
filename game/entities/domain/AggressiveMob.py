@@ -23,7 +23,7 @@ class AggressiveMob(Mob):
 
     def attack(self, target: Entity | Object):
         target.getDamage(self.damage)
-        if target.currentHealth == 0:
+        if target.currHealth == 0:
             self.target = None
             self.destinationPosition = None
 

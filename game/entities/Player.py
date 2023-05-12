@@ -22,7 +22,7 @@ from game.LoadedImages import LoadedImages
 
 class Player(Entity, Glowing):
     def __init__(self,
-                 groups: Group,
+                 visibleSprites: Group,
                  obstacleSprites: Group,
                  UiSprites: UiSpriteGroup,
                  loadedImages: LoadedImages,
@@ -34,7 +34,7 @@ class Player(Entity, Glowing):
         playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
         self.handDamage = 3
         colliderRect = Rect((0, 0), (20, 20))
-        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
+        Entity.__init__(self, visibleSprites, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
         offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
@@ -57,7 +57,7 @@ class Player(Entity, Glowing):
         UiSprites.selectedItem = self.selectedItem
         UiSprites.setEquipmentSlots(self.handSlot, self.bodySlot)
 
-        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200,
+        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currHealth, 20, 200,
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
 
     def moveInDirection(self):
@@ -107,16 +107,20 @@ class Player(Entity, Glowing):
         Entity.getDamage(self, amount)
 
     def die(self):
-        self.currentHealth = 0
-        self.healthBar.update(self.currentHealth)
+        self.currHealth = 0
+        self.healthBar.update(self.currHealth)
         self.remove(*self.groups())
         self.drop()
         print("Game Over")
 
     def localUpdate(self):
         self.move()
-        self.healthBar.update(self.currentHealth)
+        self.healthBar.update(self.currHealth)
 
     # I'll need to add currentHunger after merge
-    def getSaveData(self) -> list:
-        return [self.rect.midbottom, self.currentHealth]
+    def getSaveData(self) -> dict:
+        return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth}
+    
+    def setSaveData(self, savefileData: dict):
+        self.rect.midbottom = savefileData['midbottom']
+        self.currHealth = savefileData['currHealth']

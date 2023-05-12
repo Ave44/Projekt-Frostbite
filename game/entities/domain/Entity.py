@@ -63,9 +63,9 @@ class Entity(Sprite, ABC):
 
         self.maxHealth = entityData["maxHealth"]
         if currHealth:
-            self.currentHealth = currHealth
+            self.currHealth = currHealth
         else:
-            self.currentHealth = self.maxHealth
+            self.currHealth = self.maxHealth
         self.timeFromLastHealthChange = 0
         self._state = State.NORMAL
 
@@ -293,16 +293,16 @@ class Entity(Sprite, ABC):
 
     def getDamage(self, amount: int) -> None:
         if self.state != State.DEAD:
-            if self.currentHealth <= amount:
+            if self.currHealth <= amount:
                 self.die()
             else:
                 self.timeFromLastHealthChange = 0
                 self.state = State.DAMAGED
-                self.currentHealth -= amount
+                self.currHealth -= amount
 
     def die(self):
         self.state = State.DEAD
-        self.currentHealth = 0
+        self.currHealth = 0
         self.remove(*self.groups())
         self.drop()
 
@@ -310,13 +310,13 @@ class Entity(Sprite, ABC):
         self.getDamage(player.damage())
 
     def heal(self, amount: int):
-        if self.currentHealth != self.maxHealth:
+        if self.currHealth != self.maxHealth:
             self.timeFromLastHealthChange = 0
             self.state = State.HEALED
-        if self.currentHealth + amount >= self.maxHealth:
-            self.currentHealth = self.maxHealth
+        if self.currHealth + amount >= self.maxHealth:
+            self.currHealth = self.maxHealth
         else:
-            self.currentHealth += amount
+            self.currHealth += amount
 
     def addEffect(self, effect: Effect) -> None:
         filteredActiveEffects = list(filter(lambda x: (x.__class__ != effect.__class__), self.activeEffects))
@@ -339,5 +339,9 @@ class Entity(Sprite, ABC):
             else:
                 self.timeFromLastHealthChange += timeFromLastTick
 
-    def getSaveData(self) -> list:
-        return [self.rect.midbottom, self.currentHealth]
+    def getSaveData(self) -> dict:
+        return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth}
+    
+    def setSaveData(self, savefileData: dict) -> None:
+        self.rect.midbottom = savefileData['midbottom']
+        self.currHealth = savefileData['currHealth']

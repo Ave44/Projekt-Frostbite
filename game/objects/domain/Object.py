@@ -16,20 +16,20 @@ from game.items.domain.Tool import Tool
 
 
 class Object(ABC, Sprite):
-    def __init__(self, visibleGroup: CameraSpriteGroup, midBottom: Vector2,
-                 durability: int, toolType: Type,
+    def __init__(self, visibleSprites: CameraSpriteGroup, midbottom: Vector2,
+                 maxDurability: int, toolType: Type,
                  image: Surface, currentDurability: int = None):
 
-        Sprite.__init__(self, visibleGroup)
-        savefileGroup = getattr(visibleGroup.savefileGroups, type(self).__name__)
+        Sprite.__init__(self, visibleSprites)
+        savefileGroup = getattr(visibleSprites.savefileGroups, type(self).__name__)
         savefileGroup.add(self)
-        self.visibleGroup = visibleGroup
+        self.visibleSprites = visibleSprites
 
         self.image = image
-        self.rect = self.image.get_rect(midbottom=midBottom)
+        self.rect = self.image.get_rect(midbottom=midbottom)
 
-        self.maxDurability = durability
-        self.currentDurability = currentDurability if currentDurability else durability
+        self.maxDurability = maxDurability
+        self.currentDurability = currentDurability if currentDurability else maxDurability
         self.toolType = toolType
 
     @abstractmethod
@@ -59,5 +59,9 @@ class Object(ABC, Sprite):
         self.remove(*self.groups())
         self.drop()
 
-    def getSaveData(self) -> list:
-        return [self.rect.midbottom, self.currentDurability]
+    def getSaveData(self) -> dict:
+        return {'midbottom': self.rect.midbottom, 'currentDurability': self.currentDurability}
+    
+    def setSaveData(self, savefileData: dict):
+        self.rect.midbottom = savefileData['midbottom']
+        self.currentDurability = savefileData['currentDurability']

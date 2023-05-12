@@ -49,6 +49,9 @@ class Item(Sprite):
     def hide(self):
         self.remove(self.visibleSprites)
 
-    def getSaveData(self) -> list:
-        return [self.rect.center, self.id]
+    def getSaveData(self) -> dict:
+        return {'center': self.rect.center, 'id': self.id}
     
+    def setSaveData(self, savefileData: dict):
+        self.rect.center = savefileData['center']
+        self.id = savefileData['id']

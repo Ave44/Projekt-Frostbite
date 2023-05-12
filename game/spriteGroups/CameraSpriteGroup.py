@@ -1,6 +1,6 @@
 import pygame
 from pygame import Surface
-from pygame.sprite import Sprite
+from pygame.sprite import Sprite, Group
 from pygame.math import Vector2
 
 from constants import TILE_SIZE, COLLIDER_COLOR
@@ -11,7 +11,7 @@ from game.spriteGroups.SavefileGroups import SavefileGroups
 from game.weathers.WeatherController import WeatherController
 
 
-class CameraSpriteGroup(pygame.sprite.Group):
+class CameraSpriteGroup(Group):
     def __init__(self, config: Config):
         super().__init__()
         self.displaySurface = pygame.display.get_surface()

@@ -20,5 +20,10 @@ class Tool(Item):
     def reduceDurability(self):
         self.currDurability -= 1
 
-    def getSaveData(self) -> list:
-        return [self.rect.center, self.id, self.currDurability]
+    def getSaveData(self) -> dict:
+        return {'center': self.rect.center, 'id': self.id, 'currDurability': self.currDurability}
+    
+    def setSaveData(self, savefileData: dict):
+        self.rect.center = savefileData['center']
+        self.id = savefileData['id']
+        self.currDurability = savefileData['currDurability']

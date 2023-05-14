@@ -16,7 +16,7 @@ class OptionsMenu(Menu):
         if self.config.WINDOW_WIDTH == 1280:
             self.resolutionsIndex = 0
         else:
-            self.resolutionsIndex = 1
+            self.resolutionsIndex = 2
         self.resolutions = ["1280x720", "1920x1080", "Fullscreen"]
         self.volume = ["0", "1", "2", "3", "4"]
         self.fonts = ["Pixel", "Normal"]
@@ -147,13 +147,18 @@ class OptionsMenu(Menu):
             self.updateScreen()
 
     def updateScreen(self) -> None:
-        if self.resolutionsIndex == 0:
+        if self.resolutionsIndex == 2:
+            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.FULLSCREEN)
+            return
+        elif self.resolutionsIndex == 0:
             self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
             window = Window.from_display_module()
             window.position = (400, 200)
             return
         else:
-            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
+            window = Window.from_display_module()
+            window.position = (0, 0)
 
     def updateMusicVolume(self) -> None:
         self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2

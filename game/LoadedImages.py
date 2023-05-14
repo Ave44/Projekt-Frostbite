@@ -40,6 +40,7 @@ class LoadedImages:
         self.rabbitHole = load("./graphics/objects/rabbit_hole.png").convert_alpha()
 
         self.goblinHideout = load("./graphics/objects/goblin_hideout.png").convert_alpha()
+        self.goblinTorch = load("./graphics/objects/goblin_torch.png").convert_alpha()
 
     def loadItemsImages(self):
         self.undefined = load("./graphics/items/undefined.png").convert_alpha()

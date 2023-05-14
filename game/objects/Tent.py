@@ -20,6 +20,7 @@ class Tent(Object):
 
     def onLeftClickAction(self, player: Player) -> None:
         self.dayCycle.skipNight()
+        player.subtractHunger(-20)
 
     def drop(self) -> None:
         return

@@ -84,7 +84,10 @@ class DayCycle:
         self.dayCycleClock.updateBackground(dayPhases)
 
     def skipNight(self):
-        if self.dawnStart < self.currentTimeMs > self.nightStart:
+        if self.currentTimeMs > self.nightStart:
             self.currentTimeMs = self.dawnStart
             self.setDay(self.currentDay + 1)
-            self.updateDayCycle()
+        elif self.currentTimeMs < self.dawnStart:
+            self.currentTimeMs = self.dawnStart
+            self.setDay(self.currentDay + 1)
+        self.updateDayCycle()

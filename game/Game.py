@@ -16,14 +16,15 @@ from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
 from game.entities.Player import Player
 from game.entities.Rabbit import Rabbit
-from game.items.Sword import Sword
-from game.items.domain.Item import Item
-from game.objects.GoblinHideout import GoblinHideout
+from game.objects.Tent import Tent
+from game.objects.goblin.GoblinHideout import GoblinHideout
 from game.entities.GoblinChampion import GoblinChampion
 
 from game.objects.Grass import Grass
 from game.objects.RabbitHole import RabbitHole
 from game.objects.Rock import Rock
+from game.objects.goblin.GoblinTorch import GoblinTorch
+from game.objects.goblin.GoblinWarningHorn import GoblinWarningHorn
 from game.objects.trees.LargeTree import LargeTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.SmallTree import SmallTree
@@ -69,7 +70,8 @@ class Game:
                              Vector2(0, 0),
                              currHunger=100)
 
-        self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
+        self.weatherController = WeatherController(self.loadedImages, self.clock, config,
+                                                   Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
@@ -84,20 +86,39 @@ class Game:
                     continue
                 break
 
-        GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
-        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
-        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, self.player.rect.midbottom)
-        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
-        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.player.rect.midbottom, self.clock)
+        GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
+                       self.player.rect.midbottom)
+        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
+             self.player.rect.midbottom)
+        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
+               self.player.rect.midbottom)
+        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
+             self.player.rect.midbottom)
+        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
+                                     self.player.rect.midbottom, self.clock)
+        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+                                           self.loadedSounds, self.player.rect.midbottom, self.clock)
+        self.goblinTorch = GoblinTorch(self.visibleSprites, self.obstacleSprites, self.loadedImages, [
+            self.player.rect.midbottom[0] - 30, self.player.rect.midbottom[1]
+        ])
+        self.goblinHorn = GoblinWarningHorn(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
+            self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 400
+        ], self.clock)
+        self.tent = Tent(self.visibleSprites, self.obstacleSprites, self.loadedImages, [
+            self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 600
+        ], self.dayCycle)
 
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
-        self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages),
+                                      self.player.selectedItem)
+        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, (0, 0), self.loadedImages),
+                                      self.player.selectedItem)
         self.player.inventory.addItem(Item(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0, 0), self.loadedImages),
+                                      self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0, 0), self.loadedImages),
+                                      self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
@@ -171,7 +192,8 @@ class Game:
         randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
         offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
         position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
-        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, self.loadedSounds.bomb, position, self.clock)
+        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, self.loadedSounds.bomb, position,
+             self.clock)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)

@@ -4,7 +4,7 @@ import pygame.image
 from pygame import Surface, Rect, Vector2, Color, SRCALPHA
 from pygame.font import Font
 
-from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, SHADOW, BORDER_SIZE, FONT_COLOR, NORMAL_FONT, FONT_SIZE
+from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, SHADOW, BORDER_SIZE, FONT_COLOR
 
 
 class DayNightClock():

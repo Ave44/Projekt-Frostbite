@@ -17,14 +17,14 @@ class OptionsMenu(Menu):
             self.resolutionsIndex = 0
         else:
             self.resolutionsIndex = 1
-        self.resolutions = ["1280x720", "1920x1080"]
+        self.resolutions = ["1280x720", "1920x1080", "Fullscreen"]
         self.volume = ["0", "1", "2", "3", "4"]
         self.fonts = ["Pixel", "Normal"]
         self.volumeIndex = 0
         self.fontIndex = 0
 
     def incrementResolution(self) -> None:
-        if self.resolutionsIndex == 1:
+        if self.resolutionsIndex == 2:
             return
         else:
             self.resolutionsIndex += 1
@@ -132,7 +132,12 @@ class OptionsMenu(Menu):
         self.menuLoop([[menuText, menuRect], [volumeText, volumeRect], [resolutionText, resolutionRect], [fontText, fontRect]], menuButtons)
 
     def updateResolution(self) -> None:
-        if self.resolutions[self.resolutionsIndex] == "1920x1080":
+        if self.resolutionsIndex == 2:
+            infoObject = pygame.display.Info()
+            self.config.WINDOW_HEIGHT = infoObject.current_h
+            self.config.WINDOW_WIDTH = infoObject.current_w
+            self.updateScreen()
+        elif self.resolutionsIndex == 1:
             self.config.WINDOW_HEIGHT = 1080
             self.config.WINDOW_WIDTH = 1920
             self.updateScreen()
@@ -142,12 +147,13 @@ class OptionsMenu(Menu):
             self.updateScreen()
 
     def updateScreen(self) -> None:
-        if self.resolutionsIndex == 1:
-            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.FULLSCREEN)
-        else:
+        if self.resolutionsIndex == 0:
             self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
             window = Window.from_display_module()
             window.position = (400, 200)
+            return
+        else:
+            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.FULLSCREEN)
 
     def updateMusicVolume(self) -> None:
         self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2

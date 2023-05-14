@@ -89,5 +89,4 @@ class DayCycle:
             self.setDay(self.currentDay + 1)
         elif self.currentTimeMs < self.dawnStart:
             self.currentTimeMs = self.dawnStart
-            self.setDay(self.currentDay + 1)
         self.updateDayCycle()

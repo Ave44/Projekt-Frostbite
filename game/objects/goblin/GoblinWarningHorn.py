@@ -1,8 +1,11 @@
+from math import sqrt
+
 from pygame import Vector2
 from pygame.time import Clock
 
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
+from game.entities.Player import Player
 
 from game.entities.Goblin import Goblin
 from game.items.domain.Hammer import Hammer
@@ -24,11 +27,13 @@ class GoblinWarningHorn(Object):
         self.obstacleSprites = obstacleSprites
         self.clock = clock
         self.daysUntilPotentialActivation = 0
+        self.visibleSprites = visibleGroup
 
-    def spawnGoblins(self):
+    def spawnAggressiveGoblins(self, player: Player):
         pos = Vector2(self.rect.centerx, self.rect.centery)
         for i in range(0, self.numberOfGoblinsToSpawn):
-            Goblin(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+            goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+            goblin.attack(player)
         self.daysUntilPotentialActivation = 5
 
     def interact(self) -> None:
@@ -46,3 +51,19 @@ class GoblinWarningHorn(Object):
         if self.daysUntilPotentialActivation == 0:
             return True
         return False
+
+    def checkForPlayer(self) -> Player | None:
+        if self.canSpawnGoblins():
+            for entity in self.visibleSprites.entities:
+                if isinstance(entity, Player):
+                    distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
+                                    (self.rect.bottom - entity.rect.bottom) ** 2)
+                    if distance < 300:
+                        return entity
+        return None
+
+    def update(self) -> None:
+        if self.canSpawnGoblins():
+            if self.checkForPlayer():
+                player = self.checkForPlayer()
+                self.spawnAggressiveGoblins(player)

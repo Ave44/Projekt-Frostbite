@@ -83,24 +83,11 @@ class Game:
         self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
 
-        # if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
-        #     for y in range(len(self.map)):
-        #         for x in range(len(self.map)):
-        #             if self.map[y][x]['walkable']:
-        #                 self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
-        #                 self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
-        #                 self.player.colliderRect.midbottom = self.player.rect.midbottom
-        #                 break
-        #         else:
-        #             continue
-        #         break
-
-        # sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
-        # self.player.inventory.addItem(sword, self.player.selectedItem)
-        # self.player.inventory.addItem(StoneAxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
-        # self.player.inventory.addItem(StonePickaxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
-        # self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
-        # self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(Sword(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(StoneAxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
 

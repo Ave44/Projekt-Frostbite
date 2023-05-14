@@ -6,8 +6,8 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class SharpRock(Item):
-    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, id: str = None):
         name = "Sharp rock"
         img = loadedImages.sharpRock
         icon = loadedImages.sharpRock
-        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon, id)

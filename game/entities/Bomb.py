@@ -25,7 +25,7 @@ class Bomb(AggressiveMob):
             "attackCooldownMs": 0
         }
         colliderRect = Rect((0, 0), (20, 20))
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, colliderRect, entityData, clock, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.bomb, loadedSounds.bomb, colliderRect, entityData, clock, midbottom, currHealth)
 
     def attack(self, target: Entity | Object):
         AggressiveMob.attack(self, target)

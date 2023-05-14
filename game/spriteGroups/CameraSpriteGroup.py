@@ -9,6 +9,7 @@ from game.lightning.Glowing import Glowing
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
 from game.spriteGroups.SavefileGroups import SavefileGroups
 from game.weathers.WeatherController import WeatherController
+from game.items.domain.Item import Item
 
 
 class CameraSpriteGroup(Group):
@@ -22,6 +23,7 @@ class CameraSpriteGroup(Group):
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
+        self.items = Group()
         self.savefileGroups = SavefileGroups()
         self.nightMask: Surface | None = None
         self.weatherController: WeatherController | None = None
@@ -76,3 +78,8 @@ class CameraSpriteGroup(Group):
 
     def toggleShowHitboxes(self):
         self.showHitboxex = not self.showHitboxex
+
+    def getItemById(self, id) -> Item | None:
+        for item in self.items.sprites():
+            if item.id == id:
+                return item

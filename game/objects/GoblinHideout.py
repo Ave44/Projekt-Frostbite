@@ -15,24 +15,28 @@ from game.items.GoblinFang import GoblinFang
 class GoblinHideout(Object):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2,
-                 clock: Clock, daysFromGoblinsChange: int = None, currentDurability: int = None):
+                 clock: Clock, daysFromGoblinsChange: int = None, currentDurability: int = None,
+                 goblinsDataList: list[dict] = None):
         image = loadedImages.goblinHideout
         Object.__init__(self, visibleSprites, midbottom, 50, Hammer, image, currentDurability)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.goblins = []
         self.daysFromGoblinsChange = daysFromGoblinsChange if daysFromGoblinsChange else 0
-        self.numberOfGoblinsToSpawn = 2
         self.obstacleSprites = obstacleSprites
         self.clock = clock
 
-        self.spawnGoblins()
+        if goblinsDataList != None:
+            for goblinData in goblinsDataList:
+                Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, goblinData['midbottom'], goblinData['currHealth'])
+        else:
+            self.spawnGoblin()
+            self.spawnGoblin()
 
-    def spawnGoblins(self):
+    def spawnGoblin(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        for i in range(0, self.numberOfGoblinsToSpawn):
-            newGoblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
-            self.goblins.append(newGoblin)
+        newGoblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+        self.goblins.append(newGoblin)
         self.daysFromGoblinsChange = 0
 
     def interact(self) -> None:
@@ -51,12 +55,22 @@ class GoblinHideout(Object):
             self.daysFromGoblinsChange += 1
             return
 
-        self.spawnGoblins()
+        self.spawnGoblin()
+
+    def destroy(self) -> None:
+        Object.destroy()
+        for goblin in self.goblins:
+            goblin.isHomeless = True
 
     def getSaveData(self) -> dict:
-        return {'midbottom': self.rect.midbottom, 'currentDurability': self.currentDurability, 'daysFromGoblinsChange': self.daysFromGoblinsChange}
+        goblinsDataList = []
+        for goblin in self.goblins:
+            goblinsDataList.append(goblin.getSaveData(True))
+        return {'midbottom': self.rect.midbottom, 'currentDurability': self.currentDurability, 'daysFromGoblinsChange': self.daysFromGoblinsChange, 'goblinsDataList': goblinsDataList}
     
     def setSaveData(self, savefileData: dict):
         self.rect.midbottom = savefileData['midbottom']
         self.currentDurability = savefileData['currentDurability']
         self.daysFromGoblinsChange = savefileData['daysFromGoblinsChange']
+        for goblinData in savefileData['daysFromGoblinsChange']:
+            Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, goblinData['midbottom'], goblinData['currHealth'])

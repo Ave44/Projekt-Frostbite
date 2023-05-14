@@ -7,11 +7,11 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class SmallMeat(Item):
-    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, id: str = None):
         name = "Small Meat"
         img = loadedImages.smallMeat
         icon = loadedImages.smallMeat
-        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon, id)
 
     def use(self, player: Player):
         player.heal(20)

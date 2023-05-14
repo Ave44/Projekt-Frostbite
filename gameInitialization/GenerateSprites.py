@@ -36,7 +36,8 @@ class GenerateSprites:
         return biomesCoordinatesDict
 
     def createPlayer(self) -> None:
-        self.sprites['Player'] = [{'midbottom': (0, 0), 'currHealth': None}]
+        midbottom = (self.biomesCoordinatesDict['medow'][0]['x'] + 50, self.biomesCoordinatesDict['medow'][0]['y'] + 50)
+        self.sprites['Player'] = [{'midbottom': midbottom, 'currHealth': None, 'inventoryData': None}]
     
 
     def generateTrees(self) -> None:
@@ -129,7 +130,7 @@ class GenerateSprites:
         self.sprites['RabbitHole'].append(rabbitHoleData)
 
     def spawnGoblinHideout(self, position: list[int, int]) -> None:
-        goblinHideoutData = {'midbottom': position, "currentDurability": None, "daysFromGoblinsChange": None}
+        goblinHideoutData = {'midbottom': position, "currentDurability": None, "daysFromGoblinsChange": None, "goblinsDataList": None}
         self.sprites['GoblinHideout'].append(goblinHideoutData)
 
     def spawnDeer(self, position: list[int, int]) -> None:

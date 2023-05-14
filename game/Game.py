@@ -83,24 +83,24 @@ class Game:
         self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
 
-        if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
-            for y in range(len(self.map)):
-                for x in range(len(self.map)):
-                    if self.map[y][x]['walkable']:
-                        self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
-                        self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
-                        self.player.colliderRect.midbottom = self.player.rect.midbottom
-                        break
-                else:
-                    continue
-                break
+        # if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
+        #     for y in range(len(self.map)):
+        #         for x in range(len(self.map)):
+        #             if self.map[y][x]['walkable']:
+        #                 self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
+        #                 self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
+        #                 self.player.colliderRect.midbottom = self.player.rect.midbottom
+        #                 break
+        #         else:
+        #             continue
+        #         break
 
-        sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
-        self.player.inventory.addItem(sword, self.player.selectedItem)
-        self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
+        # sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
+        # self.player.inventory.addItem(sword, self.player.selectedItem)
+        # self.player.inventory.addItem(StoneAxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        # self.player.inventory.addItem(StonePickaxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        # self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        # self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
 
@@ -134,13 +134,16 @@ class Game:
         globalsData = globals()
         fixedArguments = {'visibleSprites': self.visibleSprites, 'obstacleSprites': self.obstacleSprites, 'UiSprites': self.UiSprites,
                            'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config, 'clock': self.clock}
+        playerInventoryData = None
         for className, instancesDataList in sprites.items():
+            # print(className, len(instancesDataList))
             if className == "Player":
                 self.createPlayer(instancesDataList[0])
+                playerInventoryData = instancesDataList[0]["inventoryData"]
                 continue
             classReference = globalsData[className]
             initArguments = inspect.getfullargspec(classReference.__init__).args[1:]
-            # print('{:15s} {}'.format(className, initArguments))
+            # print('{:15s} {}\t{}'.format(className, len(instancesDataList), initArguments))
             indexesOfArgumentsToReplace = []
             for argumentIndex in range(len(initArguments)):
                 if initArguments[argumentIndex] in fixedArguments:
@@ -151,9 +154,11 @@ class Game:
             for instanceData in instancesDataList:
                 instanceArguments = initArguments[:]
                 for argumentIndex in indexesOfArgumentsToReplace:
-                    # print(instanceData)
+                    # print(className, instanceArguments)
                     instanceArguments[argumentIndex] = instanceData[instanceArguments[argumentIndex]]
                 classReference(*instanceArguments)
+        if playerInventoryData:
+            self.player.populateEquipment(playerInventoryData)
 
     def createPlayer(self, playerData: dict) -> None:
         self.player = Player(self.visibleSprites, self.obstacleSprites, self.UiSprites,
@@ -191,7 +196,7 @@ class Game:
                 if sprite.colliderRect.colliderect(rect):
                     viablbePosition = False
                     break
-        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, self.loadedSounds.bomb, self.clock, position)
+        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, position)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)

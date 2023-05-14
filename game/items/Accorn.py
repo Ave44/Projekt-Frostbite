@@ -6,8 +6,8 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class Accorn(Item):
-    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, id: str = None):
         name = "Accorn"
         img = loadedImages.accorn
         icon = loadedImages.accorn
-        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon, id)

@@ -10,8 +10,8 @@ from game.LoadedImages import LoadedImages
 class Tool(Item):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages,
                  damage: int, maxDurability: int, name: str = None, image: Surface = None,
-                 icon: Surface = None, currDurability: int = None, toolPower: float = 1):
-        Item.__init__(self, visibleSprites, center, loadedImages, name, image, icon)
+                 icon: Surface = None, id: str = None, currDurability: int = None, toolPower: float = 1):
+        Item.__init__(self, visibleSprites, center, loadedImages, name, image, icon, id)
         self.toolPower = toolPower
         self.damage = damage
         self.maxDurability = maxDurability

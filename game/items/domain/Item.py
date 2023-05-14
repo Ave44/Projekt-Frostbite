@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from game.entities.Player import Player
+    from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 import shortuuid
 
 from pygame import Surface
@@ -10,17 +11,17 @@ from pygame.sprite import Sprite
 from pygame.math import Vector2
 
 from game.LoadedImages import LoadedImages
-from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class Item(Sprite):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages,
-                 name: str = None, image: Surface = None, icon: Surface = None):
+                 name: str = None, image: Surface = None, icon: Surface = None, id: str = None):
         Sprite.__init__(self, visibleSprites)
         self.visibleSprites = visibleSprites
+        self.visibleSprites.items.add(self)
         savefileGroup = getattr(visibleSprites.savefileGroups, type(self).__name__)
         savefileGroup.add(self)
-        self.id = shortuuid.uuid()
+        self.id = id if id else shortuuid.uuid()
 
         self.name = name
         if not name:

@@ -6,11 +6,11 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class StonePickaxe(Pickaxe):
-    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, currDurability: int = None):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, currDurability: int = None, id: str = None):
         name = "StonePickaxe"
         image = loadedImages.stonePickaxe
         icon = loadedImages.stonePickaxe
         damage = 5
         durability = 100
 
-        Pickaxe.__init__(self, visibleSprites, center, loadedImages, damage, durability, name, image, icon, currDurability)
+        Pickaxe.__init__(self, visibleSprites, center, loadedImages, damage, durability, name, image, icon, id, currDurability)

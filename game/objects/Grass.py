@@ -19,9 +19,16 @@ class Grass(Object, AnimatedObject):
         AnimatedObject.__init__(self, loadedImages.grass, clock, 120)
 
         self.imagePicked = loadedImages.grassPicked
-        self.picked = False
         self.regrowthTimeMs = 10000
         self.currGrowthTime = currGrowthTime if currGrowthTime else 0
+
+        if currGrowthTime:
+            self.currGrowthTime = currGrowthTime
+            self.picked = True
+            self.image = self.imagePicked
+        else:
+            self.currGrowthTime = 0
+            self.picked = False
 
     def onLeftClickAction(self, player: Player) -> None:
         if not self.picked:

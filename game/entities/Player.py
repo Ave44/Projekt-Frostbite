@@ -1,4 +1,9 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+
 from pygame import Rect
 from pygame.sprite import Group, Sprite
 from pygame.time import Clock
@@ -22,7 +27,7 @@ from game.LoadedImages import LoadedImages
 
 class Player(Entity, Glowing):
     def __init__(self,
-                 visibleSprites: Group,
+                 visibleSprites: CameraSpriteGroup,
                  obstacleSprites: Group,
                  UiSprites: UiSpriteGroup,
                  loadedImages: LoadedImages,
@@ -34,6 +39,7 @@ class Player(Entity, Glowing):
         playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20}
         self.handDamage = 3
         colliderRect = Rect((0, 0), (20, 20))
+        self.visibleSprites = visibleSprites
         Entity.__init__(self, visibleSprites, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
@@ -119,8 +125,24 @@ class Player(Entity, Glowing):
 
     # I'll need to add currentHunger after merge
     def getSaveData(self) -> dict:
-        return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth}
-    
-    def setSaveData(self, savefileData: dict):
-        self.rect.midbottom = savefileData['midbottom']
-        self.currHealth = savefileData['currHealth']
+        inventoryData = {'inventory': self.inventory.getSaveData(), 'handSlot': self.handSlot.getItemId(), 'bodySlot': self.bodySlot.getItemId()}
+        return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth, 'inventoryData': inventoryData}
+
+    def populateEquipment(self, inventoryData: dict) -> None:
+        inventorySaveData = inventoryData['inventory']['slotsItemData']
+        for itemIdIndex in range(len(inventorySaveData)):
+            itemId = inventorySaveData[itemIdIndex]
+            if itemId != None:
+                item = self.visibleSprites.getItemById(itemId)
+                item.hide()
+                self.inventory.slotList[itemIdIndex].addItem(item)
+
+        if inventoryData['handSlot'] != None:
+            item = self.visibleSprites.getItemById(inventoryData['handSlot'])
+            item.hide()
+            self.handSlot.addItem(item)
+
+        if inventoryData['bodySlot'] != None:
+            item = self.visibleSprites.getItemById(inventoryData['bodySlot'])
+            item.hide()
+            self.bodySlot.addItem(item)

@@ -26,7 +26,7 @@ class RabbitHole(Object):
         self.obstacleSprites = obstacleSprites
         self.clock = clock
 
-        if rabbitsDataList:
+        if rabbitsDataList != None:
             for rabbitData in rabbitsDataList:
                 self.spawnRabbit()
         else:

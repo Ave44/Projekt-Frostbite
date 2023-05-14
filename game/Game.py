@@ -16,6 +16,7 @@ from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
 from game.entities.Player import Player
 from game.entities.Rabbit import Rabbit
+from game.objects.Tent import Tent
 from game.objects.goblin.GoblinHideout import GoblinHideout
 from game.entities.GoblinChampion import GoblinChampion
 
@@ -103,6 +104,9 @@ class Game:
         self.goblinHorn = GoblinWarningHorn(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
             self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 400
         ], self.clock)
+        self.tent = Tent(self.visibleSprites, self.obstacleSprites, self.loadedImages, [
+            self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 600
+        ], self.dayCycle)
 
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)

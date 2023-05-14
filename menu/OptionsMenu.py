@@ -158,7 +158,14 @@ class OptionsMenu(Menu):
         else:
             self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
             window = Window.from_display_module()
-            window.position = (0, 0)
+            info = pygame.display.Info()
+            positonX = 0
+            positonY = 0
+            if info.current_w > 1920:
+                positonX = 20
+            if info.current_h > 1080:
+                positonY = 20
+            window.position = (positonX, positonY)
 
     def updateMusicVolume(self) -> None:
         self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2

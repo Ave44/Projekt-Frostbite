@@ -147,5 +147,8 @@ class Player(Entity, Glowing):
         self.move()
 
     def subtractHunger(self, value):
-        self.currentHunger -= value
+        if self.currentHunger - value > 0:
+            self.currentHunger -= value
+        else:
+            self.currentHunger = 0
         self.updateHunger()

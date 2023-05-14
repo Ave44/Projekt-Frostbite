@@ -23,15 +23,26 @@ class GoblinWarningHorn(Object):
         self.numberOfGoblinsToSpawn = 6
         self.obstacleSprites = obstacleSprites
         self.clock = clock
+        self.daysUntilPotentialActivation = 0
 
     def spawnGoblins(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
         for i in range(0, self.numberOfGoblinsToSpawn):
             Goblin(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+        self.daysUntilPotentialActivation = 5
 
     def interact(self) -> None:
         print("interacted with goblin horn")
-        self.spawnGoblins()
 
     def drop(self) -> None:
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
+
+    def onNewDay(self) -> None:
+        if self.daysUntilPotentialActivation != 0:
+            self.daysUntilPotentialActivation -= 1
+        return
+
+    def canSpawnGoblins(self):
+        if self.daysUntilPotentialActivation == 0:
+            return True
+        return False

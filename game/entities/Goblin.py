@@ -32,7 +32,7 @@ class Goblin(AggressiveMob):
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
 
-    def attack(self, target: Entity | Object):
+    def attack(self, target: Entity | Object) -> None:
         AggressiveMob.attack(self, target)
         self.playSound(self.soundAttack)
 

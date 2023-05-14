@@ -21,17 +21,17 @@ class AggressiveMob(Mob):
     def isInAttackRange(self, target: Entity | Object) -> bool:
         return self.isInRange(Vector2(target.rect.midbottom), self.actionRange)
 
-    def attack(self, target: Entity | Object):
+    def attack(self, target: Entity | Object) -> None:
         target.getDamage(self.damage)
         if target.currentHealth == 0:
             self.target = None
             self.destinationPosition = None
 
-    def moveTo(self, target: Entity | Object):
+    def moveTo(self, target: Entity | Object) -> None:
         self.destinationPosition = Vector2(target.rect.midbottom)
         self.move()
 
-    def moveToOrAttack(self, target: Entity | Object):
+    def moveToOrAttack(self, target: Entity | Object) -> None:
         if self.isInAttackRange(target):
             if self.timeFromLastAttack >= self.attackCooldownMs:
                 self.attack(target)
@@ -39,7 +39,7 @@ class AggressiveMob(Mob):
         else:
             self.moveTo(target)
 
-    def localUpdate(self):
+    def localUpdate(self) -> None:
         if not self.target:
             closestEntity = self.findClosestOtherEntity()
             if closestEntity and self.isInSightRange(closestEntity):

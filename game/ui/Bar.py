@@ -44,7 +44,6 @@ class Bar(Sprite):
 
     def drawBarSurface(self, screen: Surface, value: int, color: tuple[int, int, int]):
         length = value * self.valueRatio
-        print(length)
         surface = Surface([length, self.barHeight])
         surface.fill(color)
 
@@ -58,7 +57,6 @@ class Bar(Sprite):
         screen.blit(self.bgSurface, self.bgRect)
 
         if self.displayValue == self.currentValue:
-            # print("!!!!!!!!", self.displayValue, self.currentValue)
             self.drawBarSurface(screen, self.currentValue, self.mainColor)
         elif self.displayValue < self.currentValue:
             self.displayValue += 1

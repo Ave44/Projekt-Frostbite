@@ -71,8 +71,8 @@ class Player(Entity, Glowing):
 
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currHealth, 20, 200,
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
-        self.hungerBar = Bar(Vector2(115, 90), self.maxHunger, self.currHunger, 20, 200,
-                             HUNGERBAR_MAIN, (255,0,0),(255,0,0))#HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
+        self.hungerBar = Bar(Vector2(115, 90), self.maxHunger, ceil(self.currHunger), 20, 200,
+                             HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
 
     def moveInDirection(self):
         Entity.moveInDirection(self)
@@ -148,8 +148,7 @@ class Player(Entity, Glowing):
 
     def localUpdate(self):
         self.updateHunger()
-        # print("{:3.4f}".format(self.currHunger), ceil(self.currHunger))
-        self.hungerBar.update(100)#ceil(self.currHunger))
+        self.hungerBar.update(ceil(self.currHunger))
         self.healthBar.update(self.currHealth)
         self.move()
 

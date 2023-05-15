@@ -9,7 +9,8 @@ from game.entities.GoblinChampion import GoblinChampion
 from game.entities.Player import Player
 
 from game.entities.Goblin import Goblin
-from game.items.domain.Hammer import Hammer
+from game.entities.domain.State import State
+from game.items.domain.Axe import Axe
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
@@ -21,27 +22,52 @@ class GoblinWatchTower(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
         image = loadedImages.goblinWatchTower
-        Object.__init__(self, visibleGroup, midBottom, 50, Hammer, image)
+        Object.__init__(self, visibleGroup, midBottom, 50, Axe, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
-        self.numberOfGoblinsToSpawn = 3
+        self.numberOfGoblinsToSpawn = 4
         self.obstacleSprites = obstacleSprites
         self.clock = clock
         self.daysUntilPotentialActivation = 0
         self.visibleSprites = visibleGroup
-        self.rabbits: list[Goblin] = []
+        self.goblins: list[Goblin] = []
 
-    def spawnAggressiveGoblins(self, player: Player):
+    def spawnAggressiveGoblins(self, player: Player) -> None:
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        for i in range(0, self.numberOfGoblinsToSpawn):
-            goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
-            goblin.attack(player)
-        goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
-        goblinChampion.attack(player)
-        self.daysUntilPotentialActivation = 5
+        if len(self.goblins) != 0:
+            self.revealAggressiveGoblins(player, pos)
+            return
+        if self.daysUntilPotentialActivation == 0:
+            for i in range(0, self.numberOfGoblinsToSpawn):
+                goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
+                                self.clock, pos)
+                goblin.attack(player)
+                self.goblins.append(goblin)
+            goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+                                            self.loadedSounds, self.clock, pos)
+            goblinChampion.attack(player)
+            self.goblins.append(goblinChampion)
+            self.daysUntilPotentialActivation = 1
+        return
+
+    def revealAggressiveGoblins(self, player: Player, pos: Vector2) -> None:
+        for goblin in self.goblins:
+            if goblin.state == State.DEAD:
+                indexToRemove = self.goblins.index(goblin)
+                self.goblins.pop(indexToRemove)
+            else:
+                goblin.add(goblin.visibleSprites)
+        if len(self.goblins) != 4 and self.daysUntilPotentialActivation:
+            for i in range(0, 4 - len(self.goblins)):
+                goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
+                                self.clock, pos)
+                goblin.attack(player)
+                self.goblins.append(goblin)
+                self.daysUntilPotentialActivation = 1
+        return
 
     def interact(self) -> None:
-        print("interacted with goblin horn")
+        print("interacted with goblin watch tower")
 
     def drop(self) -> None:
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
@@ -51,23 +77,19 @@ class GoblinWatchTower(Object):
             self.daysUntilPotentialActivation -= 1
         return
 
-    def canSpawnGoblins(self):
-        if self.daysUntilPotentialActivation == 0:
-            return True
-        return False
-
     def checkForPlayer(self) -> Player | None:
-        if self.canSpawnGoblins():
-            for entity in self.visibleSprites.entities:
-                if isinstance(entity, Player):
-                    distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
-                                    (self.rect.bottom - entity.rect.bottom) ** 2)
-                    if distance < 300:
-                        return entity
+        for entity in self.visibleSprites.entities:
+            if isinstance(entity, Player):
+                distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
+                                (self.rect.bottom - entity.rect.bottom) ** 2)
+                if distance < 500:
+                    return entity
         return None
 
     def update(self) -> None:
-        if self.canSpawnGoblins():
-            if self.checkForPlayer():
-                player = self.checkForPlayer()
-                self.spawnAggressiveGoblins(player)
+        if self.checkForPlayer():
+            player = self.checkForPlayer()
+            self.spawnAggressiveGoblins(player)
+        if not self.checkForPlayer():
+            for goblin in self.goblins:
+                goblin.remove(*goblin.groups())

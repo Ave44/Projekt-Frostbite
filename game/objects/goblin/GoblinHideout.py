@@ -30,7 +30,8 @@ class GoblinHideout(Object):
     def spawnGoblins(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
         for i in range(0, self.numberOfGoblinsToSpawn):
-            newGoblin = Goblin(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+            newGoblin = Goblin(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds,
+                               self.clock, pos)
             self.goblins.append(newGoblin)
         self.daysFromGoblinsChange = 0
 

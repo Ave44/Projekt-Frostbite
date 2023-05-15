@@ -73,6 +73,7 @@ class Game:
         self.weatherController = WeatherController(self.loadedImages, self.clock, config,
                                                    Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
+        self.towersAmount = 4
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):

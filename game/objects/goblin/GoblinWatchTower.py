@@ -82,7 +82,7 @@ class GoblinWatchTower(Object):
             if isinstance(entity, Player):
                 distance = sqrt((self.rect.centerx - entity.rect.centerx) ** 2 +
                                 (self.rect.bottom - entity.rect.bottom) ** 2)
-                if distance < 500:
+                if distance < 300:
                     return entity
         return None
 
@@ -93,3 +93,8 @@ class GoblinWatchTower(Object):
         if not self.checkForPlayer():
             for goblin in self.goblins:
                 goblin.remove(*goblin.groups())
+
+    def destroy(self) -> None:
+        self.remove(*self.groups())
+        self.kill()
+        self.drop()

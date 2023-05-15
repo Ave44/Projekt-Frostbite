@@ -74,6 +74,7 @@ class Game:
                                                    Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
         self.towersAmount = 4
+        self.towers: list[GoblinWatchTower] = []
 
         if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
             for y in range(len(self.map)):
@@ -105,9 +106,10 @@ class Game:
         self.goblinWatchTower = GoblinWatchTower(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
             self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 400
         ], self.clock)
-        self.tent = Tent(self.visibleSprites, self.obstacleSprites, self.loadedImages, [
-            self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 600
-        ], self.dayCycle)
+        for tower in range(0, self.towersAmount):
+            self.goblinWatchTower = GoblinWatchTower(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
+                self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 400 * (tower + 1)
+            ], self.clock)
 
         sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
         self.player.inventory.addItem(sword, self.player.selectedItem)
@@ -220,3 +222,9 @@ class Game:
 
             pygame.display.update()
             self.clock.tick()
+            towersDestroyed = 0
+            for tower in self.towers:
+                if not tower.alive():
+                    towersDestroyed += 1
+            if towersDestroyed == 4:
+                print("YOU WIN!")

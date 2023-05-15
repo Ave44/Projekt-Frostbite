@@ -23,9 +23,12 @@ from game.entities.Bomb import Bomb
 from game.entities.Deer import Deer
 from game.entities.Rabbit import Rabbit
 from game.entities.Goblin import Goblin
+from game.entities.GoblinChampion import GoblinChampion
 
 from game.objects.Grass import Grass
 from game.objects.Rock import Rock
+from game.objects.GoblinTorch import GoblinTorch
+from game.objects.GoblinWarningHorn import GoblinWarningHorn
 from game.objects.trees.LargeTree import LargeTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.SmallTree import SmallTree
@@ -34,6 +37,7 @@ from game.objects.trees.Snag import Snag
 from game.objects.trees.TreeSapling import TreeSapling
 from game.objects.RabbitHole import RabbitHole
 from game.objects.GoblinHideout import GoblinHideout
+from game.objects.Tent import Tent
 
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
@@ -80,7 +84,8 @@ class Game:
         self.createSprites(saveData['sprites'])
         self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], 2 * 64 * 1000, self.clock, config, self.UiSprites, self.visibleSprites)
 
-        self.weatherController = WeatherController(self.loadedImages, self.clock, config, Vector2(self.player.rect.center))
+        self.weatherController = WeatherController(self.loadedImages, self.clock, config,
+                                                   Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
 
         self.player.inventory.addItem(Sword(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
@@ -150,7 +155,7 @@ class Game:
     def createPlayer(self, playerData: dict) -> None:
         self.player = Player(self.visibleSprites, self.obstacleSprites, self.UiSprites,
                         self.loadedImages, self.loadedSounds, self.config, self.clock,
-                        playerData["midbottom"], playerData["currHealth"])
+                        playerData["midbottom"], playerData["currHealth"], playerData['currHunger'])
 
     def saveGame(self):
         savefileData = {'savefileName': self.config.savefileName,'currentDay': self.dayCycle.currentDay, 'currentTimeMs': self.dayCycle.currentTimeMs, "map": self.mapData}

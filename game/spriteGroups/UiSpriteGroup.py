@@ -67,6 +67,7 @@ class UiSpriteGroup(pygame.sprite.Group):
             self.displaySurface.blit(self.selectedItem.item.icon, displayPos)
 
         self.player.healthBar.draw(self.displaySurface)
+        self.player.hungerBar.draw(self.displaySurface)
 
         self.clock.draw(self.displaySurface, self.clockRect)
 

@@ -9,12 +9,16 @@ ICON = load(f"{ROOT_PATH}/graphics/icon.png")
 BIOMES_ID = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
 # UI
-BG_COLOR = (50, 50, 50)
-BORDER_COLOR = (255, 255, 255)
+BG_COLOR = Color(50, 50, 50)
+BORDER_COLOR = Color(255, 255, 255)
 BORDER_SIZE = 3
-HEALTHBAR_MAIN = (214, 30, 17)
-HEALTHBAR_INCREASE = (82, 255, 20)
-HEALTHBAR_DECREASE = (240, 212, 29)
+HEALTHBAR_MAIN = Color(214, 30, 17)
+HEALTHBAR_INCREASE = Color(82, 255, 20)
+HEALTHBAR_DECREASE = Color(240, 212, 29)
+
+HUNGERBAR_MAIN = Color(224, 150, 20)
+HUNGERBAR_INCREASE = Color(170, 230, 60)
+HUNGERBAR_DECREASE = Color(179, 78, 32)
 
 # SLOTS
 SLOT_SIZE = load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]

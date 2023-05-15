@@ -77,5 +77,10 @@ class Slot(Sprite):
 
     def reduceItemDurability(self):
         self.item.reduceDurability()
-        if self.item.durability <= 0:
+        if self.item.currDurability <= 0:
             self.removeItem()
+
+    def getItemId(self):
+        if not self.isEmpty():
+            return self.item.id
+        return None

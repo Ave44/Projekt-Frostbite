@@ -13,24 +13,32 @@ from game.LoadedImages import LoadedImages
 
 
 class RabbitHole(Object):
-    def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
+    def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2,
+                 clock: Clock, daysFromRabbitsChange: int = None, currentDurability: int = None,
+                 rabbitsDataList: list = None):
         image = loadedImages.rabbitHole
-        Object.__init__(self, visibleGroup, midBottom, 50, Shovel, image)
+        Object.__init__(self, visibleSprites, midbottom, 2, Shovel, image, currentDurability)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.rabbits: list[Rabbit] = []
-        self.daysFromRabbitsChange = 0
+        self.daysFromRabbitsChange = daysFromRabbitsChange if daysFromRabbitsChange else 0
         self.obstacleSprites = obstacleSprites
         self.clock = clock
 
-        self.spawnRabbit()
-        self.spawnRabbit()
-        self.spawnRabbit()
+        if rabbitsDataList != None:
+            for rabbitData in rabbitsDataList:
+                self.spawnRabbit()
+        else:
+            for i in range(3):
+                self.spawnRabbit()
 
-    def spawnRabbit(self):
+    def spawnRabbit(self, rabbitData: dict = None):
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        newRabbit = Rabbit(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos, self)
+        if rabbitData:
+            newRabbit = Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, rabbitData['midbottom'], self, rabbitData['currHealth'])
+        else:
+            newRabbit = Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos, self)
         self.rabbits.append(newRabbit)
         self.daysFromRabbitsChange = 0
 
@@ -66,3 +74,16 @@ class RabbitHole(Object):
 
     def onEvening(self):
         self.hideRabbits()
+
+    def getSaveData(self) -> dict:
+        rabbitsDataList = []
+        for rabbit in self.rabbits:
+            rabbitsDataList.append(rabbit.getSaveData(True))
+        return {'midbottom': self.rect.midbottom, 'currentDurability': self.currentDurability, 'daysFromRabbitsChange': self.daysFromRabbitsChange, 'rabbitsDataList': rabbitsDataList}
+    
+    def setSaveData(self, savefileData: dict):
+        self.rect.midbottom = savefileData['midbottom']
+        self.currentDurability = savefileData['currentDurability']
+        self.daysFromRabbitsChange = savefileData['daysFromRabbitsChange']
+        for rabbitData in savefileData['rabbitsDataList']:
+                self.spawnRabbit()

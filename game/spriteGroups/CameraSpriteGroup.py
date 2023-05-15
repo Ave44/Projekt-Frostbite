@@ -1,16 +1,18 @@
 import pygame
 from pygame import Surface
-from pygame.sprite import Sprite
+from pygame.sprite import Sprite, Group
 from pygame.math import Vector2
 
-from game.lightning.Glowing import Glowing
 from constants import TILE_SIZE, COLLIDER_COLOR
 from Config import Config
+from game.lightning.Glowing import Glowing
 from game.spriteGroups.EntitiesGroup import EntitiesGroup
+from game.spriteGroups.SavefileGroups import SavefileGroups
 from game.weathers.WeatherController import WeatherController
+from game.items.domain.Item import Item
 
 
-class CameraSpriteGroup(pygame.sprite.Group):
+class CameraSpriteGroup(Group):
     def __init__(self, config: Config):
         super().__init__()
         self.displaySurface = pygame.display.get_surface()
@@ -21,6 +23,8 @@ class CameraSpriteGroup(pygame.sprite.Group):
         self.offset = Vector2()
         self.map = []
         self.entities = EntitiesGroup()
+        self.items = Group()
+        self.savefileGroups = SavefileGroups()
         self.nightMask: Surface | None = None
         self.weatherController: WeatherController | None = None
         self.showHitboxex = False
@@ -74,3 +78,8 @@ class CameraSpriteGroup(pygame.sprite.Group):
 
     def toggleShowHitboxes(self):
         self.showHitboxex = not self.showHitboxex
+
+    def getItemById(self, id) -> Item | None:
+        for item in self.items.sprites():
+            if item.id == id:
+                return item

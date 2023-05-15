@@ -72,3 +72,7 @@ class Rabbit(PassiveMob):
             self.move()
         else:
             super().localUpdate()
+
+    def getSaveData(self, homeRequest: bool = False) -> dict:
+        if self.isHomeless or homeRequest:
+            return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth, 'home': None}

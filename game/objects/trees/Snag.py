@@ -12,18 +12,18 @@ from game.objects.trees.BurntTree import BurntTree
 
 class Snag(CollisionObject, Flammable):
 
-    def __init__(self, visibleGroup: Group, obstaclesGroup: Group, midBottom: Vector2,
-                 loadedImages: LoadedImages, clock: Clock, age: int = 0):
+    def __init__(self, visibleSprites: Group, obstacleSprites: Group, midbottom: Vector2,
+                 loadedImages: LoadedImages, clock: Clock, ageMs: int = 0, currentDurability: int = None):
         self.loadedImages = loadedImages
         image = loadedImages.snag[0]
         colliderRect = Rect((0, 0), (20, 20))
-        colliderRect.midbottom = midBottom
+        colliderRect.midbottom = midbottom
 
-        CollisionObject.__init__(self, visibleGroup, obstaclesGroup,
-                                 midBottom, 1, Axe, image, colliderRect)
+        CollisionObject.__init__(self, visibleSprites, obstacleSprites,
+                                 midbottom, 1, Axe, image, colliderRect, currentDurability)
         Flammable.__init__(self, clock)
 
-        self.age = age
+        self.ageMs = ageMs
         self.growthStage = 4
         self.LIFESPAN = 10000
 
@@ -31,12 +31,12 @@ class Snag(CollisionObject, Flammable):
         print("interacted with snag")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        Wood(self.visibleGroup, self.rect.center, self.loadedImages)
-        Wood(self.visibleGroup, self.rect.center, self.loadedImages)
+        Wood(self.visibleSprites, self.rect.center, self.loadedImages)
+        Wood(self.visibleSprites, self.rect.center, self.loadedImages)
 
     def burn(self):
         self.remove(*self.groups())
-        BurntTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages)
+        BurntTree(self.visibleSprites, self.obstacleSprites, self.rect.midbottom, self.loadedImages)
 
     def update(self):
         from game.objects.trees.SmallTree import SmallTree
@@ -44,7 +44,15 @@ class Snag(CollisionObject, Flammable):
         if self.isOnFire and self.timeToBurn:
             self.flameUpdate()
             return
-        self.age += self.clock.get_time()
-        if self.age >= self.LIFESPAN:
+        self.ageMs += self.clock.get_time()
+        if self.ageMs >= self.LIFESPAN:
             self.remove(*self.groups())
-            SmallTree(self.visibleGroup, self.obstaclesGroup, self.rect.midbottom, self.loadedImages, self.clock)
+            SmallTree(self.visibleSprites, self.obstacleSprites, self.rect.midbottom, self.loadedImages, self.clock)
+
+    def getSaveData(self) -> dict:
+        return {'midbottom': self.rect.midbottom, 'currentDurability': self.currentDurability, 'ageMs': self.ageMs}
+    
+    def setSaveData(self, savefileData: dict):
+        self.rect.midbottom = savefileData['midbottom']
+        self.currentDurability = savefileData['currentDurability']
+        self.ageMs = savefileData['ageMs']

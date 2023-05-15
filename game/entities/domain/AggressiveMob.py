@@ -17,13 +17,15 @@ class AggressiveMob(Mob):
         self.target = None
         self.attackCooldownMs = enemyData["attackCooldownMs"]
         self.timeFromLastAttack = 0
+        self.lookForTargetOncePerFrames = 10
+        self.framesUntilLookingForTarget = 0
 
     def isInAttackRange(self, target: Entity | Object) -> bool:
         return self.isInRange(Vector2(target.rect.midbottom), self.actionRange)
 
     def attack(self, target: Entity | Object):
         target.getDamage(self.damage)
-        if target.currentHealth == 0:
+        if target.currHealth == 0:
             self.target = None
             self.destinationPosition = None
 
@@ -40,21 +42,23 @@ class AggressiveMob(Mob):
             self.moveTo(target)
 
     def localUpdate(self):
-        if not self.target:
+        if self.target:
+            if self.isInSightRange(self.target):
+                self.moveToOrAttack(self.target)
+                self.timeFromLastAttack += self.clock.get_time()
+            else:
+                self.target = None
+                self.destinationPosition = None
+                self.timeFromLastAttack += self.clock.get_time()    
+
+        elif self.framesUntilLookingForTarget == 0:
+            self.framesUntilLookingForTarget = self.lookForTargetOncePerFrames
+        
             closestEntity = self.findClosestOtherEntity()
             if closestEntity and self.isInSightRange(closestEntity):
                 self.target = closestEntity
                 self.moveToOrAttack(self.target)
-            else:
-                self.moveRandomly()
-                self.timeFromLastAttack += self.clock.get_time()
-            return
-
-        if not self.isInSightRange(self.target):
-            self.target = None
-            self.destinationPosition = None
+        else:
+            self.moveRandomly()
             self.timeFromLastAttack += self.clock.get_time()
-            return
-
-        self.moveToOrAttack(self.target)
-        self.timeFromLastAttack += self.clock.get_time()
+            self.framesUntilLookingForTarget -= 1

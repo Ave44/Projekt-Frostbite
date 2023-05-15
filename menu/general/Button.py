@@ -1,7 +1,7 @@
 from constants import BASE_BUTTON_COLOR, WHITE
 
 class Button:
-    def __init__(self, pos, textInput, font, action, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, image=None):
+    def __init__(self, pos, textInput, font, action, baseColor=BASE_BUTTON_COLOR, hoveringColor=WHITE, image=None, actionArgument=None):
         self.image = image
         self.x_pos = pos[0]
         self.y_pos = pos[1]
@@ -14,6 +14,7 @@ class Button:
         self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
         self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
         self.action = action
+        self.actionArgument = actionArgument
 
     def update(self, screen, mousePos) -> None:
         self.setTextColor(mousePos)
@@ -26,7 +27,10 @@ class Button:
         return False
 
     def executeAction(self):
-        self.action()
+        if self.actionArgument:
+            self.action(self.actionArgument)
+        else:
+            self.action()
 
     def setTextColor(self, mousePos) -> None:
         if self.rect.collidepoint(mousePos):

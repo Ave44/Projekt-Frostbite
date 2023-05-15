@@ -24,7 +24,7 @@ from game.objects.Grass import Grass
 from game.objects.RabbitHole import RabbitHole
 from game.objects.Rock import Rock
 from game.objects.goblin.GoblinTorch import GoblinTorch
-from game.objects.goblin.GoblinWarningHorn import GoblinWarningHorn
+from game.objects.goblin.GoblinWatchTower import GoblinWatchTower
 from game.objects.trees.LargeTree import LargeTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.SmallTree import SmallTree
@@ -101,7 +101,7 @@ class Game:
         self.goblinTorch = GoblinTorch(self.visibleSprites, self.obstacleSprites, self.loadedImages, [
             self.player.rect.midbottom[0] - 30, self.player.rect.midbottom[1]
         ])
-        self.goblinHorn = GoblinWarningHorn(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
+        self.goblinWatchTower = GoblinWatchTower(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
             self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 400
         ], self.clock)
         self.tent = Tent(self.visibleSprites, self.obstacleSprites, self.loadedImages, [

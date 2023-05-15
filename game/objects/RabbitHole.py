@@ -1,7 +1,5 @@
 from pygame import Vector2
 from pygame.time import Clock
-from game.LoadedImages import LoadedImages
-from game.LoadedSounds import LoadedSounds
 
 from game.entities.Rabbit import Rabbit
 from game.items.domain.Shovel import Shovel

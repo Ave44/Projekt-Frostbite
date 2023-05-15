@@ -5,6 +5,7 @@ from pygame.time import Clock
 
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
+from game.entities.GoblinChampion import GoblinChampion
 from game.entities.Player import Player
 
 from game.entities.Goblin import Goblin
@@ -16,24 +17,27 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.items.GoblinFang import GoblinFang
 
 
-class GoblinWarningHorn(Object):
+class GoblinWatchTower(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
-        image = loadedImages.goblinHorn
+        image = loadedImages.goblinWatchTower
         Object.__init__(self, visibleGroup, midBottom, 50, Hammer, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
-        self.numberOfGoblinsToSpawn = 6
+        self.numberOfGoblinsToSpawn = 3
         self.obstacleSprites = obstacleSprites
         self.clock = clock
         self.daysUntilPotentialActivation = 0
         self.visibleSprites = visibleGroup
+        self.rabbits: list[Goblin] = []
 
     def spawnAggressiveGoblins(self, player: Player):
         pos = Vector2(self.rect.centerx, self.rect.centery)
         for i in range(0, self.numberOfGoblinsToSpawn):
             goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
             goblin.attack(player)
+        goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+        goblinChampion.attack(player)
         self.daysUntilPotentialActivation = 5
 
     def interact(self) -> None:

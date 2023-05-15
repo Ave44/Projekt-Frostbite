@@ -15,3 +15,4 @@ class SmallMeat(Item):
 
     def use(self, player: Player):
         player.heal(20)
+        player.satiate(20)

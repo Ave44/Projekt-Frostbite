@@ -54,7 +54,7 @@ class Grass(Object, AnimatedObject):
 
     def getSaveData(self) -> dict:
         return {'midbottom': self.rect.midbottom, 'currentDurability': self.currentDurability, 'currGrowthTime': self.currGrowthTime}
-    
+
     def setSaveData(self, savefileData: dict):
         self.rect.midbottom = savefileData['midbottom']
         self.currentDurability = savefileData['currentDurability']

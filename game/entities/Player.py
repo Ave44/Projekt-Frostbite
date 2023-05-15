@@ -9,6 +9,7 @@ from pygame.sprite import Group, Sprite
 from pygame.time import Clock
 from pygame.math import Vector2
 
+from math import ceil
 from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE, SLOT_GAP
 from Config import Config
 from game.LoadedImages import LoadedImages
@@ -37,11 +38,10 @@ class Player(Entity, Glowing):
                  midbottom: Vector2,
                  currHealth: int = None,
                  currHunger: float = None):
-        playerData = {"speed": 6, "maxHealth": 100, "maxHunger": 100, "actionRange": 20, "hungerDecreasePerSecond": 0.1}
+        playerData = {"speed": 6, "maxHealth": 100, "maxHunger": 100, "actionRange": 20, "hungerDecreasePerMS": 0.0001}
         self.maxHunger = playerData["maxHunger"]
-        self.hungerDecreaseSpeedPerSecond = playerData["hungerDecreasePerSecond"]
+        self.hungerDecreasePerMS = playerData["hungerDecreasePerMS"]
         self.currHunger = currHunger if currHunger else self.maxHunger
-        self.isStarving = False if self.currHunger > 0 else True
         self.handDamage = 3
 
         colliderRect = Rect((0, 0), (20, 20))
@@ -71,8 +71,8 @@ class Player(Entity, Glowing):
 
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currHealth, 20, 200,
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
-        self.hungerBar = Bar(Vector2(115, 90), self.maxHealth, self.currHealth, 20, 200,
-                             HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
+        self.hungerBar = Bar(Vector2(115, 90), self.maxHunger, self.currHunger, 20, 200,
+                             HUNGERBAR_MAIN, (255,0,0),(255,0,0))#HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
 
     def moveInDirection(self):
         Entity.moveInDirection(self)
@@ -128,34 +128,28 @@ class Player(Entity, Glowing):
         print(deathMessage)
 
     def updateHunger(self):
-        timeInSeconds = self.clock.get_time() / 1000
-        if self.currHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds > 0:
-            self.currHunger = self.currHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds
-        else:
+        deltaTime = self.clock.get_time()
+        self.currHunger -= self.hungerDecreasePerMS * deltaTime
+        if self.currHunger <= 0:
             self.currHunger = 0
-            self.isStarving = True
-        if self.isStarving:
-            if self.currHealth - self.hungerDecreaseSpeedPerSecond * timeInSeconds > 0:
-                self.currHealth = self.currHealth - self.hungerDecreaseSpeedPerSecond * timeInSeconds
-            else:
-                self.die("Game Over: You Died Of Hunger")
+            self.getDamage(1, 'hunger')
 
-    def satiate(self, numberOfHungerToSatiate):
+    def satiate(self, numberOfHungerToSatiate: int):
         if self.currHunger + numberOfHungerToSatiate < self.maxHunger:
             self.currHunger = self.currHunger + numberOfHungerToSatiate
         else:
             self.currHunger = self.maxHunger
 
-    def subtractHunger(self, value):
+    def subtractHunger(self, value: int):
         if self.currHunger - value > 0:
             self.currHunger -= value
         else:
             self.currHunger = 0
-        self.updateHunger()
 
     def localUpdate(self):
         self.updateHunger()
-        self.hungerBar.update(int(self.currHunger))
+        # print("{:3.4f}".format(self.currHunger), ceil(self.currHunger))
+        self.hungerBar.update(100)#ceil(self.currHunger))
         self.healthBar.update(self.currHealth)
         self.move()
 

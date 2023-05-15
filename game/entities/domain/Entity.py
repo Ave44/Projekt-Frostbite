@@ -292,10 +292,13 @@ class Entity(Sprite, ABC):
     def adjustRect(self):
         self.rect.midbottom = self.colliderRect.midbottom
 
-    def getDamage(self, amount: int) -> None:
+    def getDamage(self, amount: int, damageCause: str = None) -> None:
         if self.state != State.DEAD:
             if self.currHealth <= amount:
-                self.die()
+                if damageCause:
+                    self.die(damageCause)
+                else:
+                    self.die()
             else:
                 self.timeFromLastHealthChange = 0
                 self.state = State.DAMAGED

@@ -1,6 +1,10 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from pygame.mixer import  Sound
+
+from game.SoundPlayer import SoundPlayer
+
 if TYPE_CHECKING:
     from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
     from game.spriteGroups.ObstacleSprites import ObstacleSprites
@@ -20,7 +24,7 @@ from game.objects.domain.CollisionObject import CollisionObject
 class Entity(Sprite, ABC):
     def __init__(self, spriteGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  entityData: dict, entityImages: dict[Surface], entitySounds: dict,
-                 colliderRect: Rect, clock: Clock, midbottom: Vector2, currHealth: int = None):
+                 colliderRect: Rect, clock: Clock, midbottom: Vector2, currHealth: int = None, soundPlayer: SoundPlayer = None):
 
         Sprite.__init__(self, spriteGroup)
         spriteGroup.entities.add(self)
@@ -76,6 +80,8 @@ class Entity(Sprite, ABC):
 
         self.activeEffects: list[Effect] = []
         self.clock = clock
+        self.soundPlayer = soundPlayer
+
 
     @property
     def state(self) -> State:
@@ -327,8 +333,11 @@ class Entity(Sprite, ABC):
         filteredActiveEffects.append(effect)
         self.activeEffects = filteredActiveEffects
 
-    def playSound(self, sound):
-        sound.play()
+    def playSound(self, sound: Sound):
+        if self.soundPlayer:
+            self.soundPlayer.playSoundWithDistanceEffect(sound, Vector2(self.rect.center))
+        else:
+            sound.play()
 
     def update(self) -> None:
         self.localUpdate()
@@ -345,7 +354,7 @@ class Entity(Sprite, ABC):
 
     def getSaveData(self) -> dict:
         return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth}
-    
+
     def setSaveData(self, savefileData: dict) -> None:
         self.rect.midbottom = savefileData['midbottom']
         self.currHealth = savefileData['currHealth']

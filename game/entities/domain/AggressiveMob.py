@@ -1,6 +1,9 @@
+from abc import ABC
+
 from pygame import Vector2, Rect
 from pygame.time import Clock
 
+from game.SoundPlayer import SoundPlayer
 from game.entities.domain.Entity import Entity
 from game.entities.domain.Mob import Mob
 from game.objects.domain.Object import Object
@@ -8,11 +11,11 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 
-class AggressiveMob(Mob):
+class AggressiveMob(Mob, ABC):
     def __init__(self,
                  visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites, loadedImages: dict, loadedSounds: dict,
-                 colliderRect: Rect, enemyData: dict, clock: Clock, midbottom: Vector2, currHealth: int = None):
-        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, colliderRect, clock, enemyData, midbottom, currHealth)
+                 colliderRect: Rect, enemyData: dict, clock: Clock, midbottom: Vector2, currHealth: int = None, soundPlayer: SoundPlayer = None):
+        Mob.__init__(self, visibleSprites, obstacleSprites, loadedImages, loadedSounds, colliderRect, clock, enemyData, midbottom, currHealth, soundPlayer)
         self.damage = enemyData["damage"]
         self.target = None
         self.attackCooldownMs = enemyData["attackCooldownMs"]

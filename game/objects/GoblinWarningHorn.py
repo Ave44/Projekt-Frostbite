@@ -3,6 +3,7 @@ from pygame.time import Clock
 
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
+from game.SoundPlayer import SoundPlayer
 
 from game.entities.Goblin import Goblin
 from game.items.domain.Hammer import Hammer
@@ -15,7 +16,8 @@ from game.items.GoblinFang import GoblinFang
 
 class GoblinWarningHorn(Object):
     def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2,
+                 clock: Clock, soundPlayer: SoundPlayer):
         image = loadedImages.goblinHorn
         Object.__init__(self, visibleGroup, midBottom, 50, Hammer, image)
         self.loadedImages = loadedImages
@@ -23,11 +25,12 @@ class GoblinWarningHorn(Object):
         self.numberOfGoblinsToSpawn = 6
         self.obstacleSprites = obstacleSprites
         self.clock = clock
+        self.soundPlayer = soundPlayer
 
     def spawnGoblins(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
         for i in range(0, self.numberOfGoblinsToSpawn):
-            Goblin(self.visibleGroup, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+            Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos, self.soundPlayer)
 
     def interact(self) -> None:
         print("interacted with goblin horn")

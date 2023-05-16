@@ -19,3 +19,4 @@ class SoundPlayer:
         volume = 100 - distance/(self.maxSoundRange / 100)
         sound.set_volume(volume / 100)
         sound.play()
+        

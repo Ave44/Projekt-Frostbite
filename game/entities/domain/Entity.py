@@ -191,7 +191,7 @@ class Entity(Sprite, ABC):
                         (self.colliderRect.bottom - target.y) ** 2)
         return distance <= rangeDistance
 
-    def checkIfRachedDestination(self) -> bool:
+    def checkIfReachedDestination(self) -> bool:
         if self.destinationTarget:
             if isinstance(self.destinationTarget, CollisionObject):
                 return self.checkIfReachedCollisionObject(self.destinationTarget)
@@ -258,7 +258,7 @@ class Entity(Sprite, ABC):
                 self.moveToPosition(self.midDestinationPosition)
                 if self.colliderRect.midbottom == self.midDestinationPosition:
                     self.midDestinationPosition = None
-            elif not self.checkIfRachedDestination():
+            elif not self.checkIfReachedDestination():
                 self.moveToPosition(self.destinationPosition)
             self.adjustRect()
 

@@ -1,5 +1,5 @@
-import inspect
 import random
+import inspect
 from json import dump
 
 import pygame
@@ -9,24 +9,58 @@ from pygame.time import Clock
 
 from Config import Config
 from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR
+from game.SoundPlayer import SoundPlayer
+from gameInitialization.GenerateMap import populateMapWithData
 from game.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
-from game.SoundPlayer import SoundPlayer
-from game.entities.Bomb import Bomb
+from game.tiles.Tile import Tile
+from game.weathers.WeatherController import WeatherController
+
 from game.entities.Player import Player
-from game.items.LeatherArmor import LeatherArmor
-from game.items.StoneAxe import StoneAxe
-from game.items.StonePickaxe import StonePickaxe
-from game.items.Sword import Sword
-from game.items.WoodenArmor import WoodenArmor
+from game.entities.Boar import Boar
+from game.entities.Bomb import Bomb
+from game.entities.Deer import Deer
+from game.entities.Rabbit import Rabbit
+from game.entities.Goblin import Goblin
+from game.entities.GoblinChampion import GoblinChampion
+
+from game.objects.Grass import Grass
+from game.objects.Rock import Rock
+from game.objects.GoblinTorch import GoblinTorch
+from game.objects.GoblinWarningHorn import GoblinWarningHorn
+from game.objects.trees.LargeTree import LargeTree
+from game.objects.trees.MediumTree import MediumTree
+from game.objects.trees.SmallTree import SmallTree
+from game.objects.trees.BurntTree import BurntTree
+from game.objects.trees.Snag import Snag
+from game.objects.trees.TreeSapling import TreeSapling
+from game.objects.RabbitHole import RabbitHole
+from game.objects.GoblinHideout import GoblinHideout
+from game.objects.Tent import Tent
+
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-from game.tiles.Tile import Tile
-from game.weathers.WeatherController import WeatherController
-from gameInitialization.GenerateMap import populateMapWithData
+
+from game.items.Sword import Sword
+from game.items.StoneAxe import StoneAxe
+from game.items.StonePickaxe import StonePickaxe
+from game.items.WoodenArmor import WoodenArmor
+from game.items.LeatherArmor import LeatherArmor
+from game.items.Accorn import Accorn
+from game.items.Wood import Wood
+from game.items.Pebble import Pebble
+from game.items.SharpRock import SharpRock
+from game.items.Leather import Leather
+from game.items.DeerAntlers import DeerAntlers
+from game.items.BoarFang import BoarFang
+from game.items.GoblinFang import GoblinFang
+from game.items.GrassFibers import GrassFibers
+from game.items.SmallMeat import SmallMeat
+from game.items.BigMeat import BigMeat
+from game.items.LeatherArmor import LeatherArmor
 
 
 class Game:

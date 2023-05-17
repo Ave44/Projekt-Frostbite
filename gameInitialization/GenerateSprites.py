@@ -15,6 +15,7 @@ class GenerateSprites:
         self.generateGrasses()
         self.generateRabbitHoles()
         self.generateGoblinHideouts()
+        self.spawnWatchTowers()
         self.generateDeers()
         self.generateBoars()
 
@@ -103,13 +104,17 @@ class GenerateSprites:
     def spawnWatchTowers(self):
         towersToSpawn = 4
         currentlySpawned = 0
+        self.sprites['GoblinWatchTower'] = []
         self.progresNotiftFunc("Generating goblin watch towers")
         tiles = self.biomesCoordinatesDict['medow']
-        for tile in tiles:
-            if currentlySpawned < towersToSpawn:
-                position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
-                goblinWatchTowerData = {'midbottom': position, "currentDurability": None}
-                self.sprites['GoblinWatchTower'].append(goblinWatchTowerData)
+        while currentlySpawned < towersToSpawn:
+            for tile in tiles:
+                rand = random.random()
+                if rand < 0.05:
+                    position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
+                    goblinWatchTowerData = {'midbottom': position, "currentDurability": None}
+                    self.sprites['GoblinWatchTower'].append(goblinWatchTowerData)
+                    currentlySpawned += 1
 
     def spawn(self, spawnObject: callable, probability: int, tiles: list[dict]) -> None:
         for tile in tiles:

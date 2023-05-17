@@ -7,6 +7,7 @@ from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
 from game.entities.GoblinChampion import GoblinChampion
 from game.entities.Player import Player
+from game.SoundPlayer import SoundPlayer
 
 from game.entities.Goblin import Goblin
 from game.entities.domain.State import State
@@ -19,18 +20,19 @@ from game.items.GoblinFang import GoblinFang
 
 
 class GoblinWatchTower(Object):
-    def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2, clock: Clock):
+    def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock, soundPlayer: SoundPlayer):
         image = loadedImages.goblinWatchTower
-        Object.__init__(self, visibleGroup, midBottom, 50, Axe, image)
+        Object.__init__(self, visibleSprites, midbottom, 50, Axe, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.numberOfGoblinsToSpawn = 4
         self.obstacleSprites = obstacleSprites
         self.clock = clock
         self.daysUntilPotentialActivation = 0
-        self.visibleSprites = visibleGroup
+        self.visibleSprites = visibleSprites
         self.goblins: list[Goblin] = []
+        self.soundPlayer = soundPlayer
 
     def spawnAggressiveGoblins(self, player: Player) -> None:
         pos = Vector2(self.rect.centerx, self.rect.centery)
@@ -40,11 +42,11 @@ class GoblinWatchTower(Object):
         if self.daysUntilPotentialActivation == 0:
             for i in range(0, self.numberOfGoblinsToSpawn):
                 goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
-                                self.clock, pos)
+                                self.clock, pos, self.soundPlayer)
                 goblin.attack(player)
                 self.goblins.append(goblin)
             goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages,
-                                            self.loadedSounds, self.clock, pos)
+                                            self.loadedSounds, self.clock, pos, self.soundPlayer)
             goblinChampion.attack(player)
             self.goblins.append(goblinChampion)
             self.daysUntilPotentialActivation = 1
@@ -60,7 +62,7 @@ class GoblinWatchTower(Object):
         if len(self.goblins) != 4 and self.daysUntilPotentialActivation:
             for i in range(0, 4 - len(self.goblins)):
                 goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
-                                self.clock, pos)
+                                self.clock, pos, self.soundPlayer)
                 goblin.attack(player)
                 self.goblins.append(goblin)
                 self.daysUntilPotentialActivation = 1
@@ -92,7 +94,7 @@ class GoblinWatchTower(Object):
             self.spawnAggressiveGoblins(player)
         if not player:
             for goblin in self.goblins:
-                goblin.remove(*goblin.visibleSprites)
+                goblin.remove(goblin.visibleSprites)
 
     def destroy(self) -> None:
         self.kill()

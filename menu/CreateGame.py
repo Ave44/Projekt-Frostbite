@@ -1,4 +1,4 @@
-from pygame import display
+from pygame import display, Vector2
 from json import dump
 
 from Config import Config
@@ -62,38 +62,36 @@ class CreateGame(Menu):
         self.screen.blit(infoText, infoRect)
         display.flip()
 
+    def createButton(self, buttonsList: list, position: Vector2, buttonText: str, action: callable) -> Button:
+        button = Button(pos=position,
+                        textInput=buttonText,
+                        font=self.config.fontBig,
+                        action=action)
+        buttonsList.append(button)
+        return button
+
     def createButtons(self) -> list[Button]:
-        mapSizeButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
-                                        textInput="=>",
-                                        font=self.config.fontBig,
-                                        action=self.incrementMapSize)
+        buttonsList = []
+        self.createButton(buttonsList, Vector2(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT), "BACK", self.backAction)
+        self.createButton(buttonsList, Vector2(0.5 * self.config.WINDOW_WIDTH, 0.79 * self.config.WINDOW_HEIGHT), "CREATE GAME", self.createGame)
 
-        mapSizeButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
-                                        textInput="<=",
-                                        font=self.config.fontBig,
-                                        action=self.decrementMapSize)
+        if self.mapSizesIndex < len(self.mapSizes) - 1:
+            position = Vector2(0.95 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "=>", self.incrementMapSize)
 
-        objectsQuantityButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
-                                                textInput="=>",
-                                                font=self.config.fontBig,
-                                                action=self.incrementObjectsQuantity)
+        if self.mapSizesIndex > 0:
+            position = Vector2(0.05 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "<=", self.decrementMapSize)
 
-        objectsQuantityButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
-                                                textInput="<=",
-                                                font=self.config.fontBig,
-                                                action=self.decrementObjectsQuantity)
+        if self.objectsQuantityIndex < len(self.objectsQuantity) - 1:
+            position = Vector2(0.95 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "=>", self.incrementObjectsQuantity)
 
-        createGameButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.79 * self.config.WINDOW_HEIGHT),
-                                  textInput="CREATE GAME",
-                                  font=self.config.fontBig,
-                                  action=self.createGame)
+        if self.objectsQuantityIndex > 0:
+            position = Vector2(0.05 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "<=", self.decrementObjectsQuantity)
 
-        backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT),
-                            textInput="BACK",
-                            font=self.config.fontBig,
-                            action=self.backAction)
-        return [backButton, createGameButton, mapSizeButtonDecrement, mapSizeButtonIncrement,
-                mapSizeButtonDecrement, objectsQuantityButtonIncrement, objectsQuantityButtonDecrement]
+        return buttonsList
 
     def initiateCreateGame(self) -> None:
         self.createBackground()

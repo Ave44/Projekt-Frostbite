@@ -1,5 +1,5 @@
 import pygame
-from pygame import mixer, Surface
+from pygame import mixer, Surface, Vector2
 
 from Config import Config
 from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR, PIXEL_FONT, NORMAL_FONT
@@ -18,7 +18,8 @@ class OptionsMenu(Menu):
         else:
             self.resolutionsIndex = 2
         self.resolutions = ["1280x720", "1920x1080", "Fullscreen"]
-        self.volume = ["0", "1", "2", "3", "4"]
+        self.volume = ["0", "0.25", "0.5", "0.75", "1"]
+        self.volumeList = [0, 0.25, 0.5, 0.75, 1]
         self.fonts = ["Pixel", "Normal"]
         self.volumeIndex = 0
         self.fontIndex = 0
@@ -71,44 +72,44 @@ class OptionsMenu(Menu):
             self.updateMusicVolume()
             self.refreshMenu()
 
+    def createButton(self, buttonsList: list, position: Vector2, buttonText: str, action: callable) -> Button:
+        button = Button(pos=position,
+                        textInput=buttonText,
+                        font=self.config.fontBig,
+                        action=action)
+        buttonsList.append(button)
+        return button
+
+
     def createButtons(self) -> list[Button]:
-        backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT),
-                            textInput="BACK",
-                            font=self.config.fontBig,
-                            action=self.backAction)
+        buttonsList = []
+        self.createButton(buttonsList, Vector2(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT), "BACK", self.backAction)
 
-        resolutionButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
-                                           textInput="=>",
-                                           font=self.config.fontBig,
-                                           action=self.incrementResolution)
+        if self.resolutionsIndex < len(self.resolutions) - 1:
+            position = Vector2(0.95 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "=>", self.incrementResolution)
 
-        resolutionButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
-                                           textInput="<=",
-                                           font=self.config.fontBig,
-                                           action=self.decrementResolution)
+        if self.resolutionsIndex > 0:
+            position = Vector2(0.05 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "<=", self.decrementResolution)
 
-        volumeButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
-                                       textInput="=>",
-                                       font=self.config.fontBig,
-                                       action=self.incrementVolume)
+        if self.volumeIndex < len(self.volume) - 1:
+            position = Vector2(0.95 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "=>", self.incrementVolume)
 
-        volumeButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT),
-                                       textInput="<=",
-                                       font=self.config.fontBig,
-                                       action=self.decrementVolume)
+        if self.volumeIndex > 0:
+            position = Vector2(0.05 * self.config.WINDOW_WIDTH, 0.486 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "<=", self.decrementVolume)
 
-        fontButtonIncrement = Button(pos=(0.95 * self.config.WINDOW_WIDTH, 0.627 * self.config.WINDOW_HEIGHT),
-                                       textInput="=>",
-                                       font=self.config.fontBig,
-                                       action=self.incrementFont)
+        if self.fontIndex < len(self.fonts) - 1:
+            position = Vector2(0.95 * self.config.WINDOW_WIDTH, 0.627 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "=>", self.incrementFont)
 
-        fontButtonDecrement = Button(pos=(0.05 * self.config.WINDOW_WIDTH, 0.627 * self.config.WINDOW_HEIGHT),
-                                       textInput="<=",
-                                       font=self.config.fontBig,
-                                       action=self.decrementFont)
+        if self.fontIndex > 0:
+            position = Vector2(0.05 * self.config.WINDOW_WIDTH, 0.627 * self.config.WINDOW_HEIGHT)
+            self.createButton(buttonsList, position, "<=", self.decrementFont)
 
-        return [backButton, resolutionButtonIncrement, resolutionButtonDecrement, volumeButtonIncrement,
-                volumeButtonDecrement, fontButtonDecrement, fontButtonIncrement]
+        return buttonsList
 
     def refreshMenu(self) -> None:
         self.createBackground()
@@ -168,7 +169,7 @@ class OptionsMenu(Menu):
             window.position = (positonX, positonY)
 
     def updateMusicVolume(self) -> None:
-        self.config.MUSIC_VOLUME = int(self.volume[self.volumeIndex]) * 0.2
+        self.config.MUSIC_VOLUME = self.volumeList[self.volumeIndex]
         mixer.music.set_volume(self.config.MUSIC_VOLUME)
 
     def updateFont(self) -> None:

@@ -1,16 +1,16 @@
 from game.LoadedImages import LoadedImages
 
 from pygame.math import Vector2
-from game.items.domain.Item import Item
 from game.items.domain.Axe import Axe
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
-class StoneAxe(Item, Axe):
-    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
+class StoneAxe(Axe):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, currDurability: int = None, id: str = None):
         name = "StoneAxe"
-        img = loadedImages.stoneAxe
+        image = loadedImages.stoneAxe
         icon = loadedImages.stoneAxe
+        damage = 5
+        durability = 100
 
-        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
-        Axe.__init__(self, 5, 100)
+        Axe.__init__(self, visibleSprites, center, loadedImages, damage, durability, name, image, icon, id, currDurability)

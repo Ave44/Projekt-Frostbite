@@ -1,24 +1,33 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+    from game.spriteGroups.ObstacleSprites import ObstacleSprites
+    from game.entities.effects.Effect import Effect
+
 from abc import abstractmethod, ABC
 from math import sqrt, ceil
 
 from pygame import Vector2, Surface, Rect
 from pygame.sprite import Sprite
 from pygame.time import Clock
+from pygame.mixer import  Sound
 
+from game.SoundPlayer import SoundPlayer
 from game.entities.domain.State import State
 from game.objects.domain.CollisionObject import CollisionObject
 
 
 class Entity(Sprite, ABC):
-    from game.entities.effects.Effect import Effect
-
-    def __init__(self, spriteGroup, obstacleSprites, entityData: dict, entityImages: dict[Surface], entitySounds: dict,
-                 colliderRect: Rect, clock: Clock, midbottom: Vector2, currHealth: int = None):
-        from game.entities.effects.Effect import Effect
+    def __init__(self, spriteGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
+                 entityData: dict, entityImages: dict[Surface], entitySounds: dict,
+                 colliderRect: Rect, clock: Clock, midbottom: Vector2, currHealth: int = None, soundPlayer: SoundPlayer = None):
 
         Sprite.__init__(self, spriteGroup)
         spriteGroup.entities.add(self)
+        savefileGroup = getattr(spriteGroup.savefileGroups, type(self).__name__)
+        savefileGroup.add(self)
 
         self.soundIdle = entitySounds["idle"]
         self.soundMovement = entitySounds["movement"]
@@ -57,9 +66,9 @@ class Entity(Sprite, ABC):
 
         self.maxHealth = entityData["maxHealth"]
         if currHealth:
-            self.currentHealth = currHealth
+            self.currHealth = currHealth
         else:
-            self.currentHealth = self.maxHealth
+            self.currHealth = self.maxHealth
         self.timeFromLastHealthChange = 0
         self._state = State.NORMAL
 
@@ -69,6 +78,8 @@ class Entity(Sprite, ABC):
 
         self.activeEffects: list[Effect] = []
         self.clock = clock
+        self.soundPlayer = soundPlayer
+
 
     @property
     def state(self) -> State:
@@ -285,18 +296,21 @@ class Entity(Sprite, ABC):
     def adjustRect(self):
         self.rect.midbottom = self.colliderRect.midbottom
 
-    def getDamage(self, amount: int) -> None:
+    def getDamage(self, amount: int, damageCause: str = None) -> None:
         if self.state != State.DEAD:
-            if self.currentHealth <= amount:
-                self.die()
+            if self.currHealth <= amount:
+                if damageCause:
+                    self.die(damageCause)
+                else:
+                    self.die()
             else:
                 self.timeFromLastHealthChange = 0
                 self.state = State.DAMAGED
-                self.currentHealth -= amount
+                self.currHealth -= amount
 
     def die(self):
         self.state = State.DEAD
-        self.currentHealth = 0
+        self.currHealth = 0
         self.remove(*self.groups())
         self.drop()
 
@@ -304,21 +318,24 @@ class Entity(Sprite, ABC):
         self.getDamage(player.damage())
 
     def heal(self, amount: int):
-        if self.currentHealth != self.maxHealth:
+        if self.currHealth != self.maxHealth:
             self.timeFromLastHealthChange = 0
             self.state = State.HEALED
-        if self.currentHealth + amount >= self.maxHealth:
-            self.currentHealth = self.maxHealth
+        if self.currHealth + amount >= self.maxHealth:
+            self.currHealth = self.maxHealth
         else:
-            self.currentHealth += amount
+            self.currHealth += amount
 
     def addEffect(self, effect: Effect) -> None:
         filteredActiveEffects = list(filter(lambda x: (x.__class__ != effect.__class__), self.activeEffects))
         filteredActiveEffects.append(effect)
         self.activeEffects = filteredActiveEffects
 
-    def playSound(self, sound):
-        sound.play()
+    def playSound(self, sound: Sound):
+        if self.soundPlayer:
+            self.soundPlayer.playSoundWithDistanceEffect(sound, Vector2(self.rect.center))
+        else:
+            sound.play()
 
     def update(self) -> None:
         self.localUpdate()
@@ -332,3 +349,10 @@ class Entity(Sprite, ABC):
                 self.state = State.NORMAL
             else:
                 self.timeFromLastHealthChange += timeFromLastTick
+
+    def getSaveData(self) -> dict:
+        return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth}
+
+    def setSaveData(self, savefileData: dict) -> None:
+        self.rect.midbottom = savefileData['midbottom']
+        self.currHealth = savefileData['currHealth']

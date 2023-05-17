@@ -6,7 +6,7 @@ from skimage.measure import label
 import numpy as np
 from math import sqrt
 from constants import BIOMES_ID
-from gameInitialization.GenerateObjects import GenerateObjects
+from gameInitialization.GenerateSprites import GenerateSprites
 
 def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
     matrixSize = len(idMatrix)
@@ -58,7 +58,7 @@ def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[list[dict['
     
     return dataMatrix
 
-def generateMap(mapSize: int, progresNotifFunc: callable):
+def generateMap(mapSize: int, objectsQuantity: float, progresNotifFunc: callable):
     progresNotifFunc("Generating map")
     idMatrix = generateIdMatrix(mapSize)
 
@@ -66,10 +66,16 @@ def generateMap(mapSize: int, progresNotifFunc: callable):
 
     dataMatrix = populateNameMatrixWithData(namesMatrix)
 
-    probabilities = {"tree": 0.2, "rock": 0.1, "grass": 0.8}
-    objects = GenerateObjects(idMatrix, probabilities, progresNotifFunc).objects
+    probabilities = {"Tree": 0.2, "Rock": 0.1, "Grass": 0.8, "RabbitHole": 0.01, "GoblinHideout": 0.01, "Deer": 0.02, "Boar": 0.03}
+    probabilities = {key: value * objectsQuantity for key, value in probabilities.items()}
+    sprites = GenerateSprites(idMatrix, probabilities, progresNotifFunc).sprites
 
-    return dataMatrix, objects
+    return idMatrix, dataMatrix, sprites
+
+def populateMapWithData(idMatrix: list[list[int]]):
+    namesMatrix = replaceIdWithNames(idMatrix)
+    dataMatrix = populateNameMatrixWithData(namesMatrix)
+    return dataMatrix
 
 def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noise1 = PerlinNoise(octaves=5, seed=seed)

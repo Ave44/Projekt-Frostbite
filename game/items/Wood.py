@@ -6,8 +6,8 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 
 class Wood(Item):
-    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, id: str = None):
         name = "Wood"
         img = loadedImages.wood
         icon = loadedImages.wood
-        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon)
+        Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon, id)

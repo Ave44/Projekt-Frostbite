@@ -1,8 +1,16 @@
-from abc import ABC
+from pygame import Vector2
+from pygame.surface import Surface
+
+from game.items.domain.Item import Item
+from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+from game.LoadedImages import LoadedImages
 
 
-class Armor(ABC):
-    def __init__(self, protectionFlat: int = 0, gainedDamageModifier: float = 1):
+class Armor(Item):
+    def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages,
+                 name: str = None, image: Surface = None, icon: Surface = None, 
+                 protectionFlat: int = 0, gainedDamageModifier: float = 1, id: str = None):
+        Item.__init__(self, visibleSprites, center, loadedImages, name, image, icon, id)
         self.protectionFlat = protectionFlat
         self.gainedDamageModifier = gainedDamageModifier
 

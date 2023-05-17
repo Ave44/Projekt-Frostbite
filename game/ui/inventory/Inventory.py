@@ -59,3 +59,9 @@ class Inventory(Sprite):
             emptySlot.addItem(item)
         else:
             selectedItem.addItem(item)
+
+    def getSaveData(self) -> dict:
+        slotsItemData = []
+        for slot in self.slotList:
+            slotsItemData.append(slot.getItemId())
+        return {'slotsItemData': slotsItemData}

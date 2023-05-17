@@ -1,51 +1,41 @@
 import random
+import inspect
+from json import dump
 
 import pygame
-from pygame import mixer, Surface
+from pygame import mixer, Surface, Rect
 from pygame.math import Vector2
 from pygame.time import Clock
 
 from Config import Config
 from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR
+from game.SoundPlayer import SoundPlayer
+from gameInitialization.GenerateMap import populateMapWithData
 from game.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
-from game.entities.Boar import Boar
-from game.entities.Bomb import Bomb
-from game.entities.Deer import Deer
-from game.entities.Player import Player
-from game.entities.Rabbit import Rabbit
-from game.objects.Tent import Tent
-from game.objects.goblin.GoblinHideout import GoblinHideout
-from game.entities.GoblinChampion import GoblinChampion
+from game.tiles.Tile import Tile
+from game.weathers.WeatherController import WeatherController
 
-from game.objects.Grass import Grass
-from game.objects.RabbitHole import RabbitHole
-from game.objects.Rock import Rock
-from game.objects.goblin.GoblinTorch import GoblinTorch
-from game.objects.goblin.GoblinWatchTower import GoblinWatchTower
-from game.objects.trees.LargeTree import LargeTree
-from game.objects.trees.MediumTree import MediumTree
-from game.objects.trees.SmallTree import SmallTree
+from game.entities.Player import Player
+from game.entities.Bomb import Bomb
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-from game.items.domain.Item import Item
+
 from game.items.Sword import Sword
 from game.items.StoneAxe import StoneAxe
 from game.items.StonePickaxe import StonePickaxe
 from game.items.WoodenArmor import WoodenArmor
 from game.items.LeatherArmor import LeatherArmor
-from game.tiles.Tile import Tile
-from game.weathers.WeatherController import WeatherController
-from gameInitialization.GenerateMap import generateMap
 
 
 class Game:
-    def __init__(self, screen: Surface, config: Config, saveData):
+    def __init__(self, screen: Surface, config: Config, saveData: dict):
         self.config = config
         self.screen = screen
+        self.generateMapLoadingScreen("Loading savefile")
         self.clock = Clock()
 
         self.loadedImages = LoadedImages()
@@ -54,76 +44,28 @@ class Game:
         self.visibleSprites = CameraSpriteGroup(config)
         self.obstacleSprites = ObstacleSprites(config)
         self.UiSprites = UiSpriteGroup(config, self.visibleSprites, self.loadedImages)
+        self.soundPlayer = SoundPlayer()
 
         self.tick = 0
 
-        self.map = self.createMap(100)
-        self.dayCycle = DayCycle(1, 60000, 2 * 64 * 1000, self.clock, config, self.UiSprites, self.visibleSprites)
-
-        self.player = Player(self.visibleSprites,
-                             self.obstacleSprites,
-                             self.UiSprites,
-                             self.loadedImages,
-                             self.loadedSounds,
-                             config,
-                             self.clock,
-                             Vector2(0, 0),
-                             currHunger=100)
+        self.mapData = saveData['map']
+        self.map = self.createMap(self.mapData)
+        self.player: Player
+        self.createSprites(saveData['sprites'])
+        self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], 2 * 64 * 1000, self.clock, config, self.UiSprites, self.visibleSprites)
 
         self.weatherController = WeatherController(self.loadedImages, self.clock, config,
                                                    Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
-        self.towersAmount = 4
-        self.towers: list[GoblinWatchTower] = []
 
-        if not self.map[self.player.rect.centerx // TILE_SIZE][self.player.rect.centery // TILE_SIZE]['walkable']:
-            for y in range(len(self.map)):
-                for x in range(len(self.map)):
-                    if self.map[y][x]['walkable']:
-                        self.player.rect.centerx = x * TILE_SIZE + TILE_SIZE // 2
-                        self.player.rect.centery = y * TILE_SIZE + TILE_SIZE // 2
-                        self.player.colliderRect.midbottom = self.player.rect.midbottom
-                        break
-                else:
-                    continue
-                break
+        self.player.inventory.addItem(Sword(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(StoneAxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
 
-        GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
-                       self.player.rect.midbottom)
-        Deer(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
-             self.player.rect.midbottom)
-        Rabbit(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
-               self.player.rect.midbottom)
-        Boar(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock,
-             self.player.rect.midbottom)
-        self.rabbitHole = RabbitHole(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
-                                     self.player.rect.midbottom, self.clock)
-        self.goblinHideout = GoblinHideout(self.visibleSprites, self.obstacleSprites, self.loadedImages,
-                                           self.loadedSounds, self.player.rect.midbottom, self.clock)
-        self.goblinTorch = GoblinTorch(self.visibleSprites, self.obstacleSprites, self.loadedImages, [
-            self.player.rect.midbottom[0] - 30, self.player.rect.midbottom[1]
-        ])
-        self.goblinWatchTower = GoblinWatchTower(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
-            self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 400
-        ], self.clock)
-        for tower in range(0, self.towersAmount):
-            self.goblinWatchTower = GoblinWatchTower(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, [
-                self.player.rect.midbottom[0], self.player.rect.midbottom[1] + 400 * (tower + 1)
-            ], self.clock)
+        self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
 
-        sword = Sword(self.visibleSprites, Vector2(200, 200), self.loadedImages)
-        self.player.inventory.addItem(sword, self.player.selectedItem)
-        self.player.inventory.addItem(StoneAxe(self.visibleSprites, (0, 0), self.loadedImages),
-                                      self.player.selectedItem)
-        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, (0, 0), self.loadedImages),
-                                      self.player.selectedItem)
-        self.player.inventory.addItem(Item(self.visibleSprites, (0, 0), self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, (0, 0), self.loadedImages),
-                                      self.player.selectedItem)
-        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, (0, 0), self.loadedImages),
-                                      self.player.selectedItem)
-
-        self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites)
 
     def generateMapLoadingScreen(self, information: str) -> None:
         self.screen.fill((0, 0, 0))
@@ -132,9 +74,10 @@ class Game:
         self.screen.blit(infoText, infoRect)
         pygame.display.flip()
 
-    # later will be replaced with LoadGame(savefile) class
-    def createMap(self, mapSize):
-        map, objects = generateMap(mapSize, self.generateMapLoadingScreen)
+    def createMap(self, mapRaw: list[list[int]]):
+        mapSize = len(mapRaw)
+        map = populateMapWithData(mapRaw)
+
         tilesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         obstaclesMap = [[None for x in range(mapSize)] for y in range(mapSize)]
         for y in range(len(map)):
@@ -147,33 +90,49 @@ class Game:
                     obstaclesMap[y][x] = tile
         self.visibleSprites.map = tilesMap
         self.obstacleSprites.map = obstaclesMap
-        self.createObjects(objects)
         return map
 
-    def createObjects(self, objects: dict) -> None:
-        self.loadTrees(objects['trees'])
-        self.loadRocks(objects['rocks'])
-        self.loadGrasses(objects['grasses'])
+    def createSprites(self, sprites: dict) -> None:
+        globalsData = globals()
+        fixedArguments = {'visibleSprites': self.visibleSprites, 'obstacleSprites': self.obstacleSprites, 'UiSprites': self.UiSprites,
+                           'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config, 'clock': self.clock,
+                          'soundPlayer': self.soundPlayer}
+        playerInventoryData = None
+        for className, instancesDataList in sprites.items():
+            # print(className, len(instancesDataList))
+            if className == "Player":
+                self.createPlayer(instancesDataList[0])
+                playerInventoryData = instancesDataList[0]["inventoryData"]
+                continue
+            classReference = globalsData[className]
+            initArguments = inspect.getfullargspec(classReference.__init__).args[1:]
+            # print('{:15s} {}\t{}'.format(className, len(instancesDataList), initArguments))
+            indexesOfArgumentsToReplace = []
+            for argumentIndex in range(len(initArguments)):
+                if initArguments[argumentIndex] in fixedArguments:
+                    initArguments[argumentIndex] = fixedArguments[initArguments[argumentIndex]]
+                else:
+                    indexesOfArgumentsToReplace.append(argumentIndex)
 
-    def loadTrees(self, treesData: dict) -> None:
-        for treeData in treesData:
-            if treeData['growthStage'] == 1:
-                SmallTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages,
-                          self.clock, treeData['age'])
-            elif treeData['growthStage'] == 2:
-                MediumTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages,
-                           self.clock, treeData['age'])
-            else:
-                LargeTree(self.visibleSprites, self.obstacleSprites, treeData['midBottom'], self.loadedImages,
-                          self.clock, treeData['age'])
+            for instanceData in instancesDataList:
+                instanceArguments = initArguments[:]
+                for argumentIndex in indexesOfArgumentsToReplace:
+                    # print(className, instanceArguments)
+                    instanceArguments[argumentIndex] = instanceData[instanceArguments[argumentIndex]]
+                classReference(*instanceArguments)
+        if playerInventoryData:
+            self.player.populateEquipment(playerInventoryData)
 
-    def loadRocks(self, rocksData: dict) -> None:
-        for rockData in rocksData:
-            Rock(self.visibleSprites, self.obstacleSprites, rockData['midBottom'], self.loadedImages)
+    def createPlayer(self, playerData: dict) -> None:
+        self.player = Player(self.visibleSprites, self.obstacleSprites, self.UiSprites,
+                        self.loadedImages, self.loadedSounds, self.config, self.clock,
+                        playerData["midbottom"], playerData["currHealth"], playerData['currHunger'])
 
-    def loadGrasses(self, grassesData: dict) -> None:
-        for grassData in grassesData:
-            Grass(self.visibleSprites, grassData['midBottom'], self.loadedImages, self.clock)
+    def saveGame(self):
+        savefileData = {'savefileName': self.config.savefileName,'currentDay': self.dayCycle.currentDay, 'currentTimeMs': self.dayCycle.currentTimeMs, "map": self.mapData}
+        savefileData['sprites'] = self.visibleSprites.savefileGroups.createSavefileSpritesData()
+        with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
+            dump(savefileData, file)
 
     def debug(self, text):
         img = self.config.fontTiny.render(text, True, (255, 255, 255))
@@ -183,20 +142,24 @@ class Game:
         self.tick = self.tick + 1
         if self.tick == 1000:
             self.spawnBomb()
-            self.rabbitHole.onNewDay()
-            self.goblinHideout.onNewDay()
         if self.tick == 2000:
             self.tick = 0
             self.spawnBomb()
-            self.rabbitHole.onEvening()
             self.player.heal(20)
 
     def spawnBomb(self):
-        randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
-        offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
-        position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
-        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages.bomb, self.loadedSounds.bomb, position,
-             self.clock)
+        viablbePosition = False
+        while not viablbePosition:
+            viablbePosition = True
+            randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
+            offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
+            position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
+            rect = Rect(position, (20, 20))
+            for sprite in self.obstacleSprites.getObstacles(position):
+                if sprite.colliderRect.colliderect(rect):
+                    viablbePosition = False
+                    break
+        Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, position)
 
     def changeMusicTheme(self, theme):
         mixer.music.load(theme)
@@ -212,6 +175,7 @@ class Game:
             playerCenter = Vector2(self.player.rect.center)
             self.weatherController.update(playerCenter)
             self.visibleSprites.customDraw(playerCenter)
+            self.soundPlayer.currentCameraPos = playerCenter
 
             self.UiSprites.customDraw()
 
@@ -222,9 +186,3 @@ class Game:
 
             pygame.display.update()
             self.clock.tick()
-            towersDestroyed = 0
-            for tower in self.towers:
-                if not tower.alive():
-                    towersDestroyed += 1
-            if towersDestroyed == 4:
-                print("YOU WIN!")

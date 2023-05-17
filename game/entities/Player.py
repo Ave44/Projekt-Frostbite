@@ -1,9 +1,15 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+
 from pygame import Rect
 from pygame.sprite import Group, Sprite
 from pygame.time import Clock
 from pygame.math import Vector2
 
+from math import ceil
 from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE, SLOT_GAP
 from Config import Config
 from game.LoadedImages import LoadedImages
@@ -22,7 +28,7 @@ from game.LoadedImages import LoadedImages
 
 class Player(Entity, Glowing):
     def __init__(self,
-                 groups: Group,
+                 visibleSprites: CameraSpriteGroup,
                  obstacleSprites: Group,
                  UiSprites: UiSpriteGroup,
                  loadedImages: LoadedImages,
@@ -32,19 +38,19 @@ class Player(Entity, Glowing):
                  midbottom: Vector2,
                  currHealth: int = None,
                  currHunger: float = None):
-        playerData = {"speed": 6, "maxHealth": 100, "actionRange": 20, "hungerDecreasePerSecond": 0.1}
-        self.currentHunger = currHunger
-        self.hungerDecreaseSpeedPerSecond = playerData["hungerDecreasePerSecond"]
-        self.maxHunger = 100
+        playerData = {"speed": 6, "maxHealth": 100, "maxHunger": 100, "actionRange": 20, "hungerDecreasePerMS": 0.0001}
+        self.maxHunger = playerData["maxHunger"]
+        self.hungerDecreasePerMS = playerData["hungerDecreasePerMS"]
+        self.currHunger = currHunger if currHunger else self.maxHunger
         self.handDamage = 3
 
-        self.isHungry = False
         colliderRect = Rect((0, 0), (20, 20))
-        Entity.__init__(self, groups, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
+        self.visibleSprites = visibleSprites
+        Entity.__init__(self, visibleSprites, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
-        offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
-        Glowing.__init__(self, loadedImages.mediumLight, self.rect, offset)
+        offset = Vector2(-150, -150) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
+        Glowing.__init__(self, loadedImages.largeLight, self.rect, offset)
 
         self.selectedItem = SelectedItem(self)
 
@@ -63,9 +69,9 @@ class Player(Entity, Glowing):
         UiSprites.selectedItem = self.selectedItem
         UiSprites.setEquipmentSlots(self.handSlot, self.bodySlot)
 
-        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currentHealth, 20, 200,
+        self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currHealth, 20, 200,
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
-        self.hungerBar = Bar(Vector2(115, 90), self.maxHealth, self.currentHealth, 20, 200,
+        self.hungerBar = Bar(Vector2(115, 90), self.maxHunger, ceil(self.currHunger), 20, 200,
                              HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
 
     def moveInDirection(self):
@@ -115,40 +121,58 @@ class Player(Entity, Glowing):
         Entity.getDamage(self, amount)
 
     def die(self, deathMessage: str = "Game Over"):
-        self.currentHealth = 0
-        self.healthBar.update(self.currentHealth)
+        self.currHealth = 0
+        self.healthBar.update(self.currHealth)
         self.remove(*self.groups())
         self.drop()
         print(deathMessage)
 
     def updateHunger(self):
-        timeInSeconds = self.clock.get_time() / 1000
-        if self.currentHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds > 0:
-            self.currentHunger = self.currentHunger - self.hungerDecreaseSpeedPerSecond * timeInSeconds
-        else:
-            self.currentHunger = 0
-            self.isHungry = True
-        if self.isHungry:
-            if self.currentHealth - self.hungerDecreaseSpeedPerSecond * timeInSeconds > 0:
-                self.currentHealth = self.currentHealth - self.hungerDecreaseSpeedPerSecond * timeInSeconds
-            else:
-                self.die("Game Over: You Died Of Hunger")
+        deltaTime = self.clock.get_time()
+        self.currHunger -= self.hungerDecreasePerMS * deltaTime
+        if self.currHunger <= 0:
+            self.currHunger = 0
+            self.getDamage(1, 'hunger')
 
-    def satiate(self, numberOfHungerToSatiate):
-        if self.currentHunger + numberOfHungerToSatiate < self.maxHunger:
-            self.currentHunger = self.currentHunger + numberOfHungerToSatiate
+    def satiate(self, numberOfHungerToSatiate: int):
+        if self.currHunger + numberOfHungerToSatiate < self.maxHunger:
+            self.currHunger = self.currHunger + numberOfHungerToSatiate
         else:
-            self.currentHunger = self.maxHunger
+            self.currHunger = self.maxHunger
+
+    def subtractHunger(self, value: int):
+        if self.currHunger - value > 0:
+            self.currHunger -= value
+        else:
+            self.currHunger = 0
 
     def localUpdate(self):
         self.updateHunger()
-        self.healthBar.update(self.currentHealth)
-        self.hungerBar.update(self.currentHunger)
+        self.hungerBar.update(ceil(self.currHunger))
+        self.healthBar.update(self.currHealth)
         self.move()
 
-    def subtractHunger(self, value):
-        if self.currentHunger - value > 0:
-            self.currentHunger -= value
-        else:
-            self.currentHunger = 0
-        self.updateHunger()
+    def getSaveData(self) -> dict:
+        inventoryData = {'inventory': self.inventory.getSaveData(), 'handSlot': self.handSlot.getItemId(), 'bodySlot': self.bodySlot.getItemId()}
+        return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth, 'currHunger': self.currHunger, 'inventoryData': inventoryData}
+
+    def populateEquipment(self, inventoryData: dict) -> None:
+        inventorySaveData = inventoryData['inventory']['slotsItemData']
+        for itemIdIndex in range(len(inventorySaveData)):
+            itemId = inventorySaveData[itemIdIndex]
+            if itemId != None:
+                item = self.visibleSprites.getItemById(itemId)
+                item.hide()
+                self.inventory.slotList[itemIdIndex].addItem(item)
+
+        if inventoryData['handSlot'] != None:
+            item = self.visibleSprites.getItemById(inventoryData['handSlot'])
+            item.hide()
+            self.handSlot.addItem(item)
+
+        if inventoryData['bodySlot'] != None:
+            item = self.visibleSprites.getItemById(inventoryData['bodySlot'])
+            item.hide()
+            self.bodySlot.addItem(item)
+        self.hungerBar.update(self.currHunger)
+        self.move()

@@ -1,10 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from pygame.mixer import  Sound
-
-from game.SoundPlayer import SoundPlayer
-
 if TYPE_CHECKING:
     from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
     from game.spriteGroups.ObstacleSprites import ObstacleSprites
@@ -16,7 +12,9 @@ from math import sqrt, ceil
 from pygame import Vector2, Surface, Rect
 from pygame.sprite import Sprite
 from pygame.time import Clock
+from pygame.mixer import  Sound
 
+from game.SoundPlayer import SoundPlayer
 from game.entities.domain.State import State
 from game.objects.domain.CollisionObject import CollisionObject
 

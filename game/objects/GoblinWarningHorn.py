@@ -15,11 +15,11 @@ from game.items.GoblinFang import GoblinFang
 
 
 class GoblinWarningHorn(Object):
-    def __init__(self, visibleGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
+    def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midBottom: Vector2,
                  clock: Clock, soundPlayer: SoundPlayer):
         image = loadedImages.goblinHorn
-        Object.__init__(self, visibleGroup, midBottom, 50, Hammer, image)
+        Object.__init__(self, visibleSprites, midBottom, 50, Hammer, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.numberOfGoblinsToSpawn = 6

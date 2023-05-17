@@ -99,7 +99,18 @@ class GenerateSprites:
             self.progresNotiftFunc("Generating boars")
             self.spawn(self.spawnBoar, boarProbability, self.biomesCoordinatesDict['forest'])
             self.spawn(self.spawnBoar, boarProbability * 0.2, self.biomesCoordinatesDict['medow'])
-    
+
+    def spawnWatchTowers(self):
+        towersToSpawn = 4
+        currentlySpawned = 0
+        self.progresNotiftFunc("Generating goblin watch towers")
+        tiles = self.biomesCoordinatesDict['medow']
+        for tile in tiles:
+            if currentlySpawned < towersToSpawn:
+                position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
+                goblinWatchTowerData = {'midbottom': position, "currentDurability": None}
+                self.sprites['GoblinWatchTower'].append(goblinWatchTowerData)
+
     def spawn(self, spawnObject: callable, probability: int, tiles: list[dict]) -> None:
         for tile in tiles:
             rand = random.random()

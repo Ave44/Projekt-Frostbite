@@ -87,14 +87,13 @@ class GoblinWatchTower(Object):
         return None
 
     def update(self) -> None:
-        if self.checkForPlayer():
-            player = self.checkForPlayer()
+        player = self.checkForPlayer()
+        if player:
             self.spawnAggressiveGoblins(player)
-        if not self.checkForPlayer():
+        if not player:
             for goblin in self.goblins:
-                goblin.remove(*goblin.groups())
+                goblin.remove(*goblin.visibleSprites)
 
     def destroy(self) -> None:
-        self.remove(*self.groups())
         self.kill()
         self.drop()

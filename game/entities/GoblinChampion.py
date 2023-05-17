@@ -3,6 +3,7 @@ from pygame.time import Clock
 
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
+from game.SoundPlayer import SoundPlayer
 from game.entities.domain.AggressiveMob import AggressiveMob
 from game.items.BigMeat import BigMeat
 from game.items.GoblinFang import GoblinFang
@@ -16,7 +17,8 @@ from game.entities.Goblin import Goblin
 
 class GoblinChampion(AnimatedEntity, Goblin):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2,
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock,
+                 midbottom: Vector2, soundPlayer: SoundPlayer,
                  currHealth: int = None):
         entityData = {
             "speed": 1,
@@ -30,7 +32,7 @@ class GoblinChampion(AnimatedEntity, Goblin):
             "attackCooldownMs": 2000
         }
         colliderRect = Rect((0, 0), (10, 10))
-        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, colliderRect, entityData, clock, midbottom, currHealth)
+        AggressiveMob.__init__(self, visibleSprites, obstacleSprites, loadedImages.goblin, loadedSounds.goblin, colliderRect, entityData, clock, midbottom, currHealth, soundPlayer)
         AnimatedEntity.__init__(self, visibleSprites, loadedImages.goblinchampion, clock)
 
         self.loadedImages = loadedImages

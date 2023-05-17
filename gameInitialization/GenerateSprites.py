@@ -37,7 +37,7 @@ class GenerateSprites:
 
     def createPlayer(self) -> None:
         midbottom = (self.biomesCoordinatesDict['medow'][0]['x'] + 50, self.biomesCoordinatesDict['medow'][0]['y'] + 50)
-        self.sprites['Player'] = [{'midbottom': midbottom, 'currHealth': None, 'inventoryData': None}]
+        self.sprites['Player'] = [{'midbottom': midbottom, 'currHealth': None, 'currHunger': None, 'inventoryData': None}]
     
 
     def generateTrees(self) -> None:

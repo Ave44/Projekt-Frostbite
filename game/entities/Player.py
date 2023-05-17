@@ -49,8 +49,8 @@ class Player(Entity, Glowing):
         Entity.__init__(self, visibleSprites, obstacleSprites, playerData, loadedImages.player, loadedSounds.player, colliderRect, clock, midbottom, currHealth)
 
         playerSize = self.rect.size
-        offset = Vector2(-100, -100) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
-        Glowing.__init__(self, loadedImages.mediumLight, self.rect, offset)
+        offset = Vector2(-150, -150) + Vector2(playerSize[0] // 2, playerSize[1] // 2)
+        Glowing.__init__(self, loadedImages.largeLight, self.rect, offset)
 
         self.selectedItem = SelectedItem(self)
 

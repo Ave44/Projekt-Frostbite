@@ -2,6 +2,7 @@ from pygame import Vector2
 from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
+from game.SoundPlayer import SoundPlayer
 
 from game.entities.Goblin import Goblin
 from game.items.domain.Hammer import Hammer
@@ -15,7 +16,8 @@ from game.items.GoblinFang import GoblinFang
 class GoblinHideout(Object):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2,
-                 clock: Clock, daysFromGoblinsChange: int = None, currentDurability: int = None,
+                 clock: Clock, soundPlayer: SoundPlayer,
+                 daysFromGoblinsChange: int = None, currentDurability: int = None,
                  goblinsDataList: list[dict] = None):
         image = loadedImages.goblinHideout
         Object.__init__(self, visibleSprites, midbottom, 50, Hammer, image, currentDurability)
@@ -25,17 +27,18 @@ class GoblinHideout(Object):
         self.daysFromGoblinsChange = daysFromGoblinsChange if daysFromGoblinsChange else 0
         self.obstacleSprites = obstacleSprites
         self.clock = clock
+        self.soundPlayer = soundPlayer
 
-        if goblinsDataList != None:
+        if goblinsDataList is not None:
             for goblinData in goblinsDataList:
-                Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, goblinData['midbottom'], goblinData['currHealth'])
+                Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, goblinData['midbottom'], self.soundPlayer, goblinData['currHealth'])
         else:
             self.spawnGoblin()
             self.spawnGoblin()
 
     def spawnGoblin(self):
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        newGoblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos)
+        newGoblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, pos, self.soundPlayer)
         self.goblins.append(newGoblin)
         self.daysFromGoblinsChange = 0
 
@@ -73,4 +76,4 @@ class GoblinHideout(Object):
         self.currentDurability = savefileData['currentDurability']
         self.daysFromGoblinsChange = savefileData['daysFromGoblinsChange']
         for goblinData in savefileData['daysFromGoblinsChange']:
-            Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, goblinData['midbottom'], goblinData['currHealth'])
+            Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, goblinData['midbottom'], self.soundPlayer, goblinData['currHealth'])

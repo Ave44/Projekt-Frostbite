@@ -12,7 +12,9 @@ from math import sqrt, ceil
 from pygame import Vector2, Surface, Rect
 from pygame.sprite import Sprite
 from pygame.time import Clock
+from pygame.mixer import  Sound
 
+from game.SoundPlayer import SoundPlayer
 from game.entities.domain.State import State
 from game.objects.domain.CollisionObject import CollisionObject
 
@@ -20,7 +22,7 @@ from game.objects.domain.CollisionObject import CollisionObject
 class Entity(Sprite, ABC):
     def __init__(self, spriteGroup: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  entityData: dict, entityImages: dict[Surface], entitySounds: dict,
-                 colliderRect: Rect, clock: Clock, midbottom: Vector2, currHealth: int = None):
+                 colliderRect: Rect, clock: Clock, midbottom: Vector2, currHealth: int = None, soundPlayer: SoundPlayer = None):
 
         Sprite.__init__(self, spriteGroup)
         spriteGroup.entities.add(self)
@@ -76,6 +78,8 @@ class Entity(Sprite, ABC):
 
         self.activeEffects: list[Effect] = []
         self.clock = clock
+        self.soundPlayer = soundPlayer
+
 
     @property
     def state(self) -> State:
@@ -191,7 +195,7 @@ class Entity(Sprite, ABC):
                         (self.colliderRect.bottom - target.y) ** 2)
         return distance <= rangeDistance
 
-    def checkIfRachedDestination(self) -> bool:
+    def checkIfReachedDestination(self) -> bool:
         if self.destinationTarget:
             if isinstance(self.destinationTarget, CollisionObject):
                 return self.checkIfReachedCollisionObject(self.destinationTarget)
@@ -258,7 +262,7 @@ class Entity(Sprite, ABC):
                 self.moveToPosition(self.midDestinationPosition)
                 if self.colliderRect.midbottom == self.midDestinationPosition:
                     self.midDestinationPosition = None
-            elif not self.checkIfRachedDestination():
+            elif not self.checkIfReachedDestination():
                 self.moveToPosition(self.destinationPosition)
             self.adjustRect()
 
@@ -327,8 +331,11 @@ class Entity(Sprite, ABC):
         filteredActiveEffects.append(effect)
         self.activeEffects = filteredActiveEffects
 
-    def playSound(self, sound):
-        sound.play()
+    def playSound(self, sound: Sound):
+        if self.soundPlayer:
+            self.soundPlayer.playSoundWithDistanceEffect(sound, Vector2(self.rect.center))
+        else:
+            sound.play()
 
     def update(self) -> None:
         self.localUpdate()
@@ -345,7 +352,7 @@ class Entity(Sprite, ABC):
 
     def getSaveData(self) -> dict:
         return {'midbottom': self.rect.midbottom, 'currHealth': self.currHealth}
-    
+
     def setSaveData(self, savefileData: dict) -> None:
         self.rect.midbottom = savefileData['midbottom']
         self.currHealth = savefileData['currHealth']

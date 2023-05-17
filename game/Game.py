@@ -9,6 +9,7 @@ from pygame.time import Clock
 
 from Config import Config
 from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR
+from game.SoundPlayer import SoundPlayer
 from gameInitialization.GenerateMap import populateMapWithData
 from game.DayCycle import DayCycle
 from game.InputManager import InputManager
@@ -75,6 +76,7 @@ class Game:
         self.visibleSprites = CameraSpriteGroup(config)
         self.obstacleSprites = ObstacleSprites(config)
         self.UiSprites = UiSpriteGroup(config, self.visibleSprites, self.loadedImages)
+        self.soundPlayer = SoundPlayer()
 
         self.tick = 0
 
@@ -125,7 +127,8 @@ class Game:
     def createSprites(self, sprites: dict) -> None:
         globalsData = globals()
         fixedArguments = {'visibleSprites': self.visibleSprites, 'obstacleSprites': self.obstacleSprites, 'UiSprites': self.UiSprites,
-                           'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config, 'clock': self.clock}
+                           'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config, 'clock': self.clock,
+                          'soundPlayer': self.soundPlayer}
         playerInventoryData = None
         for className, instancesDataList in sprites.items():
             # print(className, len(instancesDataList))
@@ -204,6 +207,7 @@ class Game:
             playerCenter = Vector2(self.player.rect.center)
             self.weatherController.update(playerCenter)
             self.visibleSprites.customDraw(playerCenter)
+            self.soundPlayer.currentCameraPos = playerCenter
 
             self.UiSprites.customDraw()
 

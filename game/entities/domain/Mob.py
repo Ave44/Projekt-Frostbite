@@ -4,6 +4,7 @@ from abc import ABC
 from pygame import Vector2, Rect
 from pygame.time import Clock
 
+from game.SoundPlayer import SoundPlayer
 from game.entities.domain.Entity import Entity
 from game.objects.domain.Object import Object
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
@@ -12,8 +13,8 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
 class Mob(Entity, ABC):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites, loadedImages: dict, loadedSounds: dict,
-                 colliderRect: Rect, clock: Clock, entityData, midbottom: Vector2, currHealth: int = None):
-        Entity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages, loadedSounds, colliderRect, clock, midbottom, currHealth)
+                 colliderRect: Rect, clock: Clock, entityData, midbottom: Vector2, currHealth: int = None, soundPlayer: SoundPlayer = None):
+        Entity.__init__(self, visibleSprites, obstacleSprites, entityData, loadedImages, loadedSounds, colliderRect, clock, midbottom, currHealth, soundPlayer)
         self.sightRange = entityData["sightRange"]
         self.isMoving = False
         self.movingTime = 0

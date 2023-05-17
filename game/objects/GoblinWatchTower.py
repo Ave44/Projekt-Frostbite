@@ -92,7 +92,7 @@ class GoblinWatchTower(Object):
         player = self.checkForPlayer()
         if player:
             self.spawnAggressiveGoblins(player)
-        if not player:
+        else:
             for goblin in self.goblins:
                 goblin.remove(goblin.visibleSprites)
 

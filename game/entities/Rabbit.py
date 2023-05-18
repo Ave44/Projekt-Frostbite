@@ -16,7 +16,7 @@ class Rabbit(PassiveMob):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock, midbottom: Vector2, home=None, currHealth: int = None):
         entityData = {
-            "speed": 2,
+            "speed": 4,
             "maxHealth": 5,
             "actionRange": 10,
             "sightRange": 200,

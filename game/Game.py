@@ -62,7 +62,6 @@ from game.items.LeatherArmor import LeatherArmor
 
 class Game:
     def __init__(self, screen: Surface, config: Config, saveData: dict):
-        self.player = None
         self.config = config
         self.screen = screen
         self.generateMapLoadingScreen("Loading savefile")

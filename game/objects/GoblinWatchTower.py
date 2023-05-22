@@ -39,6 +39,7 @@ class GoblinWatchTower(Object):
         self.goblinChampion: list[GoblinChampion] = []
         self.soundPlayer = soundPlayer
         self.destroyTower = destroyTower
+        self.goblinsInside = True
 
         if goblinDataList is not None:
             for goblinData in goblinDataList:
@@ -59,6 +60,7 @@ class GoblinWatchTower(Object):
             goblinChampion.remove(visibleSprites)
 
     def spawnAggressiveGoblins(self, player: Player) -> None:
+        self.goblinsInside = False
         pos = Vector2(self.rect.centerx, self.rect.centery)
         if len(self.goblins) != 0:
             self.revealAggressiveGoblins(player, pos)
@@ -125,11 +127,18 @@ class GoblinWatchTower(Object):
     def update(self) -> None:
         player = self.checkForPlayer()
         if player:
-            self.spawnAggressiveGoblins(player)
-        else:
+            if self.goblinsInside:
+                self.spawnAggressiveGoblins(player)
+        elif not self.goblinsInside:
+            allGoblinsAtHome = True
             for goblin in [*self.goblins, *self.goblinChampion]:
                 goblin.setDestination(Vector2(self.rect.midbottom), None)
-                goblin.remove(goblin.visibleSprites)
+                if goblin.rect.midbottom == self.rect.midbottom:
+                    goblin.remove(goblin.visibleSprites)
+                else:
+                    allGoblinsAtHome = False
+            if allGoblinsAtHome:
+                self.goblinsInside = True
 
     def destroy(self) -> None:
         self.destroyTower()

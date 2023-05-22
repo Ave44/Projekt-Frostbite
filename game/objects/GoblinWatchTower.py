@@ -127,7 +127,7 @@ class GoblinWatchTower(Object):
         if player:
             self.spawnAggressiveGoblins(player)
         else:
-            for goblin in self.goblins:
+            for goblin in [*self.goblins, *self.goblinChampion]:
                 goblin.setDestination(Vector2(self.rect.midbottom), None)
                 goblin.remove(goblin.visibleSprites)
 

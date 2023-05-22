@@ -43,11 +43,11 @@ class GoblinWatchTower(Object):
             for i in range(0, self.numberOfGoblinsToSpawn):
                 goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
                                 self.clock, pos, self.soundPlayer)
-                goblin.attack(player)
+                goblin.moveToOrAttack(player)
                 self.goblins.append(goblin)
             goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages,
                                             self.loadedSounds, self.clock, pos, self.soundPlayer)
-            goblinChampion.attack(player)
+            goblinChampion.moveToOrAttack(player)
             self.goblins.append(goblinChampion)
             self.daysUntilPotentialActivation = 1
         return
@@ -63,7 +63,7 @@ class GoblinWatchTower(Object):
             for i in range(0, 4 - len(self.goblins)):
                 goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
                                 self.clock, pos, self.soundPlayer)
-                goblin.attack(player)
+                goblin.moveToOrAttack(player)
                 self.goblins.append(goblin)
                 self.daysUntilPotentialActivation = 1
         return
@@ -94,6 +94,7 @@ class GoblinWatchTower(Object):
             self.spawnAggressiveGoblins(player)
         else:
             for goblin in self.goblins:
+                goblin.setDestination(Vector2(self.rect.midbottom), None)
                 goblin.remove(goblin.visibleSprites)
 
     def destroy(self) -> None:

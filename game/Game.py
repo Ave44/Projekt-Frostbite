@@ -176,7 +176,7 @@ class Game:
             self.spawnBomb()
             self.player.heal(20)
 
-    def spawnBomb(self):
+    def spawnBomb(self) -> None:
         viablbePosition = False
         while not viablbePosition:
             viablbePosition = True
@@ -190,7 +190,7 @@ class Game:
                     break
         Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, position)
 
-    def changeMusicTheme(self, theme):
+    def changeMusicTheme(self, theme) -> None:
         mixer.music.load(theme)
         mixer.music.play(-1)
 

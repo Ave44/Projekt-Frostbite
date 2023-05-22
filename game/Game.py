@@ -93,6 +93,7 @@ class Game:
         self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
+        self.towersAmount: int = 0
 
 
     def generateMapLoadingScreen(self, information: str) -> None:

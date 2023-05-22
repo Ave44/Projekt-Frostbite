@@ -24,7 +24,6 @@ def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
     #             checkForBorder(idMatrix, namesMatrix, x, y,   1, -1, "2")
     #             checkForBorder(idMatrix, namesMatrix, x, y,   1,  1, "3")
     #             checkForBorder(idMatrix, namesMatrix, x, y,  -1,  1, "4")
-    print(namesMatrix)
     return namesMatrix
 
 def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str) -> None:

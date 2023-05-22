@@ -109,7 +109,12 @@ class GenerateSprites:
         random_tiles = random.sample(tiles, 4)
         for tile in random_tiles:
             position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
-            goblinWatchTowerData = {'midbottom': position, "currentDurability": None}
+            goblinWatchTowerData = {'midbottom': position,
+                                    "currentDurability": None,
+                                    'daysUntilPotentialActivation': None,
+                                    'goblinDataList': None,
+                                    'goblinChampionDataList': None
+                                    }
             self.sprites['GoblinWatchTower'].append(goblinWatchTowerData)
 
     def spawn(self, spawnObject: callable, probability: int, tiles: list[dict]) -> None:

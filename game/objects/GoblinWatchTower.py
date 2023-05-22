@@ -21,19 +21,42 @@ from game.items.GoblinFang import GoblinFang
 
 class GoblinWatchTower(Object):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock, soundPlayer: SoundPlayer, destroyTower: callable):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock,
+                 soundPlayer: SoundPlayer, destroyTower: callable,
+                 daysUntilPotentialActivation: int = 0, goblinDataList: list[dict] = None,
+                 goblinChampionDataList: list[dict] = None
+                 ):
         image = loadedImages.goblinWatchTower
         Object.__init__(self, visibleSprites, midbottom, 15, Axe, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
-        self.numberOfGoblinsToSpawn = 4
+        self.numberOfGoblinsToSpawn = 3
         self.obstacleSprites = obstacleSprites
         self.clock = clock
-        self.daysUntilPotentialActivation = 0
+        self.daysUntilPotentialActivation = daysUntilPotentialActivation
         self.visibleSprites = visibleSprites
         self.goblins: list[Goblin] = []
+        self.goblinChampion: list[GoblinChampion] = []
         self.soundPlayer = soundPlayer
         self.destroyTower = destroyTower
+
+        if goblinDataList is not None:
+            for goblinData in goblinDataList:
+                goblin = self.spawnGoblin(goblinData['midbottom'], goblinData['currentHealth'])
+                goblin.remove(visibleSprites)
+        else:
+            for i in range(self.numberOfGoblinsToSpawn):
+                goblin = self.spawnGoblin(self.rect.midbottom)
+                goblin.remove(visibleSprites)
+
+        if goblinChampionDataList is not None:
+            for goblinChampionData in goblinChampionDataList:
+                goblinChampion = self.spawnGoblinChampion(goblinChampionData['midbottom'],
+                                                          goblinChampionData['currentHealth'])
+                goblinChampion.remove(visibleSprites)
+        else:
+            goblinChampion = self.spawnGoblinChampion(self.rect.midbottom)
+            goblinChampion.remove(visibleSprites)
 
     def spawnAggressiveGoblins(self, player: Player) -> None:
         pos = Vector2(self.rect.centerx, self.rect.centery)
@@ -51,9 +74,17 @@ class GoblinWatchTower(Object):
             goblinChampion.moveToOrAttack(player)
             self.goblins.append(goblinChampion)
             self.daysUntilPotentialActivation = 1
-        return
 
-    def revealAggressiveGoblins(self, player: Player, pos: Vector2) -> None:
+    def goblinChampionStateCheck(self) -> None:
+        if len(self.goblinChampion) != 0:
+            goblinChampion = self.goblinChampion[0]
+            if goblinChampion.state == State.DEAD:
+                self.goblinChampion.pop(0)
+            else:
+                goblinChampion.currHealth = goblinChampion.maxHealth
+                goblinChampion.add(goblinChampion.visibleSprites)
+
+    def goblinListStateCheck(self) -> None:
         for goblin in self.goblins:
             if goblin.state == State.DEAD:
                 indexToRemove = self.goblins.index(goblin)
@@ -61,17 +92,19 @@ class GoblinWatchTower(Object):
             else:
                 goblin.currHealth = goblin.maxHealth
                 goblin.add(goblin.visibleSprites)
-        if len(self.goblins) != 4 and self.daysUntilPotentialActivation:
-            for i in range(0, 4 - len(self.goblins)):
-                goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
-                                self.clock, pos, self.soundPlayer)
-                goblin.moveToOrAttack(player)
-                self.goblins.append(goblin)
-                self.daysUntilPotentialActivation = 1
-        return
 
-    def interact(self) -> None:
-        print("interacted with goblin watch tower")
+    def revealAggressiveGoblins(self, player: Player, pos: Vector2) -> None:
+        self.goblinListStateCheck()
+        self.goblinChampionStateCheck()
+        if len(self.goblins) != 3 and self.daysUntilPotentialActivation:
+            for i in range(0, 3 - len(self.goblins)):
+                goblin = self.spawnGoblin(pos)
+                goblin.moveToOrAttack(player)
+                self.daysUntilPotentialActivation = 1
+        if len(self.goblinChampion) != 1 and self.daysUntilPotentialActivation:
+            goblin = self.spawnGoblinChampion(pos)
+            goblin.moveToOrAttack(player)
+            self.daysUntilPotentialActivation = 1
 
     def drop(self) -> None:
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
@@ -79,7 +112,6 @@ class GoblinWatchTower(Object):
     def onNewDay(self) -> None:
         if self.daysUntilPotentialActivation != 0:
             self.daysUntilPotentialActivation -= 1
-        return
 
     def checkForPlayer(self) -> Player | None:
         for entity in self.visibleSprites.entities:
@@ -103,3 +135,32 @@ class GoblinWatchTower(Object):
         self.destroyTower()
         self.kill()
         self.drop()
+        for goblin in self.goblins:
+            goblin.isHomeless = True
+
+    def spawnGoblin(self, pos, currentHealth: int = None) -> Goblin:
+        goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
+                        self.clock, pos, self.soundPlayer, currentHealth)
+        self.goblins.append(goblin)
+        return goblin
+
+    def spawnGoblinChampion(self, pos, currentHealth: int = None) -> GoblinChampion:
+        goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+                                        self.loadedSounds, self.clock, pos, self.soundPlayer, currentHealth)
+        self.goblinChampion.append(goblinChampion)
+        return goblinChampion
+
+    def getSaveData(self) -> dict:
+        goblinDataList = []
+        goblinChampionDataList = []
+        for goblin in self.goblins:
+            goblinDataList.append(goblin.getSaveData(True))
+        for goblin in self.goblinChampion:
+            goblinChampionDataList.append(goblin.getSaveData(True))
+        return {
+            'midbottom': self.rect.midbottom,
+            'currentDurability': self.currentDurability,
+            'daysUntilPotentialActivation': self.daysUntilPotentialActivation,
+            'goblinDataList': goblinDataList,
+            'goblinChampionDataList': goblinChampionDataList
+        }

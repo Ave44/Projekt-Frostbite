@@ -1,6 +1,7 @@
 from constants import BIOMES_ID, TILE_SIZE
 import random
 
+
 class GenerateSprites:
     def __init__(self, idMatrix: list[list[int]], probabilities: dict, progresNotiftFunc: callable):
         self.biomesCoordinatesDict = self.getBiomesCoordinatesDict(idMatrix)
@@ -15,6 +16,7 @@ class GenerateSprites:
         self.generateGrasses()
         self.generateRabbitHoles()
         self.generateGoblinHideouts()
+        self.spawnWatchTowers()
         self.generateDeers()
         self.generateBoars()
 
@@ -32,13 +34,13 @@ class GenerateSprites:
                 coordinates = {'x': xCoordinate, 'y': yCoordinate}
                 biome = BIOMES_ID[idMatrix[y][x]]
                 biomesCoordinatesDict[biome].append(coordinates)
-        
+
         return biomesCoordinatesDict
 
     def createPlayer(self) -> None:
         midbottom = (self.biomesCoordinatesDict['medow'][0]['x'] + 50, self.biomesCoordinatesDict['medow'][0]['y'] + 50)
-        self.sprites['Player'] = [{'midbottom': midbottom, 'currHealth': None, 'currHunger': None, 'inventoryData': None}]
-    
+        self.sprites['Player'] = [
+            {'midbottom': midbottom, 'currHealth': None, 'currHunger': None, 'inventoryData': None}]
 
     def generateTrees(self) -> None:
         treeProbability = self.probabilities['Tree']
@@ -99,7 +101,22 @@ class GenerateSprites:
             self.progresNotiftFunc("Generating boars")
             self.spawn(self.spawnBoar, boarProbability, self.biomesCoordinatesDict['forest'])
             self.spawn(self.spawnBoar, boarProbability * 0.2, self.biomesCoordinatesDict['medow'])
-    
+
+    def spawnWatchTowers(self) -> None:
+        self.sprites['GoblinWatchTower'] = []
+        self.progresNotiftFunc("Generating goblin watch towers")
+        tiles = self.biomesCoordinatesDict['medow']
+        random_tiles = random.sample(tiles, 4)
+        for tile in random_tiles:
+            position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
+            goblinWatchTowerData = {'midbottom': position,
+                                    "currentDurability": None,
+                                    'daysUntilPotentialActivation': None,
+                                    'goblinDataList': None,
+                                    'goblinChampionDataList': None
+                                    }
+            self.sprites['GoblinWatchTower'].append(goblinWatchTowerData)
+
     def spawn(self, spawnObject: callable, probability: int, tiles: list[dict]) -> None:
         for tile in tiles:
             rand = random.random()
@@ -107,7 +124,7 @@ class GenerateSprites:
                 position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
                 spawnObject(position)
                 rand += random.random()
-        
+
     def spawnTree(self, position: list[int, int]) -> None:
         ageMs = random.randint(0, 10000)
         growthStage = random.randint(0, 2)
@@ -126,11 +143,13 @@ class GenerateSprites:
         self.sprites['Grass'].append(grassData)
 
     def spawnRabbitHole(self, position: list[int, int]) -> None:
-        rabbitHoleData = {'midbottom': position, "currentDurability": None, "daysFromRabbitsChange": None, "rabbitsDataList": None}
+        rabbitHoleData = {'midbottom': position, "currentDurability": None, "daysFromRabbitsChange": None,
+                          "rabbitsDataList": None}
         self.sprites['RabbitHole'].append(rabbitHoleData)
 
     def spawnGoblinHideout(self, position: list[int, int]) -> None:
-        goblinHideoutData = {'midbottom': position, "currentDurability": None, "daysFromGoblinsChange": None, "goblinsDataList": None}
+        goblinHideoutData = {'midbottom': position, "currentDurability": None, "daysFromGoblinsChange": None,
+                             "goblinsDataList": None}
         self.sprites['GoblinHideout'].append(goblinHideoutData)
 
     def spawnDeer(self, position: list[int, int]) -> None:

@@ -19,7 +19,7 @@ class GoblinChampion(AnimatedEntity, Goblin):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, clock: Clock,
                  midbottom: Vector2, soundPlayer: SoundPlayer,
-                 currHealth: int = None):
+                 currHealth: int = None, isHomeless: bool = False):
         entityData = {
             "speed": 1,
             "maxHealth": 100,
@@ -36,6 +36,7 @@ class GoblinChampion(AnimatedEntity, Goblin):
         AnimatedEntity.__init__(self, visibleSprites, loadedImages.goblinchampion, clock)
 
         self.loadedImages = loadedImages
+        self.isHomeless = isHomeless
 
     def attack(self, target: Entity | Object):
         AggressiveMob.attack(self, target)
@@ -48,3 +49,6 @@ class GoblinChampion(AnimatedEntity, Goblin):
     def update(self) -> None:
         AggressiveMob.update(self)
         AnimatedEntity.update(self)
+
+    def getSaveData(self, homeRequest: bool = False) -> dict:
+        return Goblin.getSaveData(self, homeRequest)

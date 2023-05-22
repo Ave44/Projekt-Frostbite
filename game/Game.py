@@ -62,6 +62,7 @@ from game.items.LeatherArmor import LeatherArmor
 
 class Game:
     def __init__(self, screen: Surface, config: Config, saveData: dict):
+        self.player = None
         self.config = config
         self.screen = screen
         self.generateMapLoadingScreen("Loading savefile")
@@ -172,8 +173,8 @@ class Game:
 
     def saveGame(self):
         savefileData = {'savefileName': self.config.savefileName, 'currentDay': self.dayCycle.currentDay,
-                        'currentTimeMs': self.dayCycle.currentTimeMs, "map": self.mapData}
-        savefileData['sprites'] = self.visibleSprites.savefileGroups.createSavefileSpritesData()
+                        'currentTimeMs': self.dayCycle.currentTimeMs, "map": self.mapData,
+                        'sprites': self.visibleSprites.savefileGroups.createSavefileSpritesData()}
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(savefileData, file)
 
@@ -191,16 +192,16 @@ class Game:
             self.player.heal(20)
 
     def spawnBomb(self) -> None:
-        viablbePosition = False
-        while not viablbePosition:
-            viablbePosition = True
+        viablePosition = False
+        while not viablePosition:
+            viablePosition = True
             randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
             offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
             position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
             rect = Rect(position, (20, 20))
             for sprite in self.obstacleSprites.getObstacles(position):
                 if sprite.colliderRect.colliderect(rect):
-                    viablbePosition = False
+                    viablePosition = False
                     break
         Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, position)
 
@@ -208,7 +209,7 @@ class Game:
         mixer.music.load(theme)
         mixer.music.play(-1)
 
-    def play(self):
+    def play(self) -> None:
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.inputManager.handleInput()

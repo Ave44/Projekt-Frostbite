@@ -1,7 +1,5 @@
 from pygame import Vector2, Rect
 from pygame.time import Clock
-from game.LoadedImages import LoadedImages
-from game.LoadedSounds import LoadedSounds
 
 from game.entities.domain.PassiveMob import PassiveMob
 from game.items.DeerAntlers import DeerAntlers

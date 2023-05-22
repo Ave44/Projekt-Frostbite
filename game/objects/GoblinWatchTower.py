@@ -23,7 +23,7 @@ class GoblinWatchTower(Object):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock, soundPlayer: SoundPlayer, destroyTower: callable):
         image = loadedImages.goblinWatchTower
-        Object.__init__(self, visibleSprites, midbottom, 50, Axe, image)
+        Object.__init__(self, visibleSprites, midbottom, 15, Axe, image)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
         self.numberOfGoblinsToSpawn = 4

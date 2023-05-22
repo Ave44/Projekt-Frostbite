@@ -83,6 +83,11 @@ class DayCycle:
 
         self.dayCycleClock.updateBackground(dayPhases)
 
+    def isNight(self) -> bool:
+        if self.currentTimeMs > self.nightStart or self.currentTimeMs < self.dawnStart:
+            return True
+        return False
+
     def skipNight(self):
         if self.currentTimeMs > self.nightStart:
             self.currentTimeMs = self.dawnStart

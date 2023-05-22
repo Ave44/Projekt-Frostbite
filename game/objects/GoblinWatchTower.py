@@ -42,7 +42,7 @@ class GoblinWatchTower(Object):
 
         if goblinDataList is not None:
             for goblinData in goblinDataList:
-                goblin = self.spawnGoblin(goblinData['midbottom'], goblinData['currentHealth'])
+                goblin = self.spawnGoblin(goblinData['midbottom'], goblinData['currHealth'])
                 goblin.remove(visibleSprites)
         else:
             for i in range(self.numberOfGoblinsToSpawn):
@@ -52,7 +52,7 @@ class GoblinWatchTower(Object):
         if goblinChampionDataList is not None:
             for goblinChampionData in goblinChampionDataList:
                 goblinChampion = self.spawnGoblinChampion(goblinChampionData['midbottom'],
-                                                          goblinChampionData['currentHealth'])
+                                                          goblinChampionData['currHealth'])
                 goblinChampion.remove(visibleSprites)
         else:
             goblinChampion = self.spawnGoblinChampion(self.rect.midbottom)
@@ -135,7 +135,7 @@ class GoblinWatchTower(Object):
         self.destroyTower()
         self.kill()
         self.drop()
-        for goblin in self.goblins:
+        for goblin in [*self.goblins, *self.goblinChampion]:
             goblin.isHomeless = True
 
     def spawnGoblin(self, pos, currentHealth: int = None) -> Goblin:

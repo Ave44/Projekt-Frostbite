@@ -37,7 +37,7 @@ class Player(Entity, Glowing):
                  midbottom: Vector2,
                  currHealth: int = None,
                  currHunger: float = None):
-        playerData = {"speed": 6, "maxHealth": 100, "maxHunger": 100, "actionRange": 20, "hungerDecreasePerMS": 0.0001}
+        playerData = {"speed": 6, "maxHealth": 10000000000000, "maxHunger": 100, "actionRange": 20, "hungerDecreasePerMS": 0.0001}
         self.maxHunger = playerData["maxHunger"]
         self.hungerDecreasePerMS = playerData["hungerDecreasePerMS"]
         self.currHunger = currHunger if currHunger else self.maxHunger

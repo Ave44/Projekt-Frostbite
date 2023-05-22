@@ -21,7 +21,7 @@ from game.items.GoblinFang import GoblinFang
 
 class GoblinWatchTower(Object):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
-                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock, soundPlayer: SoundPlayer):
+                 loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2, clock: Clock, soundPlayer: SoundPlayer, destroyTower: callable):
         image = loadedImages.goblinWatchTower
         Object.__init__(self, visibleSprites, midbottom, 50, Axe, image)
         self.loadedImages = loadedImages
@@ -33,6 +33,7 @@ class GoblinWatchTower(Object):
         self.visibleSprites = visibleSprites
         self.goblins: list[Goblin] = []
         self.soundPlayer = soundPlayer
+        self.destroyTower = destroyTower
 
     def spawnAggressiveGoblins(self, player: Player) -> None:
         pos = Vector2(self.rect.centerx, self.rect.centery)
@@ -58,6 +59,7 @@ class GoblinWatchTower(Object):
                 indexToRemove = self.goblins.index(goblin)
                 self.goblins.pop(indexToRemove)
             else:
+                goblin.currHealth = goblin.maxHealth
                 goblin.add(goblin.visibleSprites)
         if len(self.goblins) != 4 and self.daysUntilPotentialActivation:
             for i in range(0, 4 - len(self.goblins)):
@@ -98,5 +100,6 @@ class GoblinWatchTower(Object):
                 goblin.remove(goblin.visibleSprites)
 
     def destroy(self) -> None:
+        self.destroyTower()
         self.kill()
         self.drop()

@@ -46,7 +46,7 @@ class GoblinWatchTower(Object):
 
         if goblinDataList is not None:
             for goblinData in goblinDataList:
-                goblin = self.goblinFactory.createGoblin(goblinData['midbottom'], goblinData['currHealth'])
+                goblin = self.spawnGoblin(goblinData['midbottom'], goblinData['currHealth'])
                 goblin.remove(visibleSprites)
         else:
             for i in range(self.numberOfGoblinsToSpawn):
@@ -55,11 +55,11 @@ class GoblinWatchTower(Object):
 
         if goblinChampionDataList is not None:
             for goblinChampionData in goblinChampionDataList:
-                goblinChampion = self.goblinFactory.createGoblinChampion(goblinChampionData['midbottom'],
-                                                                         goblinChampionData['currHealth'])
+                goblinChampion = self.spawnGoblinChampion(goblinChampionData['midbottom'],
+                                                          goblinChampionData['currHealth'])
                 goblinChampion.remove(visibleSprites)
         else:
-            goblinChampion = self.goblinFactory.createGoblinChampion(self.rect.midbottom)
+            goblinChampion = self.spawnGoblinChampion(self.rect.midbottom)
             goblinChampion.remove(visibleSprites)
 
     def spawnAggressiveGoblins(self, player: Player) -> None:

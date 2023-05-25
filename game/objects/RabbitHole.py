@@ -1,6 +1,9 @@
 from pygame import Vector2
 from pygame.time import Clock
 
+from game.dayCycle.DayCycle import DayCycle
+from game.dayCycle.domain.DayPhase import DayPhase
+from game.dayCycle.domain.DayPhaseListener import DayPhaseListener
 from game.entities.Rabbit import Rabbit
 from game.items.domain.Shovel import Shovel
 from game.objects.domain.Object import Object
@@ -10,23 +13,28 @@ from game.LoadedSounds import LoadedSounds
 from game.LoadedImages import LoadedImages
 
 
-class RabbitHole(Object):
-    def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
+class RabbitHole(Object, DayPhaseListener):
+    def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites, dayCycle: DayCycle,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2,
-                 clock: Clock, daysFromRabbitsChange: int = None, currentDurability: int = None,
+                 clock: Clock, daysFromRabbitsChange: int = 0, currentDurability: int = None,
                  rabbitsDataList: list[dict] = None):
         image = loadedImages.rabbitHole
         Object.__init__(self, visibleSprites, midbottom, 2, Shovel, image, currentDurability)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
+        self.dayCycle = dayCycle
+
         self.rabbits: list[Rabbit] = []
-        self.daysFromRabbitsChange = daysFromRabbitsChange if daysFromRabbitsChange else 0
+        self.daysFromRabbitsChange = daysFromRabbitsChange
         self.obstacleSprites = obstacleSprites
         self.clock = clock
 
+        self.dayCycle.events.subscribe(DayPhase.DAY, self)
+        self.dayCycle.events.subscribe(DayPhase.EVENING, self)
+
         if rabbitsDataList is not None:
             for rabbitData in rabbitsDataList:
-                self.spawnRabbit()
+                self.spawnRabbit(rabbitData)
         else:
             for i in range(3):
                 self.spawnRabbit()
@@ -56,6 +64,8 @@ class RabbitHole(Object):
         for rabbit in self.rabbits:
             rabbit.isHomeless = True
             rabbit.goOut()
+        self.dayCycle.events.unsubscribe(DayPhase.DAY)
+        self.dayCycle.events.unsubscribe(DayPhase.EVENING)
 
     def interact(self) -> None:
         print("interacted with rabbit hole")
@@ -75,6 +85,12 @@ class RabbitHole(Object):
     def onEvening(self):
         self.hideRabbits()
 
+    def onDayPhaseChange(self, dayPhase: DayPhase):
+        if dayPhase == DayPhase.DAY:
+            self.onNewDay()
+        elif dayPhase == DayPhase.EVENING:
+            self.onEvening()
+
     def getSaveData(self) -> dict:
         rabbitsDataList = []
         for rabbit in self.rabbits:
@@ -87,4 +103,4 @@ class RabbitHole(Object):
         self.currentDurability = savefileData['currentDurability']
         self.daysFromRabbitsChange = savefileData['daysFromRabbitsChange']
         for rabbitData in savefileData['rabbitsDataList']:
-            self.spawnRabbit()
+            self.spawnRabbit(rabbitData)

@@ -1,7 +1,7 @@
 from pygame.math import Vector2
 from pygame.sprite import Group
 
-from game.DayCycle import DayCycle
+from game.dayCycle.DayCycle import DayCycle
 from game.LoadedImages import LoadedImages
 from game.items.Leather import Leather
 from game.items.Wood import Wood

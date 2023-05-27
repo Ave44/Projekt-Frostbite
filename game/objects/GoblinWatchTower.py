@@ -126,7 +126,7 @@ class GoblinWatchTower(Object):
         elif not self.goblinsInside:
             allGoblinsAtHome = True
             for goblin in [*self.goblins, *self.goblinChampion]:
-                goblin.setDestination(Vector2(self.rect.midbottom), None)
+                goblin.setDestination(Vector2(self.rect.midbottom))
                 if goblin.rect.midbottom == self.rect.midbottom:
                     goblin.remove(goblin.visibleSprites)
                 else:

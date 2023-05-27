@@ -1,4 +1,4 @@
-from pygame import display, Vector2
+from pygame import Vector2
 from json import dump
 
 from Config import Config
@@ -13,7 +13,7 @@ from shared.LoadingScreenGenerator import LoadingScreenGenerator
 class CreateGame(Menu):
     def __init__(self, screen, backAction, config: Config, loadingScreenGenerator: LoadingScreenGenerator):
         Menu.__init__(self, screen)
-        self.loadingScreenGenerator = None
+        self.loadingScreenGenerator = loadingScreenGenerator
         self.backAction = backAction
         self.mapSizes = ["XS", "S", "M", "L", "XL"]
         self.mapSizesList = [50, 75, 100, 150, 200]
@@ -22,7 +22,6 @@ class CreateGame(Menu):
         self.objectsQuantityList = [0.25, 0.5, 1, 1.5, 2]
         self.objectsQuantityIndex = 2
         self.config = config
-        self.loadingScreenGenerator: loadingScreenGenerator
 
     def incrementMapSize(self) -> None:
         if self.mapSizesIndex == 4:

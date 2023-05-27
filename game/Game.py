@@ -6,7 +6,7 @@ from pygame import mixer, Surface, Rect
 from pygame.math import Vector2
 from pygame.time import Clock
 from Config import Config
-from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR
+from constants import TILE_SIZE, HAPPY_THEME
 from game.SoundPlayer import SoundPlayer
 from gameInitialization.GenerateMap import populateMapWithData
 from game.DayCycle import DayCycle

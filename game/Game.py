@@ -58,13 +58,15 @@ from game.items.GrassFibers import GrassFibers
 from game.items.SmallMeat import SmallMeat
 from game.items.BigMeat import BigMeat
 from game.items.LeatherArmor import LeatherArmor
+from shared.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class Game:
-    def __init__(self, screen: Surface, config: Config, saveData: dict):
+    def __init__(self, screen: Surface, config: Config, saveData: dict, loadingScreenGenerator: LoadingScreenGenerator):
         self.config = config
         self.screen = screen
-        self.generateMapLoadingScreen("Loading savefile")
+        self.loadingScreenGenerator = loadingScreenGenerator
+        self.loadingScreenGenerator.generateMapLoadingScreen("Loading savefile")
         self.clock = Clock()
 
         self.loadedImages = LoadedImages()
@@ -106,13 +108,6 @@ class Game:
         self.towersAmount -= 1
         if self.towersAmount == 0:
             print("YOU WIN!")
-
-    def generateMapLoadingScreen(self, information: str) -> None:
-        self.screen.fill((0, 0, 0))
-        infoText = self.config.fontBig.render(information, True, FONT_MENU_COLOR)
-        infoRect = infoText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.5 * self.config.WINDOW_HEIGHT))
-        self.screen.blit(infoText, infoRect)
-        pygame.display.flip()
 
     def createMap(self, mapRaw: list[list[int]]) -> list[list]:
         mapSize = len(mapRaw)

@@ -80,10 +80,10 @@ class OptionsMenu(Menu):
         buttonsList.append(button)
         return button
 
-
     def createButtons(self) -> list[Button]:
         buttonsList = []
-        self.createButton(buttonsList, Vector2(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT), "BACK", self.backAction)
+        self.createButton(buttonsList, Vector2(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT), "BACK",
+                          self.backAction)
 
         if self.resolutionsIndex < len(self.resolutions) - 1:
             position = Vector2(0.95 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT)
@@ -130,7 +130,9 @@ class OptionsMenu(Menu):
 
         menuButtons = self.createButtons()
 
-        self.menuLoop([[menuText, menuRect], [volumeText, volumeRect], [resolutionText, resolutionRect], [fontText, fontRect]], menuButtons)
+        self.menuLoop(
+            [[menuText, menuRect], [volumeText, volumeRect], [resolutionText, resolutionRect], [fontText, fontRect]],
+            menuButtons)
 
     def updateResolution(self) -> None:
         if self.resolutionsIndex == 2:
@@ -149,7 +151,8 @@ class OptionsMenu(Menu):
 
     def updateScreen(self) -> None:
         if self.resolutionsIndex == 2:
-            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT),
+                                                  pygame.FULLSCREEN)
             return
         elif self.resolutionsIndex == 0:
             self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))

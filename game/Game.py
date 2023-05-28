@@ -66,7 +66,7 @@ class Game:
         self.config = config
         self.screen = screen
         self.loadingScreenGenerator = loadingScreenGenerator
-        self.loadingScreenGenerator.generateMapLoadingScreen("Loading savefile")
+        self.loadingScreenGenerator.generateLoadingScreen("Loading savefile")
         self.clock = Clock()
 
         self.loadedImages = LoadedImages()

@@ -50,7 +50,7 @@ class CreateGame(Menu):
     def createGame(self) -> None:
         mapSize = self.mapSizesList[self.mapSizesIndex]
         objectsQuantity = self.objectsQuantityList[self.objectsQuantityIndex]
-        mapRaw, mapData, objects = generateMap(mapSize, objectsQuantity, self.loadingScreenGenerator.generateMapLoadingScreen)
+        mapRaw, mapData, objects = generateMap(mapSize, objectsQuantity, self.loadingScreenGenerator.generateLoadingScreen)
         saveData = {'map': mapRaw, 'currentDay': 1, 'currentTimeMs': 60000, 'sprites': objects}
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(saveData, file)

@@ -58,7 +58,7 @@ from game.items.GrassFibers import GrassFibers
 from game.items.SmallMeat import SmallMeat
 from game.items.BigMeat import BigMeat
 from game.items.LeatherArmor import LeatherArmor
-from shared.LoadingScreenGenerator import LoadingScreenGenerator
+from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class Game:

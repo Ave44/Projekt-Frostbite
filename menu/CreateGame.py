@@ -7,7 +7,7 @@ from menu.Menu import Menu
 from menu.general.Button import Button
 from gameInitialization.GenerateMap import generateMap
 from game.Game import Game
-from shared.LoadingScreenGenerator import LoadingScreenGenerator
+from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class CreateGame(Menu):

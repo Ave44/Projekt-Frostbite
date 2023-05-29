@@ -9,7 +9,7 @@ from game.Game import Game
 from menu.Menu import Menu
 from menu.CreateGame import CreateGame
 from menu.general.Button import Button
-from shared.LoadingScreenGenerator import LoadingScreenGenerator
+from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class SaveSelectMenu(Menu):

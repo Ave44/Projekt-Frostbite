@@ -71,3 +71,7 @@ FONT_SIZE_BIG = 50
 FONT_SIZE_HUGE = 100
 NORMAL_FONT = "graphics/fonts/RobotoMono-Regular.ttf"
 PIXEL_FONT = "graphics/fonts/pixel-font.ttf"
+
+# DAY CYCLE
+DAY_LENGTH_MS = 2 * 64 * 1000
+NUMBER_OF_DAY_SEGMENTS = 24

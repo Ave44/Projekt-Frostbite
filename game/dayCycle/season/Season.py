@@ -1,9 +1,12 @@
-from pygame import Color
 
 from math import floor, ceil
 
+from pygame import Color
 
-class Season():
+from constants import DAY_LENGTH_MS, NUMBER_OF_DAY_SEGMENTS
+
+
+class Season:
     def __init__(self, nightStart: list[int, int], nightLength: list[int, int],
                  dawnLength: int, duskLength: int, seasonLength: int, peakDay: int,
                  clockColors: list[Color]):
@@ -23,7 +26,9 @@ class Season():
         self.peakDay = peakDay
         self.colors = clockColors
 
-    def getDayPhases(self, seasonDay: int, daySegmentLengthMs: int) -> list[dict[int, Color]]:
+        self.daySegmentLengthMs = DAY_LENGTH_MS / NUMBER_OF_DAY_SEGMENTS
+
+    def getDayPhases(self, seasonDay: int) -> list[tuple[int, Color]]:
         if seasonDay < self.peakDay:
             growthModifier = seasonDay / self.peakDay
         else:
@@ -36,11 +41,9 @@ class Season():
         dayStart = (dawnStart + self.dawnLength) % 24
         duskStart = nightStart - self.duskLength
 
-        dayPhases = [dawnStart, dayStart, duskStart, nightStart]
-        for phaseIndex in range(len(dayPhases)):
-            dayPhases[phaseIndex] = {'start': dayPhases[phaseIndex] * daySegmentLengthMs, 'color': self.colors[phaseIndex]}
+        dayPhasesStartTime = map(lambda time: time * self.daySegmentLengthMs,[dawnStart, dayStart, duskStart, nightStart])
 
-        return dayPhases
+        return list(zip(dayPhasesStartTime, self.colors))
 
     def customRound(self, number: float, numberChangeStep: float) -> int:
         if numberChangeStep > 0:

@@ -1,5 +1,5 @@
 import pygame
-from pygame import Surface
+from pygame import Surface, SRCALPHA
 from pygame.sprite import Sprite, Group
 from pygame.math import Vector2
 
@@ -25,7 +25,7 @@ class CameraSpriteGroup(Group):
         self.entities = EntitiesGroup()
         self.items = Group()
         self.savefileGroups = SavefileGroups()
-        self.nightMask: Surface | None = None
+        self.nightMask: Surface = Surface((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), SRCALPHA)
         self.weatherController: WeatherController | None = None
         self.showHitboxex = False
 
@@ -83,3 +83,6 @@ class CameraSpriteGroup(Group):
         for item in self.items.sprites():
             if item.id == id:
                 return item
+
+    def updateNightMask(self, brightness: int):
+        self.nightMask.fill((brightness, brightness, brightness))

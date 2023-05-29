@@ -3,6 +3,10 @@ from pygame.time import Clock
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
 from game.SoundPlayer import SoundPlayer
+from game.dayCycle.DayCycle import DayCycle
+from game.dayCycle.domain.DayPhase import DayPhase
+from game.dayCycle.domain.DayPhaseListener import DayPhaseListener
+
 from game.entities.Goblin import Goblin
 
 from game.items.domain.Hammer import Hammer
@@ -14,16 +18,18 @@ from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.items.GoblinFang import GoblinFang
 
 
-class GoblinHideout(Object):
+class GoblinHideout(Object, DayPhaseListener):
     def __init__(self, visibleSprites: CameraSpriteGroup, obstacleSprites: ObstacleSprites,
                  loadedImages: LoadedImages, loadedSounds: LoadedSounds, midbottom: Vector2,
-                 clock: Clock, soundPlayer: SoundPlayer,
+                 clock: Clock, soundPlayer: SoundPlayer, dayCycle: DayCycle,
                  daysFromGoblinsChange: int = None, currentDurability: int = None,
                  goblinsDataList: list[dict] = None):
         image = loadedImages.goblinHideout
         Object.__init__(self, visibleSprites, midbottom, 50, Hammer, image, currentDurability)
         self.loadedImages = loadedImages
         self.loadedSounds = loadedSounds
+        self.dayCycle = dayCycle
+
         self.goblins: list[Goblin] = []
         self.daysFromGoblinsChange = daysFromGoblinsChange if daysFromGoblinsChange else 0
         self.obstacleSprites = obstacleSprites
@@ -31,6 +37,8 @@ class GoblinHideout(Object):
         self.soundPlayer = soundPlayer
         self.goblinFactory = GoblinFactory(self.visibleSprites, self.obstacleSprites, self.loadedImages,
                                            self.loadedSounds, self.clock, self.soundPlayer)
+
+        self.dayCycle.events.subscribe(DayPhase.DAY, self)
 
         if goblinsDataList is not None:
             for goblinData in goblinsDataList:
@@ -52,8 +60,9 @@ class GoblinHideout(Object):
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
+        self.dayCycle.events.unsubscribe(DayPhase.DAY)
 
-    def onNewDay(self):
+    def onDay(self):
         if len(self.goblins) >= 2:
             return
 

@@ -9,7 +9,7 @@ from Config import Config
 from constants import TILE_SIZE, HAPPY_THEME
 from game.SoundPlayer import SoundPlayer
 from gameInitialization.GenerateMap import populateMapWithData
-from game.DayCycle import DayCycle
+from game.dayCycle.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
@@ -82,9 +82,9 @@ class Game:
         self.mapData = saveData['map']
         self.map = self.createMap(self.mapData)
         self.player: Player
-        self.createSprites(saveData['sprites'])
-        self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], 2 * 64 * 1000, self.clock, config,
+        self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], self.clock, config,
                                  self.UiSprites, self.visibleSprites)
+        self.createSprites(saveData['sprites'])
 
         self.weatherController = WeatherController(self.loadedImages, self.clock, config,
                                                    Vector2(self.player.rect.center))
@@ -133,7 +133,7 @@ class Game:
                           'UiSprites': self.UiSprites,
                           'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config,
                           'clock': self.clock,
-                          'soundPlayer': self.soundPlayer, 'destroyTower': self.destroyTower}
+                          'soundPlayer': self.soundPlayer, 'destroyTower': self.destroyTower, 'dayCycle': self.dayCycle}
         playerInventoryData = None
         for className, instancesDataList in sprites.items():
             # print(className, len(instancesDataList))
@@ -207,7 +207,7 @@ class Game:
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.inputManager.handleInput()
-            self.dayCycle.updateDayCycle()
+            self.dayCycle.update()
             self.visibleSprites.update()
             self.handleTick()
             playerCenter = Vector2(self.player.rect.center)

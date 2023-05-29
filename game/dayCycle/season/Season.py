@@ -26,7 +26,7 @@ class Season:
         self.peakDay = peakDay
         self.colors = clockColors
 
-        self.daySegmentLengthMs = int(DAY_LENGTH_MS / NUMBER_OF_DAY_SEGMENTS)
+        self.daySegmentLengthMs = DAY_LENGTH_MS / NUMBER_OF_DAY_SEGMENTS
 
     def getDayPhases(self, seasonDay: int) -> list[tuple[int, Color]]:
         if seasonDay < self.peakDay:

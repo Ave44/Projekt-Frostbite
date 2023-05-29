@@ -70,7 +70,7 @@ class RabbitHole(Object, DayPhaseListener):
     def interact(self) -> None:
         print("interacted with rabbit hole")
 
-    def onNewDay(self):
+    def onDay(self):
         self.releaseRabbits()
 
         if len(self.rabbits) >= 3:
@@ -84,12 +84,6 @@ class RabbitHole(Object, DayPhaseListener):
 
     def onEvening(self):
         self.hideRabbits()
-
-    def onDayPhaseChange(self, dayPhase: DayPhase):
-        if dayPhase == DayPhase.DAY:
-            self.onNewDay()
-        elif dayPhase == DayPhase.EVENING:
-            self.onEvening()
 
     def getSaveData(self) -> dict:
         rabbitsDataList = []

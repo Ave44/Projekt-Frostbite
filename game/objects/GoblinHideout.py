@@ -34,7 +34,7 @@ class GoblinHideout(Object, DayPhaseListener):
         self.clock = clock
         self.soundPlayer = soundPlayer
 
-        self.dayCycle.events.subscribe(DayPhase.DAY)
+        self.dayCycle.events.subscribe(DayPhase.DAY, self)
 
         if goblinsDataList is not None:
             for goblinData in goblinsDataList:
@@ -58,7 +58,7 @@ class GoblinHideout(Object, DayPhaseListener):
         GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
         self.dayCycle.events.unsubscribe(DayPhase.DAY)
 
-    def onNewDay(self):
+    def onDay(self):
         if len(self.goblins) >= 2:
             return
 
@@ -67,10 +67,6 @@ class GoblinHideout(Object, DayPhaseListener):
             return
 
         self.spawnGoblin()
-
-    def onDayPhaseChange(self, dayPhase: DayPhase):
-        if dayPhase == DayPhase.DAY:
-            self.onNewDay()
 
     def destroy(self) -> None:
         Object.destroy()

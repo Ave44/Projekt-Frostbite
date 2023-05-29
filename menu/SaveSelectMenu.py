@@ -9,6 +9,7 @@ from game.Game import Game
 from menu.Menu import Menu
 from menu.CreateGame import CreateGame
 from menu.general.Button import Button
+from shared.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class SaveSelectMenu(Menu):
@@ -16,7 +17,8 @@ class SaveSelectMenu(Menu):
         Menu.__init__(self, screen)
         self.config = config
         self.backAction = backAction
-        self.createGameMenu = CreateGame(screen, self.initiateView, self.config)
+        self.loadingScreenGenerator = LoadingScreenGenerator(screen, config)
+        self.createGameMenu = CreateGame(screen, self.initiateView, self.config, self.loadingScreenGenerator)
 
     def loadSavefile(self, savefileName: str) -> None:
         self.config.savefileName = savefileName
@@ -24,7 +26,7 @@ class SaveSelectMenu(Menu):
         if isfile(f"./savefiles/{savefileName}.json"):
             with open(f"./savefiles/{savefileName}.json") as savefile:
                 saveData = json.load(savefile)
-            game = Game(self.screen, self.config, saveData)
+            game = Game(self.screen, self.config, saveData, self.loadingScreenGenerator)
             game.play()
         else:
             self.createGameMenu.initiateCreateGame()

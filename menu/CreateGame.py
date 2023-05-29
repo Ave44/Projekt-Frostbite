@@ -1,4 +1,4 @@
-from pygame import display, Vector2
+from pygame import Vector2
 from json import dump
 
 from Config import Config
@@ -7,11 +7,13 @@ from menu.Menu import Menu
 from menu.general.Button import Button
 from gameInitialization.GenerateMap import generateMap
 from game.Game import Game
+from shared.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class CreateGame(Menu):
-    def __init__(self, screen, backAction, config: Config):
+    def __init__(self, screen, backAction, config: Config, loadingScreenGenerator: LoadingScreenGenerator):
         Menu.__init__(self, screen)
+        self.loadingScreenGenerator = loadingScreenGenerator
         self.backAction = backAction
         self.mapSizes = ["XS", "S", "M", "L", "XL"]
         self.mapSizesList = [50, 75, 100, 150, 200]
@@ -48,19 +50,12 @@ class CreateGame(Menu):
     def createGame(self) -> None:
         mapSize = self.mapSizesList[self.mapSizesIndex]
         objectsQuantity = self.objectsQuantityList[self.objectsQuantityIndex]
-        mapRaw, mapData, objects = generateMap(mapSize, objectsQuantity, self.generateMapLoadingScreen)
+        mapRaw, mapData, objects = generateMap(mapSize, objectsQuantity, self.loadingScreenGenerator.generateLoadingScreen)
         saveData = {'map': mapRaw, 'currentDay': 1, 'currentTimeMs': 60000, 'sprites': objects}
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(saveData, file)
-        game = Game(self.screen, self.config, saveData)
+        game = Game(self.screen, self.config, saveData, self.loadingScreenGenerator)
         game.play()
-
-    def generateMapLoadingScreen(self, information: str) -> None:
-        self.screen.fill((0, 0, 0))
-        infoText = self.config.fontBig.render(information, True, FONT_MENU_COLOR)
-        infoRect = infoText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.5 * self.config.WINDOW_HEIGHT))
-        self.screen.blit(infoText, infoRect)
-        display.flip()
 
     def createButton(self, buttonsList: list, position: Vector2, buttonText: str, action: callable) -> Button:
         button = Button(pos=position,

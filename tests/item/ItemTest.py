@@ -52,5 +52,13 @@ class ItemTest(unittest.TestCase):
         self.item.onLeftClickAction(self.player)
         self.player.inventory.addItem.assert_called_once()
 
+    def test_hide_should_remove_item_from_visibleSprites(self):
+        self.item.hide()
+        self.assertNotIn(self.item, self.visibleSprites)
+
+    def test_on_left_click_action_should_call_inventory_addItem_method(self):
+        self.item.onLeftClickAction(self.player)
+        self.player.inventory.addItem.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()

@@ -6,10 +6,10 @@ from pygame import mixer, Surface, Rect
 from pygame.math import Vector2
 from pygame.time import Clock
 from Config import Config
-from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR
+from constants import TILE_SIZE, HAPPY_THEME
 from game.SoundPlayer import SoundPlayer
 from gameInitialization.GenerateMap import populateMapWithData
-from game.DayCycle import DayCycle
+from game.dayCycle.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
@@ -58,13 +58,15 @@ from game.items.GrassFibers import GrassFibers
 from game.items.SmallMeat import SmallMeat
 from game.items.BigMeat import BigMeat
 from game.items.LeatherArmor import LeatherArmor
+from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class Game:
-    def __init__(self, screen: Surface, config: Config, saveData: dict):
+    def __init__(self, screen: Surface, config: Config, saveData: dict, loadingScreenGenerator: LoadingScreenGenerator):
         self.config = config
         self.screen = screen
-        self.generateMapLoadingScreen("Loading savefile")
+        self.loadingScreenGenerator = loadingScreenGenerator
+        self.loadingScreenGenerator.generateLoadingScreen("Loading savefile")
         self.clock = Clock()
 
         self.loadedImages = LoadedImages()
@@ -80,9 +82,9 @@ class Game:
         self.mapData = saveData['map']
         self.map = self.createMap(self.mapData)
         self.player: Player
-        self.createSprites(saveData['sprites'])
-        self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], 2 * 64 * 1000, self.clock, config,
+        self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], self.clock, config,
                                  self.UiSprites, self.visibleSprites)
+        self.createSprites(saveData['sprites'])
 
         self.weatherController = WeatherController(self.loadedImages, self.clock, config,
                                                    Vector2(self.player.rect.center))
@@ -106,13 +108,6 @@ class Game:
         self.towersAmount -= 1
         if self.towersAmount == 0:
             print("YOU WIN!")
-
-    def generateMapLoadingScreen(self, information: str) -> None:
-        self.screen.fill((0, 0, 0))
-        infoText = self.config.fontBig.render(information, True, FONT_MENU_COLOR)
-        infoRect = infoText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.5 * self.config.WINDOW_HEIGHT))
-        self.screen.blit(infoText, infoRect)
-        pygame.display.flip()
 
     def createMap(self, mapRaw: list[list[int]]) -> list[list]:
         mapSize = len(mapRaw)
@@ -138,7 +133,7 @@ class Game:
                           'UiSprites': self.UiSprites,
                           'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config,
                           'clock': self.clock,
-                          'soundPlayer': self.soundPlayer, 'destroyTower': self.destroyTower}
+                          'soundPlayer': self.soundPlayer, 'destroyTower': self.destroyTower, 'dayCycle': self.dayCycle}
         playerInventoryData = None
         for className, instancesDataList in sprites.items():
             # print(className, len(instancesDataList))
@@ -212,7 +207,7 @@ class Game:
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.inputManager.handleInput()
-            self.dayCycle.updateDayCycle()
+            self.dayCycle.update()
             self.visibleSprites.update()
             self.handleTick()
             playerCenter = Vector2(self.player.rect.center)

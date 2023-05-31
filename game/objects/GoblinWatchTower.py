@@ -13,6 +13,7 @@ from game.entities.Goblin import Goblin
 from game.entities.domain.State import State
 from game.items.domain.Axe import Axe
 from game.objects.domain.Object import Object
+from game.objects.factories.GoblinFactory import GoblinFactory
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 
@@ -40,6 +41,8 @@ class GoblinWatchTower(Object):
         self.soundPlayer = soundPlayer
         self.destroyTower = destroyTower
         self.goblinsInside = True
+        self.goblinFactory = GoblinFactory(self.visibleSprites, self.obstacleSprites, self.loadedImages,
+                                           self.loadedSounds, self.clock, self.soundPlayer)
 
         if goblinDataList is not None:
             for goblinData in goblinDataList:
@@ -62,22 +65,10 @@ class GoblinWatchTower(Object):
     def spawnAggressiveGoblins(self, player: Player) -> None:
         self.goblinsInside = False
         pos = Vector2(self.rect.centerx, self.rect.centery)
-        if len(self.goblins) != 0:
+        if len(self.goblins) != 0 or len(self.goblinChampion) != 0:
             self.revealAggressiveGoblins(player, pos)
-            return
-        if self.daysUntilPotentialActivation == 0:
-            for i in range(0, self.numberOfGoblinsToSpawn):
-                goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
-                                self.clock, pos, self.soundPlayer)
-                goblin.moveToOrAttack(player)
-                self.goblins.append(goblin)
-            goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages,
-                                            self.loadedSounds, self.clock, pos, self.soundPlayer)
-            goblinChampion.moveToOrAttack(player)
-            self.goblins.append(goblinChampion)
-            self.daysUntilPotentialActivation = 1
 
-    def goblinChampionStateCheck(self) -> None:
+    def goblinChampionStateCheck(self, player: Player) -> None:
         if len(self.goblinChampion) != 0:
             goblinChampion = self.goblinChampion[0]
             if goblinChampion.state == State.DEAD:
@@ -85,8 +76,9 @@ class GoblinWatchTower(Object):
             else:
                 goblinChampion.currHealth = goblinChampion.maxHealth
                 goblinChampion.add(goblinChampion.visibleSprites)
+                goblinChampion.moveToOrAttack(player)
 
-    def goblinListStateCheck(self) -> None:
+    def goblinListStateCheck(self, player: Player) -> None:
         for goblin in self.goblins:
             if goblin.state == State.DEAD:
                 indexToRemove = self.goblins.index(goblin)
@@ -94,16 +86,18 @@ class GoblinWatchTower(Object):
             else:
                 goblin.currHealth = goblin.maxHealth
                 goblin.add(goblin.visibleSprites)
+                goblin.moveToOrAttack(player)
 
     def revealAggressiveGoblins(self, player: Player, pos: Vector2) -> None:
-        self.goblinListStateCheck()
-        self.goblinChampionStateCheck()
-        if len(self.goblins) != 3 and self.daysUntilPotentialActivation:
+        self.goblinListStateCheck(player)
+        self.goblinChampionStateCheck(player)
+        daysUntilPotentialActivationSnapshot = self.daysUntilPotentialActivation
+        if len(self.goblins) != 3 and daysUntilPotentialActivationSnapshot == 0:
             for i in range(0, 3 - len(self.goblins)):
                 goblin = self.spawnGoblin(pos)
                 goblin.moveToOrAttack(player)
                 self.daysUntilPotentialActivation = 1
-        if len(self.goblinChampion) != 1 and self.daysUntilPotentialActivation:
+        if len(self.goblinChampion) != 1 and daysUntilPotentialActivationSnapshot == 0:
             goblin = self.spawnGoblinChampion(pos)
             goblin.moveToOrAttack(player)
             self.daysUntilPotentialActivation = 1
@@ -132,7 +126,7 @@ class GoblinWatchTower(Object):
         elif not self.goblinsInside:
             allGoblinsAtHome = True
             for goblin in [*self.goblins, *self.goblinChampion]:
-                goblin.setDestination(Vector2(self.rect.midbottom), None)
+                goblin.setDestination(Vector2(self.rect.midbottom))
                 if goblin.rect.midbottom == self.rect.midbottom:
                     goblin.remove(goblin.visibleSprites)
                 else:
@@ -147,15 +141,13 @@ class GoblinWatchTower(Object):
         for goblin in [*self.goblins, *self.goblinChampion]:
             goblin.isHomeless = True
 
-    def spawnGoblin(self, pos, currentHealth: int = None) -> Goblin:
-        goblin = Goblin(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds,
-                        self.clock, pos, self.soundPlayer, currentHealth)
+    def spawnGoblin(self, pos, currentHealth: int | None = None) -> Goblin:
+        goblin = self.goblinFactory.createGoblin(pos, currentHealth)
         self.goblins.append(goblin)
         return goblin
 
-    def spawnGoblinChampion(self, pos, currentHealth: int = None) -> GoblinChampion:
-        goblinChampion = GoblinChampion(self.visibleSprites, self.obstacleSprites, self.loadedImages,
-                                        self.loadedSounds, self.clock, pos, self.soundPlayer, currentHealth)
+    def spawnGoblinChampion(self, pos, currentHealth: int | None = None) -> GoblinChampion:
+        goblinChampion = self.goblinFactory.createGoblinChampion(pos, currentHealth)
         self.goblinChampion.append(goblinChampion)
         return goblinChampion
 

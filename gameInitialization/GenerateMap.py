@@ -15,23 +15,27 @@ def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
     for y in range(1, len(idMatrix) - 1):
         for x in range(1, len(idMatrix) - 1):
             if idMatrix[x][y] != 0:
-                originalName = namesMatrix[x][y]
-                checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
-                checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
-                checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
-                checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
+                leftCoast = checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
+                rightCoast = checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
+                topCoast = checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
+                bottomCoast = checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
 
-                if namesMatrix[x][y] == originalName:
+                if not leftCoast and not topCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,  -1, -1, "1")
+                if not rightCoast and not topCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,   1, -1, "2")
+                if not rightCoast and not bottomCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,   1,  1, "3")
+                if not leftCoast and not bottomCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,  -1,  1, "4")
 
     return namesMatrix
 
-def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str) -> None:
+def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str) -> Bool:
     if idMatrix[x + xOffset][y + yOffset] == 0:
         namesMatrix[x][y] = namesMatrix[x][y] + borderTag
+        return True
+    return False
 
 def loadTilesData() -> dict['image': pygame.image, 'walkable': bool]:
     tilesData = {}

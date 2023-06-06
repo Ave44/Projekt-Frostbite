@@ -63,8 +63,9 @@ from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class Game:
-    def __init__(self, config: Config, saveData: dict):
+    def __init__(self, config: Config, saveData: dict, returnToMainMenu: callable):
         self.config = config
+        self.returnToMainMenu = returnToMainMenu
         self.screen = display.get_surface()
         LoadingScreenGenerator(config).generateLoadingScreen("Loading savefile")
         self.clock = Clock()
@@ -250,3 +251,4 @@ class Game:
             event = pygame.event.wait()
             if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 self.waitingForInput = False
+                self.returnToMainMenu()

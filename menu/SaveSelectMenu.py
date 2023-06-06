@@ -12,11 +12,12 @@ from menu.general.Text import Text
 
 
 class SaveSelectMenu(Menu):
-    def __init__(self, config: Config, goToMainMenu: callable, goToCreateGameMenu: callable, refreshMenu: callable):
+    def __init__(self, config: Config, goToMainMenu: callable, goToCreateGameMenu: callable, refreshMenu: callable, returnToMainMenu: callable):
         Menu.__init__(self)
         self.config = config
         self.goToMainMenu = goToMainMenu
         self.goToCreateGameMenu = goToCreateGameMenu
+        self.returnToMainMenu = returnToMainMenu
         self.refreshMenu = refreshMenu
         self.createButtons()
         self.createTexts()
@@ -27,7 +28,7 @@ class SaveSelectMenu(Menu):
         if isfile(f"./savefiles/{savefileName}.json"):
             with open(f"./savefiles/{savefileName}.json") as savefile:
                 saveData = json.load(savefile)
-            game = Game(self.config, saveData)
+            game = Game(self.config, saveData, self.returnToMainMenu)
             game.play()
         else:
             self.goToCreateGameMenu()

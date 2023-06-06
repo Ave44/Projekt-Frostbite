@@ -12,9 +12,10 @@ from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class CreateGame(Menu):
-    def __init__(self, config: Config, goToSaveSelectMenu: callable, refreshMenu: callable):
+    def __init__(self, config: Config, goToSaveSelectMenu: callable, refreshMenu: callable, returnToMainMenu: callable):
         Menu.__init__(self)
         self.goToSaveSelectMenu = goToSaveSelectMenu
+        self.returnToMainMenu = returnToMainMenu
         self.refreshMenu = refreshMenu
         self.mapSizes = ["XS", "S", "M", "L", "XL"]
         self.mapSizesList = [50, 75, 100, 150, 200]
@@ -60,7 +61,7 @@ class CreateGame(Menu):
         saveData = {'map': mapRaw, 'currentDay': 1, 'currentTimeMs': 50000, 'sprites': objects}
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(saveData, file)
-        game = Game(self.config, saveData)
+        game = Game(self.config, saveData, self.returnToMainMenu)
         game.play()
 
     def createButton(self, buttonsList: list, position: Vector2, buttonText: str, action: callable) -> Button:

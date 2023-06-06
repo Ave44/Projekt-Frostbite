@@ -7,18 +7,19 @@ from constants import FONT_MENU_COLOR, DELETE_SAVEFILE_COLOR
 from Config import Config
 from game.Game import Game
 from menu.Menu import Menu
-from menu.CreateGame import CreateGame
 from menu.general.Button import Button
-from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
+from menu.general.Text import Text
 
 
 class SaveSelectMenu(Menu):
-    def __init__(self, screen, config: Config, backAction):
-        Menu.__init__(self, screen)
+    def __init__(self, config: Config, goToMainMenu: callable, goToCreateGameMenu: callable, refreshMenu: callable):
+        Menu.__init__(self)
         self.config = config
-        self.backAction = backAction
-        self.loadingScreenGenerator = LoadingScreenGenerator(screen, config)
-        self.createGameMenu = CreateGame(screen, self.initiateView, self.config, self.loadingScreenGenerator)
+        self.goToMainMenu = goToMainMenu
+        self.goToCreateGameMenu = goToCreateGameMenu
+        self.refreshMenu = refreshMenu
+        self.createButtons()
+        self.createTexts()
 
     def loadSavefile(self, savefileName: str) -> None:
         self.config.savefileName = savefileName
@@ -26,14 +27,14 @@ class SaveSelectMenu(Menu):
         if isfile(f"./savefiles/{savefileName}.json"):
             with open(f"./savefiles/{savefileName}.json") as savefile:
                 saveData = json.load(savefile)
-            game = Game(self.screen, self.config, saveData, self.loadingScreenGenerator)
+            game = Game(self.config, saveData)
             game.play()
         else:
-            self.createGameMenu.initiateCreateGame()
+            self.goToCreateGameMenu()
 
     def deleteSavefile(self, savefileName: str):
         remove(f"./savefiles/{savefileName}.json")
-        self.initiateView()
+        self.refreshMenu()
 
     def createDeleteSaveButton(self, buttonsList: list, savefileName: str, position: Vector2) -> None:
         if isfile(f"./savefiles/{savefileName}.json"):
@@ -53,7 +54,7 @@ class SaveSelectMenu(Menu):
         buttonsList.append(button)
         return button
 
-    def createButtons(self) -> list[Button]:
+    def createButtons(self) -> None:
         buttonsList = []
 
         savefile1Button = self.createSavefileButton(buttonsList, "SAVEFILE 1", "savefile1", Vector2(0.5 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT))
@@ -61,8 +62,8 @@ class SaveSelectMenu(Menu):
         savefile3Button = self.createSavefileButton(buttonsList, "SAVEFILE 3", "savefile3", Vector2(0.5 * self.config.WINDOW_WIDTH, 0.625 * self.config.WINDOW_HEIGHT))
 
         deleteButton1Position = Vector2(savefile1Button.rect.right + 100, 0.347 * self.config.WINDOW_HEIGHT)
-        deleteButton2Position = Vector2(savefile1Button.rect.right + 100, 0.486 * self.config.WINDOW_HEIGHT)
-        deleteButton3Position = Vector2(savefile1Button.rect.right + 100, 0.625 * self.config.WINDOW_HEIGHT)
+        deleteButton2Position = Vector2(savefile2Button.rect.right + 100, 0.486 * self.config.WINDOW_HEIGHT)
+        deleteButton3Position = Vector2(savefile3Button.rect.right + 100, 0.625 * self.config.WINDOW_HEIGHT)
         self.createDeleteSaveButton(buttonsList, "savefile1", deleteButton1Position)
         self.createDeleteSaveButton(buttonsList, "savefile2", deleteButton2Position)
         self.createDeleteSaveButton(buttonsList, "savefile3", deleteButton3Position)
@@ -70,17 +71,13 @@ class SaveSelectMenu(Menu):
         backButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.764 * self.config.WINDOW_HEIGHT),
                             textInput="BACK",
                             font=self.config.fontBig,
-                            action=self.backAction)
+                            action=self.goToMainMenu)
         buttonsList.append(backButton)
-        return buttonsList
+        
+        self.buttons = buttonsList
+    
+    def createTexts(self) -> None:
+        mainMenuTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT)
+        mainMenuText = Text(mainMenuTextPos, "SELECT SAVEFILE", self.config.fontHuge, FONT_MENU_COLOR)
 
-
-    def initiateView(self) -> None:
-        self.createBackground()
-        menuText = self.config.fontHuge.render("SELECT SAVEFILE", True, FONT_MENU_COLOR)
-        menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
-
-        menuButtons = self.createButtons()
-        menuTexts = [[menuText, menuRect]]
-
-        self.menuLoop(menuTexts, menuButtons)
+        self.texts = [mainMenuText]

@@ -34,6 +34,7 @@ class Player(Entity, Glowing):
                  loadedSounds: LoadedSounds,
                  config: Config,
                  clock: Clock,
+                 endGame : callable,
                  midbottom: Vector2,
                  currHealth: int = None,
                  currHunger: float = None):
@@ -72,6 +73,8 @@ class Player(Entity, Glowing):
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)
         self.hungerBar = Bar(Vector2(115, 90), self.maxHunger, ceil(self.currHunger), 20, 200,
                              HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE)
+        
+        self.endGame = endGame
 
     def moveInDirection(self):
         Entity.moveInDirection(self)
@@ -125,6 +128,7 @@ class Player(Entity, Glowing):
         self.remove(*self.groups())
         self.drop()
         print(deathMessage)
+        self.endGame("Game Over!")
 
     def updateHunger(self):
         deltaTime = self.clock.get_time()

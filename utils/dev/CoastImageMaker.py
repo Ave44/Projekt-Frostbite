@@ -45,9 +45,9 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
     # 3 side beach
     returnedTileArray = numpy.array(groundTileImg)
     layMaskOnGroundFile(maskCorner3SideArray)
-    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "TLR.png")
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "LRT.png")
     Image.fromarray(numpy.rot90(returnedTileArray)).save("coastFiles/" + groundTileName + "LTB.png")
-    Image.fromarray(numpy.rot90(returnedTileArray, 2)).save("coastFiles/" + groundTileName + "BLR.png")
+    Image.fromarray(numpy.rot90(returnedTileArray, 2)).save("coastFiles/" + groundTileName + "LRB.png")
     Image.fromarray(numpy.rot90(returnedTileArray, 3)).save("coastFiles/" + groundTileName + "RTB.png")
 
     # endregion
@@ -127,5 +127,5 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
 makeArrayOftileSizextileSizeCoastImagesForTile(
     "../../graphics/tiles/walkable/beach/beach.png",
     "../../graphics/tiles/collidable/sea/sea.png",
-    "beach",
+    "medow",
     128)

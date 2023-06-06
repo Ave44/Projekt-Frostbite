@@ -12,18 +12,20 @@ def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
     matrixSize = len(idMatrix)
     namesMatrix = [[BIOMES_ID[idMatrix[row][column]] for column in range(matrixSize)] for row in range(matrixSize)]
 
-    # for y in range(1, len(idMatrix) - 1):
-    #     for x in range(1, len(idMatrix) - 1):
-    #         if idMatrix[x][y] != 0:
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
-    #             checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
+    for y in range(1, len(idMatrix) - 1):
+        for x in range(1, len(idMatrix) - 1):
+            if idMatrix[x][y] != 0:
+                originalName = namesMatrix[x][y]
+                checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
+                checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
+                checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
+                checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
 
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  -1, -1, "1")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,   1, -1, "2")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,   1,  1, "3")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  -1,  1, "4")
+                if namesMatrix[x][y] == originalName:
+                    checkForBorder(idMatrix, namesMatrix, x, y,  -1, -1, "1")
+                    checkForBorder(idMatrix, namesMatrix, x, y,   1, -1, "2")
+                    checkForBorder(idMatrix, namesMatrix, x, y,   1,  1, "3")
+                    checkForBorder(idMatrix, namesMatrix, x, y,  -1,  1, "4")
 
     return namesMatrix
 

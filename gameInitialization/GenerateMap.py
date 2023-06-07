@@ -22,11 +22,11 @@ def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
 
                 if not leftCoast and not topCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,  -1, -1, "1")
-                if not rightCoast and not topCoast:
+                if not leftCoast and not bottomCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,   1, -1, "2")
                 if not rightCoast and not bottomCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,   1,  1, "3")
-                if not leftCoast and not bottomCoast:
+                if not rightCoast and not topCoast:
                     checkForBorder(idMatrix, namesMatrix, x, y,  -1,  1, "4")
 
     return namesMatrix

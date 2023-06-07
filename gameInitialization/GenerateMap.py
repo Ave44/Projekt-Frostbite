@@ -31,7 +31,7 @@ def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
 
     return namesMatrix
 
-def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str) -> Bool:
+def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str):
     if idMatrix[x + xOffset][y + yOffset] == 0:
         namesMatrix[x][y] = namesMatrix[x][y] + borderTag
         return True

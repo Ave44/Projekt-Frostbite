@@ -123,9 +123,113 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
     Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "1234.png")
     # endregion
 
+    # region BeachesWithInverseCornersRegion
+    maskT3 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskT3.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskT3)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "T3.png")
+
+    maskT4 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskT4.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskT4)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "T4.png")
+
+    maskB1 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskB1.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskB1)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "B1.png")
+
+    maskB2 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskB2.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskB2)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "B2.png")
+
+    #========================================================================================
+
+    maskB12 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskB12.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskB12)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "B12.png")
+
+    maskL23 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskL23.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskL23)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "L23.png")
+
+    maskT34 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskT34.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskT34)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "T34.png")
+
+    maskR14 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskR14.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskR14)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "R14.png")
+
+    # ========================================================================================
+
+    maskLB2 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskLB2.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskLB2)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "LB2.png")
+
+    maskLT3 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskLT3.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskLT3)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "LT3.png")
+
+    maskRT4 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskRT4.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskRT4)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "RT4.png")
+
+    maskRB1 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskRB1.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskRB1)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "RB1.png")
+
+    # ========================================================================================
+
+    maskL2 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskL2.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskL2)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "L2.png")
+
+    maskL3 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskL3.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskL3)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "L3.png")
+
+    maskR1 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskR1.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskR1)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "R1.png")
+
+    maskR4 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskR4.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskR4)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "R4.png")
+
+    # end region
 
 makeArrayOftileSizextileSizeCoastImagesForTile(
-    "../../graphics/tiles/walkable/beach/beach.png",
+    "../../graphics/tiles/walkable/medow/medow.png",
     "../../graphics/tiles/collidable/sea/sea.png",
     "medow",
     128)

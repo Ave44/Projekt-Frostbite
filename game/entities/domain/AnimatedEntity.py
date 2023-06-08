@@ -1,7 +1,6 @@
-from game.entities.domain.Entity import Entity
 from abc import ABC
 
-from pygame import Vector2, Surface, Rect
+from pygame import Surface
 from pygame.sprite import Sprite
 from pygame.time import Clock
 

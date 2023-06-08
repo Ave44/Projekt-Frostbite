@@ -41,7 +41,7 @@ class LoadedImages:
 
         self.goblinHideout = load("./graphics/objects/goblin_hideout.png").convert_alpha()
         self.goblinTorch = load("./graphics/objects/goblin_torch.png").convert_alpha()
-        self.goblinHorn = load("./graphics/objects/goblin_horn.png").convert_alpha()
+        self.goblinWatchTower = load("./graphics/objects/goblin_watch_tower.png").convert_alpha()
         self.tent = load("./graphics/objects/tent.png").convert_alpha()
 
     def loadItemsImages(self):

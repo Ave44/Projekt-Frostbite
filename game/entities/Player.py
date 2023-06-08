@@ -12,7 +12,6 @@ from pygame.math import Vector2
 from math import ceil
 from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE, SLOT_GAP
 from Config import Config
-from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.entities.domain.Entity import Entity
@@ -104,13 +103,13 @@ class Player(Entity, Glowing):
         self.direction.x = 1
         self.stopAutowalking()
 
-    def handleMouseLeftClick(self, sprite: Sprite):
+    def handleMouseLeftClick(self, sprite: Sprite) -> None:
         self.setDestination(Vector2(sprite.rect.midbottom), sprite)
 
     def drop(self) -> None:
         pass
 
-    def damage(self):
+    def damage(self) -> int:
         if self.handSlot.item:
             return self.handSlot.item.damage
         return self.handDamage

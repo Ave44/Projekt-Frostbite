@@ -4,11 +4,11 @@ import pygame.image
 from pygame import Surface, Rect, Vector2, Color, SRCALPHA
 from pygame.font import Font
 
-from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, SHADOW, BORDER_SIZE, FONT_COLOR
+from constants import CLOCK_OUTLINE, CLOCK_OUTLINE_SHADOW, SHADOW, BORDER_SIZE, FONT_COLOR, NUMBER_OF_DAY_SEGMENTS
 
 
-class DayNightClock():
-    def __init__(self, dayLengthMs: int, daySegments: int, currentTime: int,
+class DayNightClock:
+    def __init__(self, dayLengthMs: int, currentTime: int,
                  currentDay: int, size: int, font: Font):
         self.dayLengthMs = dayLengthMs
         self.currentDay = currentDay
@@ -19,7 +19,7 @@ class DayNightClock():
 
         self.background = Surface(Vector2(size, size), SRCALPHA)
         self.backgroundOutline = Surface(Vector2(size, size), SRCALPHA)
-        self.createBackgroundOutline(daySegments)
+        self.createBackgroundOutline(NUMBER_OF_DAY_SEGMENTS)
         self.drawCircleCutout(self.background, 0, 360, 0.1, 0, self.radius / 2 - BORDER_SIZE, SHADOW)
 
         self.hand = Surface(Vector2(size, size), SRCALPHA)
@@ -29,9 +29,9 @@ class DayNightClock():
 
     def updateBackground(self, dayPhases: list[tuple[float, Color]]):
         for dayPhaseIndex in range(len(dayPhases)):
-            angleStart = dayPhases[dayPhaseIndex]['start'] / self.dayLengthMs * 360
-            angleEnd = dayPhases[(dayPhaseIndex + 1) % len(dayPhases)]['start'] / self.dayLengthMs * 360
-            color = dayPhases[dayPhaseIndex]['color']
+            angleStart = dayPhases[dayPhaseIndex][0]/ self.dayLengthMs * 360
+            angleEnd = dayPhases[(dayPhaseIndex + 1) % len(dayPhases)][0] / self.dayLengthMs * 360
+            color = dayPhases[dayPhaseIndex][1]
             if angleStart > angleEnd:
                 self.drawCircleCutout(self.background, angleStart, 360, 0.02, self.radius / 2, self.radius, color)
                 self.drawCircleCutout(self.background, 0, angleEnd, 0.02, self.radius / 2, self.radius, color)

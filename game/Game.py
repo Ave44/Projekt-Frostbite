@@ -1,17 +1,15 @@
 import random
 import inspect
 from json import dump
-
 import pygame
 from pygame import mixer, Surface, Rect
 from pygame.math import Vector2
 from pygame.time import Clock
-
 from Config import Config
-from constants import TILE_SIZE, HAPPY_THEME, FONT_MENU_COLOR
+from constants import TILE_SIZE, HAPPY_THEME
 from game.SoundPlayer import SoundPlayer
 from gameInitialization.GenerateMap import populateMapWithData
-from game.DayCycle import DayCycle
+from game.dayCycle.DayCycle import DayCycle
 from game.InputManager import InputManager
 from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
@@ -29,7 +27,7 @@ from game.entities.GoblinChampion import GoblinChampion
 from game.objects.Grass import Grass
 from game.objects.Rock import Rock
 from game.objects.GoblinTorch import GoblinTorch
-from game.objects.GoblinWarningHorn import GoblinWarningHorn
+from game.objects.GoblinWatchTower import GoblinWatchTower
 from game.objects.trees.LargeTree import LargeTree
 from game.objects.trees.MediumTree import MediumTree
 from game.objects.trees.SmallTree import SmallTree
@@ -43,7 +41,6 @@ from game.objects.Tent import Tent
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-
 from game.items.Sword import Sword
 from game.items.StoneAxe import StoneAxe
 from game.items.StonePickaxe import StonePickaxe
@@ -61,13 +58,15 @@ from game.items.GrassFibers import GrassFibers
 from game.items.SmallMeat import SmallMeat
 from game.items.BigMeat import BigMeat
 from game.items.LeatherArmor import LeatherArmor
+from menu.general.LoadingScreenGenerator import LoadingScreenGenerator
 
 
 class Game:
-    def __init__(self, screen: Surface, config: Config, saveData: dict):
+    def __init__(self, screen: Surface, config: Config, saveData: dict, loadingScreenGenerator: LoadingScreenGenerator):
         self.config = config
         self.screen = screen
-        self.generateMapLoadingScreen("Loading savefile")
+        self.loadingScreenGenerator = loadingScreenGenerator
+        self.loadingScreenGenerator.generateLoadingScreen("Loading savefile")
         self.clock = Clock()
 
         self.loadedImages = LoadedImages()
@@ -83,30 +82,34 @@ class Game:
         self.mapData = saveData['map']
         self.map = self.createMap(self.mapData)
         self.player: Player
+        self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], self.clock, config,
+                                 self.UiSprites, self.visibleSprites)
         self.createSprites(saveData['sprites'])
-        self.dayCycle = DayCycle(saveData['currentDay'], saveData['currentTimeMs'], 2 * 64 * 1000, self.clock, config, self.UiSprites, self.visibleSprites)
 
         self.weatherController = WeatherController(self.loadedImages, self.clock, config,
                                                    Vector2(self.player.rect.center))
         self.visibleSprites.weatherController = self.weatherController
 
-        self.player.inventory.addItem(Sword(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(StoneAxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
-        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+        self.player.inventory.addItem(Sword(self.visibleSprites, self.player.rect.midbottom, self.loadedImages),
+                                      self.player.selectedItem)
+        self.player.inventory.addItem(StoneAxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages),
+                                      self.player.selectedItem)
+        self.player.inventory.addItem(StonePickaxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages),
+                                      self.player.selectedItem)
+        self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages),
+                                      self.player.selectedItem)
+        self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages),
+                                      self.player.selectedItem)
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
+        self.towersAmount: int = len(saveData['sprites']['GoblinWatchTower'])
 
+    def destroyTower(self) -> None:
+        self.towersAmount -= 1
+        if self.towersAmount == 0:
+            print("YOU WIN!")
 
-    def generateMapLoadingScreen(self, information: str) -> None:
-        self.screen.fill((0, 0, 0))
-        infoText = self.config.fontBig.render(information, True, FONT_MENU_COLOR)
-        infoRect = infoText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.5 * self.config.WINDOW_HEIGHT))
-        self.screen.blit(infoText, infoRect)
-        pygame.display.flip()
-
-    def createMap(self, mapRaw: list[list[int]]):
+    def createMap(self, mapRaw: list[list[int]]) -> list[list]:
         mapSize = len(mapRaw)
         map = populateMapWithData(mapRaw)
 
@@ -126,9 +129,11 @@ class Game:
 
     def createSprites(self, sprites: dict) -> None:
         globalsData = globals()
-        fixedArguments = {'visibleSprites': self.visibleSprites, 'obstacleSprites': self.obstacleSprites, 'UiSprites': self.UiSprites,
-                           'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config, 'clock': self.clock,
-                          'soundPlayer': self.soundPlayer}
+        fixedArguments = {'visibleSprites': self.visibleSprites, 'obstacleSprites': self.obstacleSprites,
+                          'UiSprites': self.UiSprites,
+                          'loadedImages': self.loadedImages, 'loadedSounds': self.loadedSounds, 'config': self.config,
+                          'clock': self.clock,
+                          'soundPlayer': self.soundPlayer, 'destroyTower': self.destroyTower, 'dayCycle': self.dayCycle}
         playerInventoryData = None
         for className, instancesDataList in sprites.items():
             # print(className, len(instancesDataList))
@@ -157,20 +162,21 @@ class Game:
 
     def createPlayer(self, playerData: dict) -> None:
         self.player = Player(self.visibleSprites, self.obstacleSprites, self.UiSprites,
-                        self.loadedImages, self.loadedSounds, self.config, self.clock,
-                        playerData["midbottom"], playerData["currHealth"], playerData['currHunger'])
+                             self.loadedImages, self.loadedSounds, self.config, self.clock,
+                             playerData["midbottom"], playerData["currHealth"], playerData['currHunger'])
 
     def saveGame(self):
-        savefileData = {'savefileName': self.config.savefileName,'currentDay': self.dayCycle.currentDay, 'currentTimeMs': self.dayCycle.currentTimeMs, "map": self.mapData}
-        savefileData['sprites'] = self.visibleSprites.savefileGroups.createSavefileSpritesData()
+        savefileData = {'savefileName': self.config.savefileName, 'currentDay': self.dayCycle.currentDay,
+                        'currentTimeMs': self.dayCycle.currentTimeMs, "map": self.mapData,
+                        'sprites': self.visibleSprites.savefileGroups.createSavefileSpritesData()}
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(savefileData, file)
 
-    def debug(self, text):
+    def debug(self, text) -> None:
         img = self.config.fontTiny.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
 
-    def handleTick(self):
+    def handleTick(self) -> None:
         self.tick = self.tick + 1
         if self.tick == 1000:
             self.spawnBomb()
@@ -179,29 +185,29 @@ class Game:
             self.spawnBomb()
             self.player.heal(20)
 
-    def spawnBomb(self):
-        viablbePosition = False
-        while not viablbePosition:
-            viablbePosition = True
+    def spawnBomb(self) -> None:
+        viablePosition = False
+        while not viablePosition:
+            viablePosition = True
             randomFactor = random.choice([Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)])
             offset = Vector2(random.randint(128, 512) * randomFactor.x, random.randint(128, 512) * randomFactor.y)
             position = Vector2(self.player.rect.centerx + offset.x, self.player.rect.centery + offset.y)
             rect = Rect(position, (20, 20))
             for sprite in self.obstacleSprites.getObstacles(position):
                 if sprite.colliderRect.colliderect(rect):
-                    viablbePosition = False
+                    viablePosition = False
                     break
         Bomb(self.visibleSprites, self.obstacleSprites, self.loadedImages, self.loadedSounds, self.clock, position)
 
-    def changeMusicTheme(self, theme):
+    def changeMusicTheme(self, theme) -> None:
         mixer.music.load(theme)
         mixer.music.play(-1)
 
-    def play(self):
+    def play(self) -> None:
         self.changeMusicTheme(HAPPY_THEME)
         while True:
             self.inputManager.handleInput()
-            self.dayCycle.updateDayCycle()
+            self.dayCycle.update()
             self.visibleSprites.update()
             self.handleTick()
             playerCenter = Vector2(self.player.rect.center)

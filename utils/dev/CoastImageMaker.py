@@ -14,7 +14,7 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
                     returnedTileArray[i][ii] = seaTileArray[i][ii]
 
     groundTileImg = Image.open(groundTilePath)
-    #groundTileArray = numpy.array(groundTileImg)
+    # groundTileArray = numpy.array(groundTileImg)
     seaTileImg = Image.open(seaTilePath)
     seaTileArray = numpy.array(seaTileImg)
 
@@ -148,7 +148,7 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
     layMaskOnGroundFile(maskB4)
     Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "B4.png")
 
-    #========================================================================================
+    # ========================================================================================
 
     maskB14 = numpy.array(Image.open("coastImageMakerMasks/BeachesWithInverseCornersFolder/maskB14.png"))
 
@@ -227,6 +227,7 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
     Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "R2.png")
 
     # end region
+
 
 makeArrayOftileSizextileSizeCoastImagesForTile(
     "../../graphics/tiles/walkable/beach/beach.png",

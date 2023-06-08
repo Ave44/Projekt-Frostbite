@@ -237,7 +237,6 @@ class Entity(Sprite, ABC):
         if abs(xOffset) <= self.speed and abs(yOffset) <= self.speed:
             self.direction = Vector2(xOffset, yOffset)
             self.adjustImageToDirection()
-            self.colliderRect.midbottom = position
             self.direction = Vector2(0, 0)
         else:
             newDirection = Vector2(xOffset, yOffset)

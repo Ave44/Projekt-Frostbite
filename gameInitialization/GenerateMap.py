@@ -123,7 +123,7 @@ def normalize(matrix):
         maxValue = max(maxValue, max(row))
         minValue = min(minValue, min(row))
     dif = maxValue - minValue
-    matrixNormalized = [[(x-minValue)/dif  for x in y] for y in matrix]
+    matrixNormalized = [[(x - minValue) / dif  for x in y] for y in matrix]
 
     return matrixNormalized
 
@@ -148,7 +148,7 @@ def circleMask(matrix):
     
     for y in range(matrixSize):
         for x in range(matrixSize):
-            distance = ((x - center)**2 + (y - center)**2) / 2
+            distance = ((x - center) ** 2 + (y - center) ** 2) / 2
             mask[y][x] = distance
 
     normalizedMask = normalize(mask)
@@ -272,7 +272,7 @@ def findClosestPoints(pointsList1, pointsList2):
         for index2 in range(list2Len):
             p1 = pointsList1[index1]
             p2 = pointsList2[index2]
-            distance = sqrt((p1['x'] - p2['x'])**2 + (p1['y'] - p2['y'])**2)
+            distance = sqrt((p1['x'] - p2['x']) ** 2 + (p1['y'] - p2['y']) ** 2)
             if minDistance > distance:
                 minDistance = distance
                 point1 = p1
@@ -293,7 +293,7 @@ def minimalSpanningTree(matrix):
         for p1 in range(matrixSize):
             if visitedNodes[p1]:
                 for p2 in range(matrixSize):
-                    if (not visitedNodes[p2] and matrix[p1][p2]>0):  
+                    if (not visitedNodes[p2] and matrix[p1][p2] > 0):  
                         if matrix[p1][p2] < minimum:
                             minimum = matrix[p1][p2]
                             start, end = p1, p2
@@ -306,7 +306,7 @@ def minimalSpanningTree(matrix):
 
     edges = []
     for l1 in range(len(result)):
-        for l2 in range(0+l1, len(result)):
+        for l2 in range(0 + l1, len(result)):
             if result[l1][l2] != 0:
                 edges.append({'label1': l1, 'label2': l2})
     return edges

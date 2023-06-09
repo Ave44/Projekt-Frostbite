@@ -1,41 +1,44 @@
-from pygame import mixer
+import sys
+from pygame import quit
 
-from constants import FONT_MENU_COLOR, MENU_THEME
+from constants import FONT_MENU_COLOR
 from Config import Config
 from menu.Menu import Menu
-from menu.OptionsMenu import OptionsMenu
-from menu.SaveSelectMenu import SaveSelectMenu
 from menu.general.Button import Button
+from menu.general.Text import Text
 
 
 class MainMenu(Menu):
-    def __init__(self, screen, config: Config):
-        Menu.__init__(self, screen)
+    def __init__(self, config: Config, goToCreateGameMenu: callable, goToOptionsMenu: callable):
+        Menu.__init__(self)
         self.config = config
-        self.optionsMenu = OptionsMenu(screen, self.mainMenu, self.config)
-        self.saveSelectMenu = SaveSelectMenu(screen, config, self.mainMenu)
+        self.goToCreateGameMenu = goToCreateGameMenu
+        self.goToOptionsMenu = goToOptionsMenu
 
-    def createButtons(self) -> list[Button]:
+        self.createButtons()
+        self.createTexts()
+
+    def createButtons(self) -> None:
         playButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT),
                             textInput="PLAY",
                             font=self.config.fontBig,
-                            action=self.saveSelectMenu.initiateView)
+                            action=self.goToCreateGameMenu)
         optionsButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.55 * self.config.WINDOW_HEIGHT),
                                textInput="OPTIONS",
                                font=self.config.fontBig,
-                               action=self.optionsMenu.refreshMenu)
+                               action=self.goToOptionsMenu)
         quitButton = Button(pos=(0.5 * self.config.WINDOW_WIDTH, 0.764 * self.config.WINDOW_HEIGHT),
                             textInput="QUIT",
                             font=self.config.fontBig,
                             action=self.quitGame)
-        return [playButton, optionsButton, quitButton]
+        self.buttons = [playButton, optionsButton, quitButton]
 
-    def mainMenu(self) -> None:
-        mixer.music.load(MENU_THEME)
-        mixer.music.play()
-        self.createBackground()
-        menuText = self.config.fontHuge.render("MAIN MENU", True, FONT_MENU_COLOR)
-        menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
-        menuButtons = self.createButtons()
+    def createTexts(self) -> None:
+        mainMenuTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT)
+        mainMenuText = Text(mainMenuTextPos, "MAIN MENU", self.config.fontHuge, FONT_MENU_COLOR)
 
-        self.menuLoop([[menuText, menuRect]], menuButtons)
+        self.texts = [mainMenuText]
+
+    def quitGame(self):
+        quit()
+        sys.exit()

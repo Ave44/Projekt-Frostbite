@@ -235,10 +235,15 @@ class Entity(Sprite, ABC):
         xOffset = position.x - self.colliderRect.centerx
         yOffset = position.y - self.colliderRect.bottom
         if abs(xOffset) <= self.speed and abs(yOffset) <= self.speed:
-            self.direction = Vector2(xOffset, yOffset)
-            self.adjustImageToDirection()
-            self.colliderRect.midbottom = position
-            self.direction = Vector2(0, 0)
+            newRect = Rect(position.x, position.y, self.colliderRect.width, self.colliderRect.height)
+            isCollision, _ = self.checkForCollision(self.colliderRect, newRect)
+            if isCollision:
+                self.midDestinationPosition = None
+            else:
+                self.direction = Vector2(xOffset, yOffset)
+                self.adjustImageToDirection()
+                self.colliderRect.midbottom = position
+                self.direction = Vector2(0, 0)
         else:
             newDirection = Vector2(xOffset, yOffset)
             newDirection = newDirection.normalize()

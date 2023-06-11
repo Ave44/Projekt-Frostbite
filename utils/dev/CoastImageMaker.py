@@ -1,8 +1,6 @@
 from PIL import Image
 import numpy
 
-from matplotlib import pyplot as plt
-
 
 def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, groundTileName, tileSize):
     '''After running function you can find new coast images in coastFiles folder'''
@@ -234,8 +232,20 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
     layMaskOnGroundFile(maskLRTB)
     Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "LRTB.png")
 
+    mask13 = numpy.array(Image.open("coastImageMakerMasks/mask13.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(mask13)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "13.png")
+
+    mask24 = numpy.array(Image.open("coastImageMakerMasks/mask24.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(mask24)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "24.png")
+
 makeArrayOftileSizextileSizeCoastImagesForTile(
-    "../../graphics/tiles/walkable/forest/forest.png",
+    "../../graphics/tiles/walkable/medow/medow.png",
     "../../graphics/tiles/collidable/sea/sea.png",
-    "forest",
+    "medow",
     128)

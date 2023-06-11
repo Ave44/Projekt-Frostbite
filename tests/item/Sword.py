@@ -6,7 +6,6 @@ from pygame.sprite import Group
 
 from game.LoadedImages import LoadedImages
 from game.entities.Player import Player
-from game.items.domain.Item import Item
 from game.items.Sword import Sword
 from game.ui.inventory.Inventory import Inventory
 

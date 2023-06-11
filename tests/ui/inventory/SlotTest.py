@@ -1,18 +1,31 @@
 import unittest
+from unittest.mock import Mock, MagicMock
 
-from mock.mock import Mock
-from pygame import Vector2
+from pygame import Vector2, Surface
 
+from game.entities.Player import Player
+from game.ui.inventory.slot.SelectedItem import SelectedItem
 from game.ui.inventory.slot.Slot import Slot
 from game.items.domain.Item import Item
 
 
 class SlotTest(unittest.TestCase):
-
     def setUp(self) -> None:
-        self.item = Mock(Item)
-        self.emptySlot = Slot(Vector2(0, 0))
-        self.slot = Slot(Vector2(0, 0), self.item)
+        slotImage = Surface((0, 0))
+
+        self.item = MagicMock(Item)
+        self.item2 = MagicMock(Item)
+        self.player = Mock(Player)
+        self.player.selectedItem = Mock(SelectedItem)
+        self.player.selectedItem.isEmpty = MagicMock(return_value = False)
+        self.player.selectedItem.item = self.item2
+
+        self.playerWithEmptySelectedItem = Mock(Player)
+        self.playerWithEmptySelectedItem.selectedItem = Mock(SelectedItem)
+        self.playerWithEmptySelectedItem.selectedItem.isEmpty = MagicMock(return_value = True)
+
+        self.emptySlot = Slot(Vector2(0, 0), slotImage)
+        self.slot = Slot(Vector2(0, 0), slotImage, self.item)
 
     def test_isEmpty_should_return_True_when_called_on_empty_slot(self):
         self.assertEqual(True, self.emptySlot.isEmpty())
@@ -28,13 +41,27 @@ class SlotTest(unittest.TestCase):
         self.slot.removeItem()
         self.assertEqual(None, self.emptySlot.item)
 
-    def test_use_should_use_item_when_called_on_not_empty_slot(self):
-        item = Mock()
-        self.emptySlot.item = item
-        self.emptySlot.use()
+    def test_handleMouseLeftClick_should_addItem_when_slot_is_empty_and_selectedItem_is_not(self):
+        self.emptySlot.handleMouseLeftClick(self.player)
+        self.assertEqual(self.item, self.slot.item)
 
-        item.use.assert_called_once()
+    def test_handleMouseLeftClick_should_call_removeItem_method_on_selectedItem_when_slot_is_empty_and_selectedItem_is_not(self):
+        self.emptySlot.handleMouseLeftClick(self.player)
+        self.player.selectedItem.removeItem.assert_called_once()
 
+    def test_handleMouseLeftClick_should_call_addItem_on_selectedItem_when_slot_is_not_empty_and_selectedItem_is(self):
+        self.slot.handleMouseLeftClick(self.playerWithEmptySelectedItem)
+        self.playerWithEmptySelectedItem.selectedItem.addItem.assert_called_once()
+
+    def test_handleMouseLeftClick_should_removeItem_when_slot_is_not_empty_and_selectedItem_is(self):
+        self.slot.handleMouseLeftClick(self.playerWithEmptySelectedItem)
+        self.assertEqual(self.slot.item, None)
+
+    def test_handleMouseLeftClick_swap_items_when_slot_and_selectedItem_is_not_empty(self):
+        self.slot.handleMouseLeftClick(self.player)
+        self.assertEqual(self.slot.item, self.item2)
+        self.player.selectedItem.removeItem.assert_called_once()
+        self.player.selectedItem.addItem.assert_called_once()
 
 if __name__ == '__main__':
     unittest.main()

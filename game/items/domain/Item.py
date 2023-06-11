@@ -15,7 +15,7 @@ from game.LoadedImages import LoadedImages
 
 class Item(Sprite):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages,
-                 name: str = None, image: Surface = None, icon: Surface = None, id: str = None):
+                 name: str = "Unknown", image: Surface = None, icon: Surface = None, id: str = None):
         Sprite.__init__(self, visibleSprites)
         self.visibleSprites = visibleSprites
         self.visibleSprites.items.add(self)
@@ -24,9 +24,6 @@ class Item(Sprite):
         self.id = id if id else shortuuid.uuid()
 
         self.name = name
-        if not name:
-            self.name = "Unknown"
-
         self.image = image
         if not image:
             self.image = loadedImages.undefined

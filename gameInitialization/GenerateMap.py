@@ -8,31 +8,34 @@ from math import sqrt
 from constants import BIOMES_ID
 from gameInitialization.GenerateSprites import GenerateSprites
 
-
 def replaceIdWithNames(idMatrix: list[list[int]]) -> list[list[str]]:
     matrixSize = len(idMatrix)
     namesMatrix = [[BIOMES_ID[idMatrix[row][column]] for column in range(matrixSize)] for row in range(matrixSize)]
 
-    # for y in range(1, len(idMatrix) - 1):
-    #     for x in range(1, len(idMatrix) - 1):
-    #         if idMatrix[x][y] != 0:
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
-    #             checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
+    for y in range(1, len(idMatrix) - 1):
+        for x in range(1, len(idMatrix) - 1):
+            if idMatrix[x][y] != 0:
+                leftCoast = checkForBorder(idMatrix, namesMatrix, x, y,  0, -1, "L")
+                rightCoast = checkForBorder(idMatrix, namesMatrix, x, y,  0,  1, "R")
+                topCoast = checkForBorder(idMatrix, namesMatrix, x, y, -1,  0, "T")
+                bottomCoast = checkForBorder(idMatrix, namesMatrix, x, y,  1,  0, "B")
 
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  -1, -1, "1")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,   1, -1, "2")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,   1,  1, "3")
-    #             checkForBorder(idMatrix, namesMatrix, x, y,  -1,  1, "4")
+                if not leftCoast and not topCoast:
+                    checkForBorder(idMatrix, namesMatrix, x, y,  -1, -1, "1")
+                if not leftCoast and not bottomCoast:
+                    checkForBorder(idMatrix, namesMatrix, x, y,   1, -1, "2")
+                if not rightCoast and not bottomCoast:
+                    checkForBorder(idMatrix, namesMatrix, x, y,   1,  1, "3")
+                if not rightCoast and not topCoast:
+                    checkForBorder(idMatrix, namesMatrix, x, y,  -1,  1, "4")
+
     return namesMatrix
 
-
-def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int,
-                   borderTag: str) -> None:
+def checkForBorder(idMatrix: list[list[int]], namesMatrix: list[list[str]], x: int, y: int, xOffset: int, yOffset: int, borderTag: str):
     if idMatrix[x + xOffset][y + yOffset] == 0:
         namesMatrix[x][y] = namesMatrix[x][y] + borderTag
-
+        return True
+    return False
 
 def loadTilesData() -> dict['image': pygame.image, 'walkable': bool]:
     tilesData = {}
@@ -42,7 +45,6 @@ def loadTilesData() -> dict['image': pygame.image, 'walkable': bool]:
 
     return tilesData
 
-
 def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable: bool) -> None:
     for biom in os.listdir(f"./graphics/tiles/{subfolderName}"):
         for imageFile in os.listdir(f"./graphics/tiles/{subfolderName}/{biom}"):
@@ -51,9 +53,7 @@ def loadTilesByType(tilesData: dict, tileId: int, subfolderName: str, isWalkable
             tilesData[name] = {"image": image, "walkable": isWalkable}
         tileId += 1
 
-
-def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[
-    list[dict['image': pygame.image, 'walkable': bool]]]:
+def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[list[dict['image': pygame.image, 'walkable': bool]]]:
     tilesData = loadTilesData()
     mapSize = len(namesMatrix)
     dataMatrix = [[None for x in range(mapSize)] for y in range(mapSize)]
@@ -61,9 +61,8 @@ def populateNameMatrixWithData(namesMatrix: list[list[str]]) -> list[
     for y in range(mapSize):
         for x in range(mapSize):
             dataMatrix[y][x] = tilesData[namesMatrix[y][x]]
-
+    
     return dataMatrix
-
 
 def generateMap(mapSize: int, objectsQuantity: float, progresNotifFunc: callable):
     progresNotifFunc("Generating map")
@@ -73,19 +72,16 @@ def generateMap(mapSize: int, objectsQuantity: float, progresNotifFunc: callable
 
     dataMatrix = populateNameMatrixWithData(namesMatrix)
 
-    probabilities = {"Tree": 0.2, "Rock": 0.1, "Grass": 0.8, "RabbitHole": 0.01, "GoblinHideout": 0.01, "Deer": 0.02,
-                     "Boar": 0.03}
+    probabilities = {"Tree": 0.2, "Rock": 0.1, "Grass": 0.8, "RabbitHole": 0.01, "GoblinHideout": 0.01, "Deer": 0.02, "Boar": 0.03}
     probabilities = {key: value * objectsQuantity for key, value in probabilities.items()}
     sprites = GenerateSprites(idMatrix, probabilities, progresNotifFunc).sprites
 
     return idMatrix, dataMatrix, sprites
 
-
 def populateMapWithData(idMatrix: list[list[int]]):
     namesMatrix = replaceIdWithNames(idMatrix)
     dataMatrix = populateNameMatrixWithData(namesMatrix)
     return dataMatrix
-
 
 def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noise1 = PerlinNoise(octaves=5, seed=seed)
@@ -94,7 +90,7 @@ def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
 
     noiseMatrix1 = []
     noiseMatrix2 = []
-
+    
     for j in range(mapSize):
         noiseMatrix1row = []
         noiseMatrix2row = []
@@ -112,13 +108,12 @@ def generateIdMatrix(mapSize: int, seed=random.randint(1, 1000)):
     noiseMatrixNormalized = normalize(noiseMatrixCombined)
     mask = getMask(noiseMatrixCombined)
     noiseMatrixMasked = [[noiseMatrixNormalized[y][x] * mask[y][x] for x in range(mapSize)] for y in range(mapSize)]
-
+    
     idMatrix, binaryLandMatrix = setpFunc(noiseMatrixMasked)
 
     matrixAfterCleanup = cleanup(idMatrix, binaryLandMatrix, bridgeId=1)
 
     return matrixAfterCleanup
-
 
 def normalize(matrix):
     maxValue = max(matrix[0])
@@ -128,10 +123,9 @@ def normalize(matrix):
         maxValue = max(maxValue, max(row))
         minValue = min(minValue, min(row))
     dif = maxValue - minValue
-    matrixNormalized = [[(x - minValue) / dif for x in y] for y in matrix]
+    matrixNormalized = [[(x - minValue) / dif  for x in y] for y in matrix]
 
     return matrixNormalized
-
 
 def setpFunc(matrix):
     step1 = 0.4
@@ -147,12 +141,11 @@ def setpFunc(matrix):
             land[row][column] = 1 if curVal >= step1 else 0
     return newMatrix, land
 
-
 def circleMask(matrix):
     matrixSize = len(matrix)
     center = matrixSize // 2
     mask = [[0 for x in range(matrixSize)] for y in range(matrixSize)]
-
+    
     for y in range(matrixSize):
         for x in range(matrixSize):
             distance = ((x - center) ** 2 + (y - center) ** 2) / 2
@@ -165,12 +158,11 @@ def circleMask(matrix):
 
     return normalizedMask
 
-
 def rectangleMask(matrix):
     frameWidth = 30
     matrixSize = len(matrix)
     mask = [[0 for x in range(matrixSize)] for y in range(matrixSize)]
-
+    
     for y in range(matrixSize):
         for x in range(matrixSize):
             distance = 0
@@ -192,7 +184,6 @@ def rectangleMask(matrix):
 
     return normalizedMask
 
-
 def getMask(matrix):
     matrixSize = len(matrix)
     circularMask = circleMask(matrix)
@@ -201,13 +192,11 @@ def getMask(matrix):
 
     return combinedMask
 
-
 def cleanup(matrix, binaryMatrix, bridgeId):
     afterRemoval, binaryMatrixAfterRemoval = removeSmallUnconnectedIslands(matrix, binaryMatrix)
     afterConnecting = connectIslands(afterRemoval, binaryMatrixAfterRemoval, bridgeId)
 
     return afterConnecting
-
 
 def removeSmallUnconnectedIslands(matrix, binaryMatrix):
     matrixSize = len(matrix)
@@ -229,7 +218,6 @@ def removeSmallUnconnectedIslands(matrix, binaryMatrix):
 
     return newMatrix, newBinaryMatrix
 
-
 def connectIslands(matrix, binaryMatrix, bridgeId):
     matrixSize = len(matrix)
     matrixLabeled, islandsAmmount = label(np.array(binaryMatrix), return_num=True)
@@ -242,7 +230,7 @@ def connectIslands(matrix, binaryMatrix, bridgeId):
     pointsMatrix = [[0 for i in range(islandsAmmount)] for j in range(islandsAmmount)]
     for firstIndex in range(islandsAmmount - 1):
         label1 = firstIndex + 1
-        for secondIndex in range(islandsAmmount - 1 - firstIndex):
+        for secondIndex in range(islandsAmmount - 1 - firstIndex):    
             label2 = secondIndex + firstIndex + 2
             data = findClosestPoints(islandsPoints[label1], islandsPoints[label2])
             distances.append({'label1': label1, 'label2': label2, 'data': data})
@@ -262,20 +250,17 @@ def connectIslands(matrix, binaryMatrix, bridgeId):
 
     return newMatrix
 
-
 def getIslandsOutline(matrixLabeled, islandsAmmount):
     matrixSize = len(matrixLabeled)
     islandsOutline = [[matrixLabeled[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
     islandsPoints = [[] for island in range(islandsAmmount + 1)]
     for row in range(matrixSize):
         for column in range(matrixSize):
-            if matrixLabeled[row - 1][column] != 0 and matrixLabeled[row + 1][column] != 0 and matrixLabeled[row][
-                column - 1] != 0 and matrixLabeled[row][column + 1] != 0:
+            if matrixLabeled[row - 1][column] != 0 and matrixLabeled[row + 1][column] != 0 and matrixLabeled[row][column - 1] != 0 and matrixLabeled[row][column + 1] != 0:
                 islandsOutline[row][column] = 0
             else:
                 islandsPoints[islandsOutline[row][column]].append({'x': column, 'y': row})
     return islandsOutline, islandsPoints
-
 
 def findClosestPoints(pointsList1, pointsList2):
     minDistance = float('inf')
@@ -295,21 +280,20 @@ def findClosestPoints(pointsList1, pointsList2):
 
     return {'distance': minDistance, 'point1': point1, 'point2': point2}
 
-
 def minimalSpanningTree(matrix):
     matrixSize = len(matrix)
     visitedNodes = [False for node in range(matrixSize)]
     result = [[0 for column in range(matrixSize)] for row in range(matrixSize)]
-
+    
     index = 0
-    while (False in visitedNodes):
+    while(False in visitedNodes):
         minimum = float('inf')
         start = 0
         end = 0
         for p1 in range(matrixSize):
             if visitedNodes[p1]:
                 for p2 in range(matrixSize):
-                    if (not visitedNodes[p2] and matrix[p1][p2] > 0):
+                    if (not visitedNodes[p2] and matrix[p1][p2] > 0):  
                         if matrix[p1][p2] < minimum:
                             minimum = matrix[p1][p2]
                             start, end = p1, p2
@@ -326,7 +310,6 @@ def minimalSpanningTree(matrix):
             if result[l1][l2] != 0:
                 edges.append({'label1': l1, 'label2': l2})
     return edges
-
 
 def createBridge(matrix, point1, point2, bridgeId):
     xGrowth = point2['x'] - point1['x']
@@ -355,7 +338,6 @@ def createBridge(matrix, point1, point2, bridgeId):
             currPoint['y'] += verticalStep
             createVerticalStep(matrix, currPoint, bridgeId, rand1, rand2)
 
-
 def createHorizontalStep(matrix, point, val, rand1=random.random(), rand2=random.random()):
     if rand1 > 0.5:
         matrix[point['y'] - 2][point['x']] = val
@@ -364,7 +346,6 @@ def createHorizontalStep(matrix, point, val, rand1=random.random(), rand2=random
     matrix[point['y'] + 1][point['x']] = val
     if rand2 > 0.5:
         matrix[point['y'] + 2][point['x']] = val
-
 
 def createVerticalStep(matrix, point, val, rand1=random.random(), rand2=random.random()):
     if rand1 > 0.5:

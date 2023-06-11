@@ -6,25 +6,33 @@ from pygame.sprite import Group
 
 from game.LoadedImages import LoadedImages
 from game.entities.Player import Player
-from game.items.domain.Item import Item
+from game.items.DeerAntlers import DeerAntlers
 from game.ui.inventory.Inventory import Inventory
 
 
-class ItemTest(unittest.TestCase):
+class DeerAntlersTest(unittest.TestCase):
     def setUp(self) -> None:
         self.visibleSprites = Group()
         self.visibleSprites.items = Group()
         self.visibleSprites.savefileGroups = Group()
-        self.visibleSprites.savefileGroups.Item = Group()
-        self.loadedImages = Mock(LoadedImages)
-        self.loadedImages.undefined = Surface((0, 0))
+        self.visibleSprites.savefileGroups.DeerAntlers = Group()
+        self.loadedImages = LoadedImages
+        self.loadedImages.deerAntlers = Surface((0, 0))
 
-        self.item = Item(self.visibleSprites, Vector2(0, 0), self.loadedImages)
-        self.item2 = Item(self.visibleSprites, Vector2(0, 0), self.loadedImages)
-
+        self.item = DeerAntlers(self.visibleSprites, Vector2(0, 0), self.loadedImages)
+        self.item2 = DeerAntlers(self.visibleSprites, Vector2(0, 0), self.loadedImages)
         self.player = Mock(Player)
         self.player.inventory = Mock(Inventory)
         self.player.selectedItem = self.item2
+
+    def test_item_name_initializes(self):
+        self.assertEqual(self.item.name, "Deer Antlers")
+
+    def test_item_icon_initializes(self):
+        self.assertEqual(self.item.icon, self.loadedImages.deerAntlers)
+
+    def test_item_img_initializes(self):
+        self.assertEqual(self.item.image, self.loadedImages.deerAntlers)
 
     def test_id_should_be_different_between_items(self):
         self.assertNotEqual(self.item.id, self.item2.id)

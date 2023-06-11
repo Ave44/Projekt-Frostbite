@@ -6,22 +6,21 @@ from pygame.sprite import Group
 
 from game.LoadedImages import LoadedImages
 from game.entities.Player import Player
-from game.items.domain.Item import Item
+from game.items.Wood import Wood
 from game.ui.inventory.Inventory import Inventory
 
 
-class ItemTest(unittest.TestCase):
+class WoodTest(unittest.TestCase):
     def setUp(self) -> None:
         self.visibleSprites = Group()
         self.visibleSprites.items = Group()
         self.visibleSprites.savefileGroups = Group()
-        self.visibleSprites.savefileGroups.Item = Group()
-        self.loadedImages = Mock(LoadedImages)
-        self.loadedImages.undefined = Surface((0, 0))
+        self.visibleSprites.savefileGroups.Wood = Group()
+        self.loadedImages = LoadedImages
+        self.loadedImages.wood = Surface((0, 0))
 
-        self.item = Item(self.visibleSprites, Vector2(0, 0), self.loadedImages)
-        self.item2 = Item(self.visibleSprites, Vector2(0, 0), self.loadedImages)
-
+        self.item = Wood(self.visibleSprites, Vector2(0, 0), self.loadedImages)
+        self.item2 = Wood(self.visibleSprites, Vector2(0, 0), self.loadedImages)
         self.player = Mock(Player)
         self.player.inventory = Mock(Inventory)
         self.player.selectedItem = self.item2
@@ -59,6 +58,15 @@ class ItemTest(unittest.TestCase):
     def test_on_left_click_action_should_call_inventory_addItem_method(self):
         self.item.onLeftClickAction(self.player)
         self.player.inventory.addItem.assert_called_once()
+
+    def test_item_name_initializes(self):
+        self.assertEqual(self.item.name, "Wood")
+
+    def test_item_icon_initializes(self):
+        self.assertEqual(self.item.icon, self.loadedImages.wood)
+
+    def test_item_img_initializes(self):
+        self.assertEqual(self.item.image, self.loadedImages.wood)
 
 if __name__ == '__main__':
     unittest.main()

@@ -7,7 +7,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 class StonePickaxe(Pickaxe):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, currDurability: int = None, id: str = None):
-        name = "StonePickaxe"
+        name = "Stone Pickaxe"
         image = loadedImages.stonePickaxe
         icon = loadedImages.stonePickaxe
         damage = 5

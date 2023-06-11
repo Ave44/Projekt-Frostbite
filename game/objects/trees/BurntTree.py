@@ -21,4 +21,4 @@ class BurntTree(CollisionObject):
         print("interacted with burnt trees")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        Accorn(self.visibleSprites, self.rect.center)  # in the future there will be a real implementation
+        Accorn(self.visibleSprites, self.rect.midbottom)  # in the future there will be a real implementation

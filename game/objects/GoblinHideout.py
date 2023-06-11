@@ -48,7 +48,7 @@ class GoblinHideout(Object, DayPhaseListener):
             self.spawnGoblin()
 
     def spawnGoblin(self):
-        pos = Vector2(self.rect.centerx, self.rect.centery)
+        pos = Vector2(self.rect.centerx, self.rect.midbottom)
         newGoblin = self.goblinFactory.createGoblin(pos)
         self.goblins.append(newGoblin)
         self.daysFromGoblinsChange = 0
@@ -57,9 +57,9 @@ class GoblinHideout(Object, DayPhaseListener):
         print("interacted with goblin hideout")
 
     def drop(self) -> None:
-        GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
-        GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
-        GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
+        GoblinFang(self.visibleSprites, self.rect.midbottom, self.loadedImages)
+        GoblinFang(self.visibleSprites, self.rect.midbottom, self.loadedImages)
+        GoblinFang(self.visibleSprites, self.rect.midbottom, self.loadedImages)
         self.dayCycle.events.unsubscribe(DayPhase.DAY)
 
     def onDay(self):

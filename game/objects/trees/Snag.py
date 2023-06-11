@@ -31,8 +31,8 @@ class Snag(CollisionObject, Flammable):
         print("interacted with snag")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        Wood(self.visibleSprites, self.rect.center, self.loadedImages)
-        Wood(self.visibleSprites, self.rect.center, self.loadedImages)
+        Wood(self.visibleSprites, self.rect.midbottom, self.loadedImages)
+        Wood(self.visibleSprites, self.rect.midbottom, self.loadedImages)
 
     def burn(self):
         self.remove(*self.groups())

@@ -103,7 +103,7 @@ class GoblinWatchTower(Object):
             self.daysUntilPotentialActivation = 1
 
     def drop(self) -> None:
-        GoblinFang(self.visibleSprites, self.rect.center, self.loadedImages)
+        GoblinFang(self.visibleSprites, self.rect.midbottom, self.loadedImages)
 
     def onNewDay(self) -> None:
         if self.daysUntilPotentialActivation != 0:

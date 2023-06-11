@@ -31,7 +31,7 @@ class SmallTree(CollisionObject, Flammable):
         print("interacted with small trees")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        Wood(self.visibleSprites, self.rect.center, self.loadedImages)
+        Wood(self.visibleSprites, self.rect.midbottom, self.loadedImages)
 
     def burn(self):
         self.remove(*self.groups())

@@ -25,5 +25,5 @@ class GoblinTorch(Object, Glowing):
         print("interacted with goblin torch")
 
     def drop(self) -> None:
-        Wood(self.visibleGroup, self.rect.center, self.loadedImages)
+        Wood(self.visibleGroup, self.rect.midbottom, self.loadedImages)
 

@@ -29,7 +29,7 @@ class TreeSapling(CollisionObject):
         print("interacted with sapling")  # in the future there will be a real implementation
 
     def drop(self) -> None:
-        Item(self.visibleSprites, self.rect.center)
+        pass
 
     def update(self) -> None:
         self.ageMs += self.clock.get_time()

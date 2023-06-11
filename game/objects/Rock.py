@@ -23,6 +23,6 @@ class Rock(CollisionObject):
         pass
 
     def drop(self) -> None:
-        Pebble(self.visibleSprites, self.rect.center, self.loadedImages)
-        Pebble(self.visibleSprites, self.rect.center, self.loadedImages)
-        SharpRock(self.visibleSprites, self.rect.center, self.loadedImages)
+        Pebble(self.visibleSprites, self.rect.midbottom, self.loadedImages)
+        Pebble(self.visibleSprites, self.rect.midbottom, self.loadedImages)
+        SharpRock(self.visibleSprites, self.rect.midbottom, self.loadedImages)

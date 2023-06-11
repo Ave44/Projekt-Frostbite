@@ -30,5 +30,5 @@ class Tent(Object, Glowing):
             player.subtractHunger(20)
 
     def drop(self) -> None:
-        Wood(self.visibleSprites, self.rect.center, self.loadedImages)
-        Leather(self.visibleSprites, self.rect.center, self.loadedImages)
+        Wood(self.visibleSprites, self.rect.midbottom, self.loadedImages)
+        Leather(self.visibleSprites, self.rect.midbottom, self.loadedImages)

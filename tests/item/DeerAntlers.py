@@ -25,6 +25,15 @@ class DeerAntlersTest(unittest.TestCase):
         self.player.inventory = Mock(Inventory)
         self.player.selectedItem = self.item2
 
+    def test_item_name_initializes(self):
+        self.assertEqual(self.item.name, "Deer Antlers")
+
+    def test_item_icon_initializes(self):
+        self.assertEqual(self.item.icon, self.loadedImages.deerAntlers)
+
+    def test_item_img_initializes(self):
+        self.assertEqual(self.item.image, self.loadedImages.deerAntlers)
+
     def test_id_should_be_different_between_items(self):
         self.assertNotEqual(self.item.id, self.item2.id)
 

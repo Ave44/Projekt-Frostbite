@@ -228,9 +228,14 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
 
     # end region
 
+    maskLRTB = numpy.array(Image.open("coastImageMakerMasks/maskLRTB.png"))
+
+    returnedTileArray = numpy.array(groundTileImg)
+    layMaskOnGroundFile(maskLRTB)
+    Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "LRTB.png")
 
 makeArrayOftileSizextileSizeCoastImagesForTile(
-    "../../graphics/tiles/walkable/beach/beach.png",
+    "../../graphics/tiles/walkable/forest/forest.png",
     "../../graphics/tiles/collidable/sea/sea.png",
-    "beach",
+    "forest",
     128)

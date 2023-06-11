@@ -1,5 +1,7 @@
 from pygame import Vector2
 from json import dump
+from os import makedirs
+from os.path import isdir
 
 from Config import Config
 from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR
@@ -59,6 +61,8 @@ class CreateGame(Menu):
         loadingScreenGenerator = LoadingScreenGenerator(self.config)
         mapRaw, mapData, objects = generateMap(mapSize, objectsQuantity, loadingScreenGenerator.generateLoadingScreen)
         saveData = {'map': mapRaw, 'currentDay': 1, 'currentTimeMs': 50000, 'sprites': objects}
+        if not isdir("savefiles"):
+            makedirs("savefiles")
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(saveData, file)
         game = Game(self.config, saveData, self.returnToMainMenu)
@@ -94,7 +98,7 @@ class CreateGame(Menu):
             self.createButton(buttonsList, position, "<=", self.decrementObjectsQuantity)
 
         self.buttons = buttonsList
-    
+
     def createTexts(self) -> None:
         mainMenuTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT)
         mainMenuText = Text(mainMenuTextPos, "CREATE GAME", self.config.fontHuge, FONT_MENU_COLOR)

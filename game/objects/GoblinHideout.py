@@ -48,7 +48,7 @@ class GoblinHideout(Object, DayPhaseListener):
             self.spawnGoblin()
 
     def spawnGoblin(self):
-        pos = Vector2(self.rect.centerx, self.rect.midbottom)
+        pos = Vector2(self.rect.centerx, self.rect.bottom)
         newGoblin = self.goblinFactory.createGoblin(pos)
         self.goblins.append(newGoblin)
         self.daysFromGoblinsChange = 0

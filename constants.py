@@ -5,7 +5,7 @@ from pygame.image import load
 TILE_SIZE = 128
 CAPTION = 'Project Frostbite'
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-ICON = load(f"{ROOT_PATH}/graphics/icon.png")
+ICON = load("graphics/icon.png")
 BIOMES_ID = {0: 'sea', 1: 'beach', 2: 'medow', 3: 'forest', 4: 'rocky', 5: 'swamp'}
 
 # UI
@@ -21,7 +21,7 @@ HUNGERBAR_INCREASE = Color(170, 230, 60)
 HUNGERBAR_DECREASE = Color(179, 78, 32)
 
 # SLOTS
-SLOT_SIZE = load(f"{ROOT_PATH}/graphics/ui/slot.png").get_size()[0]
+SLOT_SIZE = load("graphics/ui/slot.png").get_size()[0]
 SLOT_GAP = 6
 
 # COLORS

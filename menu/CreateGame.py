@@ -98,7 +98,7 @@ class CreateGame(Menu):
             self.createButton(buttonsList, position, "<=", self.decrementObjectsQuantity)
 
         self.buttons = buttonsList
-    
+
     def createTexts(self) -> None:
         mainMenuTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT)
         mainMenuText = Text(mainMenuTextPos, "CREATE GAME", self.config.fontHuge, FONT_MENU_COLOR)

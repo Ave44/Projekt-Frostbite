@@ -245,7 +245,7 @@ def makeArrayOftileSizextileSizeCoastImagesForTile(groundTilePath, seaTilePath, 
     Image.fromarray(returnedTileArray).save("coastFiles/" + groundTileName + "24.png")
 
 makeArrayOftileSizextileSizeCoastImagesForTile(
-    "../../graphics/tiles/walkable/medow/medow.png",
+    "../../graphics/tiles/walkable/forest/forest.png",
     "../../graphics/tiles/collidable/sea/sea.png",
-    "medow",
+    "forest",
     128)

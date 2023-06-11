@@ -59,5 +59,18 @@ class PebbleTest(unittest.TestCase):
         self.item.onLeftClickAction(self.player)
         self.player.inventory.addItem.assert_called_once()
 
+    def test_on_left_click_action_should_call_inventory_addItem_method(self):
+        self.item.onLeftClickAction(self.player)
+        self.player.inventory.addItem.assert_called_once()
+
+    def test_item_name_initializes(self):
+        self.assertEqual(self.item.name, "Pebble")
+
+    def test_item_icon_initializes(self):
+        self.assertEqual(self.item.icon, self.loadedImages.pebble)
+
+    def test_item_img_initializes(self):
+        self.assertEqual(self.item.image, self.loadedImages.pebble)
+
 if __name__ == '__main__':
     unittest.main()

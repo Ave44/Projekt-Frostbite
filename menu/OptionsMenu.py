@@ -1,76 +1,63 @@
 import pygame
-from pygame import mixer, Surface, Vector2
+from pygame import mixer, Vector2
 
 from Config import Config
 from constants import FONT_MENU_COLOR, BASE_BUTTON_COLOR, PIXEL_FONT, NORMAL_FONT
 from menu.Menu import Menu
 from menu.general.Button import Button
-from pygame._sdl2.video import Window
+from menu.general.Text import Text
 
 
 class OptionsMenu(Menu):
-    def __init__(self, screen: Surface, backAction, config: Config):
-        Menu.__init__(self, screen)
-        self.backAction = backAction
+    def __init__(self, config: Config, goToMainMenu: callable, refreshMenu: callable, refreshAllMenus: callable):
+        Menu.__init__(self)
+        self.goToMainMenu = goToMainMenu
+        self.refreshMenu = refreshMenu
+        self.refreshAllMenus = refreshAllMenus
         self.config = config
-        if self.config.WINDOW_WIDTH == 1280:
-            self.resolutionsIndex = 0
-        else:
-            self.resolutionsIndex = 2
+        
+        self.resolutionsIndex = 2
         self.resolutions = ["1280x720", "1920x1080", "Fullscreen"]
+
         self.volume = ["0", "0.25", "0.5", "0.75", "1"]
         self.volumeList = [0, 0.25, 0.5, 0.75, 1]
-        self.fonts = ["Pixel", "Normal"]
-        self.volumeIndex = 0
+        self.volumeIndex = 2
+
         self.fontIndex = 0
+        self.fonts = ["Pixel", "Normal"]
+
+        self.createButtons()
+        self.createTexts()
 
     def incrementResolution(self) -> None:
-        if self.resolutionsIndex == 2:
-            return
-        else:
+        if self.resolutionsIndex < 2:
             self.resolutionsIndex += 1
             self.updateResolution()
-            self.refreshMenu()
 
     def decrementResolution(self) -> None:
-        if self.resolutionsIndex == 0:
-            return
-        else:
+        if self.resolutionsIndex > 0:
             self.resolutionsIndex -= 1
             self.updateResolution()
-            self.refreshMenu()
 
     def incrementFont(self) -> None:
-        if self.fontIndex == 1:
-            return
-        else:
+        if self.fontIndex < 1:
             self.fontIndex += 1
             self.updateFont()
-            self.refreshMenu()
 
     def decrementFont(self) -> None:
-        if self.fontIndex == 0:
-            return
-        else:
+        if self.fontIndex > 0:
             self.fontIndex -= 1
             self.updateFont()
-            self.refreshMenu()
 
     def incrementVolume(self) -> None:
-        if self.volumeIndex == 4:
-            return
-        else:
+        if self.volumeIndex < 4:
             self.volumeIndex += 1
             self.updateMusicVolume()
-            self.refreshMenu()
 
     def decrementVolume(self) -> None:
-        if self.volumeIndex == 0:
-            return
-        else:
+        if self.volumeIndex > 0:
             self.volumeIndex -= 1
             self.updateMusicVolume()
-            self.refreshMenu()
 
     def createButton(self, buttonsList: list, position: Vector2, buttonText: str, action: callable) -> Button:
         button = Button(pos=position,
@@ -80,10 +67,10 @@ class OptionsMenu(Menu):
         buttonsList.append(button)
         return button
 
-    def createButtons(self) -> list[Button]:
+    def createButtons(self) -> None:
         buttonsList = []
         self.createButton(buttonsList, Vector2(0.5 * self.config.WINDOW_WIDTH, 0.9 * self.config.WINDOW_HEIGHT), "BACK",
-                          self.backAction)
+                          self.goToMainMenu)
 
         if self.resolutionsIndex < len(self.resolutions) - 1:
             position = Vector2(0.95 * self.config.WINDOW_WIDTH, 0.347 * self.config.WINDOW_HEIGHT)
@@ -109,74 +96,52 @@ class OptionsMenu(Menu):
             position = Vector2(0.05 * self.config.WINDOW_WIDTH, 0.627 * self.config.WINDOW_HEIGHT)
             self.createButton(buttonsList, position, "<=", self.decrementFont)
 
-        return buttonsList
+        self.buttons = buttonsList
+    
+    def createTexts(self) -> None:
+        menuTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT)
+        menuText = Text(menuTextPos, "OPTIONS", self.config.fontHuge, FONT_MENU_COLOR)
 
-    def refreshMenu(self) -> None:
-        self.createBackground()
-        menuText = self.config.fontHuge.render("OPTIONS", True, FONT_MENU_COLOR)
-        menuRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.138 * self.config.WINDOW_HEIGHT))
+        volumeTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.52 * self.config.WINDOW_HEIGHT)
+        volumeTextContent = "VOLUME: " + self.volume[self.volumeIndex]
+        volumeText = Text(volumeTextPos, volumeTextContent, self.config.fontBig, BASE_BUTTON_COLOR)
 
-        volumeText = self.config.fontBig.render("VOLUME: " + self.volume[self.volumeIndex], True,
-                                                BASE_BUTTON_COLOR)
-        volumeRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.52 * self.config.WINDOW_HEIGHT))
+        resolutionTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.37 * self.config.WINDOW_HEIGHT)
+        resolutionTextContent = "HUD: " + self.resolutions[self.resolutionsIndex]
+        resolutionText = Text(resolutionTextPos, resolutionTextContent, self.config.fontBig, BASE_BUTTON_COLOR)
 
-        resolutionText = self.config.fontBig.render(
-            "HUD: " + self.resolutions[self.resolutionsIndex], True, BASE_BUTTON_COLOR)
-        resolutionRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.37 * self.config.WINDOW_HEIGHT))
+        fontTextPos = (0.5 * self.config.WINDOW_WIDTH, 0.65 * self.config.WINDOW_HEIGHT)
+        fontTextContent = "FONT: " + self.fonts[self.fontIndex]
+        fontText = Text(fontTextPos, fontTextContent, self.config.fontBig, BASE_BUTTON_COLOR)
 
-        fontText = self.config.fontBig.render(
-            "FONT: " + self.fonts[self.fontIndex], True, BASE_BUTTON_COLOR)
-        fontRect = menuText.get_rect(center=(0.5 * self.config.WINDOW_WIDTH, 0.65 * self.config.WINDOW_HEIGHT))
-
-        menuButtons = self.createButtons()
-
-        self.menuLoop(
-            [[menuText, menuRect], [volumeText, volumeRect], [resolutionText, resolutionRect], [fontText, fontRect]],
-            menuButtons)
+        self.texts = [menuText, volumeText, resolutionText, fontText]
 
     def updateResolution(self) -> None:
         if self.resolutionsIndex == 2:
-            infoObject = pygame.display.Info()
-            self.config.WINDOW_HEIGHT = infoObject.current_h
-            self.config.WINDOW_WIDTH = infoObject.current_w
-            self.updateScreen()
+            self.config.setWindowSize(self.config.monitorWidth, self.config.monitorHeight)
+            pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.FULLSCREEN)
         elif self.resolutionsIndex == 1:
-            self.config.WINDOW_HEIGHT = 1080
-            self.config.WINDOW_WIDTH = 1920
-            self.updateScreen()
+            self.config.setWindowSize(1920, 1080)
+            pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
+            positonX = 20 if self.config.monitorWidth > 1920 else 0
+            positonY = 20 if self.config.monitorHeight > 1080 else 0
+            self.config.window.position = (positonX, positonY)
         else:
-            self.config.WINDOW_HEIGHT = 720
-            self.config.WINDOW_WIDTH = 1080
-            self.updateScreen()
+            self.config.setWindowSize(1080, 720)
+            pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
+            self.config.window.position = (400, 200)
 
-    def updateScreen(self) -> None:
-        if self.resolutionsIndex == 2:
-            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT),
-                                                  pygame.FULLSCREEN)
-            return
-        elif self.resolutionsIndex == 0:
-            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
-            window = Window.from_display_module()
-            window.position = (400, 200)
-            return
-        else:
-            self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT))
-            window = Window.from_display_module()
-            info = pygame.display.Info()
-            positonX = 0
-            positonY = 0
-            if info.current_w > 1920:
-                positonX = 20
-            if info.current_h > 1080:
-                positonY = 20
-            window.position = (positonX, positonY)
+        self.createBackground()
+        self.refreshAllMenus()
 
     def updateMusicVolume(self) -> None:
         self.config.MUSIC_VOLUME = self.volumeList[self.volumeIndex]
         mixer.music.set_volume(self.config.MUSIC_VOLUME)
+        self.refreshMenu()
 
     def updateFont(self) -> None:
         if self.fontIndex == 1:
             self.config.setFont(NORMAL_FONT)
         else:
             self.config.setFont(PIXEL_FONT)
+        self.refreshAllMenus()

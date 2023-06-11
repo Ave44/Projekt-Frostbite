@@ -8,7 +8,7 @@ class Button:
         self.font = font
         self.baseColor, self.hoveringColor = baseColor, hoveringColor
         self.textInput = textInput
-        self.text = self.font.render(self.textInput, True, self.baseColor)
+        self.text = self.font.render(self.textInput, False, self.baseColor)
         if self.image is None:
             self.image = self.text
         self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
@@ -16,8 +16,10 @@ class Button:
         self.action = action
         self.actionArgument = actionArgument
 
-    def update(self, screen, mousePos) -> None:
+    def update(self, mousePos) -> None:
         self.setTextColor(mousePos)
+
+    def draw(self, screen) -> None:
         screen.blit(self.image, self.rect)
         screen.blit(self.text, self.text_rect)
 

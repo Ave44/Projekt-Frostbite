@@ -5,8 +5,8 @@ from constants import FONT_MENU_COLOR
 
 
 class LoadingScreenGenerator:
-    def __init__(self, screen, config: Config):
-        self.screen = screen
+    def __init__(self, config: Config):
+        self.screen = display.get_surface()
         self.config = config
 
     def generateLoadingScreen(self, information: str) -> None:

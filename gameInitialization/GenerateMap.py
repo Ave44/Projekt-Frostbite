@@ -2,7 +2,7 @@ import os
 import pygame
 from perlin_noise import PerlinNoise
 import random
-from skimage.measure import label
+from scipy.ndimage import label
 import numpy as np
 from math import sqrt
 from constants import BIOMES_ID
@@ -200,7 +200,7 @@ def cleanup(matrix, binaryMatrix, bridgeId):
 
 def removeSmallUnconnectedIslands(matrix, binaryMatrix):
     matrixSize = len(matrix)
-    matrixLabeled, islandsAmmount = label(np.array(binaryMatrix), return_num=True)
+    matrixLabeled, islandsAmmount = label(np.array(binaryMatrix))
     newMatrix = [[matrix[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
     newBinaryMatrix = [[binaryMatrix[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
 
@@ -220,7 +220,7 @@ def removeSmallUnconnectedIslands(matrix, binaryMatrix):
 
 def connectIslands(matrix, binaryMatrix, bridgeId):
     matrixSize = len(matrix)
-    matrixLabeled, islandsAmmount = label(np.array(binaryMatrix), return_num=True)
+    matrixLabeled, islandsAmmount = label(np.array(binaryMatrix))
     newMatrix = [[matrix[y][x] for x in range(matrixSize)] for y in range(matrixSize)]
 
     islandsOutline, islandsPoints = getIslandsOutline(matrixLabeled, islandsAmmount)

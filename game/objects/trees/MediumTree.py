@@ -25,7 +25,7 @@ class MediumTree(CollisionObject, Flammable):
 
         self.ageMs = ageMs
         self.growthStage = 2
-        self.LIFESPAN = 20000
+        self.LIFESPAN = 120000
 
     def interact(self) -> None:
         print("interacted with medium trees")  # in the future there will be a real implementation

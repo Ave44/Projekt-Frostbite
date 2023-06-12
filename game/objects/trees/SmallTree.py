@@ -25,7 +25,7 @@ class SmallTree(CollisionObject, Flammable):
 
         self.ageMs = ageMs
         self.growthStage = 1
-        self.LIFESPAN = 20000
+        self.LIFESPAN = 120000
 
     def interact(self) -> None:
         print("interacted with small trees")  # in the future there will be a real implementation

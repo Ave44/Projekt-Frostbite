@@ -1,8 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from game.ui.Crafting import Crafting
-
 if TYPE_CHECKING:
     from game.entities.Player import Player
 
@@ -16,6 +14,7 @@ from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 from game.ui.inventory.slot.Slot import Slot
 from game.ui.DayNightClock import DayNightClock
+from game.ui.crafting.Crafting import Crafting
 from game.LoadedImages import LoadedImages
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
@@ -73,7 +72,8 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.player.hungerBar.draw(self.displaySurface)
 
         self.clock.draw(self.displaySurface, self.clockRect)
-        self.displaySurface.blit(self.crafting.image, self.crafting.rect)
+
+        self.crafting.draw(self.displaySurface)
 
     def setClock(self, clock: DayNightClock):
         self.clock = clock

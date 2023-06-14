@@ -16,6 +16,7 @@ from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
 from game.tiles.Tile import Tile
 from game.weathers.WeatherController import WeatherController
+from game.ui.crafting.Crafting import Crafting
 
 from game.entities.Player import Player
 from game.entities.Boar import Boar
@@ -97,6 +98,9 @@ class Game:
             self.player.inventory.addItem(StonePickaxe(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
             self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
             self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
+
+        self.crafting = Crafting(config, self.visibleSprites, self.loadedImages)
+        self.UiSprites.crafting = self.crafting
 
         self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
         self.towersAmount: int = len(saveData['sprites']['GoblinWatchTower'])

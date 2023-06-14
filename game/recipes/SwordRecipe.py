@@ -1,12 +1,11 @@
 from typing import Type
 
-from pygame import Surface, Vector2
-from pygame.sprite import Group
+from pygame import Surface
 
 from game.LoadedImages import LoadedImages
 from game.items.Wood import Wood
 from game.items.domain.Item import Item
-from recipes.domain.Recipe import Recipe
+from game.recipes.domain.Recipe import Recipe
 
 
 class SwordRecipe(Recipe):

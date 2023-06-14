@@ -61,8 +61,7 @@ class Player(Entity, Glowing):
         self.inventory.open()
 
         craftingPosition = Vector2(20, config.WINDOW_HEIGHT / 2)
-        self.crafting = Crafting(loadedImages, UiSprites, craftingPosition)
-        print(self.inventory.checkIfContains(self.crafting.recipesList[0].requiredItems))
+        self.crafting = Crafting(loadedImages, craftingPosition)
 
         handSlotPosition = self.inventory.rect.topright + Vector2(SLOT_GAP * 2, SLOT_GAP)
         self.handSlot = Slot(handSlotPosition, loadedImages.slotHand, type=Tool)
@@ -74,6 +73,7 @@ class Player(Entity, Glowing):
         UiSprites.inventory = self.inventory
         UiSprites.selectedItem = self.selectedItem
         UiSprites.setEquipmentSlots(self.handSlot, self.bodySlot)
+        UiSprites.crafting = self.crafting
 
         self.healthBar = Bar(Vector2(115, 50), self.maxHealth, self.currHealth, 20, 200,
                              HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE)

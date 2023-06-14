@@ -3,13 +3,11 @@ from pygame.sprite import Sprite
 
 from constants import SLOT_SIZE, SLOT_GAP, BG_COLOR
 from game.LoadedImages import LoadedImages
-from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
-from recipes.SwordRecipe import SwordRecipe
+from game.recipes.SwordRecipe import SwordRecipe
 
 
 class Crafting(Sprite):
-    def __init__(self, loadedImages: LoadedImages, uiSprites: UiSpriteGroup, center: Vector2):
-        super().__init__(uiSprites)
+    def __init__(self, loadedImages: LoadedImages, center: Vector2):
         self.recipesList = [SwordRecipe(loadedImages), SwordRecipe(loadedImages)]
         self.image = Surface(
             [(SLOT_SIZE + SLOT_GAP) + SLOT_GAP,

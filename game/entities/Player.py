@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from game.ui.Crafting import Crafting
+
 if TYPE_CHECKING:
     from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
@@ -57,6 +59,10 @@ class Player(Entity, Glowing):
         inventoryPosition = Vector2(config.WINDOW_WIDTH / 2, config.WINDOW_HEIGHT - 60)
         self.inventory = Inventory(UiSprites, 2, 12, inventoryPosition, loadedImages)
         self.inventory.open()
+
+        craftingPosition = Vector2(20, config.WINDOW_HEIGHT / 2)
+        self.crafting = Crafting(loadedImages, UiSprites, craftingPosition)
+        print(self.inventory.checkIfContains(self.crafting.recipesList[0].requiredItems))
 
         handSlotPosition = self.inventory.rect.topright + Vector2(SLOT_GAP * 2, SLOT_GAP)
         self.handSlot = Slot(handSlotPosition, loadedImages.slotHand, type=Tool)

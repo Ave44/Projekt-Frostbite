@@ -70,6 +70,7 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.player.hungerBar.draw(self.displaySurface)
 
         self.clock.draw(self.displaySurface, self.clockRect)
+        self.draw(self.displaySurface)
 
     def setClock(self, clock: DayNightClock):
         self.clock = clock

@@ -36,7 +36,7 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.cameraSpriteGroup = cameraSpriteGroup
         self.pointer = loadedImages.pointer
         self.font = self.config.fontTiny
-        self.crafting = Crafting
+        self.crafting: Crafting
         self.pointerOffset = Vector2(self.pointer.get_width() // 2, self.pointer.get_height() // 2, )
 
     def customDraw(self):

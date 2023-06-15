@@ -24,6 +24,7 @@ class Item(Sprite):
         self.id = id if id else shortuuid.uuid()
 
         self.name = name
+        self.hoverMessage = self.name
         self.image = image
         if not image:
             self.image = loadedImages.undefined

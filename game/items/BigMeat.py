@@ -12,6 +12,7 @@ class BigMeat(Item):
         img = loadedImages.bigMeat
         icon = loadedImages.bigMeat
         Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon, id)
+        self.hoverMessage = f"Eat {self.name}"
 
     def use(self, player: Player):
         player.heal(30)

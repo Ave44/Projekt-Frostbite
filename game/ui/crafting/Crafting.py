@@ -12,13 +12,13 @@ from constants import SLOT_SIZE, SLOT_GAP, BG_COLOR
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.LoadedImages import LoadedImages
 from game.ui.crafting.Recipe import Recipe
-from game.ui.crafting.recipeListCreator import recipeListCreator
+from game.ui.crafting.RecipeListCreator import RecipeListCreator
 
 class Crafting(Sprite):
     def __init__(self, config: Config, visibleSprites: CameraSpriteGroup, loadedImages: LoadedImages):
         self.visibleSprites = visibleSprites
         self.loadedImages = loadedImages
-        self.recipesList: list[Recipe] = recipeListCreator(visibleSprites, loadedImages).recipesList
+        self.recipesList: list[Recipe] = RecipeListCreator(visibleSprites, loadedImages).recipesList
 
         self.image = Surface(
             [(SLOT_SIZE + SLOT_GAP) + SLOT_GAP,

@@ -104,10 +104,11 @@ class Game:
         self.crafting = Crafting(config, self.visibleSprites, self.loadedImages)
         self.UiSprites.crafting = self.crafting
 
-        self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
+        self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame, self.goBackToMenu)
         self.towersAmount: int = len(saveData['sprites']['GoblinWatchTower'])
 
         self.gameRunning = True
+        self.gameEnded = False
         self.endMessage = None
         self.waitingForInput = False
 
@@ -178,6 +179,9 @@ class Game:
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(savefileData, file)
 
+    def goBackToMenu(self):
+        self.gameRunning = False
+
     def drawStatistics(self, text) -> None:
         img = self.config.fontTiny.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
@@ -211,6 +215,7 @@ class Game:
 
     def endGame(self, endMessage: str) -> None:
         self.gameRunning = False
+        self.gameEnded = True
         self.endMessage = endMessage
 
     def displayEndMessage(self):
@@ -251,10 +256,12 @@ class Game:
             pygame.display.update()
             self.clock.tick()
 
-        self.displayEndMessage()
-        
-        while self.waitingForInput:
-            event = pygame.event.wait()
-            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                self.waitingForInput = False
-                self.returnToMainMenu()
+        if self.gameEnded:
+            self.displayEndMessage()
+            
+            while self.waitingForInput:
+                event = pygame.event.wait()
+                if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    self.waitingForInput = False
+
+        self.returnToMainMenu()

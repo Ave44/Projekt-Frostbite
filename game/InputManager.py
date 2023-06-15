@@ -12,11 +12,12 @@ from game.ui.crafting.Recipe import Recipe
 
 
 class InputManager:
-    def __init__(self, player: Player, UiSprites: UiSpriteGroup, visibleSprites: CameraSpriteGroup, saveGame: callable):
+    def __init__(self, player: Player, UiSprites: UiSpriteGroup, visibleSprites: CameraSpriteGroup, saveGame: callable, goBackToMenu: callable):
         self.player = player
         self.UiSprites = UiSprites
         self.visibleSprites = visibleSprites
         self.saveGame = saveGame
+        self.goBackToMenu = goBackToMenu
         pygame.event.clear()
 
     def handleInput(self) -> None:
@@ -44,8 +45,7 @@ class InputManager:
                     self.saveGame()
 
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                    self.goBackToMenu()
 
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)

@@ -38,9 +38,11 @@ class GenerateSprites:
         return biomesCoordinatesDict
 
     def createPlayer(self) -> None:
-        midbottom = (self.biomesCoordinatesDict['medow'][0]['x'] + 50, self.biomesCoordinatesDict['medow'][0]['y'] + 50)
+        halfTileSize = TILE_SIZE // 2
+        midbottom = (self.biomesCoordinatesDict['medow'][0]['x'] + halfTileSize, self.biomesCoordinatesDict['medow'][0]['y'] + halfTileSize)
         self.sprites['Player'] = [
             {'midbottom': midbottom, 'currHealth': None, 'currHunger': None, 'inventoryData': None}]
+        self.sprites['Tent'] = [{'midbottom': midbottom}]
 
     def generateTrees(self) -> None:
         treeProbability = self.probabilities['Tree']

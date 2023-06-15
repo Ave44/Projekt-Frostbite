@@ -63,7 +63,7 @@ class Inventory(Sprite):
         else:
             selectedItem.addItem(item)
 
-    def checkIfContains(self, items: list[Type[Item]]) -> bool:
+    def contains(self, items: list[Type[Item]]) -> bool:
         inventoryDict = Counter(type(slot.item) for slot in self.slotList)
 
         for item in items:

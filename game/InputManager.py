@@ -8,7 +8,7 @@ from game.entities.Player import Player
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.ui.inventory.slot.Slot import Slot
-from game.items.domain.Item import Item
+from game.ui.crafting.recipes.domain.Recipe import Recipe
 
 
 class InputManager:
@@ -49,6 +49,7 @@ class InputManager:
 
             if event.type == pygame.MOUSEBUTTONUP:
                 mouseHoversOverInventory = self.checkIfMouseHoversOverInventory(mousePos)
+                mouseHoversOverCrafting = self.checkIfMouseHoversOverCrafting(mousePos)
                 hoveredSprite = self.getHoveredSprite(mousePos)
 
                 if event.button == 1:
@@ -56,6 +57,10 @@ class InputManager:
                         hoveredSlot = self.getHoveredSlotSprite(mousePos)
                         if hoveredSlot:
                             hoveredSlot.handleMouseLeftClick(self.player)
+                    elif mouseHoversOverCrafting:
+                        hoveredRecipe = self.getHoveredRecipe(mousePos)
+                        if hoveredRecipe:
+                            hoveredRecipe.craft(self.player.inventory, self.player.selectedItem)
                     elif hoveredSprite:
                         if not isinstance(hoveredSprite, Player):
                             self.player.handleMouseLeftClick(hoveredSprite)
@@ -89,6 +94,9 @@ class InputManager:
     def checkIfMouseHoversOverInventory(self, mousePos: Vector2) -> bool:
         return self.UiSprites.inventory.rect.collidepoint(mousePos) or self.UiSprites.equipmentBackgroundRect.collidepoint(mousePos)
 
+    def checkIfMouseHoversOverCrafting(self, mousePos: Vector2) -> bool:
+        return self.UiSprites.crafting.rect.collidepoint(mousePos)
+
     def getHoveredSprite(self, mousePos: Vector2) -> Sprite:
         mousePosInWorld = mousePos + self.visibleSprites.offset
 
@@ -110,3 +118,7 @@ class InputManager:
         else:
             hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.player.inventory.slotList), None)
             return hoveredSlot
+
+    def getHoveredRecipe(self, mousePos) -> Recipe:
+        hoveredRecipe = next(filter(lambda recipe: (recipe.rect.collidepoint(mousePos)), self.UiSprites.crafting.recipesList), None)
+        return hoveredRecipe

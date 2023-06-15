@@ -96,9 +96,7 @@ class UiSpriteGroup(pygame.sprite.Group):
         if self.checkIfMouseHoversOverCrafting(mousePos):
             hoverMessage = self.crafting.hoverMessage(mousePos, self.inventory)
         elif self.checkIfMouseHoversOverInventory(mousePos):
-            hoveredSlot = next(filter(lambda slot: (slot.rect.collidepoint(mousePos)), self.player.inventory.slotList), None)
-            if hoveredSlot:
-                hoverMessage = hoveredSlot.hoverMessage()
+            hoverMessage = self.inventory.hoverMessage(mousePos)
         elif self.checkIfMouseHoversOverEquipment(mousePos):
             if self.player.handSlot.rect.collidepoint(mousePos):
                 hoverMessage = self.player.handSlot.unequipHoverMessage()

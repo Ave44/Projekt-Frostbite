@@ -81,6 +81,11 @@ class Inventory(Sprite):
                     slot.removeItem()
                     break
 
+    def hoverMessage(self, mousePos: Vector2) -> str:
+        for slot in self.slotList:
+            if slot.rect.collidepoint(mousePos):
+                return slot.hoverMessage()
+
     def getSaveData(self) -> dict:
         slotsItemData = []
         for slot in self.slotList:

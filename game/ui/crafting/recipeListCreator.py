@@ -21,7 +21,7 @@ from game.items.GoblinPickaxe import GoblinPickaxe
 from game.items.WoodenArmor import WoodenArmor
 from game.items.LeatherArmor import LeatherArmor
 
-class recipeListCreator:
+class RecipeListCreator:
     def __init__(self, visibleSprites: CameraSpriteGroup, loadedImages: LoadedImages) -> None:
         self.visibleSprites = visibleSprites
         self.loadedImages = loadedImages

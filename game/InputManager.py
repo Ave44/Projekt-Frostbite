@@ -8,7 +8,7 @@ from game.entities.Player import Player
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.ui.inventory.slot.Slot import Slot
-from game.ui.crafting.recipes.domain.Recipe import Recipe
+from game.ui.crafting.Recipe import Recipe
 
 
 class InputManager:

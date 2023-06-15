@@ -44,7 +44,9 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Sword import Sword
+from game.items.Mace import Mace
 from game.items.StoneAxe import StoneAxe
+from game.items.GoblinPickaxe import GoblinPickaxe
 from game.items.StonePickaxe import StonePickaxe
 from game.items.WoodenArmor import WoodenArmor
 from game.items.LeatherArmor import LeatherArmor

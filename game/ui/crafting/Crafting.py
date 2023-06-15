@@ -11,15 +11,14 @@ from Config import Config
 from constants import SLOT_SIZE, SLOT_GAP, BG_COLOR
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.LoadedImages import LoadedImages
-from game.ui.crafting.recipes.domain.Recipe import Recipe
-from game.ui.crafting.recipes.SwordRecipe import SwordRecipe
-from game.ui.crafting.recipes.WoodenArmorRecipe import WoodenArmorRecipe
+from game.ui.crafting.Recipe import Recipe
+from game.ui.crafting.recipeListCreator import recipeListCreator
 
 class Crafting(Sprite):
     def __init__(self, config: Config, visibleSprites: CameraSpriteGroup, loadedImages: LoadedImages):
-        self.recipesList: list[Recipe] = []
-        self.addRecipe(SwordRecipe(visibleSprites, loadedImages))
-        self.addRecipe(WoodenArmorRecipe(visibleSprites, loadedImages))
+        self.visibleSprites = visibleSprites
+        self.loadedImages = loadedImages
+        self.recipesList: list[Recipe] = recipeListCreator(visibleSprites, loadedImages).recipesList
 
         self.image = Surface(
             [(SLOT_SIZE + SLOT_GAP) + SLOT_GAP,
@@ -33,9 +32,6 @@ class Crafting(Sprite):
             position = Vector2(SLOT_GAP, idx * (SLOT_SIZE + SLOT_GAP) + SLOT_GAP)
             recipe.rect.topleft = self.rect.topleft + position
             recipe.draw(self.image, position)
-
-    def addRecipe(self, recipe: Recipe) -> None:
-        self.recipesList.append(recipe)
 
     def hoverMessage(self, mousePos: Vector2, inventory: Inventory) -> str:
         for recipe in self.recipesList:

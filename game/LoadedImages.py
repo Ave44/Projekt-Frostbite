@@ -55,6 +55,8 @@ class LoadedImages:
         self.sword = load("./graphics/items/sword.png").convert_alpha()
         self.stoneAxe = load("./graphics/items/stoneAxe.png").convert_alpha()
         self.stonePickaxe = load("./graphics/items/stonePickaxe.png").convert_alpha()
+        self.goblinPickaxe = load("./graphics/items/goblinPickaxe.png").convert_alpha()
+        self.mace = load("./graphics/items/mace.png").convert_alpha()
         self.woodenArmor = load("./graphics/items/woodenArmor.png").convert_alpha()
         self.leatherArmor = load("./graphics/items/leatherArmor.png").convert_alpha()
 

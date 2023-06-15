@@ -79,6 +79,8 @@ class Inventory(Sprite):
             for slot in self.slotList:
                 if isinstance(slot.item, item):
                     slot.removeItem()
+                    break
+
     def getSaveData(self) -> dict:
         slotsItemData = []
         for slot in self.slotList:

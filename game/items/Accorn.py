@@ -1,6 +1,7 @@
 from pygame import Vector2
 from game.LoadedImages import LoadedImages
 
+from game.entities.Player import Player
 from game.items.domain.Item import Item
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
@@ -11,3 +12,7 @@ class Accorn(Item):
         img = loadedImages.accorn
         icon = loadedImages.accorn
         Item.__init__(self, visibleSprites, center, loadedImages, name, img, icon, id)
+
+    def use(self, player: Player):
+        player.heal(5)
+        player.satiate(5)

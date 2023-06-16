@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
+    from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 
 from pygame import Rect
 from pygame.sprite import Group, Sprite
@@ -13,7 +14,6 @@ from math import ceil
 from constants import HEALTHBAR_MAIN, HEALTHBAR_INCREASE, HEALTHBAR_DECREASE, HUNGERBAR_MAIN, HUNGERBAR_INCREASE, HUNGERBAR_DECREASE, SLOT_GAP
 from Config import Config
 from game.LoadedSounds import LoadedSounds
-from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.entities.domain.Entity import Entity
 from game.lightning.Glowing import Glowing
 from game.ui.inventory.Inventory import Inventory

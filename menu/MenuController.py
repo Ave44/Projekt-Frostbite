@@ -44,6 +44,7 @@ class MenuController:
     def returnToMainMenu(self) -> None:
         mixer.music.load(MENU_THEME)
         mixer.music.play(-1)
+        self.refreshAllMenus()
         self.goToMainMenu()
 
     def handleEvent(self, event: Event) -> None:

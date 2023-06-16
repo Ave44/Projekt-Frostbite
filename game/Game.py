@@ -16,6 +16,7 @@ from game.LoadedImages import LoadedImages
 from game.LoadedSounds import LoadedSounds
 from game.tiles.Tile import Tile
 from game.weathers.WeatherController import WeatherController
+from game.ui.crafting.Crafting import Crafting
 
 from game.entities.Player import Player
 from game.entities.Boar import Boar
@@ -43,7 +44,9 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 from game.spriteGroups.ObstacleSprites import ObstacleSprites
 from game.spriteGroups.UiSpriteGroup import UiSpriteGroup
 from game.items.Sword import Sword
+from game.items.Mace import Mace
 from game.items.StoneAxe import StoneAxe
+from game.items.GoblinPickaxe import GoblinPickaxe
 from game.items.StonePickaxe import StonePickaxe
 from game.items.WoodenArmor import WoodenArmor
 from game.items.LeatherArmor import LeatherArmor
@@ -98,10 +101,14 @@ class Game:
             self.player.inventory.addItem(WoodenArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
             self.player.inventory.addItem(LeatherArmor(self.visibleSprites, self.player.rect.midbottom, self.loadedImages), self.player.selectedItem)
 
-        self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame)
+        self.crafting = Crafting(config, self.visibleSprites, self.loadedImages)
+        self.UiSprites.crafting = self.crafting
+
+        self.inputManager = InputManager(self.player, self.UiSprites, self.visibleSprites, self.saveGame, self.goBackToMenu)
         self.towersAmount: int = len(saveData['sprites']['GoblinWatchTower'])
 
         self.gameRunning = True
+        self.gameEnded = False
         self.endMessage = None
         self.waitingForInput = False
 
@@ -172,6 +179,9 @@ class Game:
         with open(f"savefiles/{self.config.savefileName}.json", "w") as file:
             dump(savefileData, file)
 
+    def goBackToMenu(self):
+        self.gameRunning = False
+
     def drawStatistics(self, text) -> None:
         img = self.config.fontTiny.render(text, True, (255, 255, 255))
         self.screen.blit(img, (10, 10))
@@ -205,6 +215,7 @@ class Game:
 
     def endGame(self, endMessage: str) -> None:
         self.gameRunning = False
+        self.gameEnded = True
         self.endMessage = endMessage
 
     def displayEndMessage(self):
@@ -245,10 +256,12 @@ class Game:
             pygame.display.update()
             self.clock.tick()
 
-        self.displayEndMessage()
-        
-        while self.waitingForInput:
-            event = pygame.event.wait()
-            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                self.waitingForInput = False
-                self.returnToMainMenu()
+        if self.gameEnded:
+            self.displayEndMessage()
+            
+            while self.waitingForInput:
+                event = pygame.event.wait()
+                if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    self.waitingForInput = False
+
+        self.returnToMainMenu()

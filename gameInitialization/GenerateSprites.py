@@ -4,6 +4,7 @@ import random
 
 class GenerateSprites:
     def __init__(self, idMatrix: list[list[int]], probabilities: dict, progresNotiftFunc: callable):
+        self.idMatrix = idMatrix
         self.biomesCoordinatesDict = self.getBiomesCoordinatesDict(idMatrix)
         self.probabilities = probabilities
         self.progresNotiftFunc = progresNotiftFunc
@@ -31,14 +32,16 @@ class GenerateSprites:
             yCoordinate = y * TILE_SIZE
             for x in range(matrixSize):
                 xCoordinate = x * TILE_SIZE
-                coordinates = {'x': xCoordinate, 'y': yCoordinate}
+                coordinates = {'x': xCoordinate, 'y': yCoordinate, 'xIndex': x, 'yIndex': y}
                 biome = BIOMES_ID[idMatrix[y][x]]
                 biomesCoordinatesDict[biome].append(coordinates)
 
         return biomesCoordinatesDict
 
     def createPlayer(self) -> None:
-        midbottom = (self.biomesCoordinatesDict['medow'][0]['x'] + 50, self.biomesCoordinatesDict['medow'][0]['y'] + 50)
+        halfTileSize = TILE_SIZE // 2
+        midbottom = (self.biomesCoordinatesDict['medow'][0]['x'] + halfTileSize, self.biomesCoordinatesDict['medow'][0]['y'] + halfTileSize)
+        self.sprites['Tent'] = [{'midbottom': midbottom}]
         self.sprites['Player'] = [
             {'midbottom': midbottom, 'currHealth': None, 'currHunger': None, 'inventoryData': None}]
 
@@ -121,9 +124,28 @@ class GenerateSprites:
         for tile in tiles:
             rand = random.random()
             while rand <= probability:
-                position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
+                if self.checkIfTileBordersWithSea(tile['xIndex'], tile['yIndex']):
+                    position = [random.randint(30, TILE_SIZE - 30) + tile['x'], random.randint(30, TILE_SIZE - 30) + tile['y']]
+                else:
+                    position = [random.randint(0, TILE_SIZE) + tile['x'], random.randint(0, TILE_SIZE) + tile['y']]
                 spawnObject(position)
                 rand += random.random()
+
+    def checkIfTileBordersWithSea(self, x: int, y: int) -> bool:
+        if self.checkForBorder(x, y, 0, -1):
+            return True
+        if self.checkForBorder(x, y, 0, 1):
+            return True
+        if self.checkForBorder(x, y, 1, 0):
+            return True
+        if self.checkForBorder(x, y, -1, 0):
+            return True
+
+
+    def checkForBorder(self, x: int, y: int, xOffset: int, yOffset: int) -> bool:
+        if self.idMatrix[y + yOffset][x + xOffset] == 0:
+            return True
+        return False
 
     def spawnTree(self, position: list[int, int]) -> None:
         ageMs = random.randint(0, 10000)

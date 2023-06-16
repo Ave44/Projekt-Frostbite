@@ -62,6 +62,14 @@ class Slot(Sprite):
         elif isinstance(self.item, Armor):
             self.swapEquipment(Armor, player.bodySlot, player)
 
+    def hoverMessage(self) -> str | None:
+        if not self.isEmpty():
+            return self.item.hoverMessage
+        
+    def unequipHoverMessage(self) -> str | None:
+        if not self.isEmpty():
+            return f'Unequip {self.item.name}'
+
     def swapEquipment(self, type: Type, destSlot: Slot, player: Player):
         if self.type == type and self.item:
             player.inventory.addItem(self.item, player.selectedItem)

@@ -13,6 +13,7 @@ class Armor(Item):
         Item.__init__(self, visibleSprites, center, loadedImages, name, image, icon, id)
         self.protectionFlat = protectionFlat
         self.gainedDamageModifier = gainedDamageModifier
+        self.hoverMessage = f"Equip {self.name}"
 
     def reduceDamage(self, amount: int):
         reducedAmount = int((amount - self.protectionFlat) * self.gainedDamageModifier)

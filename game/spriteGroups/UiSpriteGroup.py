@@ -9,11 +9,12 @@ from pygame.math import Vector2
 from pygame import Surface, Rect
 
 from Config import Config
-from constants import SLOT_SIZE, BG_COLOR, SLOT_GAP
+from constants import SLOT_SIZE, BG_COLOR, SLOT_GAP, FONT_COLOR
 from game.ui.inventory.Inventory import Inventory
 from game.ui.inventory.slot.SelectedItem import SelectedItem
 from game.ui.inventory.slot.Slot import Slot
 from game.ui.DayNightClock import DayNightClock
+from game.ui.crafting.Crafting import Crafting
 from game.LoadedImages import LoadedImages
 from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
@@ -34,6 +35,8 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.player: Player | None = None
         self.cameraSpriteGroup = cameraSpriteGroup
         self.pointer = loadedImages.pointer
+        self.font = self.config.fontTiny
+        self.crafting: Crafting
         self.pointerOffset = Vector2(self.pointer.get_width() // 2, self.pointer.get_height() // 2, )
 
     def customDraw(self):
@@ -71,6 +74,10 @@ class UiSpriteGroup(pygame.sprite.Group):
 
         self.clock.draw(self.displaySurface, self.clockRect)
 
+        self.crafting.draw(self.displaySurface)
+
+        self.drawHoverMessage()
+
     def setClock(self, clock: DayNightClock):
         self.clock = clock
         self.clockRect = Rect(self.config.WINDOW_WIDTH - self.clock.radius * 2 - 10, 10, clock.radius * 2, clock.radius * 2)
@@ -82,3 +89,33 @@ class UiSpriteGroup(pygame.sprite.Group):
         self.equipmentBackground = Surface(equipmentBackgroundSize)
         self.equipmentBackground.fill(BG_COLOR)
         self.equipmentBackgroundRect = Rect((self.inventory.rect.topright), equipmentBackgroundSize)
+
+    def drawHoverMessage(self) -> None:
+        mousePos = Vector2(pygame.mouse.get_pos())
+        hoverMessage = self.getHoverMessage(mousePos)
+
+        if hoverMessage:
+            textSurface = self.font.render(hoverMessage, True, FONT_COLOR)
+            self.displaySurface.blit(textSurface, mousePos + Vector2(0, -15))
+
+    def getHoverMessage(self, mousePos: Vector2) -> str | None:
+        if self.checkIfMouseHoversOverCrafting(mousePos):
+            return self.crafting.hoverMessage(mousePos, self.inventory)
+
+        elif self.checkIfMouseHoversOverInventory(mousePos):
+            return self.inventory.hoverMessage(mousePos)
+
+        elif self.checkIfMouseHoversOverEquipment(mousePos):
+            if self.player.handSlot.rect.collidepoint(mousePos):
+                return self.player.handSlot.unequipHoverMessage()
+            elif self.player.bodySlot.rect.collidepoint(mousePos):
+                return self.player.bodySlot.unequipHoverMessage()
+
+    def checkIfMouseHoversOverCrafting(self, mousePos) -> bool:
+        return self.crafting.rect.collidepoint(mousePos)
+    
+    def checkIfMouseHoversOverInventory(self, mousePos) -> bool:
+        return self.player.inventory.rect.collidepoint(mousePos)
+    
+    def checkIfMouseHoversOverEquipment(self, mousePos) -> bool:
+        return self.equipmentBackgroundRect.collidepoint(mousePos)

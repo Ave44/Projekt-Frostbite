@@ -7,7 +7,7 @@ from game.spriteGroups.CameraSpriteGroup import CameraSpriteGroup
 
 class LeatherArmor(Armor):
     def __init__(self, visibleSprites: CameraSpriteGroup, center: Vector2, loadedImages: LoadedImages, id: str = None):
-        name = "LeatherArmor"
+        name = "Leather Armor"
         image = loadedImages.leatherArmor
         icon = loadedImages.leatherArmor
         protectionFlat = 0

@@ -1,3 +1,6 @@
+from collections import Counter
+from typing import Type
+
 from pygame import Surface
 from pygame.math import Vector2
 from pygame.sprite import Sprite, Group
@@ -59,6 +62,29 @@ class Inventory(Sprite):
             emptySlot.addItem(item)
         else:
             selectedItem.addItem(item)
+
+    def contains(self, items: list[Type[Item]]) -> bool:
+        inventoryDict = Counter(type(slot.item) for slot in self.slotList)
+
+        for item in items:
+            dictItemValue = inventoryDict.get(item)
+            if dictItemValue and dictItemValue > 0:
+                inventoryDict[item] = inventoryDict[item] - 1
+            else:
+                return False
+        return True
+
+    def remove(self, items: list[Type[Item]]) -> None:
+        for item in items:
+            for slot in self.slotList:
+                if isinstance(slot.item, item):
+                    slot.removeItem()
+                    break
+
+    def hoverMessage(self, mousePos: Vector2) -> str:
+        for slot in self.slotList:
+            if slot.rect.collidepoint(mousePos):
+                return slot.hoverMessage()
 
     def getSaveData(self) -> dict:
         slotsItemData = []

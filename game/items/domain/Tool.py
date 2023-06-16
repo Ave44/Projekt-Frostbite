@@ -16,6 +16,7 @@ class Tool(Item):
         self.damage = damage
         self.maxDurability = maxDurability
         self.currDurability = currDurability if currDurability else maxDurability
+        self.hoverMessage = f"Equip {self.name}"
 
     def reduceDurability(self):
         self.currDurability -= 1

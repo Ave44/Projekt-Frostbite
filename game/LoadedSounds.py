@@ -9,45 +9,45 @@ class LoadedSounds:
 
     def loadEntitiesSounds(self):
         self.player = {
-            "idle": Sound("./sounds/entities/player/idle.wav"),
-            "movement": Sound("./sounds/entities/player/movement.wav"),
-            "attack": Sound("./sounds/entities/player/attack.wav"),
-            "damaged": Sound("./sounds/entities/player/damaged.wav"),
+            "idle": None,
+            "movement": None,
+            "attack": None,
+            "damaged": None,
         }
 
         self.rabbit = {
-            "idle": Sound("./sounds/entities/rabbit/idle.wav"),
-            "movement": Sound("./sounds/entities/rabbit/movement.wav"),
-            "attack": Sound("./sounds/entities/rabbit/attack.wav"),
-            "damaged": Sound("./sounds/entities/rabbit/damaged.wav"),
+            "idle": None,
+            "movement": None,
+            "attack": None,
+            "damaged": None,
         }
 
         self.deer = {
-            "idle": Sound("./sounds/entities/deer/idle.wav"),
-            "movement": Sound("./sounds/entities/deer/movement.wav"),
-            "attack": Sound("./sounds/entities/deer/attack.wav"),
-            "damaged": Sound("./sounds/entities/deer/damaged.wav"),
+            "idle": None,
+            "movement": None,
+            "attack": None,
+            "damaged": None,
         }
 
         self.boar = {
-            "idle": Sound("./sounds/entities/boar/idle.wav"),
-            "movement": Sound("./sounds/entities/boar/movement.wav"),
-            "attack": Sound("./sounds/entities/boar/attack.wav"),
-            "damaged": Sound("./sounds/entities/boar/damaged.wav"),
+            "idle": None,
+            "movement": None,
+            "attack": None,
+            "damaged": None,
         }
 
         self.bomb = {
-            "idle": Sound("./sounds/entities/bomb/idle.wav"),
-            "movement": Sound("./sounds/entities/bomb/movement.wav"),
-            "attack": Sound("./sounds/entities/bomb/attack.wav"),
-            "damaged": Sound("./sounds/entities/bomb/damaged.wav"),
+            "idle": None,
+            "movement": None,
+            "attack": None,
+            "damaged": None,
         }
 
         self.goblin = {
-            "idle": Sound("./sounds/entities/goblin/idle.wav"),
-            "movement": Sound("./sounds/entities/goblin/movement.wav"),
-            "attack": Sound("./sounds/entities/goblin/attack.wav"),
-            "damaged": Sound("./sounds/entities/goblin/damaged.wav"),
+            "idle": Sound("./sounds/entities/goblin/idle.mp3"),
+            "movement": Sound("./sounds/entities/goblin/movement.mp3"),
+            "attack": Sound("./sounds/entities/goblin/attack.mp3"),
+            "damaged": Sound("./sounds/entities/goblin/damaged.mp3"),
         }
 
     def loadObjectsSounds(self):

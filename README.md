@@ -1,8 +1,8 @@
-# Projekt-Frostbite
+# Project-Frostbite
 
-Repozytorium zawierające projekt na przedmiot "Projekt zespołowy" UG 22/23
+Repository containing the project for the subject "Team Project" UG 22/23
 
-### Uruchamianie gry
-Aby uruchomić grę należy:
-- pobrać repozytorium
-- uruchomić plik Frostbite.exe
+### Launching the game
+To launch the game you need to:
+- download the repository
+- run the Frostbite.exe file
